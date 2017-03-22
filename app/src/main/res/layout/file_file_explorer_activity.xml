@@ -1,0 +1,88 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.design.widget.AppBarLayout android:layout_height="wrap_content"
+        android:layout_width="match_parent" android:theme="@style/AppTheme.AppBarOverlay">
+        <android.support.v7.widget.Toolbar android:id="@+id/toolbar"
+            android:layout_width="match_parent" android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary" app:popupTheme="@style/AppTheme.PopupOverlay" />
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:background="@color/background_basic"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:background="@drawable/layout_basic"
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <HorizontalScrollView
+                android:id="@+id/scrollView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:padding="0dp"
+                    android:orientation="horizontal"
+                    android:id="@+id/pathView"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp">
+                </LinearLayout>
+            </HorizontalScrollView>
+        </LinearLayout>
+        <LinearLayout
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="0dp"
+            android:paddingTop="5dp"
+            android:paddingRight="0dp"
+            android:paddingBottom="5dp">
+            <!--<com.beardedhen.androidbootstrap.BootstrapButton
+                style="@style/explorer_button"
+                app:bootstrapText="@string/home"
+                app:bootstrapBrand="primary"
+                app:roundedCorners="true"
+                app:bootstrapSize="sm"
+                android:id="@+id/btnroot"
+                />-->
+            <com.beardedhen.androidbootstrap.BootstrapButton
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                app:bootstrapText="{fa_folder_open_o} 현재폴더 일괄등록"
+                app:bootstrapBrand="primary"
+                app:roundedCorners="true"
+                app:bootstrapSize="sm"
+                android:id="@+id/btnup"
+                />
+            <!--<com.beardedhen.androidbootstrap.BootstrapButton
+                style="@style/explorer_button"
+                app:bootstrapText="@string/close"
+                app:bootstrapBrand="primary"
+                app:roundedCorners="true"
+                app:bootstrapSize="sm"
+                android:id="@+id/close"
+                android:layout_marginLeft="5dp"
+                />-->
+        </LinearLayout>
+        <ListView
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp"
+            android:background="@drawable/layout_basic"
+            android:drawSelectorOnTop="true"
+            android:listSelector="@drawable/stocks_selector"
+            android:id="@+id/filelist"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+</LinearLayout>

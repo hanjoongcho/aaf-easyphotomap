@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/lib/com.beardedhen.androidbootstrap;"
+    android:background="@drawable/intro5"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:padding="15dp"
+        android:text="Awesome Application Factory"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:id="@+id/textView"
+        android:gravity="left"
+        android:textColor="@color/bootstrap_brand_secondary_fill"
+        android:textSize="13dp"
+        android:textStyle="normal|bold" />
+
+    <TextView
+        android:padding="15dp"
+        android:text="Easy Photo Map"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="right|bottom"
+        android:textColor="@color/bootstrap_brand_secondary_fill"
+        android:textSize="13dp"
+        android:id="@+id/textView5"
+        android:textStyle="normal|bold" />
+
+</LinearLayout>

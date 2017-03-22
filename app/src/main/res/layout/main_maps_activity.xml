@@ -1,0 +1,89 @@
+<fragment xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" android:id="@+id/map" tools:context=".MapsActivity"
+    android:name="com.google.android.gms.maps.SupportMapFragment">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <com.github.clans.fab.FloatingActionMenu
+            android:id="@+id/menu_down"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:paddingRight="10dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:elevation="6dp"
+            fab:menu_colorNormal="#1565C0"
+            fab:menu_colorPressed="#2272CD"
+            fab:menu_colorRipple="#62B2FF"
+            fab:menu_labels_ellipsize="end"
+            fab:menu_labels_singleLine="true"
+            fab:menu_fab_size="mini"
+            fab:menu_backgroundColor="#461544f4"
+            fab:menu_openDirection="down">
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/setting"
+                style="@style/MenuButtonsBlue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/settings"
+                fab:fab_size="mini"
+                fab:fab_label="@string/maps_activity_setting" />
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/timeline"
+                style="@style/MenuButtonsBlue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/timeline"
+                fab:fab_size="mini"
+                fab:fab_label="@string/maps_activity_timeline" />
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/find"
+                style="@style/MenuButtonsBlue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/search"
+                fab:fab_size="mini"
+                fab:fab_label="@string/maps_activity_find" />
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/overlay"
+                style="@style/MenuButtonsBlue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/marker"
+                fab:fab_size="mini"
+                fab:fab_label="@string/maps_activity_overlay" />
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/folder"
+                style="@style/MenuButtonsBlue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/folder"
+                fab:fab_size="mini"
+                fab:fab_label="@string/maps_activity_folder" />
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/explorer"
+                style="@style/MenuButtonsBlue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/image"
+                fab:fab_size="mini"
+                fab:fab_label="@string/maps_activity_explorer" />
+            <com.github.clans.fab.FloatingActionButton
+                android:id="@+id/camera"
+                style="@style/MenuButtonsBlue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/camera"
+                fab:fab_size="mini"
+                fab:fab_label="@string/maps_activity_camera" />
+        </com.github.clans.fab.FloatingActionMenu>
+
+    </LinearLayout>
+</fragment>

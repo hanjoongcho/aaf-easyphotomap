@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".SearchFragmentActivity">
+
+    <item
+        android:id="@+id/sendLog"
+        android:icon="@android:drawable/ic_dialog_map"
+        android:title="@string/send_log"
+        app:showAsAction="collapseActionView" />
+
+</menu>

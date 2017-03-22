@@ -1,0 +1,198 @@
+<resources>
+    <string name="app_name">EasyPhotoMap</string>
+    <string name="title_activity_maps">Easy\nPhotoMap</string>
+
+    <!--MapsActivity-->
+    <string name="maps_activity_timeline">Timeline</string>
+    <string name="maps_activity_setting">Environment settings</string>
+    <string name="maps_activity_find">Find registration photos</string>
+    <string name="maps_activity_overlay">View your registration photos</string>
+    <string name="maps_activity_folder">Register with explorer</string>
+    <string name="maps_activity_explorer">Register with preview</string>
+    <string name="maps_activity_camera">Register with photographic</string>
+
+    <!--ThumbnailExplorerActivity-->
+    <string name="thumbnail_explorer_compact_activity_title">Register with preview</string>
+    <string name="thumbnail_explorer_compact_activity_explorer">Register with explorer</string>
+    <string name="thumbnail_explorer_compact_activity_update">Update thumbnails</string>
+
+    <!--FileExplorerActivity-->
+    <string name="file_explorer_activity_title">Register with explorer</string>
+
+    <!--SettingsActivity-->
+    <string name="setting_activity_title">Environment settings</string>
+    <string name="setting_activity_minimum_cluster_title">Photo marker minimum cluster</string>
+    <string name="setting_activity_minimum_cluster_summary">If there are more markers than a set point within a certain distance, use cluster markers to increase readability.</string>
+
+    <!--TimelineActivity-->
+    <string name="timeline_compat_activity_title">타임라인</string>
+
+    <string name="explorer">explorer</string>
+    <string name="overlay">overlay photos</string>
+    <string name="action_settings">action_settings</string>
+    <string name="address">add</string>
+    <string name="info_message">Click on the keyword, you can view the photos taken nearby.</string>
+    <string name="view_korea">view(KOREA)</string>
+    <string name="view_world">View(WORLD)</string>
+    <string name="close">Close</string>
+    <string name="open_explorer">Registered in Explorer</string>
+    <string name="update_thumbnail">Updating thumbnails</string>
+    <string name="setting">Setting</string>
+    <string name="down_scale">Down scale font</string>
+    <string name="send_log">send log</string>
+    <string name="photo_home_internal">Photo Home</string>
+    <string name="photo_home_external">Photo Home(SD)</string>
+    <string name="add_all">register all</string>
+    <string name="home">gallery</string>
+    <string name="batch_stop">Stop</string>
+    <string name="return_explorer">Close</string>
+
+    <string name="batch_popup_message1">In batch mode or register location information (GPS), it does not register the photos to an existing registration.\npictures without location information (GPS) is simply individual properties using the search function of the address easy photo map.</string>
+    <string name="batch_popup_message2">succeed registration photos</string>
+    <string name="batch_popup_message3">duplicate photos</string>
+    <string name="batch_popup_message4">no gps data photos</string>
+    <string name="batch_popup_message5">failed registration photos</string>
+
+    <string name="maps_activity_message1">The current version is only available with an existing registered Photos.</string>
+    <string name="maps_activity_message2">There is no registered Photos.</string>
+
+    <string name="file_explorer_message1">GPS information is not present in the photo file. \nWould you like to use the address search?</string>
+    <string name="file_explorer_message2">No time information</string>
+    <string name="file_explorer_message3">The picture of the same name already exists.</string>
+    <string name="file_explorer_message4">Photo has registered on Easy Photo Map.</string>
+    <string name="file_explorer_message5">Register Photo</string>
+    <string name="file_explorer_message6">Checking GPS information...</string>
+    <string name="file_explorer_message7">Would you like to register?</string>
+    <string name="file_explorer_message8">Generate thumbnail...</string>
+    <string name="file_explorer_message9">There are no pictures folder currently registered.</string>
+    <string name="file_explorer_message10">Update list..</string>
+    <string name="file_explorer_message11">Do you want to register all photos in the current folder?</string>
+
+    <string name="thumbnail_explorer_message1">Thumbnail of the updated information...</string>
+    <string name="thumbnail_explorer_message2">Choose a picture.</string>
+    <string name="thumbnail_explorer_message3">update thumbnail</string>
+
+    <string name="photo_search_message1">Choose a picture.</string>
+
+    <string name="address_search_message1">The picture of the same name already exists.</string>
+    <string name="address_search_message2">Photo has registered on Easy Photo Map.</string>
+
+    <string name="epm_preference_message1">easy photo map setting</string>
+    <string name="epm_preference_message2">enable date filter</string>
+
+    <string name="camera_activity_message1">It does not receive GPS information.</string>
+
+    <string name="confirm">confirm</string>
+    <string name="cancel">cancel</string>
+    <string name="setting_title">easy photo map preference setting</string>
+
+    <string name="camera_info_message1">Before the picture is taken, please activate the tag location in the camera settings. If the tag location setting is not enabled, you must enter the location information manually by using the address search function.</string>
+    <string name="camera_info_message2">Confirm</string>
+    <string name="camera_info_message3">Do not show after this time</string>
+    <string name="camera_info_message4">The location tag setting screen may differ depending on the mobile phone.</string>
+
+    <string name="disable_info_popup">Disable camera setup guide</string>
+    <string name="disable_info_popup_summary">Camera does not show the entire GPS geotag information.</string>
+
+    <string name="enable_create_copy">Activate copy generation</string>
+    <string name="enable_create_copy_summary">Create copies of photographs during registration. If you create a copy even if the original picture is deleted, you can view pictures using the copy.</string>
+
+    <string name="enable_reverse_order">Explorer activated in reverse order</string>
+    <string name="enable_reverse_order_summary">The file and directory names in reverse order when sorted Explorer.</string>
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+
+    <string name="pref_title_social_recommendations">enable date filter</string>
+    <string name="pref_description_social_recommendations">In place of the address filter used in the keyword nApplies a date filter.
+    </string>
+
+    <string name="pref_title_display_name">Display name</string>
+    <string name="pref_default_display_name">John Smith</string>
+
+    <string name="photo_size_setting">Photo marker size</string>
+    <string name="photo_size_setting_summary">Change the size of the photo marker displayed on a map.</string>
+    <string-array name="pref_example_list_titles">
+        <item>x0.2</item>
+        <item>x0.4</item>
+        <item>x0.6</item>
+        <item>x0.8</item>
+        <item>x1.0</item>
+        <item>x1.2</item>
+        <item>x1.4</item>
+    </string-array>
+    <string-array name="pref_example_list_values">
+        <item>0.2</item>
+        <item>0.4</item>
+        <item>0.6</item>
+        <item>0.8</item>
+        <item>1.0</item>
+        <item>1.2</item>
+        <item>1.4</item>
+    </string-array>
+
+    <string name="photo_marker_setting">Photo marker type</string>
+    <string name="photo_marker_setting_summary">Change the type of the photo marker displayed on a map</string>
+    <string-array name="photo_marker_list_titles">
+        <item>Film Frame</item>
+        <item>Flower Frame</item>
+        <item>Basic Frame</item>
+        <item>Red Circle</item>
+    </string-array>
+    <string-array name="photo_marker_list_values">
+        <item>filmFrame</item>
+        <item>flowerFrame</item>
+        <item>basicFrame</item>
+        <item>redCircle</item>
+    </string-array>
+
+    <string-array name="photo_marker_enable_minimum_cluster_list_titles">
+        <item>more than 5</item>
+        <item>more than 10</item>
+        <item>more than 100</item>
+        <item>more than 200</item>
+        <item>more than 500</item>
+        <item>more than 1000</item>
+    </string-array>
+    <string-array name="photo_marker_enable_minimum_cluster_list_values">
+        <item>5</item>
+        <item>10</item>
+        <item>100</item>
+        <item>200</item>
+        <item>500</item>
+        <item>1000</item>
+    </string-array>
+
+    <!-- Example settings for Data & Sync -->
+    <string name="pref_header_data_sync">Data &amp; sync</string>
+
+    <string name="pref_title_sync_frequency">Sync frequency</string>
+    <string-array name="pref_sync_frequency_titles">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>3 hours</item>
+        <item>6 hours</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_sync_frequency_values">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>180</item>
+        <item>360</item>
+        <item>-1</item>
+    </string-array>
+
+    <string name="pref_title_system_sync_settings">System sync settings</string>
+
+    <!-- Example settings for Notifications -->
+    <string name="pref_header_notifications">Notifications</string>
+
+    <string name="pref_title_new_message_notifications">New message notifications</string>
+
+    <string name="pref_title_ringtone">Ringtone</string>
+    <string name="pref_ringtone_silent">Silent</string>
+
+    <string name="pref_title_vibrate">Vibrate</string>
+</resources>

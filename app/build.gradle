@@ -1,0 +1,66 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "22.0.1"
+
+    defaultConfig {
+        applicationId "me.blog.korn123.easyphotomap"
+        minSdkVersion 14
+        targetSdkVersion 22
+        versionCode 52
+        versionName "1.1.41"
+        multiDexEnabled true
+        vectorDrawables.useSupportLibrary = true
+    }
+
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig getSigningConfig()
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    def date = new Date();
+                    def formattedDate = date.format('yyyyMMddHHmmss')
+                    output.outputFile = new File(output.outputFile.parent,
+                            output.outputFile.name.replace("-release", "-easy_photo_map-" + formattedDate)
+                            //for Debug use output.outputFile = new File(output.outputFile.parent,
+                            //                             output.outputFile.name.replace("-debug", "-" + formattedDate)
+                    )
+                }
+            }
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:23.2.1'
+    compile 'com.android.support:design:23.0.0'
+    compile 'com.android.support:multidex:1.0.0'
+//    compile 'com.google.android.gms:play-services:9.2.0'
+//    compile 'com.google.android.gms:play-services-maps:9.4.0'
+    compile 'com.google.android.gms:play-services:6.5.87'
+    compile 'com.google.maps.android:android-maps-utils:0.4'
+    // https://mvnrepository.com/artifact/commons-io/commons-io
+    compile group: 'commons-io', name: 'commons-io', version: '2.4'
+    // https://mvnrepository.com/artifact/com.drewnoakes/metadata-extractor
+    compile group: 'com.drewnoakes', name: 'metadata-extractor', version: '2.8.1'
+    // https://mvnrepository.com/artifact/commons-lang/commons-lang
+    compile group: 'commons-lang', name: 'commons-lang', version: '2.4'
+    compile 'log4j:log4j:1.2.17'
+    compile 'de.mindpipe.android:android-logging-log4j:1.0.2@jar'
+    compile 'com.beardedhen:androidbootstrap:2.0.0'
+    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.github.clans:fab:1.6.4'
+}

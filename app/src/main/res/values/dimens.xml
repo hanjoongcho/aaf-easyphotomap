@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Android-Bootstrap-->
+    <dimen name="default_padding">16dp</dimen>
+    <dimen name="micro_padding">4dp</dimen>
+    <dimen name="default_circle_size">250dp</dimen>
+
+    <dimen name="map_dot_marker_size">12dp</dimen>
+</resources>

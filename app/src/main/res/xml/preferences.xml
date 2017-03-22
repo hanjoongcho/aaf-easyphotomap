@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/epm_preference_message1" android:key="setting_app"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+        <CheckBoxPreference android:title="@string/epm_preference_message2" android:key="enableDateFilter" android:defaultValue="false" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

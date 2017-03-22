@@ -1,0 +1,80 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:layout="@layout/preference_category"
+        android:title="General">
+        <SwitchPreference
+            android:key="date_filter_setting"
+            android:title="@string/pref_title_social_recommendations"
+            android:summary="@string/pref_description_social_recommendations"
+            android:defaultValue="false" />
+
+        <SwitchPreference
+            android:key="disable_info_popup"
+            android:title="@string/disable_info_popup"
+            android:summary="@string/disable_info_popup_summary"
+            android:defaultValue="false" />
+
+        <SwitchPreference
+            android:key="enable_create_copy"
+            android:title="@string/enable_create_copy"
+            android:summary="@string/enable_create_copy_summary"
+            android:defaultValue="false" />
+
+        <SwitchPreference
+            android:key="enable_reverse_order"
+            android:title="@string/enable_reverse_order"
+            android:summary="@string/enable_reverse_order_summary"
+            android:defaultValue="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:layout="@layout/preference_category"
+        android:title="Map Marker">
+        <ListPreference
+            android:key="photo_size_setting"
+            android:title="@string/photo_size_setting"
+            android:summary="@string/photo_size_setting_summary"
+            android:defaultValue="0.6"
+            android:entries="@array/pref_example_list_titles"
+            android:entryValues="@array/pref_example_list_values"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null" />
+
+        <ListPreference
+            android:key="photo_marker_setting"
+            android:title="@string/photo_marker_setting"
+            android:summary="@string/photo_marker_setting_summary"
+            android:defaultValue="filmFrame"
+            android:entries="@array/photo_marker_list_titles"
+            android:entryValues="@array/photo_marker_list_values"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null" />
+
+        <ListPreference
+            android:key="photo_marker_enable_minimum_cluster"
+            android:title="@string/setting_activity_minimum_cluster_title"
+            android:summary="@string/setting_activity_minimum_cluster_summary"
+            android:defaultValue="10"
+            android:entries="@array/photo_marker_enable_minimum_cluster_list_titles"
+            android:entryValues="@array/photo_marker_enable_minimum_cluster_list_values"
+            android:negativeButtonText="@null"
+            android:positiveButtonText="@null" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:layout="@layout/preference_category"
+        android:title="Application Information">
+        <Preference
+            android:key="aaf_app_version"
+            android:title=""
+            android:summary="">
+        </Preference>
+        <Preference
+            android:key="open_source_licenses"
+            android:title="Open Source Licenses"
+            android:summary="open source software notices">
+        </Preference>
+    </PreferenceCategory>
+
+</PreferenceScreen>

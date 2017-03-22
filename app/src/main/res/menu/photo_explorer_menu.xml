@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".SearchFragmentActivity">
+
+    <item
+        android:id="@+id/explorer"
+        android:icon="@android:drawable/ic_dialog_map"
+        android:title="@string/thumbnail_explorer_compact_activity_explorer"
+        app:showAsAction="collapseActionView" />
+    <item
+        android:id="@+id/update"
+        android:icon="@android:drawable/ic_dialog_map"
+        android:title="@string/thumbnail_explorer_compact_activity_update"
+        app:showAsAction="collapseActionView" />
+
+</menu>

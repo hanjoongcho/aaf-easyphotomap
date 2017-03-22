@@ -1,0 +1,9 @@
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/primary_600">
+    <item>
+        <shape xmlns:android="http://schemas.android.com/apk/res/android">
+            <corners android:radius="1dp" />
+            <solid android:color="@color/primary" />
+        </shape>
+    </item>
+</ripple>
