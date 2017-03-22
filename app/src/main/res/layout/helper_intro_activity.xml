@@ -1,33 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/lib/com.beardedhen.androidbootstrap;"
-    android:background="@drawable/intro5"
+    android:background="@color/colorPrimary2"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <TextView
-        android:padding="15dp"
+        android:padding="10dp"
         android:text="Awesome Application Factory"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:id="@+id/textView"
+        android:id="@+id/companyName"
         android:gravity="left"
-        android:textColor="@color/bootstrap_brand_secondary_fill"
-        android:textSize="13dp"
-        android:textStyle="normal|bold" />
+        android:textColor="@color/white"
+        android:textSize="15dp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:src="@drawable/intro"
+            android:layout_width="100dp"
+            android:layout_height="100dp" />
+
+    </LinearLayout>
 
     <TextView
-        android:padding="15dp"
+        android:padding="10dp"
         android:text="Easy Photo Map"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:gravity="right|bottom"
-        android:textColor="@color/bootstrap_brand_secondary_fill"
-        android:textSize="13dp"
-        android:id="@+id/textView5"
-        android:textStyle="normal|bold" />
+        android:gravity="center_horizontal"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        android:id="@+id/appName"
+        android:textStyle="bold" />
 
 </LinearLayout>

@@ -2,14 +2,14 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "22.0.1"
+    buildToolsVersion '25.0.0'
 
     defaultConfig {
         applicationId "me.blog.korn123.easyphotomap"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 52
-        versionName "1.1.41"
+        versionCode 53
+        versionName "1.1.42"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
     }
