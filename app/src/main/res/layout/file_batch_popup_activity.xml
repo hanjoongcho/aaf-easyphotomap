@@ -13,10 +13,11 @@
         android:gravity="center_vertical"
         >
         <TextView
+            android:id="@+id/infoText6"
             android:padding="5dp"
             android:gravity="left"
             android:textSize="11dp"
-            android:textColor="@color/black1"
+            android:textColor="@color/defaultFont"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/batch_popup_message1"
@@ -29,37 +30,38 @@
             android:id="@+id/progressBar"
             />
         <TextView
+            android:typeface="normal"
             android:gravity="center"
             android:textSize="15dp"
-            android:textColor="@color/colorPrimary2"
+            android:textColor="@color/colorPrimary"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:id="@+id/infoText"
             />
         <TextView
             android:textSize="15dp"
-            android:textColor="@color/colorPrimary2"
+            android:textColor="@color/colorPrimary"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:id="@+id/infoText2"
             />
         <TextView
             android:textSize="15dp"
-            android:textColor="@color/colorPrimary2"
+            android:textColor="@color/colorPrimary"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:id="@+id/infoText3"
             />
         <TextView
             android:textSize="15dp"
-            android:textColor="@color/colorPrimary2"
+            android:textColor="@color/colorPrimary"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:id="@+id/infoText4"
             />
         <TextView
             android:textSize="15dp"
-            android:textColor="@color/colorPrimary2"
+            android:textColor="@color/colorPrimary"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:id="@+id/infoText5"

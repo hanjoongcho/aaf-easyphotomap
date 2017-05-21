@@ -2,6 +2,7 @@ package me.blog.korn123.easyphotomap.file;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.location.Address;
 import android.os.Bundle;
 import android.os.Handler;
@@ -53,6 +54,7 @@ public class BatchPopupActivity extends Activity {
     TextView infoText3;
     TextView infoText4;
     TextView infoText5;
+    TextView infoText6;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +68,14 @@ public class BatchPopupActivity extends Activity {
         infoText3 = (TextView)findViewById(R.id.infoText3);
         infoText4 = (TextView)findViewById(R.id.infoText4);
         infoText5 = (TextView)findViewById(R.id.infoText5);
+        infoText6 = (TextView)findViewById(R.id.infoText6);
+        infoText.setTypeface(Typeface.DEFAULT);
+        infoText2.setTypeface(Typeface.DEFAULT);
+        infoText3.setTypeface(Typeface.DEFAULT);
+        infoText4.setTypeface(Typeface.DEFAULT);
+        infoText5.setTypeface(Typeface.DEFAULT);
+        infoText6.setTypeface(Typeface.DEFAULT);
+
         ArrayList<String> listImagePath = getIntent().getStringArrayListExtra("listImagePath");
         totalPhoto = listImagePath.size();
         Thread thread = new RegisterThread(BatchPopupActivity.this, listImagePath);
@@ -107,6 +117,7 @@ public class BatchPopupActivity extends Activity {
         }
 
         public void run() {
+            StringBuilder successRow = new StringBuilder();
             for (String imagePath : listImagePath) {
                 if (!enableUpdate) return;
                 Message message = progressHandler.obtainMessage();
@@ -143,29 +154,35 @@ public class BatchPopupActivity extends Activity {
                         if (listAddress.size() > 0) {
                             entity.info = CommonUtils.fullAddress(listAddress.get(0));
                         }
-                        StringBuilder sb = new StringBuilder();
-                        sb.append(entity.imagePath + "|");
-                        sb.append(entity.info + "|");
-                        sb.append(entity.latitude + "|");
-                        sb.append(entity.longitude + "|");
-                        sb.append(entity.date + "\n");
-                        if (CommonUtils.isMatchLine(Constant.PHOTO_DATA_PATH, sb.toString())) {
+                        StringBuilder temp = new StringBuilder();
+                        temp.append(entity.imagePath + "|");
+                        temp.append(entity.info + "|");
+                        temp.append(entity.latitude + "|");
+                        temp.append(entity.longitude + "|");
+                        temp.append(entity.date + "\n");
+                        if (CommonUtils.isMatchLine(Constant.PHOTO_DATA_PATH, temp.toString())) {
                             reduplicationCount++;
                         } else {
-                            CommonUtils.writeDataFile(sb.toString(), Constant.PHOTO_DATA_PATH, true);
+                            successRow.append(temp.toString());
                             CommonUtils.createScaledBitmap(targetFile.getAbsolutePath(), Constant.WORKING_DIRECTORY + fileName + ".thumb", 200);
                             successCount++;
                         }
                     } else {
                         noGPSInfoCount++;
                     }
+
                 } catch (Exception e) {
                     AAFLogger.info("RegisterThread-run INFO: exception is " + e.getMessage(), getClass());
                     failCount++;
                 }
                 progressHandler.sendMessage(message);
             }
+            CommonUtils.writeDataFile(successRow.toString(), Constant.PHOTO_DATA_PATH, true);
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        CommonUtils.showAlertDialog(BatchPopupActivity.this, getString(R.string.batch_popup_message6));
+    }
 }

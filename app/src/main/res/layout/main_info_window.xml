@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     >
     <TextView
-        android:background="@color/colorPrimary2"
+        android:background="@color/colorPrimary"
         android:textColor="@color/white"
         android:padding="5dp"
         android:layout_width="match_parent"
@@ -21,7 +21,7 @@
         />
     <TextView
         android:textColor="@color/white"
-        android:background="@color/colorPrimary2"
+        android:background="@color/colorPrimary"
         android:padding="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

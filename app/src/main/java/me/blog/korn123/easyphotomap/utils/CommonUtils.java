@@ -520,6 +520,19 @@ public class CommonUtils {
         alert.show();
     }
 
+    public static void showAlertDialog(Context context,
+                                       String message,
+                                       DialogInterface.OnClickListener positiveListener,
+                                       DialogInterface.OnClickListener negativeListener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage(message);
+        builder.setCancelable(true);
+        builder.setNegativeButton("취소", negativeListener);
+        builder.setPositiveButton("확인", positiveListener);
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
     public static boolean isMatchLine(String dataPath, String lineString) {
         boolean isMatch = false;
         try {
@@ -713,7 +726,7 @@ public class CommonUtils {
 
     public static Bitmap decodeFile(Activity activity, String imagePath, BitmapFactory.Options options) {
         Bitmap bitmap = null;
-        if (new File(imagePath).exists()) {
+        if (imagePath != null && new File(imagePath).exists()) {
             if (options == null) {
                 bitmap = BitmapFactory.decodeFile(imagePath);
             } else {

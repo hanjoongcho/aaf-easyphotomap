@@ -52,6 +52,7 @@
     <string name="batch_popup_message3">duplicate photos</string>
     <string name="batch_popup_message4">no gps data photos</string>
     <string name="batch_popup_message5">failed registration photos</string>
+    <string name="batch_popup_message6">Click on the \'Close\' button to exit.</string>
 
     <string name="maps_activity_message1">The current version is only available with an existing registered Photos.</string>
     <string name="maps_activity_message2">There is no registered Photos.</string>
@@ -67,10 +68,12 @@
     <string name="file_explorer_message9">There are no pictures folder currently registered.</string>
     <string name="file_explorer_message10">Update list..</string>
     <string name="file_explorer_message11">Do you want to register all photos in the current folder?</string>
+    <string name="file_explorer_message12">Select the \'OK\' button to go to the Photo Map screen.\nIf you want to move to the previous folder, select the \'Cancel\' button and click the folder name of the navigation.</string>
 
     <string name="thumbnail_explorer_message1">Thumbnail of the updated information...</string>
     <string name="thumbnail_explorer_message2">Choose a picture.</string>
     <string name="thumbnail_explorer_message3">update thumbnail</string>
+    <string name="thumbnail_explorer_message4">The original of the photo could not be found.</string>
 
     <string name="photo_search_message1">Choose a picture.</string>
 

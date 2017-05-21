@@ -6,7 +6,7 @@
         android:textColor="@color/white"
         android:padding="5dp"
         android:layout_marginTop="10dp"
-        android:background="@color/colorPrimary2"
+        android:background="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="New Text"

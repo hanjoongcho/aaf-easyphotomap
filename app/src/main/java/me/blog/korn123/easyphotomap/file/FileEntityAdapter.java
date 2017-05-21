@@ -5,13 +5,13 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,19 +19,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.drew.imaging.jpeg.JpegMetadataReader;
-import com.drew.imaging.jpeg.JpegProcessingException;
 import com.drew.lang.GeoLocation;
-import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.GpsDirectory;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import me.blog.korn123.easyphotomap.R;
-import me.blog.korn123.easyphotomap.constant.Constant;
-import me.blog.korn123.easyphotomap.log.AAFLogger;
 import me.blog.korn123.easyphotomap.utils.BitmapUtils;
 import me.blog.korn123.easyphotomap.utils.CommonUtils;
 
@@ -62,37 +55,45 @@ public class FileEntityAdapter extends ArrayAdapter<FileEntity> {
             LayoutInflater inflater = ((Activity)context).getLayoutInflater();
             row = inflater.inflate(layoutResourceId, parent, false);
             holder = new ViewHolder();
+            // bind view
             holder.textView1 = (TextView)row.findViewById(R.id.text1);
             holder.textView2 = (TextView)row.findViewById(R.id.text2);
             holder.textView3 = (TextView)row.findViewById(R.id.text3);
             holder.imageView1 = (ImageView)row.findViewById(R.id.image1);
+            holder.textView1.setTypeface(Typeface.DEFAULT);
+            holder.textView2.setTypeface(Typeface.DEFAULT);
+            holder.textView3.setTypeface(Typeface.DEFAULT);
+
+            // set tag
             row.setTag(holder);
         } else {
             holder = (ViewHolder)row.getTag();
         }
+
         FileEntity entity = entities.get(position);
+
+        // init default option
         int widthHeight = (int)(CommonUtils.getDefaultDisplay(activity).x / 5);
+        holder.imageView1.getLayoutParams().height = widthHeight;
+        holder.imageView1.getLayoutParams().width = widthHeight;
+
+        // init default value
         holder.textView1.setText(entity.fileName);
         holder.textView2.setText("");
         holder.textView3.setText("");
-        holder.imageView1.getLayoutParams().height = widthHeight;
-        holder.imageView1.getLayoutParams().width = widthHeight;
-        holder.imageView1.setImageBitmap(BitmapFactory.decodeResource(activity.getResources(), android.R.drawable.ic_menu_gallery));
+        holder.imageView1.setImageBitmap(getDefaultImage());
+
+        // init async process
         String imagePath = entity.getImagePath();
-        String thumbnailPath = Constant.WORKING_DIRECTORY + entity.getFileName() + ".thumb";
         holder.position = position;
         if (entity.isDirectory) {
-//            holder.imageView1.setImageResource(R.drawable.ic_menu_archive);
-//            new ThumbnailTask(activity, position, holder).execute(null, String.valueOf(widthHeight));
             holder.textView2.setVisibility(View.GONE);
             holder.textView3.setVisibility(View.GONE);
             new ThumbnailTask(activity, position, holder).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null, String.valueOf(widthHeight));
         } else {
             holder.textView2.setVisibility(View.VISIBLE);
             holder.textView3.setVisibility(View.VISIBLE);
-//            new ThumbnailTask(activity, position, holder).execute(imagePath, String.valueOf(widthHeight));
             new ThumbnailTask(activity, position, holder).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, imagePath, String.valueOf(widthHeight));
-//                holder.imageView1.setImageResource(R.drawable.ic_menu_gallery);
         }
         return row;
     }
@@ -117,6 +118,7 @@ public class FileEntityAdapter extends ArrayAdapter<FileEntity> {
             options.inJustDecodeBounds = false;
             options.inSampleSize = 20;
             Bitmap resized = null;
+//            Log.i("doInBack", String.format("%s, %s", mHolder.position, mPosition));
             if (mHolder.position == mPosition) {
                 if (filePath == null) {
                     isDirectory = true;
@@ -169,6 +171,14 @@ public class FileEntityAdapter extends ArrayAdapter<FileEntity> {
                 }
             }
         }
+    }
+
+    private Bitmap mDefaultBitmap = null;
+    private Bitmap getDefaultImage() {
+        if (mDefaultBitmap == null) {
+            mDefaultBitmap = BitmapFactory.decodeResource(activity.getResources(), android.R.drawable.ic_menu_gallery);
+        }
+        return mDefaultBitmap;
     }
 
     private static class ViewHolder {

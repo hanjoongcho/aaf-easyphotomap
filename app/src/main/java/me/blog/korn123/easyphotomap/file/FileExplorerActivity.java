@@ -12,6 +12,7 @@ import android.location.Address;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
@@ -247,6 +248,7 @@ public class FileExplorerActivity extends AppCompatActivity {
         listDirectroryEntity = new ArrayList<>();
         mRoot = Constant.CAMERA_DIRECTORY_INTERNAL;
         mCurrent = Constant.CAMERA_DIRECTORY;
+        ((TextView)findViewById(R.id.btnup)).setTypeface(Typeface.DEFAULT);
 
         mAdapter = new FileEntityAdapter(this, this, R.layout.file_file_explorer_activity_list_item, this.listFileEntity);
         mFileList.setAdapter(mAdapter);
@@ -396,24 +398,27 @@ public class FileExplorerActivity extends AppCompatActivity {
         String[] arrayPath = StringUtils.split(mCurrent, "/");
         viewGroup.removeViews(0, viewGroup.getChildCount());
         String currentPath = "";
+        int index = 0;
         for (String path : arrayPath) {
             currentPath += ("/" + path);
             final String targetPath = currentPath;
             TextView textView = new TextView(this);
-            if(viewGroup.getChildCount() < 1) {
-                textView.setText(path);
+            if(index < arrayPath.length - 1) {
+                textView.setText(path + "  >  ");
             } else {
-                textView.setText("  >  " + path);
+                textView.setText(path);
             }
-//            textView.setTextColor(Color.parseColor("#ff000000"));
-            textView.setTextColor(getResources().getColor(R.color.black1));
+
             if (StringUtils.equals(arrayPath[arrayPath.length - 1], path)) {
-                textView.setTypeface(null, Typeface.BOLD);
+                textView.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+                textView.setTextColor(ContextCompat.getColor(FileExplorerActivity.this, R.color.colorPrimary));
+            } else {
+                textView.setTypeface(Typeface.DEFAULT);
+                textView.setTextColor(ContextCompat.getColor(FileExplorerActivity.this, R.color.defaultFont));
             }
             textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16);
             textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
             textView.setGravity(Gravity.CENTER_VERTICAL);
-//            textView.setBackgroundResource(R.color.color2);
             textView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -422,6 +427,7 @@ public class FileExplorerActivity extends AppCompatActivity {
                 }
             });
             viewGroup.addView(textView);
+            index++;
         }
         mScrollView.postDelayed(new Runnable() {
             public void run() {
@@ -431,5 +437,19 @@ public class FileExplorerActivity extends AppCompatActivity {
         Thread refreshThread = new RefreshThread();
         refreshThread.start();
         progressDialog = ProgressDialog.show(FileExplorerActivity.this, "", getString(R.string.file_explorer_message10));
+    }
+
+    @Override
+    public void onBackPressed() {
+        CommonUtils.showAlertDialog(FileExplorerActivity.this, getString(R.string.file_explorer_message12), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finish();
+            }
+        }, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        });
     }
 }

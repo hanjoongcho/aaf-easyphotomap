@@ -32,7 +32,6 @@
                     android:layout_weight="1"
                     android:textSize="12dp"
                     android:gravity="center_vertical"
-                    android:textColor="#FF885599"
                     android:paddingLeft="10dp"
                     android:paddingRight="0dp" />
                 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -42,7 +41,6 @@
                     android:layout_weight="1"
                     android:textSize="12dp"
                     android:gravity="center_vertical"
-                    android:textColor="#FF885599"
                     android:paddingLeft="10dp"
                     android:paddingRight="0dp" />
                 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -52,7 +50,6 @@
                     android:layout_weight="1"
                     android:textSize="12dp"
                     android:gravity="center_vertical"
-                    android:textColor="#FF885599"
                     android:paddingLeft="10dp"
                     android:paddingRight="0dp" />
             </LinearLayout>
