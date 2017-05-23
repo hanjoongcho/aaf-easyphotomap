@@ -1,0 +1,199 @@
+<resources>
+    <string name="app_name">EasyPhotoMap</string>
+    <string name="title_activity_maps">Easy\nPhotoMap</string>
+
+    <!--MapsActivity-->
+    <string name="maps_activity_timeline">タイムライン</string>
+    <string name="maps_activity_setting">環境設定</string>
+    <string name="maps_activity_find">登録画像の検索</string>
+    <string name="maps_activity_overlay">登録写真を見る</string>
+    <string name="maps_activity_folder">エクスプローラで登録</string>
+    <string name="maps_activity_explorer">プレビューで登録</string>
+    <string name="maps_activity_camera">撮影して登録</string>
+
+    <!--ThumbnailExplorerActivity-->
+    <string name="thumbnail_explorer_compact_activity_title">プレビューで登録</string>
+    <string name="thumbnail_explorer_compact_activity_explorer">エクスプローラで登録</string>
+    <string name="thumbnail_explorer_compact_activity_update">サムネイルを更新</string>
+
+    <!--FileExplorerActivity-->
+    <string name="file_explorer_activity_title">エクスプローラ</string>
+
+    <!--SettingsActivity-->
+    <string name="setting_activity_title">環境設定</string>
+    <string name="setting_activity_minimum_cluster_title">フォトマーカークラスタの設定</string>
+    <string name="setting_activity_minimum_cluster_summary">特定の距離以内に設定値よりもマーカーが多くなると、クラスタのマーカーを使用して、読みやすさを高めます。</string>
+
+    <!--TimelineActivity-->
+    <string name="timeline_compat_activity_title">タイムライン</string>
+
+    <string name="explorer">explorer</string>
+    <string name="overlay">overlay photos</string>
+    <string name="action_settings">action_settings</string>
+    <string name="address">add</string>
+    <string name="info_message">おすすめキーワードをクリックしてください。\n近くで撮影された写真を見ることができます。</string>
+    <string name="view_korea">전체보기(KOREA)</string>
+    <string name="view_world">一覧（WORLD）</string>
+    <string name="close">閉じる</string>
+    <string name="open_explorer">エクスプローラで登録</string>
+    <string name="update_thumbnail">サムネイルを更新</string>
+    <string name="setting">環境設定</string>
+    <string name="down_scale">フォントサイズを小さく</string>
+    <string name="send_log">ログファイルの転送</string>
+    <string name="photo_home_internal">フォトホーム</string>
+    <string name="photo_home_external">フォトホームSDカード</string>
+    <string name="add_all">一括登録</string>
+    <string name="home">ギャラリー</string>
+    <string name="batch_stop">停止</string>
+    <string name="return_explorer">閉じる</string>
+
+    <string name="batch_popup_message1">一括登録モードでは、位置情報（GPS）がないか、既存の登録された写真を登録しません。\n位置情報（GPS）がない写真はeasy photo mapのアドレス検索機能を利用して、個々の登録となります。</string>
+    <string name="batch_popup_message2">登録完了の写真ファイルの数</string>
+    <string name="batch_popup_message3">重複した画像ファイル数</string>
+    <string name="batch_popup_message4">位置情報のない写真ファイル数</string>
+    <string name="batch_popup_message5">登録に失敗し、画像ファイル数</string>
+    <string name="batch_popup_message6">終了をご希望の場合 \'Close\' ボタンをクリックします。</string>
+
+    <string name="maps_activity_message1">現在のバージョンは、既存の写真登録のみ可能です。</string>
+    <string name="maps_activity_message2">登録された写真がありません。</string>
+
+    <string name="file_explorer_message1">写真撮影時の位置情報（GPS）の使用が有効にされていない位置情報が存在しません。\n選択された写真は、アドレス検索を利用して位置情報を入力します。</string>
+    <string name="file_explorer_message2">時間情報なし</string>
+    <string name="file_explorer_message3">同じ名前の画像が存在します。</string>
+    <string name="file_explorer_message4">EasyPhotoMapに写真を登録しました。</string>
+    <string name="file_explorer_message5">写真登録</string>
+    <string name="file_explorer_message6">GPS情報を確認中...</string>
+    <string name="file_explorer_message7">登録しますか？</string>
+    <string name="file_explorer_message8">Generate thumbnail...</string>
+    <string name="file_explorer_message9">現在のフォルダには、登録可能な画像がありません。</string>
+    <string name="file_explorer_message10">Update list..</string>
+    <string name="file_explorer_message11">現在のフォルダのすべての写真を登録しますか？</string>
+    <string name="file_explorer_message12">\'確認\' ボタンを選択するとフォトマップ画面に移動します。\n前のフォルダに移動をご希望の場合 \'キャンセル\' ボタンを選択し、ナビゲーションのフォルダ名をクリックしてください。</string>
+
+    <string name="thumbnail_explorer_message1">サムネイル情報更新中...</string>
+    <string name="thumbnail_explorer_message2">写真を選択してください。</string>
+    <string name="thumbnail_explorer_message3">thumbnail アップデート</string>
+    <string name="thumbnail_explorer_message4">写真のソースを見つけることができません。</string>
+
+    <string name="photo_search_message1">写真を選択</string>
+
+    <string name="address_search_message1">同じ名前の画像が存在します。</string>
+    <string name="address_search_message2">EasyPhotoMapに写真を登録しました。</string>
+
+    <string name="epm_preference_message1">easy photo mapアプリの設定</string>
+    <string name="epm_preference_message2">おすすめキーワード、日付フィルタを使用する</string>
+
+    <string name="camera_activity_message1">GPS情報を受信しませんでした。</string>
+
+    <string name="confirm">確認</string>
+    <string name="cancel">キャンセル</string>
+    <string name="setting_title">easy photo map設定</string>
+    <string name="camera_info_message1">写真撮影前のカメラの設定で位置タグ機能を活性化させてください。位置タグ設定が有効になっていない場合、アドレス検索機能を利用して位置情報を直接入力する必要があります。</string>
+    <string name="camera_info_message2">確認</string>
+    <string name="camera_info_message3">もはや見ない</string>
+    <string name="camera_info_message4">位置タグの設定画面は、携帯電話に応じて異なる場合があります。</string>
+
+    <string name="disable_info_popup">カメラの設定案内メッセージを無効に</string>
+    <string name="disable_info_popup_summary">カメラ撮影前GPS位置タグ案内情報を表示しません。</string>
+
+    <string name="enable_create_copy">コピーの作成機能を有効に</string>
+    <string name="enable_create_copy_summary">写真の登録時にコピーを作成します。コピーを作成する場合、元の画像が削除されてもコピーを利用して、写真を閲覧することができます。</string>
+
+    <string name="enable_reverse_order">エクスプローラ逆順にソートを有効に</string>
+    <string name="enable_reverse_order_summary">エクスプローラの並べ替えの際、ファイルやディレクトリの名前を逆の順序で並べ替えます。</string>
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">デフォルトの設定</string>
+
+    <string name="pref_title_social_recommendations">おすすめキーワード、日付フィルタを使用有効</string>
+    <string name="pref_description_social_recommendations">おすすめキーワードに使用されるアドレスフィルタを代わりにして、日付フィルタを適用します。</string>
+
+    <string name="pref_title_display_name">Display name</string>
+    <string name="pref_default_display_name">John Smith</string>
+
+    <string name="photo_size_setting">フォトマーカーサイズを設定</string>
+    <string name="photo_size_setting_summary">地図上に表示されているフォトマーカーのサイズを変更します。</string>
+    <string-array name="pref_example_list_titles">
+        <item>x0.2</item>
+        <item>x0.4</item>
+        <item>x0.6</item>
+        <item>x0.8</item>
+        <item>x1.0</item>
+        <item>x1.2</item>
+        <item>x1.4</item>
+    </string-array>
+    <string-array name="pref_example_list_values">
+    <item>0.2</item>
+    <item>0.4</item>
+    <item>0.6</item>
+    <item>0.8</item>
+    <item>1.0</item>
+    <item>1.2</item>
+    <item>1.4</item>
+    </string-array>
+
+    <string name="photo_marker_setting">フォトマーカーアイコンの設定</string>
+    <string name="photo_marker_setting_summary">地図上に表示されているフォトマーカーのジョトリュを変更します。</string>
+    <string-array name="photo_marker_list_titles">
+        <item>フィルムフレーム</item>
+        <item>花フレーム</item>
+        <item>基本フレーム</item>
+        <item>赤い点</item>
+    </string-array>
+    <string-array name="photo_marker_list_values">
+        <item>filmFrame</item>
+        <item>flowerFrame</item>
+        <item>basicFrame</item>
+        <item>redCircle</item>
+    </string-array>
+
+    <string-array name="photo_marker_enable_minimum_cluster_list_titles">
+        <item>5以上</item>
+        <item>10以上</item>
+        <item>100以上</item>
+        <item>200以上</item>
+        <item>500以上</item>
+        <item>1000以上</item>
+    </string-array>
+    <string-array name="photo_marker_enable_minimum_cluster_list_values">
+        <item>5</item>
+        <item>10</item>
+        <item>100</item>
+        <item>200</item>
+        <item>500</item>
+        <item>1000</item>
+    </string-array>
+
+    <!-- Example settings for Data & Sync -->
+    <string name="pref_header_data_sync">Data &amp; sync</string>
+
+    <string name="pref_title_sync_frequency">Sync frequency</string>
+    <string-array name="pref_sync_frequency_titles">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>3 hours</item>
+        <item>6 hours</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_sync_frequency_values">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>180</item>
+        <item>360</item>
+        <item>-1</item>
+    </string-array>
+
+    <string name="pref_title_system_sync_settings">System sync settings</string>
+
+    <!-- Example settings for Notifications -->
+    <string name="pref_header_notifications">Notifications</string>
+
+    <string name="pref_title_new_message_notifications">New message notifications</string>
+
+    <string name="pref_title_ringtone">Ringtone</string>
+    <string name="pref_ringtone_silent">Silent</string>
+
+    <string name="pref_title_vibrate">Vibrate</string>
+</resources>

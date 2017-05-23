@@ -25,7 +25,7 @@
     <string name="setting_activity_minimum_cluster_summary">If there are more markers than a set point within a certain distance, use cluster markers to increase readability.</string>
 
     <!--TimelineActivity-->
-    <string name="timeline_compat_activity_title">타임라인</string>
+    <string name="timeline_compat_activity_title">Timeline</string>
 
     <string name="explorer">explorer</string>
     <string name="overlay">overlay photos</string>
