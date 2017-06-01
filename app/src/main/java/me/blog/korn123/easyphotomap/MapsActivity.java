@@ -9,11 +9,13 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.media.ExifInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -77,6 +79,8 @@ import me.blog.korn123.easyphotomap.setting.SettingsActivity;
 import me.blog.korn123.easyphotomap.thumbnail.ThumbnailExplorerActivity;
 import me.blog.korn123.easyphotomap.timeline.TimelineActivity;
 import me.blog.korn123.easyphotomap.utils.CommonUtils;
+import me.blog.korn123.easyphotomap.utils.FontUtils;
+import me.blog.korn123.easyphotomap.utils.GPSUtils;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -211,8 +215,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             });
 //                        Toast.makeText(getApplicationContext(), marker.isInfoWindowShown() + "", Toast.LENGTH_SHORT).show();
         } else {
-//            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(37.3425, 127.29194444444444), 7.0f));
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(36.4372046, 127.8896971), 7.0f));
+            Location location = GPSUtils.getLocationWithGPSProvider(this);
+            if (location == null) {
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(36.4372046, 127.8896971), 7.0f));
+            } else {
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 13.0f));
+            }
         }
     }
 
@@ -403,7 +411,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
                 View customView = inflater.inflate(R.layout.main_marker_popup, null);
-
+                FontUtils.setChildViewTypeface((ViewGroup) customView);
                 Set<String> set = new HashSet<>();
                 if (enableDateFilter) {
                     for (PhotoEntity imageEntity : entities) {
