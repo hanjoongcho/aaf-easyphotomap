@@ -64,6 +64,7 @@ import me.blog.korn123.easyphotomap.thumbnail.ThumbnailExplorerActivity;
  */
 public class CommonUtils {
 
+//    public final static SimpleDateFormat DATE_TIME_PATTERN = new SimpleDateFormat("yyyy-MM-dd(EEE) HH:mm", Locale.getDefault());
     public final static SimpleDateFormat DATE_TIME_PATTERN = new SimpleDateFormat("yyyy년 MM월 dd일(E) HH:mm", Locale.KOREA);
 
     private static final int MAX_RETRY = 5;

@@ -4,6 +4,10 @@
 
 ---------------------------------------------------
 
+# Changes in 1.1.45 (date: 2017/06/03)
+  [기능개선/Improvement]
+  1. GPS 정보를 이용한 지도 초기화기능 적용/Apply map initialization function using GPS information
+
 # Changes in 1.1.44 (date: 2017/05/23)
   [기능추가/New Feature]
   1. 일본어 지원기능 추가/Added support for Japanese language

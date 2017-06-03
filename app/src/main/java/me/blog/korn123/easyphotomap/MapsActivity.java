@@ -15,7 +15,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -84,13 +83,10 @@ import me.blog.korn123.easyphotomap.utils.GPSUtils;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
-    final float MAX_ZOOM = 18.0f;
     private GoogleMap mMap;
-    private FloatingActionMenu menuDown;
-
-    public Map<String, PhotoEntity> entityMap = new HashMap<String, PhotoEntity>();
-    ArrayList<PhotoEntity> entities;
-    Map<String, Integer> map;
+    private FloatingActionMenu mFloatingMenu;
+    private ArrayList<PhotoEntity> mPhotoEntities;
+    private Map<String, Integer> mRecommendMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,21 +94,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         TypefaceProvider.registerDefaultIconSets();
         setContentView(R.layout.main_maps_activity);
         ButterKnife.bind(this);
-        menuDown = (FloatingActionMenu) findViewById(R.id.menu_down);
+        mFloatingMenu = (FloatingActionMenu) findViewById(R.id.floatingMenu);
         if (!new File(Constant.WORKING_DIRECTORY).exists()) {
             new File(Constant.WORKING_DIRECTORY).mkdirs();
         }
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        // Obtain the SupportMapFragment and get notified when the mRecommendMap is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        menuDown.setClosedOnTouchOutside(true);
-        menuDown.setOnMenuButtonClickListener(new View.OnClickListener() {
+        mFloatingMenu.setClosedOnTouchOutside(true);
+        mFloatingMenu.setOnMenuButtonClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                menuDown.toggle(true);
+                mFloatingMenu.toggle(true);
             }
         });
     }
@@ -123,33 +119,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         parseMetadata();
     }
 
-    private void bindButtonEffect() {
-        ImageButton camera = (ImageButton) findViewById(R.id.camera);
-        ImageButton explorer = (ImageButton) findViewById(R.id.explorer);
-        ImageButton overlay = (ImageButton) findViewById(R.id.overlay);
-        ImageButton find = (ImageButton) findViewById(R.id.find);
-        ImageButton setting = (ImageButton) findViewById(R.id.setting);
-        View.OnTouchListener onTouchListener = new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (motionEvent.getAction() == motionEvent.ACTION_DOWN) {
-                    view.setBackgroundColor(0x5fef1014);
-                } else if (motionEvent.getAction() == motionEvent.ACTION_UP) {
-                    view.setBackgroundColor(0x00ffffff);
-                }
-                return false;
-            }
-        };
-        camera.setOnTouchListener(onTouchListener);
-        explorer.setOnTouchListener(onTouchListener);
-        overlay.setOnTouchListener(onTouchListener);
-        find.setOnTouchListener(onTouchListener);
-        setting.setOnTouchListener(onTouchListener);
-    }
-
     /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
+     * Manipulates the mRecommendMap once available.
+     * This callback is triggered when the mRecommendMap is ready to be used.
      * This is where we can add markers or lines, add listeners or move the camera_camera_activity. In this case,
      * we just add a marker near Sydney, Australia.
      * If Google Play services is not installed on the device, the user will be prompted to install
@@ -162,18 +134,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
             @Override
             public void onCameraChange(CameraPosition cameraPosition) {
-                if (cameraPosition.zoom > MAX_ZOOM) {
-                    mMap.animateCamera(CameraUpdateFactory.zoomTo(MAX_ZOOM));
+                if (cameraPosition.zoom > Constant.GOOGLE_MAP_MAX_ZOOM_IN_VALUE) {
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(Constant.GOOGLE_MAP_MAX_ZOOM_IN_VALUE));
                 }
-//                latitude.setText(String.valueOf(cameraPosition.target.latitude));
-//                longitude.setText(String.valueOf(cameraPosition.target.longitude));
-//                try {
-//                    List<Address> listAddress = CommonUtils.getFromLocation(MapsActivity.this, cameraPosition.target.latitude, cameraPosition.target.longitude, 1, 0);
-//                    address.setText(CommonUtils.fullAddress(listAddress.get(0)));
-//                } catch (Exception e) {
-//                    AAFLogger.error("MapsActivity-MapsActivity ERROR: " + e.getMessage(), getClass());
-//                    e.printStackTrace();
-//                }
             }
         });
 
@@ -197,11 +160,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 public void onFinish() {
 //                  options.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_menu_myplaces));
                     Marker marker = mMap.addMarker(fOptions);
-//                  Toast.makeText(getApplicationContext(), marker.isInfoWindowShown() + "", Toast.LENGTH_SHORT).show();
                     mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                         @Override
                         public void onInfoWindowClick(Marker marker) {
-//                            CommonUtils.showAlertDialog(MapsActivity.this, "", MapsActivity.this, fImagePath);
                             Intent imageViewIntent = new Intent(MapsActivity.this, PopupImageActivity.class);
                             imageViewIntent.putExtra("imagePath", fImagePath);
                             startActivity(imageViewIntent);
@@ -213,27 +174,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 public void onCancel() {
                 }
             });
-//                        Toast.makeText(getApplicationContext(), marker.isInfoWindowShown() + "", Toast.LENGTH_SHORT).show();
         } else {
             Location location = GPSUtils.getLocationWithGPSProvider(this);
             if (location == null) {
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(36.4372046, 127.8896971), 7.0f));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                        new LatLng(Constant.GOOGLE_MAP_DEFAULT_LATITUDE, Constant.GOOGLE_MAP_DEFAULT_LONGITUDE),
+                        Constant.GOOGLE_MAP_DEFAULT_ZOOM_VALUE)
+                );
             } else {
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 13.0f));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), Constant.GOOGLE_MAP_DEFAULT_ZOOM_VALUE));
             }
         }
     }
 
     public void parseMetadata() {
-        if (entities == null) {
-            entities = new ArrayList<>();
+        if (mPhotoEntities == null) {
+            mPhotoEntities = new ArrayList<>();
         } else {
-            entities.clear();
+            mPhotoEntities.clear();
         }
-        if (map == null) {
-            map = new HashMap<String, Integer>();
+        if (mRecommendMap == null) {
+            mRecommendMap = new HashMap<String, Integer>();
         } else {
-            map.clear();
+            mRecommendMap.clear();
         }
         List<String> infoLines = new ArrayList();
         try {
@@ -247,9 +210,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 entity.imagePath = infoArray[0];
                 entity.info = infoArray[1];
                 entity.date = infoArray[4];
-                entities.add(entity);
+                mPhotoEntities.add(entity);
             }
-            Collections.sort(entities);
+            Collections.sort(mPhotoEntities);
         } catch (Exception e) {
             AAFLogger.info("MapsActivity-parseMetadata INFO: " + e.getMessage(), getClass());
         }
@@ -326,9 +289,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             } else {
                 imageView.setImageBitmap(BitmapFactory.decodeResource(getResources(), android.R.drawable.ic_menu_gallery));
             }
-//            imageView.setRotation(90);
-//            imageView.setMaxWidth(100);
-//            imageView.setMaxHeight(100);
             ((TextView) (view.findViewById(R.id.info2))).setText("lat: " + StringUtils.substring(String.valueOf(latitude), 0, 6) + " lon: " + StringUtils.substring(String.valueOf(longitude), 0, 6) + "\n" + info);
             ((TextView) (view.findViewById(R.id.info3))).setText(date);
             return view;
@@ -356,15 +316,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     ArrayAdapter adapter;
     @OnClick({R.id.setting, R.id.camera, R.id.explorer, R.id.overlay, R.id.find, R.id.folder, R.id.timeline})
     public void buttonClick(View view) {
-        menuDown.close(false);
-//        new Handler().post(new Runnable() {
-//            @Override
-//            public void run() {
-//            }
-//        });
+        mFloatingMenu.close(false);
         switch (view.getId()) {
             case R.id.camera:
-//                CommonUtils.showAlertDialog(this, getString(R.string.maps_activity_message1));
                 if (CommonUtils.loadBooleanPreference(MapsActivity.this, "disable_info_popup")) {
                     Intent camera = new Intent(view.getContext(), CameraActivity.class);
                     startActivity(camera);
@@ -404,7 +358,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //                Log.i("enableDateFilter", String.valueOf(enableDateFilter));
                 mMap.clear();
                 parseMetadata();
-                if (entities.size() < 1) {
+                if (mPhotoEntities.size() < 1) {
                     CommonUtils.showAlertDialog(this, getString(R.string.maps_activity_message2));
                     return;
                 }
@@ -414,34 +368,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 FontUtils.setChildViewTypeface((ViewGroup) customView);
                 Set<String> set = new HashSet<>();
                 if (enableDateFilter) {
-                    for (PhotoEntity imageEntity : entities) {
+                    for (PhotoEntity imageEntity : mPhotoEntities) {
                         String date = null;
                         if (imageEntity.date.contains("(")) {
                             date = imageEntity.date.substring(0, imageEntity.date.lastIndexOf("("));
                         } else {
                             date = imageEntity.date;
                         }
-                        if (map.containsKey(date)) {
-                            map.put(date, map.get(date) + 1);
+                        if (mRecommendMap.containsKey(date)) {
+                            mRecommendMap.put(date, mRecommendMap.get(date) + 1);
                         } else {
-                            map.put(date, 1);
+                            mRecommendMap.put(date, 1);
                         }
                     }
                 } else {
-                    for (PhotoEntity imageEntity : entities) {
+                    for (PhotoEntity imageEntity : mPhotoEntities) {
                         String[] arr = StringUtils.split(imageEntity.info, " ");
                         for (String keyword : arr) {
                             if (Pattern.matches("^(([0-9]{1,9})-([0-9]{1,9}))|(([0-9]{1,9}))$", keyword) || keyword.length() < 2)
                                 continue;
-                            if (map.containsKey(keyword)) {
-                                map.put(keyword, map.get(keyword) + 1);
+                            if (mRecommendMap.containsKey(keyword)) {
+                                mRecommendMap.put(keyword, mRecommendMap.get(keyword) + 1);
                             } else {
-                                map.put(keyword, 1);
+                                mRecommendMap.put(keyword, 1);
                             }
                         }
                     }
                 }
-                List<Map.Entry<String, Integer>> listOfSortEntry = CommonUtils.entriesSortedByValues(map);
+                List<Map.Entry<String, Integer>> listOfSortEntry = CommonUtils.entriesSortedByValues(mRecommendMap);
                 listRecommendationOrigin.clear();
                 listRecommendation.clear();
                 for (Map.Entry<String, Integer> entry : listOfSortEntry) {
@@ -467,13 +421,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         overlayIcons("", false);
                     }
                 });
-//                customView.findViewById(R.id.viewKorea).setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        popupWindow.dismiss();
-//                        overlayIcons("대한민국", true);
-//                    }
-//                });
                 customView.findViewById(R.id.close).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -501,12 +448,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         return false;
                     }
                 });
-//                popupWindow = new PopupWindow(customView, (int) (point.x * 0.9), (int) (point.y * 0.6), true);
                 popupWindow = new PopupWindow(customView, (int)(point.x * 0.9), (int)((point.y - CommonUtils.dpToPixel(this, 25)) * 0.8), true);
                 popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
                 break;
             case R.id.find:
-                if (entities.size() < 1) {
+                if (mPhotoEntities.size() < 1) {
                     CommonUtils.showAlertDialog(this, getString(R.string.maps_activity_message2));
                     return;
                 }
@@ -514,7 +460,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 startActivity(photoSearchIntent);
                 break;
             case R.id.setting:
-//                Intent settingIntent = new Intent(this, EPMPreferenceActivity.class);
                 Intent settingIntent = new Intent(this, SettingsActivity.class);
                 startActivity(settingIntent);
                 break;
@@ -523,7 +468,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 startActivity(fileExplorerIntent);
                 break;
             case R.id.timeline:
-                if (entities.size() < 1) {
+                if (mPhotoEntities.size() < 1) {
                     CommonUtils.showAlertDialog(this, getString(R.string.maps_activity_message2));
                     return;
                 }
@@ -602,8 +547,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         @Override
         protected boolean shouldRenderAsCluster(Cluster<MyItem> cluster) {
-//            AAFLogger.info("MapsActivity.MyClusterRenderer-shouldRenderAsCluster INFO: " + mapZoom, getClass());
-            if (mapZoom > 17) {
+            if (mapZoom > Constant.GOOGLE_MAP_MAX_ZOOM_IN_VALUE - 1) {
                 return false;
             } else {
                 return cluster.getSize() > Integer.valueOf(CommonUtils.loadStringPreference(MapsActivity.this, "photo_marker_enable_minimum_cluster", "10"));
@@ -613,8 +557,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         @Override
         public void onCameraChange(CameraPosition cameraPosition) {
-            if (cameraPosition.zoom > MAX_ZOOM) {
-                mMap.animateCamera(CameraUpdateFactory.zoomTo(MAX_ZOOM));
+            if (cameraPosition.zoom > Constant.GOOGLE_MAP_MAX_ZOOM_IN_VALUE) {
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(Constant.GOOGLE_MAP_MAX_ZOOM_IN_VALUE));
             }
             mapZoom = cameraPosition.zoom;
         }
@@ -624,7 +568,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private ClusterManager<MyItem> mClusterManager;
     private void setUpClusterer() {
 
-        // Initialize the manager with the context and the map.
+        // Initialize the manager with the context and the mRecommendMap.
         // (Activity extends context, so we can pass 'this' in the constructor.)
         if (mClusterManager == null) {
             mClusterManager = new ClusterManager<MyItem>(this, mMap);
@@ -633,7 +577,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mClusterManager.clearItems();
         }
 
-        // Point the map's listeners at the listeners implemented by the cluster
+        // Point the mRecommendMap's listeners at the listeners implemented by the cluster
         // manager.
 //        getMap().setOnCameraChangeListener(mClusterManager);
 //        getMap().setOnMarkerClickListener(mClusterManager);
@@ -693,34 +637,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 }
                     });
 
-//                    mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-//                        @Override
-//                        public boolean onMarkerClick(Marker marker) {
-////                Toast.makeText(getApplicationContext(), marker.getId(), Toast.LENGTH_SHORT).show();
-//                            mMap.setInfoWindowAdapter(new InfoWindow(
-//                                    entityMap.get(marker.getId()).info,
-//                                    entityMap.get(marker.getId()).imagePath,
-//                                    entityMap.get(marker.getId()).latitude,
-//                                    entityMap.get(marker.getId()).longitude,
-//                                    entityMap.get(marker.getId()).date
-//                            ));
-//                            mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-//                                @Override
-//                                public void onInfoWindowClick(Marker marker) {
-////                        Log.i("onClick", "setOnInfoWindowClickListener");
-////                                    CommonUtils.showAlertDialog(MapsActivity.this, "", MapsActivity.this, entityMap.get(marker.getId()).imagePath);
-//                                    Intent imageViewIntent = new Intent(MapsActivity.this, PopupImageActivity.class);
-//                                    imageViewIntent.putExtra("imagePath", entityMap.get(marker.getId()).imagePath);
-//                                    startActivity(imageViewIntent);
-//                                }
-//                            });
-//                            return false;
-//                        }
-//                    });
                     LatLngBounds.Builder builder = new LatLngBounds.Builder();
-//                    for (Marker marker : listMarker) {
-//                        builder.include(marker.getPosition());
-//                    }
                     for (LatLng latLng: listLatLng) {
                         builder.include(latLng);
                     }
@@ -729,7 +646,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             } else if (msg.obj instanceof OverlayThread.ProgressInfo) {
                 OverlayThread.ProgressInfo progressInfo = (OverlayThread.ProgressInfo)msg.obj;
-//                progressDialog.setMessage(progressInfo.getMessage());
                 progressDialog.setProgress(progressInfo.getProgress());
                 progressDialog.setMessage(progressInfo.getMessage());
             }
@@ -784,10 +700,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             listMarkerOptions.clear();
             listPhotoEntity.clear();
             int index = 0;
-            for (PhotoEntity imageEntity : entities) {
+            for (PhotoEntity imageEntity : mPhotoEntities) {
                 Message progressMsg = overlayHandler.obtainMessage();
                 index++;
-                progressMsg.obj = new ProgressInfo(index, imageEntity.info, entities.size());
+                progressMsg.obj = new ProgressInfo(index, imageEntity.info, mPhotoEntities.size());
                 overlayHandler.sendMessage(progressMsg);
                 if (enableDateFilter) {
                     if (applyFilter && !imageEntity.date.contains(keyword) && !keyword.equals("대한민국")) continue;
@@ -851,7 +767,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         progressDialog = new ProgressDialog(MapsActivity.this);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         progressDialog.setMessage("find " + keyword + "...");
-        progressDialog.setMax(entities.size());
+        progressDialog.setMax(mPhotoEntities.size());
         progressDialog.show();
     }
 }

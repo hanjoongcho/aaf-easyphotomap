@@ -22,31 +22,33 @@ public class GPSUtils {
     private static LocationManager getGPSProvider(Context context) {
         if (mLocationManagerWithGPS == null) {
             mLocationManagerWithGPS = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
-            mLocationManagerWithGPS.requestLocationUpdates(
-                    LocationManager.GPS_PROVIDER,
-                    MIN_TIME_BW_UPDATES,
-                    MIN_DISTANCE_CHANGE_FOR_UPDATES,
-                    new LocationListener() {
-                        @Override
-                        public void onLocationChanged(Location location) {
+            if (mLocationManagerWithGPS.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                mLocationManagerWithGPS.requestLocationUpdates(
+                        LocationManager.GPS_PROVIDER,
+                        MIN_TIME_BW_UPDATES,
+                        MIN_DISTANCE_CHANGE_FOR_UPDATES,
+                        new LocationListener() {
+                            @Override
+                            public void onLocationChanged(Location location) {
 
-                        }
+                            }
 
-                        @Override
-                        public void onStatusChanged(String s, int i, Bundle bundle) {
+                            @Override
+                            public void onStatusChanged(String s, int i, Bundle bundle) {
 
-                        }
+                            }
 
-                        @Override
-                        public void onProviderEnabled(String s) {
+                            @Override
+                            public void onProviderEnabled(String s) {
 
-                        }
+                            }
 
-                        @Override
-                        public void onProviderDisabled(String s) {
+                            @Override
+                            public void onProviderDisabled(String s) {
 
-                        }
-                    });
+                            }
+                        });
+            }
         }
         return mLocationManagerWithGPS;
     }
@@ -54,31 +56,33 @@ public class GPSUtils {
     private static LocationManager getNetworkProvider(Context context) {
         if (mLocationManagerWithNetwork == null) {
             mLocationManagerWithNetwork = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
-            mLocationManagerWithNetwork.requestLocationUpdates(
-                    LocationManager.NETWORK_PROVIDER,
-                    MIN_TIME_BW_UPDATES,
-                    MIN_DISTANCE_CHANGE_FOR_UPDATES,
-                    new LocationListener() {
-                        @Override
-                        public void onLocationChanged(Location location) {
+            if (mLocationManagerWithNetwork.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+                mLocationManagerWithNetwork.requestLocationUpdates(
+                        LocationManager.NETWORK_PROVIDER,
+                        MIN_TIME_BW_UPDATES,
+                        MIN_DISTANCE_CHANGE_FOR_UPDATES,
+                        new LocationListener() {
+                            @Override
+                            public void onLocationChanged(Location location) {
 
-                        }
+                            }
 
-                        @Override
-                        public void onStatusChanged(String s, int i, Bundle bundle) {
+                            @Override
+                            public void onStatusChanged(String s, int i, Bundle bundle) {
 
-                        }
+                            }
 
-                        @Override
-                        public void onProviderEnabled(String s) {
+                            @Override
+                            public void onProviderEnabled(String s) {
 
-                        }
+                            }
 
-                        @Override
-                        public void onProviderDisabled(String s) {
+                            @Override
+                            public void onProviderDisabled(String s) {
 
-                        }
-                    });
+                            }
+                        });
+            }
         }
         return mLocationManagerWithNetwork;
     }
