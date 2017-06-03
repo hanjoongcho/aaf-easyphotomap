@@ -4,7 +4,7 @@
 
 ---------------------------------------------------
 
-# Changes in 1.1.45 (date: 2017/06/03)
+# Changes in 1.1.46 (date: 2017/06/03)
   [기능개선/Improvement]
   1. GPS 정보를 이용한 지도 초기화기능 적용/Apply map initialization function using GPS information
 

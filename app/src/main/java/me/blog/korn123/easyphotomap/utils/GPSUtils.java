@@ -22,33 +22,33 @@ public class GPSUtils {
     private static LocationManager getGPSProvider(Context context) {
         if (mLocationManagerWithGPS == null) {
             mLocationManagerWithGPS = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
-            if (mLocationManagerWithGPS.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                mLocationManagerWithGPS.requestLocationUpdates(
-                        LocationManager.GPS_PROVIDER,
-                        MIN_TIME_BW_UPDATES,
-                        MIN_DISTANCE_CHANGE_FOR_UPDATES,
-                        new LocationListener() {
-                            @Override
-                            public void onLocationChanged(Location location) {
-
-                            }
-
-                            @Override
-                            public void onStatusChanged(String s, int i, Bundle bundle) {
-
-                            }
-
-                            @Override
-                            public void onProviderEnabled(String s) {
-
-                            }
-
-                            @Override
-                            public void onProviderDisabled(String s) {
-
-                            }
-                        });
-            }
+//            if (mLocationManagerWithGPS.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+//                mLocationManagerWithGPS.requestLocationUpdates(
+//                        LocationManager.GPS_PROVIDER,
+//                        MIN_TIME_BW_UPDATES,
+//                        MIN_DISTANCE_CHANGE_FOR_UPDATES,
+//                        new LocationListener() {
+//                            @Override
+//                            public void onLocationChanged(Location location) {
+//
+//                            }
+//
+//                            @Override
+//                            public void onStatusChanged(String s, int i, Bundle bundle) {
+//
+//                            }
+//
+//                            @Override
+//                            public void onProviderEnabled(String s) {
+//
+//                            }
+//
+//                            @Override
+//                            public void onProviderDisabled(String s) {
+//
+//                            }
+//                        });
+//            }
         }
         return mLocationManagerWithGPS;
     }
@@ -56,33 +56,33 @@ public class GPSUtils {
     private static LocationManager getNetworkProvider(Context context) {
         if (mLocationManagerWithNetwork == null) {
             mLocationManagerWithNetwork = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
-            if (mLocationManagerWithNetwork.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-                mLocationManagerWithNetwork.requestLocationUpdates(
-                        LocationManager.NETWORK_PROVIDER,
-                        MIN_TIME_BW_UPDATES,
-                        MIN_DISTANCE_CHANGE_FOR_UPDATES,
-                        new LocationListener() {
-                            @Override
-                            public void onLocationChanged(Location location) {
-
-                            }
-
-                            @Override
-                            public void onStatusChanged(String s, int i, Bundle bundle) {
-
-                            }
-
-                            @Override
-                            public void onProviderEnabled(String s) {
-
-                            }
-
-                            @Override
-                            public void onProviderDisabled(String s) {
-
-                            }
-                        });
-            }
+//            if (mLocationManagerWithNetwork.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+//                mLocationManagerWithNetwork.requestLocationUpdates(
+//                        LocationManager.NETWORK_PROVIDER,
+//                        MIN_TIME_BW_UPDATES,
+//                        MIN_DISTANCE_CHANGE_FOR_UPDATES,
+//                        new LocationListener() {
+//                            @Override
+//                            public void onLocationChanged(Location location) {
+//
+//                            }
+//
+//                            @Override
+//                            public void onStatusChanged(String s, int i, Bundle bundle) {
+//
+//                            }
+//
+//                            @Override
+//                            public void onProviderEnabled(String s) {
+//
+//                            }
+//
+//                            @Override
+//                            public void onProviderDisabled(String s) {
+//
+//                            }
+//                        });
+//            }
         }
         return mLocationManagerWithNetwork;
     }
@@ -96,4 +96,11 @@ public class GPSUtils {
         return location;
     }
 
+    public static Location getLocationWithNetworkProvider(Context context) {
+        Location location = getNetworkProvider(context).getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        if (location == null) {
+            location = getGPSProvider(context).getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        }
+        return location;
+    }
 }
