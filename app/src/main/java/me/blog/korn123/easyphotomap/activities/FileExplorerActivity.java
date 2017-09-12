@@ -93,106 +93,7 @@ public class FileExplorerActivity extends AppCompatActivity {
         }
     });
 
-    class RegisterThread extends Thread {
-        String fileName;
-        String path;
-        Context context;
 
-        RegisterThread(Context context, String fileName, String path) {
-            this.fileName = fileName;
-            this.path = path;
-            this.context = context;
-        }
-
-        public void registerSingleFile() {
-            Message message = registerHandler.obtainMessage();
-            try {
-
-                File targetFile = null;
-                if (CommonUtils.loadBooleanPreference(FileExplorerActivity.this, "enable_create_copy")) {
-                    targetFile = new File(Constant.WORKING_DIRECTORY + fileName);
-                    if (!targetFile.exists()) {
-                        FileUtils.copyFile(new File(path), targetFile);
-                    }
-                } else {
-                    targetFile = new File(path);
-                    // remove .origin extension
-                    fileName = FilenameUtils.getBaseName(fileName);
-                }
-
-                Metadata metadata = JpegMetadataReader.readMetadata(targetFile);
-                PhotoMapItem item = new PhotoMapItem();
-                item.imagePath = targetFile.getAbsolutePath();
-                ExifSubIFDDirectory exifSubIFDDirectory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
-                Date date = exifSubIFDDirectory.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL, TimeZone.getDefault());
-                if (date != null) {
-                    item.date = CommonUtils.DATE_TIME_PATTERN.format(date);
-                } else {
-                    item.date = getString(R.string.file_explorer_message2);
-                }
-
-                GpsDirectory gpsDirectory = metadata.getFirstDirectoryOfType(GpsDirectory.class);
-                if (gpsDirectory != null && gpsDirectory.getGeoLocation() != null) {
-                    item.longitude = gpsDirectory.getGeoLocation().getLongitude();
-                    item.latitude = gpsDirectory.getGeoLocation().getLatitude();
-                    List<Address> listAddress = CommonUtils.getFromLocation(FileExplorerActivity.this, item.latitude, item.longitude, 1, 0);
-                    if (listAddress.size() > 0) {
-                        item.info = CommonUtils.fullAddress(listAddress.get(0));
-                    }
-
-                    ArrayList<PhotoMapItem> tempList = PhotoMapDbHelper.selectPhotoMapItemBy("imagePath", item.imagePath);
-                    if (tempList.size() > 0) {
-                        message.obj = getString(R.string.file_explorer_message3);
-                        registerHandler.sendMessage(message);
-                    } else {
-                        PhotoMapDbHelper.insertPhotoMapItem(item);
-                        CommonUtils.createScaledBitmap(targetFile.getAbsolutePath(), Constant.WORKING_DIRECTORY + fileName + ".thumb", 200);
-                        message.obj = getString(R.string.file_explorer_message4);
-                        registerHandler.sendMessage(message);
-                    }
-                } else {
-                    // does not exits gps data
-                    final PhotoMapItem temp = item;
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-                        @Override
-                        public void run() {
-                            progressDialog.dismiss();
-                            final Intent addressIntent = new Intent(FileExplorerActivity.this, AddressSearchActivity.class);
-                            AlertDialog.Builder builder = new AlertDialog.Builder(FileExplorerActivity.this);
-                            builder.setMessage(getString(R.string.file_explorer_message1)).setCancelable(false).setPositiveButton(getString(R.string.confirm),
-                                    new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            addressIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                            addressIntent.putExtra("imagePath", temp.imagePath);
-                                            addressIntent.putExtra("date", temp.date);
-                                            fileExplorerContext.startActivity(addressIntent);
-                                            return;
-                                        }
-                                    }).setNegativeButton(getString(R.string.cancel),
-                                    new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            return;
-                                        }
-                                    });
-                            AlertDialog alert = builder.create();
-                            alert.show();
-                        }
-                    });
-                }
-            } catch (Exception e) {
-                AAFLogger.info("FileExplorerActivity-run INFO: " + e.getMessage(), getClass());
-                AAFLogger.info("RegisterThread-run INFO: exception is " + e, getClass());
-                message.obj = e.getMessage();
-                registerHandler.sendMessage(message);
-            }
-        }
-
-        public void run() {
-            registerSingleFile();
-        }
-    }
 
     ProgressDialog progressDialog;
     public class PositiveListener {
@@ -417,5 +318,106 @@ public class FileExplorerActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
             }
         });
+    }
+
+    class RegisterThread extends Thread {
+        String fileName;
+        String path;
+        Context context;
+
+        RegisterThread(Context context, String fileName, String path) {
+            this.fileName = fileName;
+            this.path = path;
+            this.context = context;
+        }
+
+        public void registerSingleFile() {
+            Message message = registerHandler.obtainMessage();
+            try {
+
+                File targetFile = null;
+                if (CommonUtils.loadBooleanPreference(FileExplorerActivity.this, "enable_create_copy")) {
+                    targetFile = new File(Constant.WORKING_DIRECTORY + fileName);
+                    if (!targetFile.exists()) {
+                        FileUtils.copyFile(new File(path), targetFile);
+                    }
+                } else {
+                    targetFile = new File(path);
+                    // remove .origin extension
+                    fileName = FilenameUtils.getBaseName(fileName);
+                }
+
+                Metadata metadata = JpegMetadataReader.readMetadata(targetFile);
+                PhotoMapItem item = new PhotoMapItem();
+                item.imagePath = targetFile.getAbsolutePath();
+                ExifSubIFDDirectory exifSubIFDDirectory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
+                Date date = exifSubIFDDirectory.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL, TimeZone.getDefault());
+                if (date != null) {
+                    item.date = CommonUtils.DATE_TIME_PATTERN.format(date);
+                } else {
+                    item.date = getString(R.string.file_explorer_message2);
+                }
+
+                GpsDirectory gpsDirectory = metadata.getFirstDirectoryOfType(GpsDirectory.class);
+                if (gpsDirectory != null && gpsDirectory.getGeoLocation() != null) {
+                    item.longitude = gpsDirectory.getGeoLocation().getLongitude();
+                    item.latitude = gpsDirectory.getGeoLocation().getLatitude();
+                    List<Address> listAddress = CommonUtils.getFromLocation(FileExplorerActivity.this, item.latitude, item.longitude, 1, 0);
+                    if (listAddress.size() > 0) {
+                        item.info = CommonUtils.fullAddress(listAddress.get(0));
+                    }
+
+                    ArrayList<PhotoMapItem> tempList = PhotoMapDbHelper.selectPhotoMapItemBy("imagePath", item.imagePath);
+                    if (tempList.size() > 0) {
+                        message.obj = getString(R.string.file_explorer_message3);
+                        registerHandler.sendMessage(message);
+                    } else {
+                        PhotoMapDbHelper.insertPhotoMapItem(item);
+                        CommonUtils.createScaledBitmap(targetFile.getAbsolutePath(), Constant.WORKING_DIRECTORY + fileName + ".thumb", 200);
+                        message.obj = getString(R.string.file_explorer_message4);
+                        registerHandler.sendMessage(message);
+                    }
+                } else {
+                    // does not exits gps data
+                    final PhotoMapItem temp = item;
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            progressDialog.dismiss();
+                            final Intent addressIntent = new Intent(FileExplorerActivity.this, AddressSearchActivity.class);
+                            AlertDialog.Builder builder = new AlertDialog.Builder(FileExplorerActivity.this);
+                            builder.setMessage(getString(R.string.file_explorer_message1)).setCancelable(false).setPositiveButton(getString(R.string.confirm),
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            addressIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                            addressIntent.putExtra("imagePath", temp.imagePath);
+                                            addressIntent.putExtra("date", temp.date);
+                                            fileExplorerContext.startActivity(addressIntent);
+                                            return;
+                                        }
+                                    }).setNegativeButton(getString(R.string.cancel),
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            return;
+                                        }
+                                    });
+                            AlertDialog alert = builder.create();
+                            alert.show();
+                        }
+                    });
+                }
+            } catch (Exception e) {
+                AAFLogger.info("FileExplorerActivity-run INFO: " + e.getMessage(), getClass());
+                AAFLogger.info("RegisterThread-run INFO: exception is " + e, getClass());
+                message.obj = e.getMessage();
+                registerHandler.sendMessage(message);
+            }
+        }
+
+        public void run() {
+            registerSingleFile();
+        }
     }
 }

@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!--common-->
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorPrimary">#0275d8</color>
     <color name="colorAccent">#63635e</color>
+
+    <!--item_search.xml-->
+    <color name="photoMapInfoText">#5a5959</color>
+    <color name="photoMapDateText">#0275d8</color>
 
     <color name="listSelector">#1a0275d8</color>
 

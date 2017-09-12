@@ -143,7 +143,7 @@ public class ExplorerItemAdapter extends ArrayAdapter<FileEntity> {
                     }
                 }
             } else {
-                // listView holder가 재활용되면 task cancel 되도록 수정 2016.11.07 Hanjoong Cho
+                // mListView holder가 재활용되면 task cancel 되도록 수정 2016.11.07 Hanjoong Cho
                 this.cancel(true);
             }
             return resized;

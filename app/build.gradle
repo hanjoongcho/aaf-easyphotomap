@@ -64,7 +64,8 @@ dependencies {
     compile 'com.beardedhen:androidbootstrap:2.0.0'
 
     // Jake Wharton
-    compile 'com.jakewharton:butterknife:7.0.1'
+    apt 'com.jakewharton:butterknife-compiler:8.4.0'
+    compile 'com.jakewharton:butterknife:8.4.0'
 
     // Clans
     compile 'com.github.clans:fab:1.6.4'

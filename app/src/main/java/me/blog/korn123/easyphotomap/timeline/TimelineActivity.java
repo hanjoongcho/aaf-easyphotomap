@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.blog.korn123.easyphotomap.activities.MapsActivity;
 import me.blog.korn123.easyphotomap.R;
@@ -34,7 +34,7 @@ import me.blog.korn123.easyphotomap.search.PhotoEntity;
 
 public class TimelineActivity extends AppCompatActivity {
 
-    @Bind(R.id.listTimeline) ListView mListView;
+    @BindView(R.id.listTimeline) ListView mListView;
     ArrayAdapter<PhotoEntity> mArrayAdapter;
     ArrayList<PhotoEntity> mListPhotoEntity;
 

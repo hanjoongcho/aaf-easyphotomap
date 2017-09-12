@@ -1,8 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
     <TableLayout
         android:background="@drawable/cell_shape"
         android:layout_height="wrap_content"
@@ -14,8 +13,7 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            >
+            android:gravity="center_vertical">
             <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/image1"
                 android:layout_width="wrap_content"
@@ -26,23 +24,30 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                >
+                android:paddingRight="20dp">
                 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
                     android:id="@+id/text1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="15dp"
+                    android:textSize="@dimen/photo_map_info_text"
                     android:gravity="center_vertical"
-                    android:textColor="#FF885599"
+                    android:textColor="@color/photoMapInfoText"
                     android:paddingRight="0dp" />
                 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
                     android:id="@+id/text2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="12dp"
+                    android:textSize="@dimen/photo_map_date_text"
                     android:gravity="center_vertical"
-                    android:textColor="#FF000000"
+                    android:textColor="@color/photoMapDateText"
+                    android:paddingRight="0dp" />
+                <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/text3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/photo_map_date_text"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/photoMapDateText"
                     android:paddingRight="0dp" />
             </LinearLayout>
         </TableRow>

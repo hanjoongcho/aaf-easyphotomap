@@ -751,7 +751,7 @@ public class CommonUtils {
 
     public static PopupWindow openPopupWindow(Activity activity, View anchorView) {
         PopupWindow popupWindow;
-        View popupView = activity.getLayoutInflater().inflate(R.layout.search_common_search_activity, null);
+        View popupView = activity.getLayoutInflater().inflate(R.layout.activity_photo_search, null);
         popupWindow = new PopupWindow(popupView, RelativeLayout.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         popupWindow.setHeight(100);
         popupWindow.showAsDropDown(anchorView);
@@ -765,7 +765,7 @@ public class CommonUtils {
 //        listPopupWindow.setHeight(100);
 ////        listPopupWindow.setVerticalOffset(CommonUtils.dpToPixel(this, 45));
 //        listPopupWindow.setAnchorView(anchorView);
-////        PhotoEntityAdapter adapter = new PhotoEntityAdapter(this, R.layout.search_photo_search_activity_list_item, entities);
+////        SearchItemAdapter adapter = new SearchItemAdapter(this, R.layout.item_search, entities);
 //        listPopupWindow.setAdapter(null);
 //        listPopupWindow.setModal(true);
 //        listPopupWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {

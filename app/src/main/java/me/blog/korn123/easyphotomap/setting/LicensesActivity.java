@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.webkit.WebView;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.blog.korn123.easyphotomap.R;
 
@@ -14,7 +14,7 @@ import me.blog.korn123.easyphotomap.R;
 
 public class LicensesActivity extends AppCompatActivity {
 
-    @Bind(R.id.licenses)WebView webView;
+    @BindView(R.id.licenses) WebView webView;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

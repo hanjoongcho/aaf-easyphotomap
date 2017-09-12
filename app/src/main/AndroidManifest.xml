@@ -36,7 +36,7 @@
         <activity android:name=".activities.FileExplorerActivity" android:label="FileExplorer" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".thumbnail.ThumbnailExplorerActivity" android:theme="@style/AppTheme.NoActionBar"
             />
-        <activity android:name=".search.PhotoSearchActivity" android:label="SearchFragment"
+        <activity android:name=".activities.PhotoSearchActivity" android:label="SearchFragment"
             android:theme="@style/AppTheme.NoActionBar"
             />
         <activity android:name=".search.AddressSearchActivity" android:label="SearchFragment"

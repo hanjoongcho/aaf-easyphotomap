@@ -63,4 +63,14 @@ public class PhotoMapDbHelper {
         return list;
     }
 
+    public static void deletePhotoMapItemBy(int sequence) {
+        Realm realm = getRealmInstance();
+        PhotoMapItem item = realm.where(PhotoMapItem.class).equalTo("sequence", sequence).findFirst();
+        if (item != null) {
+            realm.beginTransaction();
+            item.deleteFromRealm();
+            realm.commitTransaction();
+        }
+    }
+
 }
