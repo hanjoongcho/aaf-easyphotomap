@@ -1,4 +1,4 @@
-package me.blog.korn123.easyphotomap.file;
+package me.blog.korn123.easyphotomap.adapters;
 
 import android.app.Activity;
 import android.content.Context;
@@ -25,20 +25,21 @@ import com.drew.metadata.exif.GpsDirectory;
 import java.util.List;
 
 import me.blog.korn123.easyphotomap.R;
+import me.blog.korn123.easyphotomap.file.FileEntity;
 import me.blog.korn123.easyphotomap.utils.BitmapUtils;
 import me.blog.korn123.easyphotomap.utils.CommonUtils;
 
 /**
  * Created by CHO HANJOONG on 2016-07-30.
  */
-public class FileEntityAdapter extends ArrayAdapter<FileEntity> {
+public class ExplorerItemAdapter extends ArrayAdapter<FileEntity> {
 
     private final Activity activity;
     private final Context context;
     private final List<FileEntity> entities;
     private final int layoutResourceId;
 
-    public FileEntityAdapter(Activity activity, Context context, int layoutResourceId, List<FileEntity> entities) {
+    public ExplorerItemAdapter(Activity activity, Context context, int layoutResourceId, List<FileEntity> entities) {
         super(context, layoutResourceId, entities);
         this.activity = activity;
         this.context = context;
@@ -74,8 +75,8 @@ public class FileEntityAdapter extends ArrayAdapter<FileEntity> {
 
         // init default option
         int widthHeight = (int)(CommonUtils.getDefaultDisplay(activity).x / 5);
-        holder.imageView1.getLayoutParams().height = widthHeight;
-        holder.imageView1.getLayoutParams().width = widthHeight;
+//        holder.imageView1.getLayoutParams().height = widthHeight;
+//        holder.imageView1.getLayoutParams().width = widthHeight;
 
         // init default value
         holder.textView1.setText(entity.fileName);
@@ -113,7 +114,7 @@ public class FileEntityAdapter extends ArrayAdapter<FileEntity> {
         @Override
         protected Bitmap doInBackground(String... params) {
             String filePath = params[0];
-            int widthHeight = Integer.valueOf(params[1]);
+            int widthHeight = CommonUtils.dpToPixel(mActivity, 45);
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = false;
             options.inSampleSize = 20;

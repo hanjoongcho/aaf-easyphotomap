@@ -47,14 +47,6 @@
             android:paddingTop="5dp"
             android:paddingRight="0dp"
             android:paddingBottom="5dp">
-            <!--<com.beardedhen.androidbootstrap.BootstrapButton
-                style="@style/explorer_button"
-                app:bootstrapText="@string/home"
-                app:bootstrapBrand="primary"
-                app:roundedCorners="true"
-                app:bootstrapSize="sm"
-                android:id="@+id/btnroot"
-                />-->
             <com.beardedhen.androidbootstrap.BootstrapButton
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -64,15 +56,6 @@
                 app:bootstrapSize="sm"
                 android:id="@+id/btnup"
                 />
-            <!--<com.beardedhen.androidbootstrap.BootstrapButton
-                style="@style/explorer_button"
-                app:bootstrapText="@string/close"
-                app:bootstrapBrand="primary"
-                app:roundedCorners="true"
-                app:bootstrapSize="sm"
-                android:id="@+id/close"
-                android:layout_marginLeft="5dp"
-                />-->
         </LinearLayout>
         <ListView
             android:paddingRight="5dp"

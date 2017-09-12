@@ -41,7 +41,7 @@ import java.util.TimeZone;
 
 import me.blog.korn123.easyphotomap.R;
 import me.blog.korn123.easyphotomap.constant.Constant;
-import me.blog.korn123.easyphotomap.file.FileExplorerActivity;
+import me.blog.korn123.easyphotomap.activities.FileExplorerActivity;
 import me.blog.korn123.easyphotomap.log.AAFLogger;
 import me.blog.korn123.easyphotomap.search.AddressSearchActivity;
 import me.blog.korn123.easyphotomap.search.PhotoEntity;

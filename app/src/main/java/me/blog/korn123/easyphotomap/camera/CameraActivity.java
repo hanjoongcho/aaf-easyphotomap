@@ -24,7 +24,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-import me.blog.korn123.easyphotomap.MapsActivity;
+import me.blog.korn123.easyphotomap.activities.MapsActivity;
 import me.blog.korn123.easyphotomap.R;
 import me.blog.korn123.easyphotomap.constant.Constant;
 import me.blog.korn123.easyphotomap.log.AAFLogger;

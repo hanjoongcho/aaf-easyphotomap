@@ -1,4 +1,4 @@
-package me.blog.korn123.easyphotomap.file;
+package me.blog.korn123.easyphotomap.activities;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,6 +7,7 @@ import android.location.Address;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ import com.drew.metadata.exif.GpsDirectory;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.time.StopWatch;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -30,7 +32,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.blog.korn123.easyphotomap.R;
 import me.blog.korn123.easyphotomap.constant.Constant;
+import me.blog.korn123.easyphotomap.helper.PhotoMapDbHelper;
 import me.blog.korn123.easyphotomap.log.AAFLogger;
+import me.blog.korn123.easyphotomap.models.PhotoMapItem;
 import me.blog.korn123.easyphotomap.search.PhotoEntity;
 import me.blog.korn123.easyphotomap.utils.CommonUtils;
 
@@ -60,7 +64,7 @@ public class BatchPopupActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         TypefaceProvider.registerDefaultIconSets();
-        setContentView(R.layout.file_batch_popup_activity);
+        setContentView(R.layout.activity_batch_popup);
         ButterKnife.bind(this);
         mProgressBar = (ProgressBar)findViewById(R.id.progressBar);
         infoText = (TextView)findViewById(R.id.infoText);
@@ -117,8 +121,9 @@ public class BatchPopupActivity extends Activity {
         }
 
         public void run() {
-            StringBuilder successRow = new StringBuilder();
             for (String imagePath : listImagePath) {
+                StopWatch stopWatch = new StopWatch();
+                stopWatch.start();
                 if (!enableUpdate) return;
                 Message message = progressHandler.obtainMessage();
                 try {
@@ -136,36 +141,38 @@ public class BatchPopupActivity extends Activity {
                     }
 
                     Metadata metadata = JpegMetadataReader.readMetadata(targetFile);
-                    PhotoEntity entity = new PhotoEntity();
-                    entity.imagePath = targetFile.getAbsolutePath();
+                    PhotoMapItem item = new PhotoMapItem();
+                    item.imagePath = targetFile.getAbsolutePath();
                     ExifSubIFDDirectory exifSubIFDDirectory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
                     Date date = exifSubIFDDirectory.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL, TimeZone.getDefault());
                     if (date != null) {
-                        entity.date = CommonUtils.DATE_TIME_PATTERN.format(date);
+                        item.date = CommonUtils.DATE_TIME_PATTERN.format(date);
                     } else {
-                        entity.date = getString(R.string.file_explorer_message2);
+                        item.date = getString(R.string.file_explorer_message2);
                     }
-
+                    Log.i("elapsed", String.format("meta %d", stopWatch.getTime()));
+                    stopWatch.reset();
+                    stopWatch.start();
                     GpsDirectory gpsDirectory = metadata.getFirstDirectoryOfType(GpsDirectory.class);
                     if (gpsDirectory != null && gpsDirectory.getGeoLocation() != null) {
-                        entity.longitude = gpsDirectory.getGeoLocation().getLongitude();
-                        entity.latitude = gpsDirectory.getGeoLocation().getLatitude();
-                        List<Address> listAddress = CommonUtils.getFromLocation(BatchPopupActivity.this, entity.latitude, entity.longitude, 1, 0);
+                        item.longitude = gpsDirectory.getGeoLocation().getLongitude();
+                        item.latitude = gpsDirectory.getGeoLocation().getLatitude();
+                        List<Address> listAddress = CommonUtils.getFromLocation(BatchPopupActivity.this, item.latitude, item.longitude, 1, 0);
                         if (listAddress.size() > 0) {
-                            entity.info = CommonUtils.fullAddress(listAddress.get(0));
+                            item.info = CommonUtils.fullAddress(listAddress.get(0));
                         }
-                        StringBuilder temp = new StringBuilder();
-                        temp.append(entity.imagePath + "|");
-                        temp.append(entity.info + "|");
-                        temp.append(entity.latitude + "|");
-                        temp.append(entity.longitude + "|");
-                        temp.append(entity.date + "\n");
-                        if (CommonUtils.isMatchLine(Constant.PHOTO_DATA_PATH, temp.toString())) {
+                        Log.i("elapsed", String.format("geo coding %d", stopWatch.getTime()));
+                        ArrayList<PhotoMapItem> tempList = PhotoMapDbHelper.selectPhotoMapItemBy("imagePath", item.imagePath);
+                        stopWatch.reset();
+                        stopWatch.start();
+                        if (tempList.size() > 0) {
                             reduplicationCount++;
                         } else {
-                            successRow.append(temp.toString());
+                            PhotoMapDbHelper.insertPhotoMapItem(item);
                             CommonUtils.createScaledBitmap(targetFile.getAbsolutePath(), Constant.WORKING_DIRECTORY + fileName + ".thumb", 200);
                             successCount++;
+                            Log.i("elapsed", String.format("create bitmap %d", stopWatch.getTime()));
+                            stopWatch.stop();
                         }
                     } else {
                         noGPSInfoCount++;
@@ -177,7 +184,6 @@ public class BatchPopupActivity extends Activity {
                 }
                 progressHandler.sendMessage(message);
             }
-            CommonUtils.writeDataFile(successRow.toString(), Constant.PHOTO_DATA_PATH, true);
         }
     }
 

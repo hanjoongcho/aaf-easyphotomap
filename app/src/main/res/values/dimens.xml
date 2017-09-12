@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--item_file_explorer.xml-->
+    <dimen name="item_file_explorer_height">60dp</dimen>
+
     <!--Android-Bootstrap-->
     <dimen name="default_padding">16dp</dimen>
     <dimen name="micro_padding">4dp</dimen>

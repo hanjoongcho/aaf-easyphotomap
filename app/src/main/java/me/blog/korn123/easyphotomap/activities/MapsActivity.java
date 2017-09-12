@@ -1,4 +1,4 @@
-package me.blog.korn123.easyphotomap;
+package me.blog.korn123.easyphotomap.activities;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -18,12 +18,10 @@ import android.support.v4.app.FragmentActivity;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -50,12 +48,9 @@ import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 import com.google.maps.android.ui.IconGenerator;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -67,12 +62,13 @@ import java.util.regex.Pattern;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import me.blog.korn123.easyphotomap.R;
 import me.blog.korn123.easyphotomap.camera.CameraActivity;
 import me.blog.korn123.easyphotomap.constant.Constant;
-import me.blog.korn123.easyphotomap.file.FileExplorerActivity;
+import me.blog.korn123.easyphotomap.helper.PhotoMapDbHelper;
 import me.blog.korn123.easyphotomap.helper.PopupImageActivity;
 import me.blog.korn123.easyphotomap.log.AAFLogger;
-import me.blog.korn123.easyphotomap.search.PhotoEntity;
+import me.blog.korn123.easyphotomap.models.PhotoMapItem;
 import me.blog.korn123.easyphotomap.search.PhotoSearchActivity;
 import me.blog.korn123.easyphotomap.setting.SettingsActivity;
 import me.blog.korn123.easyphotomap.thumbnail.ThumbnailExplorerActivity;
@@ -85,14 +81,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     private FloatingActionMenu mFloatingMenu;
-    private ArrayList<PhotoEntity> mPhotoEntities;
+    private ArrayList<PhotoMapItem> listPhotoMapItem;
     private Map<String, Integer> mRecommendMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(null);
         TypefaceProvider.registerDefaultIconSets();
-        setContentView(R.layout.main_maps_activity);
+        setContentView(R.layout.activity_maps);
         ButterKnife.bind(this);
         mFloatingMenu = (FloatingActionMenu) findViewById(R.id.floatingMenu);
         if (!new File(Constant.WORKING_DIRECTORY).exists()) {
@@ -188,34 +184,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void parseMetadata() {
-        if (mPhotoEntities == null) {
-            mPhotoEntities = new ArrayList<>();
-        } else {
-            mPhotoEntities.clear();
-        }
         if (mRecommendMap == null) {
             mRecommendMap = new HashMap<String, Integer>();
         } else {
             mRecommendMap.clear();
         }
         List<String> infoLines = new ArrayList();
-        try {
-            InputStream is = new FileInputStream(new File(Constant.PHOTO_DATA_PATH));
-            infoLines = IOUtils.readLines(is, "UTF-8");
-            for (String infoLine : infoLines) {
-                String[] infoArray = StringUtils.split(infoLine, "|");
-                PhotoEntity entity = new PhotoEntity();
-                entity.longitude = Double.parseDouble(infoArray[3]);
-                entity.latitude = Double.parseDouble(infoArray[2]);
-                entity.imagePath = infoArray[0];
-                entity.info = infoArray[1];
-                entity.date = infoArray[4];
-                mPhotoEntities.add(entity);
-            }
-            Collections.sort(mPhotoEntities);
-        } catch (Exception e) {
-            AAFLogger.info("MapsActivity-parseMetadata INFO: " + e.getMessage(), getClass());
-        }
+        listPhotoMapItem = PhotoMapDbHelper.selectPhotoMapItemAll();
+        Collections.sort(listPhotoMapItem);
     }
 
     class InfoWindow implements GoogleMap.InfoWindowAdapter {
@@ -358,7 +334,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //                Log.i("enableDateFilter", String.valueOf(enableDateFilter));
                 mMap.clear();
                 parseMetadata();
-                if (mPhotoEntities.size() < 1) {
+                if (listPhotoMapItem.size() < 1) {
                     CommonUtils.showAlertDialog(this, getString(R.string.maps_activity_message2));
                     return;
                 }
@@ -368,12 +344,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 FontUtils.setChildViewTypeface((ViewGroup) customView);
                 Set<String> set = new HashSet<>();
                 if (enableDateFilter) {
-                    for (PhotoEntity imageEntity : mPhotoEntities) {
+                    for (PhotoMapItem item : listPhotoMapItem) {
                         String date = null;
-                        if (imageEntity.date.contains("(")) {
-                            date = imageEntity.date.substring(0, imageEntity.date.lastIndexOf("("));
+                        if (item.date.contains("(")) {
+                            date = item.date.substring(0, item.date.lastIndexOf("("));
                         } else {
-                            date = imageEntity.date;
+                            date = item.date;
                         }
                         if (mRecommendMap.containsKey(date)) {
                             mRecommendMap.put(date, mRecommendMap.get(date) + 1);
@@ -382,8 +358,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         }
                     }
                 } else {
-                    for (PhotoEntity imageEntity : mPhotoEntities) {
-                        String[] arr = StringUtils.split(imageEntity.info, " ");
+                    for (PhotoMapItem item : listPhotoMapItem) {
+                        String[] arr = StringUtils.split(item.info, " ");
                         for (String keyword : arr) {
                             if (Pattern.matches("^(([0-9]{1,9})-([0-9]{1,9}))|(([0-9]{1,9}))$", keyword) || keyword.length() < 2)
                                 continue;
@@ -452,7 +428,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
                 break;
             case R.id.find:
-                if (mPhotoEntities.size() < 1) {
+                if (listPhotoMapItem.size() < 1) {
                     CommonUtils.showAlertDialog(this, getString(R.string.maps_activity_message2));
                     return;
                 }
@@ -468,7 +444,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 startActivity(fileExplorerIntent);
                 break;
             case R.id.timeline:
-                if (mPhotoEntities.size() < 1) {
+                if (listPhotoMapItem.size() < 1) {
                     CommonUtils.showAlertDialog(this, getString(R.string.maps_activity_message2));
                     return;
                 }
@@ -486,21 +462,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     class MyItem implements ClusterItem {
         private final LatLng mPosition;
-        private PhotoEntity photoEntity;
+        private PhotoMapItem item;
         private MarkerOptions markerOptions;
 
-        public MyItem(MarkerOptions markerOptions, PhotoEntity photoEntity) {
+        public MyItem(MarkerOptions markerOptions, PhotoMapItem photoMapItem) {
             mPosition = markerOptions.getPosition();
             this.markerOptions = markerOptions;
-            this.photoEntity = photoEntity;
+            this.item = photoMapItem;
         }
 
         public MarkerOptions getMarkerOptions() {
             return markerOptions;
         }
 
-        public PhotoEntity getPhotoEntity() {
-            return photoEntity;
+        public PhotoMapItem getPhotoEntity() {
+            return item;
         }
 
         @Override
@@ -589,10 +565,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 if (StringUtils.equals((String) msg.obj, "update completed")) {
                     progressDialog.dismiss();
                     setUpClusterer();
-
+                    ArrayList<PhotoMapItem> listTemp = PhotoMapDbHelper.selectPhotoMapItemAll();
                     for (int i = 0; i < listMarkerOptions.size(); i++) {
 //                        Marker marker = mMap.addMarker(listMarkerOptions.get(i));
-                        MyItem item = new MyItem(listMarkerOptions.get(i), listPhotoEntity.get(i));
+                        MyItem item = new MyItem(listMarkerOptions.get(i), listTemp.get(i));
                         mClusterManager.addItem(item);
                         listLatLng.add(listMarkerOptions.get(i).getPosition());
 //                        listMarker.add(marker);
@@ -694,36 +670,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         @Override
         public void run() {
+            ArrayList<PhotoMapItem> listTemp = PhotoMapDbHelper.selectPhotoMapItemAll();
             super.run();
-//            listMarker.clear();
             listLatLng.clear();
             listMarkerOptions.clear();
             listPhotoEntity.clear();
             int index = 0;
-            for (PhotoEntity imageEntity : mPhotoEntities) {
+            for (PhotoMapItem item : listTemp) {
                 Message progressMsg = overlayHandler.obtainMessage();
                 index++;
-                progressMsg.obj = new ProgressInfo(index, imageEntity.info, mPhotoEntities.size());
+                progressMsg.obj = new ProgressInfo(index, item.info, listTemp.size());
                 overlayHandler.sendMessage(progressMsg);
                 if (enableDateFilter) {
-                    if (applyFilter && !imageEntity.date.contains(keyword) && !keyword.equals("대한민국")) continue;
+                    if (applyFilter && !item.date.contains(keyword) && !keyword.equals("대한민국")) continue;
                 } else {
-                    if (applyFilter && !imageEntity.info.contains(keyword)) continue;
+                    if (applyFilter && !item.info.contains(keyword)) continue;
                 }
                 BitmapDescriptor image = null;
                 MarkerOptions options = new MarkerOptions();
-                LatLng latLng = new LatLng(imageEntity.latitude, imageEntity.longitude);
+                LatLng latLng = new LatLng(item.latitude, item.longitude);
                 options.position(latLng);
-                String fileName = FilenameUtils.getName(imageEntity.imagePath);
+                String fileName = FilenameUtils.getName(item.imagePath);
                 Bitmap bm = CommonUtils.decodeFile(MapsActivity.this, Constant.WORKING_DIRECTORY + fileName + ".thumb");
                 if (CommonUtils.loadStringPreference(MapsActivity.this, "photo_marker_setting", "filmFrame").equals("filmFrame")) {
-//                    options.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_menu_myplaces));
-//                            options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
-//                    String photoSize = CommonUtils.loadStringPreference(MapsActivity.this, "photo_size_setting", "1.0");
                     Point point = new Point(bm.getWidth(), bm.getHeight());
                     double fixedWidthHeight = Double.parseDouble(CommonUtils.loadStringPreference(MapsActivity.this, "photo_size_setting", "0.6"));
                     Bitmap bm2 = CommonUtils.createScaledBitmap(bm, point, fixedWidthHeight, fixedWidthHeight);
-//                    Log.i("bm2", bm2.getWidth() + "x" + bm2.getHeight());
                     image = BitmapDescriptorFactory.fromBitmap(CommonUtils.addFrame(MapsActivity.this, bm2, CommonUtils.dpToPixel(MapsActivity.this, 6), R.drawable.frame_03));
                 } else if (CommonUtils.loadStringPreference(MapsActivity.this, "photo_marker_setting", "filmFrame").equals("basicFrame")) {
                     Point point = new Point(bm.getWidth(), bm.getHeight());
@@ -747,7 +719,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
                 options.icon(image);
                 listMarkerOptions.add(options);
-                listPhotoEntity.add(imageEntity);
+                listPhotoEntity.add(item);
             }
             Message completeMsg = overlayHandler.obtainMessage();
             completeMsg.obj = "update completed";
@@ -756,18 +728,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     ProgressDialog progressDialog;
-//    List<Marker> listMarker = new ArrayList<>();
     List<LatLng> listLatLng = new ArrayList<>();
-    List<PhotoEntity> listPhotoEntity = new ArrayList<>();
+    List<PhotoMapItem> listPhotoEntity = new ArrayList<>();
     List<MarkerOptions> listMarkerOptions = new ArrayList<>();
     public void overlayIcons(String keyword, boolean applyFilter) {
         Thread overlayThread = new OverlayThread(keyword, applyFilter);
         overlayThread.start();
-//        progressDialog = ProgressDialog.show(MapsActivity.this, "find " + keyword + "...", "");
         progressDialog = new ProgressDialog(MapsActivity.this);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         progressDialog.setMessage("find " + keyword + "...");
-        progressDialog.setMax(mPhotoEntities.size());
+        progressDialog.setMax(listPhotoMapItem.size());
         progressDialog.show();
     }
+
 }

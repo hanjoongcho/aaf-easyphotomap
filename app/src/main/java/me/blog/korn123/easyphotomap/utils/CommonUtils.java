@@ -54,7 +54,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import me.blog.korn123.easyphotomap.R;
-import me.blog.korn123.easyphotomap.file.FileExplorerActivity;
+import me.blog.korn123.easyphotomap.activities.FileExplorerActivity;
 import me.blog.korn123.easyphotomap.log.AAFLogger;
 import me.blog.korn123.easyphotomap.thumbnail.ThumbnailEntity;
 import me.blog.korn123.easyphotomap.thumbnail.ThumbnailExplorerActivity;
@@ -74,9 +74,7 @@ public class CommonUtils {
         List<Address> listAddress = null;
         Locale locale = Locale.getDefault();
         Geocoder geocoder = new Geocoder(context, locale);
-        long start = System.currentTimeMillis();
         try {
-//            AAFLogger.info("CommonUtils-getFromLocation INFO: " + latitude + ", " + longitude, CommonUtils.class);
             listAddress = geocoder.getFromLocation(latitude, longitude, maxResults);
         } catch (Exception e) {
             AAFLogger.info("CommonUtils-getFromLocation ERROR: [" + locale + "/retry count " + retryCount + "] " + e.getMessage(), CommonUtils.class);
@@ -85,7 +83,6 @@ public class CommonUtils {
             }
             throw new Exception(e.getMessage());
         }
-//        AAFLogger.info("CommonUtils-getFromLocation INFO: " + latitude + ", " + longitude + ", " + (System.currentTimeMillis() - start), CommonUtils.class);
         return listAddress;
     }
 

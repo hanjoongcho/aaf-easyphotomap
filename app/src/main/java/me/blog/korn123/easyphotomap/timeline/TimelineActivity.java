@@ -22,7 +22,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import me.blog.korn123.easyphotomap.MapsActivity;
+import me.blog.korn123.easyphotomap.activities.MapsActivity;
 import me.blog.korn123.easyphotomap.R;
 import me.blog.korn123.easyphotomap.constant.Constant;
 import me.blog.korn123.easyphotomap.log.AAFLogger;

@@ -17,4 +17,6 @@ public class Constant {
     final static public float GOOGLE_MAP_DEFAULT_ZOOM_VALUE = 13.0F;
     final static public double GOOGLE_MAP_DEFAULT_LATITUDE = 37.3997208;
     final static public double GOOGLE_MAP_DEFAULT_LONGITUDE = 127.1000782;
+
+
 }

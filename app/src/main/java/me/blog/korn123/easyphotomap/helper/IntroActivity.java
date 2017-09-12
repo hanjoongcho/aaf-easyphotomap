@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
-import me.blog.korn123.easyphotomap.MapsActivity;
+import me.blog.korn123.easyphotomap.activities.MapsActivity;
 import me.blog.korn123.easyphotomap.R;
 
 /**

@@ -1,4 +1,4 @@
-package me.blog.korn123.easyphotomap.file;
+package me.blog.korn123.easyphotomap.activities;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -11,6 +11,7 @@ import android.graphics.Typeface;
 import android.location.Address;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -49,10 +50,13 @@ import java.util.TimeZone;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.blog.korn123.easyphotomap.R;
+import me.blog.korn123.easyphotomap.adapters.ExplorerItemAdapter;
 import me.blog.korn123.easyphotomap.constant.Constant;
+import me.blog.korn123.easyphotomap.file.FileEntity;
+import me.blog.korn123.easyphotomap.helper.PhotoMapDbHelper;
 import me.blog.korn123.easyphotomap.log.AAFLogger;
+import me.blog.korn123.easyphotomap.models.PhotoMapItem;
 import me.blog.korn123.easyphotomap.search.AddressSearchActivity;
-import me.blog.korn123.easyphotomap.search.PhotoEntity;
 import me.blog.korn123.easyphotomap.utils.CommonUtils;
 
 /**
@@ -79,38 +83,11 @@ public class FileExplorerActivity extends AppCompatActivity {
                     mAdapter.notifyDataSetChanged();
                     mFileList.setSelection(0);
                 } else {
-                    // 탐색기 스크롤 후 사진 등록 시 기존 스크롤 위치 변경되지 않게 주석처리 2016.11.07 Hanjoong Cho
-//                    mAdapter.notifyDataSetChanged();
-//                    mFileList.setSelection(0);
                     CommonUtils.makeToast(FileExplorerActivity.this, (String) msg.obj);
                 }
             } else if (msg.obj instanceof Map) {
                 Map<String, String> infoMap = (Map)msg.obj;
                 progressDialog.setMessage(infoMap.get("progressInfo"));
-            } else if (msg.obj instanceof PhotoEntity) {
-                progressDialog.dismiss();
-                final Intent addressIntent = new Intent(FileExplorerActivity.this, AddressSearchActivity.class);
-                final PhotoEntity lEntity = (PhotoEntity)msg.obj;
-                AlertDialog.Builder builder = new AlertDialog.Builder(FileExplorerActivity.this);
-                builder.setMessage(getString(R.string.file_explorer_message1)).setCancelable(false).setPositiveButton(getString(R.string.confirm),
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                addressIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                addressIntent.putExtra("imagePath", lEntity.imagePath);
-                                addressIntent.putExtra("date", lEntity.date);
-                                fileExplorerContext.startActivity(addressIntent);
-                                return;
-                            }
-                        }).setNegativeButton(getString(R.string.cancel),
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                return;
-                            }
-                        });
-                AlertDialog alert = builder.create();
-                alert.show();
             }
             return true;
         }
@@ -144,44 +121,65 @@ public class FileExplorerActivity extends AppCompatActivity {
                 }
 
                 Metadata metadata = JpegMetadataReader.readMetadata(targetFile);
-                PhotoEntity entity = new PhotoEntity();
-                entity.imagePath = targetFile.getAbsolutePath();
+                PhotoMapItem item = new PhotoMapItem();
+                item.imagePath = targetFile.getAbsolutePath();
                 ExifSubIFDDirectory exifSubIFDDirectory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
                 Date date = exifSubIFDDirectory.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL, TimeZone.getDefault());
                 if (date != null) {
-                    entity.date = CommonUtils.DATE_TIME_PATTERN.format(date);
+                    item.date = CommonUtils.DATE_TIME_PATTERN.format(date);
                 } else {
-                    entity.date = getString(R.string.file_explorer_message2);
+                    item.date = getString(R.string.file_explorer_message2);
                 }
 
                 GpsDirectory gpsDirectory = metadata.getFirstDirectoryOfType(GpsDirectory.class);
                 if (gpsDirectory != null && gpsDirectory.getGeoLocation() != null) {
-                    entity.longitude = gpsDirectory.getGeoLocation().getLongitude();
-                    entity.latitude = gpsDirectory.getGeoLocation().getLatitude();
-                    List<Address> listAddress = CommonUtils.getFromLocation(FileExplorerActivity.this, entity.latitude, entity.longitude, 1, 0);
+                    item.longitude = gpsDirectory.getGeoLocation().getLongitude();
+                    item.latitude = gpsDirectory.getGeoLocation().getLatitude();
+                    List<Address> listAddress = CommonUtils.getFromLocation(FileExplorerActivity.this, item.latitude, item.longitude, 1, 0);
                     if (listAddress.size() > 0) {
-                        entity.info = CommonUtils.fullAddress(listAddress.get(0));
+                        item.info = CommonUtils.fullAddress(listAddress.get(0));
                     }
-                    StringBuilder sb = new StringBuilder();
-                    sb.append(entity.imagePath + "|");
-                    sb.append(entity.info + "|");
-                    sb.append(entity.latitude + "|");
-                    sb.append(entity.longitude + "|");
-                    sb.append(entity.date + "\n");
-                    if (CommonUtils.isMatchLine(Constant.PHOTO_DATA_PATH, sb.toString())) {
+
+                    ArrayList<PhotoMapItem> tempList = PhotoMapDbHelper.selectPhotoMapItemBy("imagePath", item.imagePath);
+                    if (tempList.size() > 0) {
                         message.obj = getString(R.string.file_explorer_message3);
                         registerHandler.sendMessage(message);
                     } else {
-                        CommonUtils.writeDataFile(sb.toString(), Constant.PHOTO_DATA_PATH, true);
-//                        if (!new File(Constant.WORKING_DIRECTORY + fileName + ".thumb").exists()) {
+                        PhotoMapDbHelper.insertPhotoMapItem(item);
                         CommonUtils.createScaledBitmap(targetFile.getAbsolutePath(), Constant.WORKING_DIRECTORY + fileName + ".thumb", 200);
-//                        }
                         message.obj = getString(R.string.file_explorer_message4);
                         registerHandler.sendMessage(message);
                     }
                 } else {
-                    message.obj = entity;
-                    registerHandler.sendMessage(message);
+                    // does not exits gps data
+                    final PhotoMapItem temp = item;
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            progressDialog.dismiss();
+                            final Intent addressIntent = new Intent(FileExplorerActivity.this, AddressSearchActivity.class);
+                            AlertDialog.Builder builder = new AlertDialog.Builder(FileExplorerActivity.this);
+                            builder.setMessage(getString(R.string.file_explorer_message1)).setCancelable(false).setPositiveButton(getString(R.string.confirm),
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            addressIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                            addressIntent.putExtra("imagePath", temp.imagePath);
+                                            addressIntent.putExtra("date", temp.date);
+                                            fileExplorerContext.startActivity(addressIntent);
+                                            return;
+                                        }
+                                    }).setNegativeButton(getString(R.string.cancel),
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            return;
+                                        }
+                                    });
+                            AlertDialog alert = builder.create();
+                            alert.show();
+                        }
+                    });
                 }
             } catch (Exception e) {
                 AAFLogger.info("FileExplorerActivity-run INFO: " + e.getMessage(), getClass());
@@ -235,7 +233,7 @@ public class FileExplorerActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         TypefaceProvider.registerDefaultIconSets();
-        setContentView(R.layout.file_file_explorer_activity);
+        setContentView(R.layout.activity_file_explorer);
         ButterKnife.bind(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -250,7 +248,7 @@ public class FileExplorerActivity extends AppCompatActivity {
         mCurrent = Constant.CAMERA_DIRECTORY;
         ((TextView)findViewById(R.id.btnup)).setTypeface(Typeface.DEFAULT);
 
-        mAdapter = new FileEntityAdapter(this, this, R.layout.file_file_explorer_activity_list_item, this.listFileEntity);
+        mAdapter = new ExplorerItemAdapter(this, this, R.layout.item_file_explorer, this.listFileEntity);
         mFileList.setAdapter(mAdapter);
         viewGroup = (ViewGroup)findViewById(R.id.pathView);
         mScrollView  = (HorizontalScrollView)findViewById(R.id.scrollView);
@@ -308,21 +306,7 @@ public class FileExplorerActivity extends AppCompatActivity {
     @OnClick({R.id.btnup})
     public void buttonClick(View view) {
         switch (view.getId()) {
-//            case R.id.btnroot:
-//                if (mCurrent.compareTo(mRoot) != 0) {
-//                    mCurrent = mRoot;
-//                    refreshFiles();
-//                }
-//                break;
             case R.id.btnup:
-//                if (mCurrent.endsWith("/")) {
-//                mCurrent = mCurrent.substring(0, mCurrent.lastIndexOf("/"));
-//            }
-//            String uppath = FilenameUtils.getFullPath(mCurrent);
-//            if (StringUtils.equals(uppath, "/")) return;
-//            mCurrent = uppath;
-//            refreshFiles();
-
                 if (listFileEntity.size() - listDirectroryEntity.size() < 1) {
                     CommonUtils.showAlertDialog(this, getString(R.string.file_explorer_message9));
                 } else {
@@ -330,15 +314,6 @@ public class FileExplorerActivity extends AppCompatActivity {
                     CommonUtils.showAlertDialog(FileExplorerActivity.this, getString(R.string.file_explorer_message11) , FileExplorerActivity.this, positiveListener);
                 }
                 break;
-//            case R.id.photoHomeExternal:
-//                if (mCurrent.compareTo(Constant.CAMERA_DIRECTORY_INTERNAL) != 0) {
-//                    mCurrent = mRoot;
-//                    refreshFiles();
-//                }
-//                break;
-//            case R.id.close:
-//                finish();
-//                break;
         }
     }
 
@@ -365,15 +340,6 @@ public class FileExplorerActivity extends AppCompatActivity {
                         name = files[i];
                         String extension = FilenameUtils.getExtension(name).toLowerCase();
                         if (!extension.matches("jpg|jpeg")) continue;
-//                        if (f.length() < 1) f.delete();
-//                        if (!new File(Constant.WORKING_DIRECTORY + files[i] + ".thumb").exists()) {
-//                            CommonUtils.createScaledBitmap(path, Constant.WORKING_DIRECTORY + files[i] + ".thumb", 200);
-//                            Message message = registerHandler.obtainMessage();
-//                            Map<String, String> infoMap = new HashMap<>();
-//                            infoMap.put("progressInfo" , i + "/" + files.length);
-//                            message.obj = infoMap;
-//                            registerHandler.sendMessage(message);
-//                        }
                         thumbnailEntity.setImagePath(path);
                         listFileEntity.add(thumbnailEntity);
                     }

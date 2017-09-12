@@ -1,5 +1,15 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
+    <!--item_file_explorer.xml-->
+    <style name="item_file_explorer_info">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:textSize">12dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingLeft">10dp</item>
+    </style>
+
     <!--Android-Bootstrap-->
     <style name="wrapping_fa_text">
         <item name="android:layout_width">wrap_content</item>
