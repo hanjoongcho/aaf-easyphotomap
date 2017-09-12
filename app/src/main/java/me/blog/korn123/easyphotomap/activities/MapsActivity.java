@@ -437,8 +437,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
 
             public String getMessage() {
-                return message;
-//                return StringUtils.abbreviate(message, 17);
+//                return message;
+                return StringUtils.abbreviate(message, 17);
             }
 
             public void setMessage(String message) {
