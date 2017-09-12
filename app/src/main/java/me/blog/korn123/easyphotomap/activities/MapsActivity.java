@@ -13,6 +13,7 @@ import android.location.Location;
 import android.media.ExifInterface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.view.ContextThemeWrapper;
@@ -563,62 +564,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         public boolean handleMessage(Message msg) {
             if (msg.obj instanceof String) {
                 if (StringUtils.equals((String) msg.obj, "update completed")) {
-                    progressDialog.dismiss();
-                    setUpClusterer();
-                    ArrayList<PhotoMapItem> listTemp = PhotoMapDbHelper.selectPhotoMapItemAll();
-                    for (int i = 0; i < listMarkerOptions.size(); i++) {
-//                        Marker marker = mMap.addMarker(listMarkerOptions.get(i));
-                        MyItem item = new MyItem(listMarkerOptions.get(i), listTemp.get(i));
-                        mClusterManager.addItem(item);
-                        listLatLng.add(listMarkerOptions.get(i).getPosition());
-//                        listMarker.add(marker);
-//                        entityMap.put(marker.getId(), listPhotoEntity.get(i));
-                    }
 
-                    mMap.setOnMarkerClickListener(mClusterManager);
-                    mMap.setOnCameraChangeListener(mClusterManager);
-
-                    MyClusterRenderer clusterRenderer = new MyClusterRenderer(MapsActivity.this, mMap, mClusterManager);
-                    mClusterManager.setRenderer(clusterRenderer);
-
-                    mClusterManager.setOnClusterClickListener(new ClusterManager.OnClusterClickListener<MyItem>() {
-                                @Override
-                                public boolean onClusterClick(Cluster<MyItem> cluster) {
-//                                    mMap.animateCamera(CameraUpdateFactory.zoomIn());
-                                    mMap.setInfoWindowAdapter(null);
-                                    return false;
-                                }
-                    });
-
-                    mClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<MyItem>() {
-                                @Override
-                                public boolean onClusterItemClick(MyItem item) {
-                                    mMap.setInfoWindowAdapter(new InfoWindow(
-                                            item.getPhotoEntity().info,
-                                            item.getPhotoEntity().imagePath,
-                                            item.getPhotoEntity().latitude,
-                                            item.getPhotoEntity().longitude,
-                                            item.getPhotoEntity().date
-                                    ));
-                                    final String fImagePath = item.getPhotoEntity().imagePath;
-                                    mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-                                        @Override
-                                        public void onInfoWindowClick(Marker marker) {
-                                            Intent imageViewIntent = new Intent(MapsActivity.this, PopupImageActivity.class);
-                                            imageViewIntent.putExtra("imagePath", fImagePath);
-                                            startActivity(imageViewIntent);
-                                        }
-                                    });
-                                    return false;
-                                }
-                    });
-
-                    LatLngBounds.Builder builder = new LatLngBounds.Builder();
-                    for (LatLng latLng: listLatLng) {
-                        builder.include(latLng);
-                    }
-                    LatLngBounds bounds = builder.build();
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 200));
                 }
             } else if (msg.obj instanceof OverlayThread.ProgressInfo) {
                 OverlayThread.ProgressInfo progressInfo = (OverlayThread.ProgressInfo)msg.obj;
@@ -670,7 +616,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         @Override
         public void run() {
-            ArrayList<PhotoMapItem> listTemp = PhotoMapDbHelper.selectPhotoMapItemAll();
+            ArrayList<PhotoMapItem> listTemp = PhotoMapDbHelper.containsPhotoMapItemBy("info", keyword);
             super.run();
             listLatLng.clear();
             listMarkerOptions.clear();
@@ -681,11 +627,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 index++;
                 progressMsg.obj = new ProgressInfo(index, item.info, listTemp.size());
                 overlayHandler.sendMessage(progressMsg);
-                if (enableDateFilter) {
-                    if (applyFilter && !item.date.contains(keyword) && !keyword.equals("대한민국")) continue;
-                } else {
-                    if (applyFilter && !item.info.contains(keyword)) continue;
-                }
+//                if (enableDateFilter) {
+//                    if (applyFilter && !item.date.contains(keyword) && !keyword.equals("대한민국")) continue;
+//                } else {
+//                    if (applyFilter && !item.info.contains(keyword)) continue;
+//                }
                 BitmapDescriptor image = null;
                 MarkerOptions options = new MarkerOptions();
                 LatLng latLng = new LatLng(item.latitude, item.longitude);
@@ -721,9 +667,63 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 listMarkerOptions.add(options);
                 listPhotoEntity.add(item);
             }
-            Message completeMsg = overlayHandler.obtainMessage();
-            completeMsg.obj = "update completed";
-            overlayHandler.sendMessage(completeMsg);
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    progressDialog.dismiss();
+                    setUpClusterer();
+                    ArrayList<PhotoMapItem> listTemp = PhotoMapDbHelper.containsPhotoMapItemBy("info", keyword);
+                    for (int i = 0; i < listMarkerOptions.size(); i++) {
+                        MyItem item = new MyItem(listMarkerOptions.get(i), listTemp.get(i));
+                        mClusterManager.addItem(item);
+                        listLatLng.add(listMarkerOptions.get(i).getPosition());
+                    }
+
+                    mMap.setOnMarkerClickListener(mClusterManager);
+                    mMap.setOnCameraChangeListener(mClusterManager);
+
+                    MyClusterRenderer clusterRenderer = new MyClusterRenderer(MapsActivity.this, mMap, mClusterManager);
+                    mClusterManager.setRenderer(clusterRenderer);
+
+                    mClusterManager.setOnClusterClickListener(new ClusterManager.OnClusterClickListener<MyItem>() {
+                        @Override
+                        public boolean onClusterClick(Cluster<MyItem> cluster) {
+                            mMap.setInfoWindowAdapter(null);
+                            return false;
+                        }
+                    });
+
+                    mClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<MyItem>() {
+                        @Override
+                        public boolean onClusterItemClick(MyItem item) {
+                            mMap.setInfoWindowAdapter(new InfoWindow(
+                                    item.getPhotoEntity().info,
+                                    item.getPhotoEntity().imagePath,
+                                    item.getPhotoEntity().latitude,
+                                    item.getPhotoEntity().longitude,
+                                    item.getPhotoEntity().date
+                            ));
+                            final String fImagePath = item.getPhotoEntity().imagePath;
+                            mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                                @Override
+                                public void onInfoWindowClick(Marker marker) {
+                                    Intent imageViewIntent = new Intent(MapsActivity.this, PopupImageActivity.class);
+                                    imageViewIntent.putExtra("imagePath", fImagePath);
+                                    startActivity(imageViewIntent);
+                                }
+                            });
+                            return false;
+                        }
+                    });
+
+                    LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                    for (LatLng latLng: listLatLng) {
+                        builder.include(latLng);
+                    }
+                    LatLngBounds bounds = builder.build();
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 200));
+                }
+            });
         }
     }
 
@@ -737,7 +737,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         progressDialog = new ProgressDialog(MapsActivity.this);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         progressDialog.setMessage("find " + keyword + "...");
-        progressDialog.setMax(listPhotoMapItem.size());
+        progressDialog.setMax(PhotoMapDbHelper.containsPhotoMapItemBy("info", keyword).size());
         progressDialog.show();
     }
 

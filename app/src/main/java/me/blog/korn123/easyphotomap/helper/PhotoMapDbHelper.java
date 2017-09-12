@@ -56,4 +56,11 @@ public class PhotoMapDbHelper {
         return list;
     }
 
+    public static ArrayList<PhotoMapItem> containsPhotoMapItemBy(String targetColumn, String value) {
+        RealmResults realmResults = getRealmInstance().where(PhotoMapItem.class).contains(targetColumn, value).findAllSorted("sequence", Sort.DESCENDING);
+        ArrayList<PhotoMapItem> list = new ArrayList<>();
+        list.addAll(realmResults.subList(0, realmResults.size()));
+        return list;
+    }
+
 }
