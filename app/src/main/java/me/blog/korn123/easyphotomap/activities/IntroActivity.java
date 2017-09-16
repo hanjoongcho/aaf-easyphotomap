@@ -1,4 +1,4 @@
-package me.blog.korn123.easyphotomap.helper;
+package me.blog.korn123.easyphotomap.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
-import me.blog.korn123.easyphotomap.activities.MapsActivity;
 import me.blog.korn123.easyphotomap.R;
 
 /**
@@ -20,7 +19,7 @@ public class IntroActivity extends Activity implements Handler.Callback {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.helper_intro_activity);
+        setContentView(R.layout.activity_intro);
         new Handler(this).sendEmptyMessageDelayed(START_MAIN_ACTIVITY, 1000);
     }
 

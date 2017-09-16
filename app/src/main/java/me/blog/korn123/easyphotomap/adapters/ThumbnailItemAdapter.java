@@ -1,4 +1,4 @@
-package me.blog.korn123.easyphotomap.thumbnail;
+package me.blog.korn123.easyphotomap.adapters;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -23,19 +23,19 @@ import java.io.File;
 import java.util.List;
 
 import me.blog.korn123.easyphotomap.R;
-import me.blog.korn123.easyphotomap.log.AAFLogger;
+import me.blog.korn123.easyphotomap.models.ThumbnailItem;
 import me.blog.korn123.easyphotomap.utils.CommonUtils;
 
 /**
  * Created by CHO HANJOONG on 2016-08-02.
  */
-public class ThumbnailEntityAdapter extends ArrayAdapter<ThumbnailEntity> {
+public class ThumbnailItemAdapter extends ArrayAdapter<ThumbnailItem> {
 
     private final Context context;
     private final Activity activity;
-    private final List<ThumbnailEntity> entities;
+    private final List<ThumbnailItem> entities;
     private final int layoutResourceId;
-    public ThumbnailEntityAdapter(Activity activity, Context context, int layoutResourceId, List<ThumbnailEntity> entities) {
+    public ThumbnailItemAdapter(Activity activity, Context context, int layoutResourceId, List<ThumbnailItem> entities) {
         super(context, layoutResourceId, entities);
         this.activity = activity;
         this.context = context;
@@ -64,7 +64,7 @@ public class ThumbnailEntityAdapter extends ArrayAdapter<ThumbnailEntity> {
 //        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_menu_gallery);
 //        Bitmap resized = Bitmap.createScaledBitmap(bitmap, widthHeight, widthHeight, true);
 //        holder.imageView1.setImageBitmap(bitmap);
-        ThumbnailEntity entity = entities.get(position);
+        ThumbnailItem entity = entities.get(position);
         String imagePath = entity.imagePath ;
         String thumbnailPath = entity.thumbnailPath;
         String imageName = FilenameUtils.getName(imagePath);
@@ -110,7 +110,7 @@ public class ThumbnailEntityAdapter extends ArrayAdapter<ThumbnailEntity> {
                     Bitmap bitmap = CommonUtils.decodeFile(activity, filePath, options);
                     resized = Bitmap.createScaledBitmap(bitmap, widthHeight, widthHeight, true);
                 } catch (Exception e) {
-                    AAFLogger.error("AAFLogger-doInBackground ERROR: " + e.getMessage(), getClass());
+                    e.printStackTrace();
                 }
             } else {
                 // listView holder가 재활용되면 task cancel 되도록 수정 2016.11.07 Hanjoong Cho

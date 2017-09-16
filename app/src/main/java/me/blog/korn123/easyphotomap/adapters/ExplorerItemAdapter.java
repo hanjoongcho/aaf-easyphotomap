@@ -11,7 +11,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,21 +24,21 @@ import com.drew.metadata.exif.GpsDirectory;
 import java.util.List;
 
 import me.blog.korn123.easyphotomap.R;
-import me.blog.korn123.easyphotomap.file.FileEntity;
+import me.blog.korn123.easyphotomap.models.FileItem;
 import me.blog.korn123.easyphotomap.utils.BitmapUtils;
 import me.blog.korn123.easyphotomap.utils.CommonUtils;
 
 /**
  * Created by CHO HANJOONG on 2016-07-30.
  */
-public class ExplorerItemAdapter extends ArrayAdapter<FileEntity> {
+public class ExplorerItemAdapter extends ArrayAdapter<FileItem> {
 
     private final Activity activity;
     private final Context context;
-    private final List<FileEntity> entities;
+    private final List<FileItem> entities;
     private final int layoutResourceId;
 
-    public ExplorerItemAdapter(Activity activity, Context context, int layoutResourceId, List<FileEntity> entities) {
+    public ExplorerItemAdapter(Activity activity, Context context, int layoutResourceId, List<FileItem> entities) {
         super(context, layoutResourceId, entities);
         this.activity = activity;
         this.context = context;
@@ -71,7 +70,7 @@ public class ExplorerItemAdapter extends ArrayAdapter<FileEntity> {
             holder = (ViewHolder)row.getTag();
         }
 
-        FileEntity entity = entities.get(position);
+        FileItem entity = entities.get(position);
 
         // init default option
         int widthHeight = (int)(CommonUtils.getDefaultDisplay(activity).x / 5);

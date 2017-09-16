@@ -106,7 +106,7 @@
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
 
-    <string name="pref_title_social_recommendations">enable date filter</string>
+    <string name="pref_title_social_recommendations">Enable date filter</string>
     <string name="pref_description_social_recommendations">In place of the address filter used in the keyword nApplies a date filter.
     </string>
 

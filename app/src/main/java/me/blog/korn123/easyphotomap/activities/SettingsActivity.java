@@ -1,4 +1,4 @@
-package me.blog.korn123.easyphotomap.setting;
+package me.blog.korn123.easyphotomap.activities;
 
 
 import android.annotation.TargetApi;
@@ -26,8 +26,7 @@ import org.apache.commons.lang.StringUtils;
 import java.io.File;
 
 import me.blog.korn123.easyphotomap.R;
-import me.blog.korn123.easyphotomap.constant.Constant;
-import me.blog.korn123.easyphotomap.log.AAFLogger;
+import me.blog.korn123.easyphotomap.constants.Constant;
 import me.blog.korn123.easyphotomap.utils.CommonUtils;
 
 /**
@@ -63,7 +62,7 @@ public class SettingsActivity extends AppPreferenceActivity {
         try {
             pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
         } catch (PackageManager.NameNotFoundException e) {
-            AAFLogger.error("SettingsActivity-initPreference ERROR: " + e.getMessage(), getClass());
+            e.printStackTrace();
         }
         String version = pInfo.versionName;
         mAppVersionPreference.setTitle("Easy Photo Map Version");

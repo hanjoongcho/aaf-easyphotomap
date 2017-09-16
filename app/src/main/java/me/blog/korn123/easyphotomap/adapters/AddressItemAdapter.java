@@ -1,4 +1,4 @@
-package me.blog.korn123.easyphotomap.search;
+package me.blog.korn123.easyphotomap.adapters;
 
 import android.app.Activity;
 import android.content.Context;
@@ -14,13 +14,13 @@ import java.util.List;
 /**
  * Created by CHO HANJOONG on 2016-07-20.
  */
-public class AddressEntityAdapter extends ArrayAdapter<Address> {
+public class AddressItemAdapter extends ArrayAdapter<Address> {
 
     private final Context context;
     private final List<Address> listAddress;
     private final int layoutResourceId;
 
-    public AddressEntityAdapter(Context context, int layoutResourceId, List<Address> listAddress) {
+    public AddressItemAdapter(Context context, int layoutResourceId, List<Address> listAddress) {
         super(context, layoutResourceId, listAddress);
         this.context = context;
         this.listAddress = listAddress;

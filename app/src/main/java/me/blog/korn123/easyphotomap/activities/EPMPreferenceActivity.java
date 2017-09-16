@@ -1,4 +1,4 @@
-package me.blog.korn123.easyphotomap.setting;
+package me.blog.korn123.easyphotomap.activities;
 
 import android.os.Bundle;
 import android.preference.Preference;

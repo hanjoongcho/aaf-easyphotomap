@@ -1,4 +1,4 @@
-package me.blog.korn123.easyphotomap.helper;
+package me.blog.korn123.easyphotomap.activities;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -18,9 +18,10 @@ import me.blog.korn123.easyphotomap.utils.CommonUtils;
  * Created by CHO HANJOONG on 2016-08-21.
  */
 public class PopupImageActivity extends Activity {
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.helper_popup_image_activity);
+        setContentView(R.layout.activity_popup_image);
         ImageView imageView = (ImageView)findViewById(R.id.imageView);
 
         BitmapFactory.Options options = new BitmapFactory.Options();
@@ -30,7 +31,7 @@ public class PopupImageActivity extends Activity {
         Bitmap bitmap = null;
         Bitmap targetBitmap = null;
         if (new File(imagePath).exists()) {
-            bitmap = CommonUtils.decodeFile(PopupImageActivity.this, imagePath, options);
+            CommonUtils.decodeFile(PopupImageActivity.this, imagePath, options);
             int width = options.outWidth;
             int height = options.outHeight;
             options.inJustDecodeBounds = false;
@@ -58,4 +59,5 @@ public class PopupImageActivity extends Activity {
             }
         });
     }
+
 }

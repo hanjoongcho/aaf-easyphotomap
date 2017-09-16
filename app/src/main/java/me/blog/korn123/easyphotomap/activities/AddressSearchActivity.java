@@ -1,6 +1,4 @@
-package me.blog.korn123.easyphotomap.search;
-
-//import android.app.Fragment;
+package me.blog.korn123.easyphotomap.activities;
 
 import android.app.SearchManager;
 import android.content.Context;
@@ -14,40 +12,46 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListPopupWindow;
 import android.widget.ListView;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import me.blog.korn123.easyphotomap.R;
-import me.blog.korn123.easyphotomap.constant.Constant;
-import me.blog.korn123.easyphotomap.log.AAFLogger;
+import me.blog.korn123.easyphotomap.constants.Constant;
+import me.blog.korn123.easyphotomap.helper.PhotoMapDbHelper;
+import me.blog.korn123.easyphotomap.models.PhotoMapItem;
+import me.blog.korn123.easyphotomap.adapters.AddressItemAdapter;
 import me.blog.korn123.easyphotomap.utils.CommonUtils;
+import me.blog.korn123.easyphotomap.utils.DialogUtils;
 
 /**
  * Created by CHO HANJOONG on 2016-07-22.
  */
 public class AddressSearchActivity extends AppCompatActivity {
 
+    private List<Address> listAddress = new ArrayList<>();
+    private AddressItemAdapter addressAdapter;
     private SearchView searchView = null;
     private SearchView.OnQueryTextListener queryTextListener;
-    private ListPopupWindow mList;
-    private ListView listView;
+
+    @BindView(R.id.listView)
+    public ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_photo_search);
+        setContentView(R.layout.activity_address_search);
+        ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        listView = (ListView)findViewById(R.id.listView);
     }
 
     @Override
@@ -100,40 +104,39 @@ public class AddressSearchActivity extends AppCompatActivity {
         refreshList(null, 50);
     }
 
-    private AddressEntityAdapter addressAdapter;
-    private List<Address> mListAddress = new ArrayList<>();
     public void refreshList(String query, int maxResults) {
         if (StringUtils.length(query) < 1) return;
-        mListAddress.clear();
+        listAddress.clear();
         try {
             List<Address> listAddress = CommonUtils.getFromLocationName(AddressSearchActivity.this, query, maxResults, 0);
-            mListAddress.addAll(listAddress);
+            this.listAddress.addAll(listAddress);
             if (addressAdapter == null) {
-                addressAdapter = new AddressEntityAdapter(this, android.R.layout.simple_list_item_2, mListAddress);
+                addressAdapter = new AddressItemAdapter(this, android.R.layout.simple_list_item_2, listAddress);
                 listView.setAdapter(addressAdapter);
-                final Context context = this;
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Address address = (Address) parent.getAdapter().getItem(position);
                         Intent intent = getIntent();
+                        String resultMessage = null;
                         if (intent.hasExtra("imagePath")) {
                             String fileName = FilenameUtils.getName(intent.getStringExtra("imagePath"));
-                            StringBuilder sb = new StringBuilder();
-                            sb.append(intent.getStringExtra("imagePath") + "|");
-                            sb.append(CommonUtils.fullAddress(address) + "|");
-                            sb.append(address.getLatitude() + "|");
-                            sb.append(address.getLongitude() + "|");
-                            sb.append(intent.getStringExtra("date") + "\n");
-                            if (CommonUtils.isMatchLine(Constant.PHOTO_DATA_PATH, sb.toString())) {
-                                CommonUtils.makeToast(getApplicationContext(), getString(R.string.address_search_message1));
+                            PhotoMapItem item = new PhotoMapItem();
+                            item.imagePath = intent.getStringExtra("imagePath");
+                            item.info = CommonUtils.fullAddress(address);
+                            item.latitude = address.getLatitude();
+                            item.longitude = address.getLongitude();
+                            item.date = intent.getStringExtra("date");
+
+                            ArrayList<PhotoMapItem> tempList = PhotoMapDbHelper.selectPhotoMapItemBy("imagePath", item.imagePath);
+                            if (tempList.size() > 0) {
+                                resultMessage = getString(R.string.file_explorer_message3);
                             } else {
-                                CommonUtils.writeDataFile(sb.toString(), Constant.PHOTO_DATA_PATH, true);
-                                if (!new File(Constant.WORKING_DIRECTORY + fileName + ".thumb").exists()) {
-                                    CommonUtils.createScaledBitmap(intent.getStringExtra("imagePath"), Constant.WORKING_DIRECTORY + fileName + ".thumb", 200);
-                                }
-                                CommonUtils.makeToast(getApplicationContext(), getString(R.string.address_search_message2));
+                                PhotoMapDbHelper.insertPhotoMapItem(item);
+                                CommonUtils.createScaledBitmap(item.imagePath, Constant.WORKING_DIRECTORY + fileName + ".thumb", 200);
+                                resultMessage = getString(R.string.file_explorer_message4);
                             }
                         }
+                        DialogUtils.makeSnackBar(view, resultMessage);
                         finish();
                     }
                 });
@@ -141,7 +144,7 @@ public class AddressSearchActivity extends AppCompatActivity {
                 addressAdapter.notifyDataSetChanged();
             }
         } catch (Exception e) {
-            AAFLogger.info("AddressSearchActivity-refreshList INFO: exception is " + e, getClass());
+            e.printStackTrace();
         }
     }
 

@@ -1,4 +1,4 @@
-package me.blog.korn123.easyphotomap.constant;
+package me.blog.korn123.easyphotomap.constants;
 
 import android.os.Environment;
 
@@ -11,12 +11,13 @@ public class Constant {
     final static public String CAMERA_DIRECTORY = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM";
     final static public String CAMERA_DIRECTORY_INTERNAL = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/Camera";
     final static public String THUMBNAIL_DIRECTORY = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/.thumbnails";
-    final static public String PHOTO_DATA_PATH = WORKING_DIRECTORY + "photodata.dat";
 
     final static public float GOOGLE_MAP_MAX_ZOOM_IN_VALUE = 18.0F;
     final static public float GOOGLE_MAP_DEFAULT_ZOOM_VALUE = 13.0F;
     final static public double GOOGLE_MAP_DEFAULT_LATITUDE = 37.3997208;
     final static public double GOOGLE_MAP_DEFAULT_LONGITUDE = 127.1000782;
 
-
+    /*CameraActivity*/
+    final static public int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+    final static public int CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE = 200;
 }

@@ -31,11 +31,9 @@ import java.util.TimeZone;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.blog.korn123.easyphotomap.R;
-import me.blog.korn123.easyphotomap.constant.Constant;
+import me.blog.korn123.easyphotomap.constants.Constant;
 import me.blog.korn123.easyphotomap.helper.PhotoMapDbHelper;
-import me.blog.korn123.easyphotomap.log.AAFLogger;
 import me.blog.korn123.easyphotomap.models.PhotoMapItem;
-import me.blog.korn123.easyphotomap.search.PhotoEntity;
 import me.blog.korn123.easyphotomap.utils.CommonUtils;
 
 /**
@@ -179,7 +177,6 @@ public class BatchPopupActivity extends Activity {
                     }
 
                 } catch (Exception e) {
-                    AAFLogger.info("RegisterThread-run INFO: exception is " + e.getMessage(), getClass());
                     failCount++;
                 }
                 progressHandler.sendMessage(message);

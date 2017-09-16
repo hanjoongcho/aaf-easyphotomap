@@ -54,7 +54,7 @@
                 app:bootstrapBrand="primary"
                 app:roundedCorners="true"
                 app:bootstrapSize="sm"
-                android:id="@+id/btnup"
+                android:id="@+id/registerDirectory"
                 />
         </LinearLayout>
         <ListView

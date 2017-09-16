@@ -65,15 +65,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.blog.korn123.easyphotomap.R;
-import me.blog.korn123.easyphotomap.camera.CameraActivity;
-import me.blog.korn123.easyphotomap.constant.Constant;
+import me.blog.korn123.easyphotomap.constants.Constant;
 import me.blog.korn123.easyphotomap.helper.PhotoMapDbHelper;
-import me.blog.korn123.easyphotomap.helper.PopupImageActivity;
-import me.blog.korn123.easyphotomap.log.AAFLogger;
 import me.blog.korn123.easyphotomap.models.PhotoMapItem;
-import me.blog.korn123.easyphotomap.setting.SettingsActivity;
-import me.blog.korn123.easyphotomap.thumbnail.ThumbnailExplorerActivity;
-import me.blog.korn123.easyphotomap.timeline.TimelineActivity;
 import me.blog.korn123.easyphotomap.utils.CommonUtils;
 import me.blog.korn123.easyphotomap.utils.FontUtils;
 import me.blog.korn123.easyphotomap.utils.GPSUtils;
@@ -125,7 +119,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     /**
      * Manipulates the recommendMap once available.
      * This callback is triggered when the recommendMap is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera_camera_activity. In this case,
+     * This is where we can add markers or lines, add listeners or move the activity_camera. In this case,
      * we just add a marker near Sydney, Australia.
      * If Google Play services is not installed on the device, the user will be prompted to install
      * it inside the SupportMapFragment. This method will only be triggered once the user has
@@ -216,7 +210,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     Intent camera = new Intent(view.getContext(), CameraActivity.class);
                     startActivity(camera);
                 } else {
-                    final View infoView = getLayoutInflater().inflate(R.layout.main_camera_info, null);
+                    final View infoView = getLayoutInflater().inflate(R.layout.popup_window_camera, null);
                     TextView textView2 = (TextView)infoView.findViewById(R.id.textView2);
                     TextView textView3 = (TextView)infoView.findViewById(R.id.textView3);
                     popupWindow = new PopupWindow(infoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -257,7 +251,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
 
                 LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
-                View customView = inflater.inflate(R.layout.main_marker_popup, null);
+                View customView = inflater.inflate(R.layout.popup_window_recommendation, null);
                 listView = (ListView) customView.findViewById(R.id.listView);
                 FontUtils.setChildViewTypeface((ViewGroup) customView);
                 Set<String> set = new HashSet<>();
@@ -297,7 +291,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
 
                 listRecommendation.addAll(listRecommendationOrigin);
-                adapter = new ArrayAdapter<Recommendation>(this, R.layout.main_marker_popup_list_item, listRecommendation);
+                adapter = new ArrayAdapter<Recommendation>(this, R.layout.item_recommendation, listRecommendation);
                 listView.setAdapter(adapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -668,7 +662,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             ContextThemeWrapper cw = new ContextThemeWrapper(getApplicationContext(), R.style.Transparent);
             LayoutInflater inflater = (LayoutInflater) cw.getSystemService(LAYOUT_INFLATER_SERVICE);
-            View view = inflater.inflate(R.layout.main_info_window, null);
+            View view = inflater.inflate(R.layout.popup_window_photo_map_info, null);
             ImageView imageView = (ImageView) (view.findViewById(R.id.info1));
 //            imageView.setImageResource(imageId);
             File imgFile = new File(imagePath);
@@ -687,7 +681,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         matrix.postRotate(270);
                     }
                 } catch (Exception e) {
-                    AAFLogger.info("MapsActivity-getInfoContents INFO: " + e.getMessage(), getClass());
+                    e.printStackTrace();
                 }
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inJustDecodeBounds = false;
@@ -707,9 +701,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     float downSampleWidth = (width / (float) height) * 200;
                     resized = Bitmap.createScaledBitmap(bitmap, (int) downSampleWidth, 200, true);
                 }
-//            Log.i("getInfoContents o: ", String.valueOf(orientation));
-//            Log.i("getInfoContents w: ", String.valueOf(resized.getWidth()));
-//            Log.i("getInfoContents h: ", String.valueOf(resized.getHeight()));
                 imageView.setImageBitmap(resized);
             } else {
                 imageView.setImageBitmap(BitmapFactory.decodeResource(getResources(), android.R.drawable.ic_menu_gallery));

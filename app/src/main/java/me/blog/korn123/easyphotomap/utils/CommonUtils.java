@@ -55,9 +55,8 @@ import java.util.Map;
 
 import me.blog.korn123.easyphotomap.R;
 import me.blog.korn123.easyphotomap.activities.FileExplorerActivity;
-import me.blog.korn123.easyphotomap.log.AAFLogger;
-import me.blog.korn123.easyphotomap.thumbnail.ThumbnailEntity;
-import me.blog.korn123.easyphotomap.thumbnail.ThumbnailExplorerActivity;
+import me.blog.korn123.easyphotomap.models.ThumbnailItem;
+import me.blog.korn123.easyphotomap.activities.ThumbnailExplorerActivity;
 
 /**
  * Created by CHO HANJOONG on 2016-07-21.
@@ -77,7 +76,6 @@ public class CommonUtils {
         try {
             listAddress = geocoder.getFromLocation(latitude, longitude, maxResults);
         } catch (Exception e) {
-            AAFLogger.info("CommonUtils-getFromLocation ERROR: [" + locale + "/retry count " + retryCount + "] " + e.getMessage(), CommonUtils.class);
             if (retryCount < MAX_RETRY) {
                 return getFromLocation(context, latitude, longitude, maxResults, ++retryCount);
             }
@@ -92,7 +90,6 @@ public class CommonUtils {
         try {
             listAddress = geocoder.getFromLocationName(locationName, maxResults);
         } catch (Exception e) {
-            AAFLogger.info("CommonUtils-getFromLocationName ERROR: [retry count " + retryCount + "] " + e.getMessage(), CommonUtils.class);
             if (retryCount < MAX_RETRY) {
                 return getFromLocationName(context, locationName, maxResults, ++retryCount);
             }
@@ -174,8 +171,8 @@ public class CommonUtils {
         edit.commit();
     }
 
-    public static ThumbnailEntity fetchThumbnailBy(Context context, String imageId) {
-        ThumbnailEntity photo = null;
+    public static ThumbnailItem fetchThumbnailBy(Context context, String imageId) {
+        ThumbnailItem photo = null;
         String[] projection = { MediaStore.Images.Thumbnails.DATA, MediaStore.Images.Thumbnails.IMAGE_ID };
         String[] mSelectionArgs = {imageId};
         Cursor imageCursor = context.getContentResolver().query(
@@ -184,7 +181,7 @@ public class CommonUtils {
                 MediaStore.Images.Thumbnails.IMAGE_ID + " = ?",
                 mSelectionArgs,
                 MediaStore.Images.Thumbnails.DATA + " desc");
-        ArrayList<ThumbnailEntity> result = new ArrayList<>(imageCursor.getCount());
+        ArrayList<ThumbnailItem> result = new ArrayList<>(imageCursor.getCount());
         int dataColumnIndex = imageCursor.getColumnIndex(projection[0]);
         int idColumnIndex = imageCursor.getColumnIndex(projection[1]);
 
@@ -192,13 +189,13 @@ public class CommonUtils {
             // Error 발생
             // 적절하게 handling 해주세요
         } else if (imageCursor.moveToFirst()) {
-                photo = new ThumbnailEntity(imageCursor.getString(idColumnIndex), null, imageCursor.getString(dataColumnIndex));
+                photo = new ThumbnailItem(imageCursor.getString(idColumnIndex), null, imageCursor.getString(dataColumnIndex));
         }
         imageCursor.close();
         return photo;
     }
 
-    public static List<ThumbnailEntity> fetchAllThumbnail(Context context) {
+    public static List<ThumbnailItem> fetchAllThumbnail(Context context) {
         String[] projection = { MediaStore.Images.Thumbnails.DATA, MediaStore.Images.Thumbnails.IMAGE_ID };
         Cursor imageCursor = context.getContentResolver().query(
                 MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI, // 이미지 컨텐트 테이블
@@ -206,7 +203,7 @@ public class CommonUtils {
                 null,
                 null,
                 MediaStore.Images.Thumbnails.DATA + " desc");
-        ArrayList<ThumbnailEntity> result = new ArrayList<>(imageCursor.getCount());
+        ArrayList<ThumbnailItem> result = new ArrayList<>(imageCursor.getCount());
         int dataColumnIndex = imageCursor.getColumnIndex(projection[0]);
         int idColumnIndex = imageCursor.getColumnIndex(projection[1]);
 
@@ -222,7 +219,7 @@ public class CommonUtils {
 //                Uri imageUri = Uri.parse(filePath);
 //                Log.i("fetchAllImages", imageUri.toString());
                 // 원본 이미지와 썸네일 이미지의 uri를 모두 담을 수 있는 클래스를 선언합니다.
-                ThumbnailEntity photo = new ThumbnailEntity(imageId, null, filePath);
+                ThumbnailItem photo = new ThumbnailItem(imageId, null, filePath);
                 result.add(photo);
             } while(imageCursor.moveToNext());
         } else {
@@ -232,7 +229,7 @@ public class CommonUtils {
         return result;
     }
 
-    public static List<ThumbnailEntity> fetchAllImages(Context context) {
+    public static List<ThumbnailItem> fetchAllImages(Context context) {
         // DATA는 이미지 파일의 스트림 데이터 경로를 나타냅니다.
         String[] projection = { MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID };
 
@@ -243,7 +240,7 @@ public class CommonUtils {
                 null,
                 MediaStore.Images.Media.DATA + " asc");
 
-        ArrayList<ThumbnailEntity> result = new ArrayList<>(imageCursor.getCount());
+        ArrayList<ThumbnailItem> result = new ArrayList<>(imageCursor.getCount());
         int dataColumnIndex = imageCursor.getColumnIndex(projection[0]);
         int idColumnIndex = imageCursor.getColumnIndex(projection[1]);
 
@@ -259,7 +256,7 @@ public class CommonUtils {
 //                Uri imageUri = Uri.parse(filePath);
 //                Log.i("fetchAllImages", imageUri.toString());
                 // 원본 이미지와 썸네일 이미지의 uri를 모두 담을 수 있는 클래스를 선언합니다.
-                ThumbnailEntity photo = new ThumbnailEntity(imageId, filePath, null);
+                ThumbnailItem photo = new ThumbnailItem(imageId, filePath, null);
                 result.add(photo);
             } while(imageCursor.moveToNext());
         } else {
@@ -545,7 +542,7 @@ public class CommonUtils {
                 }
             }
         } catch (Exception e) {
-            AAFLogger.info("CommonUtils-isMatchLine INFO: " + e.getMessage(), CommonUtils.class);
+            e.printStackTrace();
         }
         return isMatch;
     }
@@ -588,7 +585,7 @@ public class CommonUtils {
 //            Log.i("createScaledBitmap1", String.valueOf(System.currentTimeMillis() - start));
             thumbNail.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
         } catch (Exception e) {
-            AAFLogger.info("CommonUtils-createScaledBitmap INFO: " + e.getMessage(), CommonUtils.class);
+            e.printStackTrace();
             result = false;
         } finally {
             IOUtils.closeQuietly(outputStream);
@@ -611,7 +608,7 @@ public class CommonUtils {
             float downSampleHeight = (height / (float)width) * fixedWidth;
             thumbNail = Bitmap.createScaledBitmap(bitmap, fixedWidth, (int)downSampleHeight, false);
         } catch (Exception e) {
-            AAFLogger.info("CommonUtils-createScaledBitmap INFO: " + e.getMessage(), CommonUtils.class);
+            e.printStackTrace();
         } finally {
             IOUtils.closeQuietly(outputStream);
         }
@@ -643,7 +640,7 @@ public class CommonUtils {
                 downscaledBitmap = bitmap;
             }
         } catch (Exception e) {
-            AAFLogger.info("CommonUtils-createScaledBitmap INFO: " + e.getMessage(), CommonUtils.class);
+            e.printStackTrace();
         }
         return downscaledBitmap;
     }
@@ -665,7 +662,7 @@ public class CommonUtils {
             bufferedWriter.write(data);
             bufferedWriter.flush();
         } catch (Exception e) {
-            AAFLogger.info("CommonUtils-appendDataFile INFO: " + e.getMessage(), CommonUtils.class);
+            e.printStackTrace();
         } finally {
             IOUtils.closeQuietly(bufferedWriter);
             IOUtils.closeQuietly(writer);
@@ -679,7 +676,7 @@ public class CommonUtils {
             inputStream = FileUtils.openInputStream(new File(targetPath));
             listData = IOUtils.readLines(inputStream, "UTF-8");
         } catch (Exception e) {
-            AAFLogger.info("CommonUtils-readDataFile INFO: " + e.getMessage(), CommonUtils.class);
+            e.printStackTrace();
         }
         return listData;
     }
@@ -690,7 +687,7 @@ public class CommonUtils {
             outputStream = new FileOutputStream(new File(targetPath));
             IOUtils.write(data, outputStream, "UTF-8");
         } catch (Exception e) {
-            AAFLogger.info("CommonUtils-writeDataFile INFO: " + e.getMessage(), CommonUtils.class);
+            e.printStackTrace();
         } finally {
             IOUtils.closeQuietly(outputStream);
         }

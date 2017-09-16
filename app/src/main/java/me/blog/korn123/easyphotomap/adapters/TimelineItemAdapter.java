@@ -1,10 +1,8 @@
-package me.blog.korn123.easyphotomap.timeline;
+package me.blog.korn123.easyphotomap.adapters;
 
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Point;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,27 +16,25 @@ import org.apache.commons.lang.StringUtils;
 import java.util.ArrayList;
 
 import me.blog.korn123.easyphotomap.R;
-import me.blog.korn123.easyphotomap.constant.Constant;
-import me.blog.korn123.easyphotomap.log.AAFLogger;
-import me.blog.korn123.easyphotomap.search.PhotoEntity;
-import me.blog.korn123.easyphotomap.utils.BitmapUtils;
+import me.blog.korn123.easyphotomap.constants.Constant;
+import me.blog.korn123.easyphotomap.models.PhotoMapItem;
 import me.blog.korn123.easyphotomap.utils.CommonUtils;
 
 /**
  * Created by CHO HANJOONG on 2016-07-20.
  */
-public class TimelineEntityAdapter extends ArrayAdapter<PhotoEntity> {
+public class TimelineItemAdapter extends ArrayAdapter<PhotoMapItem> {
 
     private final Context context;
     private final int layoutResourceId;
-    private final ArrayList<PhotoEntity> entities;
+    private final ArrayList<PhotoMapItem> listPhotoMapItem;
     private Activity activity;
 
-    public TimelineEntityAdapter(Context context, Activity activity, int layoutResourceId, ArrayList<PhotoEntity> entities) {
-        super(context, layoutResourceId, entities);
+    public TimelineItemAdapter(Context context, Activity activity, int layoutResourceId, ArrayList<PhotoMapItem> listPhotoMapItem) {
+        super(context, layoutResourceId, listPhotoMapItem);
         this.context = context;
         this.layoutResourceId = layoutResourceId;
-        this.entities = entities;
+        this.listPhotoMapItem = listPhotoMapItem;
         this.activity = activity;
     }
 
@@ -58,15 +54,15 @@ public class TimelineEntityAdapter extends ArrayAdapter<PhotoEntity> {
             holder = (ViewHolder)row.getTag();
         }
 
-        PhotoEntity entity = entities.get(position);
+        PhotoMapItem photoMapItem = listPhotoMapItem.get(position);
         if (isDateChange(position)) {
             row.findViewById(R.id.timelineHeader).setVisibility(View.VISIBLE);
-            ((TextView)row.findViewById(R.id.timelineDate)).setText(entity.date);
+            ((TextView)row.findViewById(R.id.timelineDate)).setText(photoMapItem.date);
         } else {
             row.findViewById(R.id.timelineHeader).setVisibility(View.GONE);
         }
-        holder.textView1.setText(entity.originDate + "\n" + entity.info);
-        String fileName = FilenameUtils.getName(entity.imagePath);
+        holder.textView1.setText(photoMapItem.originDate + "\n" + photoMapItem.info);
+        String fileName = FilenameUtils.getName(photoMapItem.imagePath);
         Bitmap bm = CommonUtils.decodeFile(activity, Constant.WORKING_DIRECTORY + fileName + ".thumb");
         holder.imageView1.setImageBitmap(bm);
 
@@ -74,13 +70,12 @@ public class TimelineEntityAdapter extends ArrayAdapter<PhotoEntity> {
     }
 
     public boolean isDateChange(int position) {
-
         boolean isChange = false;
         String previousDate = null;
         String currentDate = null;
         if (position > 0) {
-            PhotoEntity previous = entities.get(position - 1);
-            PhotoEntity current = entities.get(position);
+            PhotoMapItem previous = listPhotoMapItem.get(position - 1);
+            PhotoMapItem current = listPhotoMapItem.get(position);
             previousDate = previous.date;
             currentDate = current.date;
             if (!StringUtils.equals(previousDate, currentDate)) {
@@ -89,7 +84,6 @@ public class TimelineEntityAdapter extends ArrayAdapter<PhotoEntity> {
         } else {
             isChange = true;
         }
-        AAFLogger.info("TimelineEntityAdapter-isDateChange INFO: " + position + ", " + isChange, getClass());
         return isChange;
     }
 

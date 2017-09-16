@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.blog.korn123.easyphotomap.R;
-import me.blog.korn123.easyphotomap.constant.Constant;
 import me.blog.korn123.easyphotomap.helper.PhotoMapDbHelper;
 import me.blog.korn123.easyphotomap.models.PhotoMapItem;
 import me.blog.korn123.easyphotomap.adapters.SearchItemAdapter;
@@ -30,7 +29,6 @@ import me.blog.korn123.easyphotomap.adapters.SearchItemAdapter;
  */
 public class PhotoSearchActivity extends AppCompatActivity {
 
-    final String PHOTO_DATA_PATH = Constant.WORKING_DIRECTORY + "photodata.dat";
     private SearchView searchView = null;
     private SearchView.OnQueryTextListener queryTextListener;
     private SearchItemAdapter searchItemAdapter;

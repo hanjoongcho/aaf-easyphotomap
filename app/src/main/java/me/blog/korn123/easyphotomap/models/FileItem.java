@@ -1,11 +1,11 @@
-package me.blog.korn123.easyphotomap.file;
+package me.blog.korn123.easyphotomap.models;
 
 import org.apache.commons.io.FilenameUtils;
 
 /**
  * Created by CHO HANJOONG on 2016-07-30.
  */
-public class FileEntity implements Comparable<FileEntity> {
+public class FileItem implements Comparable<FileItem> {
 
     public String imagePath;
     public String fileName;
@@ -34,7 +34,7 @@ public class FileEntity implements Comparable<FileEntity> {
     }
 
     @Override
-    public int compareTo(FileEntity entity) {
+    public int compareTo(FileItem entity) {
         return fileName.compareTo(entity.fileName);
     }
 }

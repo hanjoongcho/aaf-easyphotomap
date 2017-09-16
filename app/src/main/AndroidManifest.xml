@@ -24,7 +24,7 @@
         <!--android:theme="@android:style/Theme.Translucent.NoTitleBar"-->
         <!--android:theme="@android:style/Theme.NoTitleBar.Fullscreen"-->
         <activity
-            android:name=".helper.IntroActivity"
+            android:name=".activities.IntroActivity"
             android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen"
             android:label="@string/title_activity_maps" >
             <intent-filter>
@@ -34,23 +34,23 @@
         </activity>
         <activity android:name=".activities.MapsActivity" android:label="MapsActivity" />
         <activity android:name=".activities.FileExplorerActivity" android:label="FileExplorer" android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".thumbnail.ThumbnailExplorerActivity" android:theme="@style/AppTheme.NoActionBar"
+        <activity android:name=".activities.ThumbnailExplorerActivity" android:theme="@style/AppTheme.NoActionBar"
             />
         <activity android:name=".activities.PhotoSearchActivity" android:label="SearchFragment"
             android:theme="@style/AppTheme.NoActionBar"
             />
-        <activity android:name=".search.AddressSearchActivity" android:label="SearchFragment"
+        <activity android:name=".activities.AddressSearchActivity" android:label="SearchFragment"
             android:theme="@style/AppTheme.NoActionBar"
             />
-        <activity android:name=".setting.EPMPreferenceActivity" android:label="EPMPreferenceActivity" />
-        <activity android:name=".setting.SettingsActivity" android:label="SettingsActivity" />
-        <activity android:name=".camera.CameraActivity" android:label="CameraActivity" android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".helper.PopupImageActivity" android:label="PopupImageActivity" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.EPMPreferenceActivity" android:label="EPMPreferenceActivity" />
+        <activity android:name=".activities.SettingsActivity" android:label="SettingsActivity" />
+        <activity android:name=".activities.CameraActivity" android:label="CameraActivity" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.PopupImageActivity" android:label="PopupImageActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.BatchPopupActivity" android:label="BatchPopupActivity" android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".timeline.TimelineActivity" android:label="Timeline"
+        <activity android:name=".activities.TimelineActivity" android:label="Timeline"
             android:theme="@style/AppTheme.NoActionBar"
             />
-        <activity android:name=".setting.LicensesActivity" android:label="Licenses" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.LicensesActivity" android:label="Licenses" android:theme="@style/AppTheme.NoActionBar" />
 
     </application>
 

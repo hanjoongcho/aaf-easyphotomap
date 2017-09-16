@@ -1,4 +1,4 @@
-package me.blog.korn123.easyphotomap.camera;
+package me.blog.korn123.easyphotomap.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -24,11 +24,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-import me.blog.korn123.easyphotomap.activities.MapsActivity;
 import me.blog.korn123.easyphotomap.R;
-import me.blog.korn123.easyphotomap.constant.Constant;
-import me.blog.korn123.easyphotomap.log.AAFLogger;
-import me.blog.korn123.easyphotomap.search.PhotoEntity;
+import me.blog.korn123.easyphotomap.constants.Constant;
+import me.blog.korn123.easyphotomap.helper.PhotoMapDbHelper;
+import me.blog.korn123.easyphotomap.models.PhotoMapItem;
 import me.blog.korn123.easyphotomap.utils.CommonUtils;
 
 /**
@@ -36,8 +35,6 @@ import me.blog.korn123.easyphotomap.utils.CommonUtils;
  */
 public class CameraActivity extends Activity {
 
-    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
-    private static final int CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE = 200;
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
     private Uri fileUri;
@@ -45,7 +42,7 @@ public class CameraActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.camera_camera_activity);
+        setContentView(R.layout.activity_camera);
 
         // create Intent to take a picture and return control to the calling application
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -53,7 +50,7 @@ public class CameraActivity extends Activity {
         intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
 
         // start the image capture Intent
-        startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+        startActivityForResult(intent, Constant.CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
     }
 
     /** Create a file Uri for saving an image or video */
@@ -97,7 +94,7 @@ public class CameraActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+        if (requestCode == Constant.CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 // Image captured and saved to fileUri specified in the Intent
 //                Toast.makeText(this, "Image saved to:\n" +
@@ -117,7 +114,7 @@ public class CameraActivity extends Activity {
                         fileName = FilenameUtils.getName(srcFilepath);
                     }
                     Metadata metadata = JpegMetadataReader.readMetadata(targetFile);
-                    PhotoEntity entity = new PhotoEntity();
+                    PhotoMapItem entity = new PhotoMapItem();
                     entity.imagePath = targetFile.getAbsolutePath();
                     ExifSubIFDDirectory exifSubIFDDirectory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
                     if (exifSubIFDDirectory != null) {
@@ -139,17 +136,9 @@ public class CameraActivity extends Activity {
                         if (listAddress.size() > 0) {
                             entity.info = CommonUtils.fullAddress(listAddress.get(0));
                         }
-                        StringBuilder sb = new StringBuilder();
-                        sb.append(entity.imagePath + "|");
-                        sb.append(entity.info + "|");
-                        sb.append(entity.latitude + "|");
-                        sb.append(entity.longitude + "|");
-                        sb.append(entity.date + "\n");
-                        if (CommonUtils.isMatchLine(Constant.PHOTO_DATA_PATH, sb.toString())) {
-                        } else {
-                            CommonUtils.writeDataFile(sb.toString(), Constant.PHOTO_DATA_PATH, true);
-                            CommonUtils.createScaledBitmap(targetFile.getAbsolutePath(), Constant.WORKING_DIRECTORY + fileName + ".thumb", 200);
-                        }
+
+                        PhotoMapDbHelper.insertPhotoMapItem(entity);
+                        CommonUtils.createScaledBitmap(targetFile.getAbsolutePath(), Constant.WORKING_DIRECTORY + fileName + ".thumb", 200);
                         Intent intent = new Intent(CameraActivity.this, MapsActivity.class);
                         intent.putExtra("info", entity.info);
                         intent.putExtra("imagePath", entity.imagePath);
@@ -161,7 +150,7 @@ public class CameraActivity extends Activity {
                         CommonUtils.makeToast(this, getString(R.string.camera_activity_message1));
                     }
                 } catch (Exception e) {
-                    AAFLogger.info("CameraActivity-onActivityResult INFO: exception is " + e, getClass());
+                    e.printStackTrace();
                 }
 
             } else if (resultCode == RESULT_CANCELED) {
@@ -170,18 +159,6 @@ public class CameraActivity extends Activity {
             }
             finish();
         }
-
-//        if (requestCode == CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE) {
-//            if (resultCode == RESULT_OK) {
-//                // Video captured and saved to fileUri specified in the Intent
-//                Toast.makeText(this, "Video saved to:\n" +
-//                        data.getData(), Toast.LENGTH_LONG).show();
-//            } else if (resultCode == RESULT_CANCELED) {
-//                // User cancelled the video capture
-//            } else {
-//                // Video capture failed, advise user
-//            }
-//        }
-
     }
+
 }

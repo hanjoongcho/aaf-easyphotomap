@@ -1,4 +1,4 @@
-package me.blog.korn123.easyphotomap.setting;
+package me.blog.korn123.easyphotomap.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -18,8 +18,8 @@ public class LicensesActivity extends AppCompatActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.licenses);
+        setContentView(R.layout.activity_licenses);
         ButterKnife.bind(this);
-        webView.loadUrl("file:///android_asset/licenses.html");
+        webView.loadUrl("file:///android_asset/activity_licenses.html");
     }
 }
