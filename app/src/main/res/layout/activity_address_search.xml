@@ -13,8 +13,8 @@
     </android.support.design.widget.AppBarLayout>
     <ListView
         android:drawSelectorOnTop="true"
-        android:listSelector="@drawable/stocks_selector"
-        android:divider="@color/color3"
+        android:listSelector="@drawable/selector_listview"
+        android:divider="@color/divider"
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">

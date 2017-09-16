@@ -32,7 +32,7 @@
                 style="@style/MenuButtonsBlue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/settings"
+                android:src="@drawable/ic_settings"
                 fab:fab_size="mini"
                 fab:fab_label="@string/maps_activity_setting" />
             <com.github.clans.fab.FloatingActionButton
@@ -40,7 +40,7 @@
                 style="@style/MenuButtonsBlue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/timeline"
+                android:src="@drawable/ic_timeline"
                 fab:fab_size="mini"
                 fab:fab_label="@string/maps_activity_timeline" />
             <com.github.clans.fab.FloatingActionButton
@@ -48,7 +48,7 @@
                 style="@style/MenuButtonsBlue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/search"
+                android:src="@drawable/ic_search"
                 fab:fab_size="mini"
                 fab:fab_label="@string/maps_activity_find" />
             <com.github.clans.fab.FloatingActionButton
@@ -56,7 +56,7 @@
                 style="@style/MenuButtonsBlue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/marker"
+                android:src="@drawable/ic_marker"
                 fab:fab_size="mini"
                 fab:fab_label="@string/maps_activity_overlay" />
             <com.github.clans.fab.FloatingActionButton
@@ -64,7 +64,7 @@
                 style="@style/MenuButtonsBlue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/folder"
+                android:src="@drawable/ic_folder"
                 fab:fab_size="mini"
                 fab:fab_label="@string/maps_activity_folder" />
             <com.github.clans.fab.FloatingActionButton
@@ -72,7 +72,7 @@
                 style="@style/MenuButtonsBlue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/image"
+                android:src="@drawable/ic_image"
                 fab:fab_size="mini"
                 fab:fab_label="@string/maps_activity_explorer" />
             <com.github.clans.fab.FloatingActionButton
@@ -80,7 +80,7 @@
                 style="@style/MenuButtonsBlue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/camera"
+                android:src="@drawable/ic_camera"
                 fab:fab_size="mini"
                 fab:fab_label="@string/maps_activity_camera" />
         </com.github.clans.fab.FloatingActionMenu>

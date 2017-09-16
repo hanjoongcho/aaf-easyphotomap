@@ -17,11 +17,11 @@
         android:paddingBottom="5dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:background="@color/background_basic"
+        android:background="@color/appBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
-            android:background="@drawable/layout_basic"
+            android:background="@drawable/bg_common"
             android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -60,9 +60,9 @@
         <ListView
             android:paddingRight="5dp"
             android:paddingLeft="5dp"
-            android:background="@drawable/layout_basic"
+            android:background="@drawable/bg_common"
             android:drawSelectorOnTop="true"
-            android:listSelector="@drawable/stocks_selector"
+            android:listSelector="@drawable/selector_listview"
             android:id="@+id/filelist"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

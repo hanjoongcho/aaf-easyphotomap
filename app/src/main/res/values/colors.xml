@@ -5,51 +5,24 @@
     <color name="colorPrimaryDark">#01549c</color>
     <color name="colorPrimary">#0275d8</color>
     <color name="colorAccent">#63635e</color>
+    <color name="white">#f0ffffff</color>
+    <color name="defaultFont">#5a5959</color>
+    <color name="divider">#2785fce2</color>
+    <color name="listSelector">#1a0275d8</color>
+    <color name="transparent">#00ffffff</color>
+    <color name="appBackground">#ffd4d3d3</color>
 
     <!--item_search.xml-->
     <color name="photoMapInfoText">#5a5959</color>
     <color name="photoMapDateText">#0275d8</color>
 
-    <color name="listSelector">#1a0275d8</color>
+    <!--popup_window_camera.xml-->
+    <color name="popupWindowCameraBackground">#90000000</color>
 
-    <!--define font color-->
-    <color name="defaultFont">#5a5959</color>
+    <!--item_timeline.xml-->
+    <color name="timelineItemText">#60000000</color>
 
-
-    <color name="color1">#5fef1014</color>
-    <color name="color2">#5f000000</color>
-    <color name="color3">#2785fce2</color>
-    <color name="color4">#f0f8f1f1</color>
-    <color name="color5">#f0710ab6</color>
-
-    <color name="white">#f0ffffff</color>
-    <color name="white2">#a0ffffff</color>
-    <color name="transparent">#00ffffff</color>
-
-    <color name="pink0">#ffef1014</color>
-    <color name="pink5">#5fef1014</color>
-    <color name="pink7">#1fef1014</color>
-    <color name="pink8">#0fef1014</color>
-
-    <color name="skyblue1">#ff87CEFA</color>
-    <color name="skyblue2">#9087CEFA</color>
-    <color name="skyblue3">#6087CEFA</color>
-    <color name="skyblue4">#3087CEFA</color>
-
-    <color name="black1">#ff000000</color>
-    <color name="black2">#90000000</color>
-    <color name="black3">#60000000</color>
-    <color name="black4">#30000000</color>
-    <color name="black5">#20000000</color>
-    <color name="black6">#10000000</color>
-
-    <color name="orange1">#ffff9933</color>
-
-    <color name="red1">#ffff0000</color>
-
-    <color name="primary">#60000000</color>
-    <color name="primary_600">#ffff0000</color>
-
-    <color name="background_basic">#ffd4d3d3</color>
+    <!--activity_popup_image.xml-->
+    <color name="popupImageBackground">#90000000</color>
 
 </resources>

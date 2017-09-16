@@ -149,7 +149,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             fOptions.position(latLng);
 
 //            fOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
-            fOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.map_marker));
+            fOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_marker));
             final String fImagePath = imagePath;
             map.setInfoWindowAdapter(new InfoWindow(info, imagePath, latitude, longitude, date));
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 15.0f), new GoogleMap.CancelableCallback() {

@@ -3,47 +3,9 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!--<LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="20dp">
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <ImageView
-                android:layout_marginLeft="10dp"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/circle2"
-                android:layout_width="15dp"
-                android:layout_height="15dp" />
-            <TextView
-                android:layout_gravity="center_vertical"
-                android:background="@color/colorPrimary2"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="3dp" />
-            <TextView
-                android:gravity="center"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:text="2017-02-02"
-                android:layout_weight="3"
-                android:layout_width="0dp"
-                android:layout_height="match_parent" />
-            <TextView
-                android:layout_marginRight="5dp"
-                android:layout_gravity="center_vertical"
-                android:background="@color/colorPrimary2"
-                android:layout_weight="7"
-                android:layout_width="0dp"
-                android:layout_height="3dp" />
-        </LinearLayout>
-    </LinearLayout>-->
-
     <LinearLayout
         android:id="@+id/timelineHeader"
-        android:background="@drawable/timeline_activitity_list_item_header_bg"
+        android:background="@drawable/bg_activitity_timeline"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <FrameLayout
@@ -52,12 +14,12 @@
             android:layout_height="30dp">
             <TextView
                 android:layout_gravity="center"
-                android:background="@color/black3"
+                android:background="@color/timelineItemText"
                 android:layout_width="0dp"
                 android:layout_height="30dp" />
             <ImageView
                 android:layout_gravity="center"
-                android:src="@drawable/photos"
+                android:src="@drawable/ic_photos"
                 android:layout_width="20dp"
                 android:layout_height="20dp" />
         </FrameLayout>
@@ -82,7 +44,7 @@
             android:layout_height="match_parent">
             <TextView
                 android:layout_gravity="center"
-                android:background="@color/black3"
+                android:background="@color/timelineItemText"
                 android:layout_width="3dp"
                 android:layout_height="match_parent" />
             <ImageView
@@ -113,7 +75,7 @@
             android:layout_height="match_parent">
             <TextView
                 android:layout_gravity="center"
-                android:background="@color/black3"
+                android:background="@color/timelineItemText"
                 android:layout_width="3dp"
                 android:layout_height="match_parent" />
         </FrameLayout>
