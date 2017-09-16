@@ -17,6 +17,7 @@ import com.drew.metadata.exif.GpsDirectory;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -129,13 +130,15 @@ public class RegistrationThread extends Thread {
             resultMessage = e.getMessage();
         }
         final String message = resultMessage;
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                progressDialog.dismiss();
-                DialogUtils.makeSnackBar(activity.findViewById(android.R.id.content), message);
-            }
-        });
+        if (StringUtils.isNotEmpty(message)) {
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    progressDialog.dismiss();
+                    DialogUtils.makeSnackBar(activity.findViewById(android.R.id.content), message);
+                }
+            });
+        }
     }
 
     public void run() {

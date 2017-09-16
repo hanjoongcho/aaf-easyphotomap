@@ -49,14 +49,10 @@ import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 import com.google.maps.android.ui.IconGenerator;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -501,7 +497,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     Point point = new Point(bm.getWidth(), bm.getHeight());
                     double fixedWidthHeight = Double.parseDouble(CommonUtils.loadStringPreference(MapsActivity.this, "photo_size_setting", "0.6"));
                     Bitmap bm2 = CommonUtils.createScaledBitmap(bm, point, fixedWidthHeight, fixedWidthHeight);
-                    image = BitmapDescriptorFactory.fromBitmap(CommonUtils.addWhiteBorder(bm2, CommonUtils.dpToPixel(MapsActivity.this, 3)));
+                    image = BitmapDescriptorFactory.fromBitmap(CommonUtils.border(bm2, CommonUtils.dpToPixel(MapsActivity.this, 1.5f)));
                 } else if (CommonUtils.loadStringPreference(MapsActivity.this, "photo_marker_setting", "filmFrame").equals("flowerFrame")) {
                     Point point = new Point(bm.getWidth(), bm.getHeight());
                     double fixedWidthHeight = Double.parseDouble(CommonUtils.loadStringPreference(MapsActivity.this, "photo_size_setting", "0.6"));

@@ -57,11 +57,11 @@ public class TimelineItemAdapter extends ArrayAdapter<PhotoMapItem> {
         PhotoMapItem photoMapItem = listPhotoMapItem.get(position);
         if (isDateChange(position)) {
             row.findViewById(R.id.timelineHeader).setVisibility(View.VISIBLE);
-            ((TextView)row.findViewById(R.id.timelineDate)).setText(photoMapItem.date);
+            ((TextView)row.findViewById(R.id.timelineDate)).setText(photoMapItem.dateWithoutTime);
         } else {
             row.findViewById(R.id.timelineHeader).setVisibility(View.GONE);
         }
-        holder.textView1.setText(photoMapItem.originDate + "\n" + photoMapItem.info);
+        holder.textView1.setText(photoMapItem.date + "\n" + photoMapItem.info);
         String fileName = FilenameUtils.getName(photoMapItem.imagePath);
         Bitmap bm = CommonUtils.decodeFile(activity, Constant.WORKING_DIRECTORY + fileName + ".thumb");
         holder.imageView1.setImageBitmap(bm);
@@ -76,8 +76,8 @@ public class TimelineItemAdapter extends ArrayAdapter<PhotoMapItem> {
         if (position > 0) {
             PhotoMapItem previous = listPhotoMapItem.get(position - 1);
             PhotoMapItem current = listPhotoMapItem.get(position);
-            previousDate = previous.date;
-            currentDate = current.date;
+            previousDate = previous.dateWithoutTime;
+            currentDate = current.dateWithoutTime;
             if (!StringUtils.equals(previousDate, currentDate)) {
                 isChange = true;
             }

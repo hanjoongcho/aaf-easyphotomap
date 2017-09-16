@@ -356,11 +356,10 @@ public class CommonUtils {
         return null;
     }
 
-    public static Bitmap addWhiteBorder(Bitmap bmp, int borderSize) {
+    public static Bitmap border(Bitmap bmp, int borderSize) {
         Bitmap bmpWithBorder = Bitmap.createBitmap(bmp.getWidth() + borderSize * 2, bmp.getHeight() + borderSize * 2, bmp.getConfig());
         Canvas canvas = new Canvas(bmpWithBorder);
-//        canvas.drawColor(Color.parseColor("#5FEF1014"));
-        canvas.drawColor(Color.WHITE);
+        canvas.drawColor(Color.parseColor("#0275d8"));
         canvas.drawBitmap(bmp, borderSize, borderSize, null);
         return bmpWithBorder;
     }
@@ -697,11 +696,11 @@ public class CommonUtils {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
-    public static int dpToPixel(Context context, int dp) {
+    public static int dpToPixel(Context context, float dp) {
         return dpToPixel(context, dp, 0);
     }
 
-    public static int dpToPixel(Context context, int dp, int policy) {
+    public static int dpToPixel(Context context, float dp, int policy) {
         float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
         int pixel = 0;
         switch (policy) {

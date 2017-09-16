@@ -58,21 +58,12 @@ public class SearchItemAdapter extends ArrayAdapter<PhotoMapItem> {
 
         PhotoMapItem imageEntity = entities.get(position);
         Bitmap bitmap = null;
-        Bitmap scaledBitmap = null;
         String fileName = FilenameUtils.getName(imageEntity.imagePath);
         bitmap = CommonUtils.decodeFile(activity, Constant.WORKING_DIRECTORY + fileName + ".thumb");
-        Point point = new Point();
-        point.x = bitmap.getWidth();
-        point.y = bitmap.getHeight();
-        double fixedWidthHeight = Double.parseDouble(CommonUtils.loadStringPreference(context, "photo_size_setting", "0.6")) * 2;
-        scaledBitmap = CommonUtils.createScaledBitmap(bitmap, point, fixedWidthHeight, fixedWidthHeight);
-//        int height = bitmap.getHeight();
-//        int width = bitmap.getWidth();
         holder.textView1.setText(imageEntity.info);
         holder.textView2.setText(imageEntity.date.toString());
         holder.textView3.setText(imageEntity.imagePath);
-        holder.imageView1.setImageBitmap(scaledBitmap);
-//        holder.textView3.setText(smsDto.getBody());
+        holder.imageView1.setImageBitmap(bitmap);
         return row;
     }
 

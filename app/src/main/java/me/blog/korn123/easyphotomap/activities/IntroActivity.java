@@ -35,4 +35,5 @@ public class IntroActivity extends Activity implements Handler.Callback {
         }
         return false;
     }
+
 }

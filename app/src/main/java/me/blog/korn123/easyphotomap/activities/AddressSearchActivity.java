@@ -23,10 +23,10 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.blog.korn123.easyphotomap.R;
+import me.blog.korn123.easyphotomap.adapters.AddressItemAdapter;
 import me.blog.korn123.easyphotomap.constants.Constant;
 import me.blog.korn123.easyphotomap.helper.PhotoMapDbHelper;
 import me.blog.korn123.easyphotomap.models.PhotoMapItem;
-import me.blog.korn123.easyphotomap.adapters.AddressItemAdapter;
 import me.blog.korn123.easyphotomap.utils.CommonUtils;
 import me.blog.korn123.easyphotomap.utils.DialogUtils;
 
@@ -56,7 +56,6 @@ public class AddressSearchActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchManager searchManager = (SearchManager)getSystemService(Context.SEARCH_SERVICE);
@@ -68,7 +67,6 @@ public class AddressSearchActivity extends AppCompatActivity {
             queryTextListener = new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextChange(String query) {
-//                    refreshList(query, 50);
                     return true;
                 }
                 @Override
@@ -88,7 +86,6 @@ public class AddressSearchActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_search:
-                // Not implemented here
                 return false;
             case android.R.id.home:
                 finish();
@@ -137,7 +134,17 @@ public class AddressSearchActivity extends AppCompatActivity {
                             }
                         }
                         DialogUtils.makeSnackBar(view, resultMessage);
-                        finish();
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    Thread.sleep(1000);
+                                    finish();
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }).start();
                     }
                 });
             } else {

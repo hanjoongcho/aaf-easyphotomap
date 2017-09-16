@@ -16,7 +16,7 @@ public class PhotoMapItem extends RealmObject implements Comparable<PhotoMapItem
     public String info = null;
     public String imagePath = null;
     public String date = null;
-    public String originDate = null;
+    public String dateWithoutTime = null;
     public int sortFlag = 0;
 
     @Override
@@ -35,7 +35,7 @@ public class PhotoMapItem extends RealmObject implements Comparable<PhotoMapItem
                 info.compareTo(item.info);
                 break;
             case 1:
-                originDate.compareTo(item.originDate);
+                dateWithoutTime.compareTo(item.dateWithoutTime);
                 break;
         }
         return result;

@@ -51,14 +51,12 @@ public class PhotoMapDbHelper {
 
     public static ArrayList<PhotoMapItem> selectTimeLineItemAll(String excludeDate) {
         Realm realm = getRealmInstance();
-        RealmResults realmResults = realm.where(PhotoMapItem.class).notEqualTo("date", excludeDate).findAllSorted("date", Sort.DESCENDING);
+        RealmResults realmResults = realm.where(PhotoMapItem.class).notEqualTo("date", excludeDate).findAllSorted("date", Sort.ASCENDING);
         ArrayList<PhotoMapItem> list = new ArrayList<>();
         list.addAll(realmResults.subList(0, realmResults.size()));
         realm.beginTransaction();
         for (PhotoMapItem item : list) {
-            String originDate = item.date;
-            item.originDate = originDate;
-            item.date = getSimpleDate(originDate);
+            item.dateWithoutTime = getSimpleDate(item.date);
         }
         realm.commitTransaction();
         return list;
