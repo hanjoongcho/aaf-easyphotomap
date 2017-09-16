@@ -16,6 +16,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -48,10 +49,14 @@ import com.google.maps.android.clustering.ClusterManager;
 import com.google.maps.android.clustering.view.DefaultClusterRenderer;
 import com.google.maps.android.ui.IconGenerator;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -147,8 +152,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             final MarkerOptions fOptions = new MarkerOptions();
             LatLng latLng = new LatLng(latitude, longitude);
             fOptions.position(latLng);
-
-//            fOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
             fOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_marker));
             final String fImagePath = imagePath;
             map.setInfoWindowAdapter(new InfoWindow(info, imagePath, latitude, longitude, date));
@@ -181,6 +184,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             } else {
                 map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), Constant.GOOGLE_MAP_DEFAULT_ZOOM_VALUE));
             }
+        }
+
+        migrateLegacyData();
+    }
+
+    private void migrateLegacyData() {
+        File legacyFile = new File(Constant.LEGACY_PHOTO_DATA_PATH);
+        if (legacyFile.exists()) {
+            List<String> listPhotoMapData = CommonUtils.readDataFile(Constant.LEGACY_PHOTO_DATA_PATH);
+            for (String data : listPhotoMapData) {
+                Log.i("MapsActivity", data);
+                String[] temps = StringUtils.split(data, "|");
+                PhotoMapItem item = new PhotoMapItem();
+                item.imagePath = temps[0];
+                item.info = temps[1];
+                item.latitude = Double.valueOf(temps[2]);
+                item.longitude = Double.valueOf(temps[3]);
+                item.date = temps[4];
+                PhotoMapDbHelper.insertPhotoMapItem(item);
+            }
+            legacyFile.renameTo(new File(Constant.LEGACY_PHOTO_DATA_PATH + "_BAK"));
+            parseMetadata();
         }
     }
 
@@ -242,7 +267,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 break;
             case R.id.overlay:
                 enableDateFilter = CommonUtils.loadBooleanPreference(MapsActivity.this, "date_filter_setting");
-//                Log.i("enableDateFilter", String.valueOf(enableDateFilter));
                 map.clear();
                 parseMetadata();
                 if (listPhotoMapItem.size() < 1) {
