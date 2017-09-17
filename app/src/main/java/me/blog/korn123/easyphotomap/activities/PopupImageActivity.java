@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import java.io.File;
 
 import me.blog.korn123.easyphotomap.R;
+import me.blog.korn123.easyphotomap.utils.BitmapUtils;
 import me.blog.korn123.easyphotomap.utils.CommonUtils;
 
 /**
@@ -31,11 +32,11 @@ public class PopupImageActivity extends Activity {
         Bitmap bitmap = null;
         Bitmap targetBitmap = null;
         if (new File(imagePath).exists()) {
-            CommonUtils.decodeFile(PopupImageActivity.this, imagePath, options);
+            BitmapUtils.decodeFile(PopupImageActivity.this, imagePath, options);
             int width = options.outWidth;
             int height = options.outHeight;
             options.inJustDecodeBounds = false;
-            bitmap = CommonUtils.decodeFile(PopupImageActivity.this, imagePath, options);
+            bitmap = BitmapUtils.decodeFile(PopupImageActivity.this, imagePath, options);
             if ((width > height && CommonUtils.getDisplayOrientation(this) == 0) ||
                     (width < height && CommonUtils.getDisplayOrientation(this) == 1)) {
                 Matrix matrix = new Matrix();

@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import me.blog.korn123.easyphotomap.R;
 import me.blog.korn123.easyphotomap.constants.Constant;
 import me.blog.korn123.easyphotomap.models.PhotoMapItem;
+import me.blog.korn123.easyphotomap.utils.BitmapUtils;
 import me.blog.korn123.easyphotomap.utils.CommonUtils;
 
 /**
@@ -63,7 +64,7 @@ public class TimelineItemAdapter extends ArrayAdapter<PhotoMapItem> {
         }
         holder.textView1.setText(photoMapItem.date + "\n" + photoMapItem.info);
         String fileName = FilenameUtils.getName(photoMapItem.imagePath);
-        Bitmap bm = CommonUtils.decodeFile(activity, Constant.WORKING_DIRECTORY + fileName + ".thumb");
+        Bitmap bm = BitmapUtils.decodeFile(activity, Constant.WORKING_DIRECTORY + fileName + ".thumb");
         holder.imageView1.setImageBitmap(bm);
 
         return row;

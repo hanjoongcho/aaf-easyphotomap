@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import me.blog.korn123.easyphotomap.R;
 import me.blog.korn123.easyphotomap.constants.Constant;
 import me.blog.korn123.easyphotomap.models.PhotoMapItem;
+import me.blog.korn123.easyphotomap.utils.BitmapUtils;
 import me.blog.korn123.easyphotomap.utils.CommonUtils;
 
 /**
@@ -59,7 +60,7 @@ public class SearchItemAdapter extends ArrayAdapter<PhotoMapItem> {
         PhotoMapItem imageEntity = entities.get(position);
         Bitmap bitmap = null;
         String fileName = FilenameUtils.getName(imageEntity.imagePath);
-        bitmap = CommonUtils.decodeFile(activity, Constant.WORKING_DIRECTORY + fileName + ".thumb");
+        bitmap = BitmapUtils.decodeFile(activity, Constant.WORKING_DIRECTORY + fileName + ".thumb");
         holder.textView1.setText(imageEntity.info);
         holder.textView2.setText(imageEntity.date.toString());
         holder.textView3.setText(imageEntity.imagePath);

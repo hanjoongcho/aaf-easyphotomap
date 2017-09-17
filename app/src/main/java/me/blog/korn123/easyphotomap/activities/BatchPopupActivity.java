@@ -34,7 +34,9 @@ import me.blog.korn123.easyphotomap.R;
 import me.blog.korn123.easyphotomap.constants.Constant;
 import me.blog.korn123.easyphotomap.helper.PhotoMapDbHelper;
 import me.blog.korn123.easyphotomap.models.PhotoMapItem;
+import me.blog.korn123.easyphotomap.utils.BitmapUtils;
 import me.blog.korn123.easyphotomap.utils.CommonUtils;
+import me.blog.korn123.easyphotomap.utils.DialogUtils;
 
 /**
  * Created by CHO HANJOONG on 2016-09-11.
@@ -167,7 +169,7 @@ public class BatchPopupActivity extends Activity {
                             reduplicationCount++;
                         } else {
                             PhotoMapDbHelper.insertPhotoMapItem(item);
-                            CommonUtils.createScaledBitmap(targetFile.getAbsolutePath(), Constant.WORKING_DIRECTORY + fileName + ".thumb", 200);
+                            BitmapUtils.createScaledBitmap(targetFile.getAbsolutePath(), Constant.WORKING_DIRECTORY + fileName + ".thumb", 200);
                             successCount++;
                             Log.i("elapsed", String.format("create bitmap %d", stopWatch.getTime()));
                             stopWatch.stop();
@@ -186,6 +188,6 @@ public class BatchPopupActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        CommonUtils.showAlertDialog(BatchPopupActivity.this, getString(R.string.batch_popup_message6));
+        DialogUtils.showAlertDialog(BatchPopupActivity.this, getString(R.string.batch_popup_message6));
     }
 }

@@ -131,7 +131,7 @@ public class ExplorerItemAdapter extends ArrayAdapter<FileItem> {
                 } else {
                     Bitmap bitmap = BitmapUtils.getBitmapFromMemCache(filePath);
                     if (bitmap == null) {
-                        bitmap = CommonUtils.decodeFile(mActivity, filePath, options);
+                        bitmap = BitmapUtils.decodeFile(mActivity, filePath, options);
                         BitmapUtils.addBitmapToMemoryCache(filePath, bitmap);
                     }
                     resized = Bitmap.createScaledBitmap(bitmap, widthHeight, widthHeight, true);

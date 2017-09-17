@@ -69,7 +69,9 @@ import me.blog.korn123.easyphotomap.R;
 import me.blog.korn123.easyphotomap.constants.Constant;
 import me.blog.korn123.easyphotomap.helper.PhotoMapDbHelper;
 import me.blog.korn123.easyphotomap.models.PhotoMapItem;
+import me.blog.korn123.easyphotomap.utils.BitmapUtils;
 import me.blog.korn123.easyphotomap.utils.CommonUtils;
+import me.blog.korn123.easyphotomap.utils.DialogUtils;
 import me.blog.korn123.easyphotomap.utils.FontUtils;
 import me.blog.korn123.easyphotomap.utils.GPSUtils;
 
@@ -266,7 +268,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 map.clear();
                 parseMetadata();
                 if (listPhotoMapItem.size() < 1) {
-                    CommonUtils.showAlertDialog(this, getString(R.string.maps_activity_message2));
+                    DialogUtils.showAlertDialog(this, getString(R.string.maps_activity_message2));
                     return;
                 }
 
@@ -360,7 +362,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 break;
             case R.id.find:
                 if (listPhotoMapItem.size() < 1) {
-                    CommonUtils.showAlertDialog(this, getString(R.string.maps_activity_message2));
+                    DialogUtils.showAlertDialog(this, getString(R.string.maps_activity_message2));
                     return;
                 }
                 Intent photoSearchIntent = new Intent(this, PhotoSearchActivity.class);
@@ -376,7 +378,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 break;
             case R.id.timeline:
                 if (listPhotoMapItem.size() < 1) {
-                    CommonUtils.showAlertDialog(this, getString(R.string.maps_activity_message2));
+                    DialogUtils.showAlertDialog(this, getString(R.string.maps_activity_message2));
                     return;
                 }
                 Intent timelineIntent = new Intent(MapsActivity.this, TimelineActivity.class);
@@ -487,22 +489,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 LatLng latLng = new LatLng(item.latitude, item.longitude);
                 options.position(latLng);
                 String fileName = FilenameUtils.getName(item.imagePath);
-                Bitmap bm = CommonUtils.decodeFile(MapsActivity.this, Constant.WORKING_DIRECTORY + fileName + ".thumb");
+                Bitmap bm = BitmapUtils.decodeFile(MapsActivity.this, Constant.WORKING_DIRECTORY + fileName + ".thumb");
                 if (CommonUtils.loadStringPreference(MapsActivity.this, "photo_marker_setting", "filmFrame").equals("filmFrame")) {
                     Point point = new Point(bm.getWidth(), bm.getHeight());
                     double fixedWidthHeight = Double.parseDouble(CommonUtils.loadStringPreference(MapsActivity.this, "photo_size_setting", "0.6"));
-                    Bitmap bm2 = CommonUtils.createScaledBitmap(bm, point, fixedWidthHeight, fixedWidthHeight);
-                    image = BitmapDescriptorFactory.fromBitmap(CommonUtils.addFrame(MapsActivity.this, bm2, CommonUtils.dpToPixel(MapsActivity.this, 6), R.drawable.frame_03));
+                    Bitmap bm2 = BitmapUtils.createScaledBitmap(bm, point, fixedWidthHeight, fixedWidthHeight);
+                    image = BitmapDescriptorFactory.fromBitmap(BitmapUtils.addFrame(MapsActivity.this, bm2, CommonUtils.dpToPixel(MapsActivity.this, 6), R.drawable.frame_03));
                 } else if (CommonUtils.loadStringPreference(MapsActivity.this, "photo_marker_setting", "filmFrame").equals("basicFrame")) {
                     Point point = new Point(bm.getWidth(), bm.getHeight());
                     double fixedWidthHeight = Double.parseDouble(CommonUtils.loadStringPreference(MapsActivity.this, "photo_size_setting", "0.6"));
-                    Bitmap bm2 = CommonUtils.createScaledBitmap(bm, point, fixedWidthHeight, fixedWidthHeight);
-                    image = BitmapDescriptorFactory.fromBitmap(CommonUtils.border(bm2, CommonUtils.dpToPixel(MapsActivity.this, 1.5f)));
+                    Bitmap bm2 = BitmapUtils.createScaledBitmap(bm, point, fixedWidthHeight, fixedWidthHeight);
+                    image = BitmapDescriptorFactory.fromBitmap(BitmapUtils.border(bm2, CommonUtils.dpToPixel(MapsActivity.this, 1.5f)));
                 } else if (CommonUtils.loadStringPreference(MapsActivity.this, "photo_marker_setting", "filmFrame").equals("flowerFrame")) {
                     Point point = new Point(bm.getWidth(), bm.getHeight());
                     double fixedWidthHeight = Double.parseDouble(CommonUtils.loadStringPreference(MapsActivity.this, "photo_size_setting", "0.6"));
-                    Bitmap bm2 = CommonUtils.createScaledBitmap(bm, point, fixedWidthHeight, fixedWidthHeight);
-                    image = BitmapDescriptorFactory.fromBitmap(CommonUtils.addFrame(MapsActivity.this, bm2, CommonUtils.dpToPixel(MapsActivity.this, 6), R.drawable.frame_02));
+                    Bitmap bm2 = BitmapUtils.createScaledBitmap(bm, point, fixedWidthHeight, fixedWidthHeight);
+                    image = BitmapDescriptorFactory.fromBitmap(BitmapUtils.addFrame(MapsActivity.this, bm2, CommonUtils.dpToPixel(MapsActivity.this, 6), R.drawable.frame_02));
                 } else {
                     int px = getResources().getDimensionPixelSize(R.dimen.map_dot_marker_size);
                     px = (int)(px * Double.parseDouble(CommonUtils.loadStringPreference(MapsActivity.this, "photo_size_setting", "0.6")));
@@ -706,7 +708,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inJustDecodeBounds = false;
                 options.inSampleSize = 5;
-                Bitmap bitmap = CommonUtils.decodeFile(MapsActivity.this, imgFile.getAbsolutePath(), options);
+                Bitmap bitmap = BitmapUtils.decodeFile(MapsActivity.this, imgFile.getAbsolutePath(), options);
                 if (orientation > 1) {
                     bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true); // rotating bitmap
                 }

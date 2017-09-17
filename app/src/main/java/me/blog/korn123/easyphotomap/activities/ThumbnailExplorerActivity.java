@@ -30,6 +30,7 @@ import me.blog.korn123.easyphotomap.helper.RegistrationThread;
 import me.blog.korn123.easyphotomap.models.ThumbnailItem;
 import me.blog.korn123.easyphotomap.adapters.ThumbnailItemAdapter;
 import me.blog.korn123.easyphotomap.utils.CommonUtils;
+import me.blog.korn123.easyphotomap.utils.DialogUtils;
 
 /**
  * Created by CHO HANJOONG on 2016-08-02.
@@ -114,9 +115,9 @@ public class ThumbnailExplorerActivity extends AppCompatActivity {
                 String imagePath = CommonUtils.getOrignImagepath(ThumbnailExplorerActivity.this, photoEntity.imageId);
                 PositiveListener positiveListener = new PositiveListener(ThumbnailExplorerActivity.this, ThumbnailExplorerActivity.this, FilenameUtils.getName(imagePath) + ".origin", imagePath);
                 if (imagePath == null) {
-                    CommonUtils.showAlertDialog(ThumbnailExplorerActivity.this, getString(R.string.thumbnail_explorer_message4));
+                    DialogUtils.showAlertDialog(ThumbnailExplorerActivity.this, getString(R.string.thumbnail_explorer_message4));
                 } else {
-                    CommonUtils.showAlertDialog(ThumbnailExplorerActivity.this, getString(R.string.file_explorer_message7), ThumbnailExplorerActivity.this, imagePath, positiveListener);
+                    DialogUtils.showAlertDialog(ThumbnailExplorerActivity.this, getString(R.string.file_explorer_message7), ThumbnailExplorerActivity.this, imagePath, positiveListener);
                 }
             }
         });

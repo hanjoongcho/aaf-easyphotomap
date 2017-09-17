@@ -28,7 +28,9 @@ import me.blog.korn123.easyphotomap.R;
 import me.blog.korn123.easyphotomap.constants.Constant;
 import me.blog.korn123.easyphotomap.helper.PhotoMapDbHelper;
 import me.blog.korn123.easyphotomap.models.PhotoMapItem;
+import me.blog.korn123.easyphotomap.utils.BitmapUtils;
 import me.blog.korn123.easyphotomap.utils.CommonUtils;
+import me.blog.korn123.easyphotomap.utils.DialogUtils;
 
 /**
  * Created by CHO HANJOONG on 2016-08-20.
@@ -138,7 +140,7 @@ public class CameraActivity extends Activity {
                         }
 
                         PhotoMapDbHelper.insertPhotoMapItem(entity);
-                        CommonUtils.createScaledBitmap(targetFile.getAbsolutePath(), Constant.WORKING_DIRECTORY + fileName + ".thumb", 200);
+                        BitmapUtils.createScaledBitmap(targetFile.getAbsolutePath(), Constant.WORKING_DIRECTORY + fileName + ".thumb", 200);
                         Intent intent = new Intent(CameraActivity.this, MapsActivity.class);
                         intent.putExtra("info", entity.info);
                         intent.putExtra("imagePath", entity.imagePath);
@@ -147,7 +149,7 @@ public class CameraActivity extends Activity {
                         intent.putExtra("date", entity.date);
                         startActivity(intent);
                     } else {
-                        CommonUtils.makeToast(this, getString(R.string.camera_activity_message1));
+                        DialogUtils.makeToast(this, getString(R.string.camera_activity_message1));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

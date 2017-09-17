@@ -29,6 +29,7 @@ import me.blog.korn123.easyphotomap.R;
 import me.blog.korn123.easyphotomap.constants.Constant;
 import me.blog.korn123.easyphotomap.models.PhotoMapItem;
 import me.blog.korn123.easyphotomap.activities.AddressSearchActivity;
+import me.blog.korn123.easyphotomap.utils.BitmapUtils;
 import me.blog.korn123.easyphotomap.utils.CommonUtils;
 import me.blog.korn123.easyphotomap.utils.DialogUtils;
 
@@ -92,7 +93,7 @@ public class RegistrationThread extends Thread {
                     resultMessage = context.getString(R.string.file_explorer_message3);
                 } else {
                     PhotoMapDbHelper.insertPhotoMapItem(item);
-                    CommonUtils.createScaledBitmap(targetFile.getAbsolutePath(), Constant.WORKING_DIRECTORY + fileName + ".thumb", 200);
+                    BitmapUtils.createScaledBitmap(targetFile.getAbsolutePath(), Constant.WORKING_DIRECTORY + fileName + ".thumb", 200);
                     resultMessage = context.getString(R.string.file_explorer_message4);
                 }
             } else {

@@ -41,6 +41,7 @@ import me.blog.korn123.easyphotomap.constants.Constant;
 import me.blog.korn123.easyphotomap.helper.RegistrationThread;
 import me.blog.korn123.easyphotomap.models.FileItem;
 import me.blog.korn123.easyphotomap.utils.CommonUtils;
+import me.blog.korn123.easyphotomap.utils.DialogUtils;
 
 /**
  * Created by CHO HANJOONG on 2016-07-16.
@@ -102,7 +103,7 @@ public class FileExplorerActivity extends AppCompatActivity {
                                 new File(Constant.WORKING_DIRECTORY).mkdirs();
                             }
                             PositiveListener positiveListener = new PositiveListener(FileExplorerActivity.this, FileExplorerActivity.this, FilenameUtils.getName(path) + ".origin", path);
-                            CommonUtils.showAlertDialog(FileExplorerActivity.this, getString(R.string.file_explorer_message7), FileExplorerActivity.this, path, positiveListener);
+                            DialogUtils.showAlertDialog(FileExplorerActivity.this, getString(R.string.file_explorer_message7), FileExplorerActivity.this, path, positiveListener);
                         }
                     }
                 };
@@ -133,10 +134,10 @@ public class FileExplorerActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.registerDirectory:
                 if (listFileItem.size() - listDirectoryEntity.size() < 1) {
-                    CommonUtils.showAlertDialog(this, getString(R.string.file_explorer_message9));
+                    DialogUtils.showAlertDialog(this, getString(R.string.file_explorer_message9));
                 } else {
                     PositiveListener positiveListener = new PositiveListener(FileExplorerActivity.this, FileExplorerActivity.this, null, null);
-                    CommonUtils.showAlertDialog(FileExplorerActivity.this, getString(R.string.file_explorer_message11) , FileExplorerActivity.this, positiveListener);
+                    DialogUtils.showAlertDialog(FileExplorerActivity.this, getString(R.string.file_explorer_message11) , FileExplorerActivity.this, positiveListener);
                 }
                 break;
         }
@@ -187,7 +188,7 @@ public class FileExplorerActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        CommonUtils.showAlertDialog(FileExplorerActivity.this, getString(R.string.file_explorer_message12), new DialogInterface.OnClickListener() {
+        DialogUtils.showAlertDialog(FileExplorerActivity.this, getString(R.string.file_explorer_message12), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 finish();

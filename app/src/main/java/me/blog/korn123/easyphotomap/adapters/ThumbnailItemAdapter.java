@@ -24,6 +24,7 @@ import java.util.List;
 
 import me.blog.korn123.easyphotomap.R;
 import me.blog.korn123.easyphotomap.models.ThumbnailItem;
+import me.blog.korn123.easyphotomap.utils.BitmapUtils;
 import me.blog.korn123.easyphotomap.utils.CommonUtils;
 
 /**
@@ -107,7 +108,7 @@ public class ThumbnailItemAdapter extends ArrayAdapter<ThumbnailItem> {
             Bitmap resized = null;
             if (mHolder.position == mPosition) {
                 try {
-                    Bitmap bitmap = CommonUtils.decodeFile(activity, filePath, options);
+                    Bitmap bitmap = BitmapUtils.decodeFile(activity, filePath, options);
                     resized = Bitmap.createScaledBitmap(bitmap, widthHeight, widthHeight, true);
                 } catch (Exception e) {
                     e.printStackTrace();

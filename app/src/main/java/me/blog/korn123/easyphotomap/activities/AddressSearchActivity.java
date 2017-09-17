@@ -27,6 +27,7 @@ import me.blog.korn123.easyphotomap.adapters.AddressItemAdapter;
 import me.blog.korn123.easyphotomap.constants.Constant;
 import me.blog.korn123.easyphotomap.helper.PhotoMapDbHelper;
 import me.blog.korn123.easyphotomap.models.PhotoMapItem;
+import me.blog.korn123.easyphotomap.utils.BitmapUtils;
 import me.blog.korn123.easyphotomap.utils.CommonUtils;
 import me.blog.korn123.easyphotomap.utils.DialogUtils;
 
@@ -129,7 +130,7 @@ public class AddressSearchActivity extends AppCompatActivity {
                                 resultMessage = getString(R.string.file_explorer_message3);
                             } else {
                                 PhotoMapDbHelper.insertPhotoMapItem(item);
-                                CommonUtils.createScaledBitmap(item.imagePath, Constant.WORKING_DIRECTORY + fileName + ".thumb", 200);
+                                BitmapUtils.createScaledBitmap(item.imagePath, Constant.WORKING_DIRECTORY + fileName + ".thumb", 200);
                                 resultMessage = getString(R.string.file_explorer_message4);
                             }
                         }
