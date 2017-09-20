@@ -52,8 +52,7 @@ import me.blog.korn123.easyphotomap.models.ThumbnailItem;
  */
 public class CommonUtils {
 
-//    public final static SimpleDateFormat DATE_TIME_PATTERN = new SimpleDateFormat("yyyy-MM-dd(EEE) HH:mm", Locale.getDefault());
-    public final static SimpleDateFormat DATE_TIME_PATTERN = new SimpleDateFormat("yyyy년 MM월 dd일(E) HH:mm", Locale.KOREA);
+    public final static SimpleDateFormat DATE_TIME_PATTERN = new SimpleDateFormat("yyyy-MM-dd(EEE) HH:mm", Locale.getDefault());
 
     private static final int MAX_RETRY = 5;
     public static List<Address> getFromLocation(Context context, double latitude, double longitude, int maxResults, int retryCount) throws Exception {

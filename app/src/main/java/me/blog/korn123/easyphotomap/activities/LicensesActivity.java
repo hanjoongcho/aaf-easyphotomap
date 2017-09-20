@@ -20,6 +20,6 @@ public class LicensesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_licenses);
         ButterKnife.bind(this);
-        webView.loadUrl("file:///android_asset/activity_licenses.html");
+        webView.loadUrl("https://github.com/hanjoongcho/aaf-easyphotomap/blob/master/LICENSE.md");
     }
 }

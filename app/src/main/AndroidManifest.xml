@@ -42,7 +42,6 @@
         <activity android:name=".activities.AddressSearchActivity" android:label="SearchFragment"
             android:theme="@style/AppTheme.NoActionBar"
             />
-        <activity android:name=".activities.EPMPreferenceActivity" android:label="EPMPreferenceActivity" />
         <activity android:name=".activities.SettingsActivity" android:label="SettingsActivity" />
         <activity android:name=".activities.CameraActivity" android:label="CameraActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.PopupImageActivity" android:label="PopupImageActivity" android:theme="@style/AppTheme.NoActionBar" />
