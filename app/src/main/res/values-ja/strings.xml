@@ -88,6 +88,7 @@
     <string name="confirm">確認</string>
     <string name="cancel">キャンセル</string>
     <string name="setting_title">easy photo map設定</string>
+
     <string name="camera_info_message1">写真撮影前のカメラの設定で位置タグ機能を活性化させてください。位置タグ設定が有効になっていない場合、アドレス検索機能を利用して位置情報を直接入力する必要があります。</string>
     <string name="camera_info_message2">確認</string>
     <string name="camera_info_message3">もはや見ない</string>
@@ -113,7 +114,7 @@
 
     <string name="photo_size_setting">フォトマーカーサイズを設定</string>
     <string name="photo_size_setting_summary">地図上に表示されているフォトマーカーのサイズを変更します。</string>
-    <string-array name="pref_example_list_titles">
+    <string-array name="photo_size_list_titles">
         <item>x0.2</item>
         <item>x0.4</item>
         <item>x0.6</item>
@@ -122,15 +123,16 @@
         <item>x1.2</item>
         <item>x1.4</item>
     </string-array>
-    <string-array name="pref_example_list_values">
-    <item>0.2</item>
-    <item>0.4</item>
-    <item>0.6</item>
-    <item>0.8</item>
-    <item>1.0</item>
-    <item>1.2</item>
-    <item>1.4</item>
+    <string-array name="photo_size_list_values">
+        <item>0.2</item>
+        <item>0.4</item>
+        <item>0.6</item>
+        <item>0.8</item>
+        <item>1.0</item>
+        <item>1.2</item>
+        <item>1.4</item>
     </string-array>
+    <string name="photo_size_default_value">0.6</string>
 
     <string name="photo_marker_setting">フォトマーカーアイコンの設定</string>
     <string name="photo_marker_setting_summary">地図上に表示されているフォトマーカーのジョトリュを変更します。</string>
@@ -146,6 +148,7 @@
         <item>basicFrame</item>
         <item>redCircle</item>
     </string-array>
+    <string name="photo_marker_default_value">basicFrame</string>
 
     <string-array name="photo_marker_enable_minimum_cluster_list_titles">
         <item>5以上</item>

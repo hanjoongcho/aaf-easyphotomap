@@ -107,15 +107,14 @@
     <string name="pref_header_general">General</string>
 
     <string name="pref_title_social_recommendations">Enable date filter</string>
-    <string name="pref_description_social_recommendations">In place of the address filter used in the keyword nApplies a date filter.
-    </string>
+    <string name="pref_description_social_recommendations">In place of the address filter used in the keyword nApplies a date filter.</string>
 
     <string name="pref_title_display_name">Display name</string>
     <string name="pref_default_display_name">John Smith</string>
 
     <string name="photo_size_setting">Photo marker size</string>
     <string name="photo_size_setting_summary">Change the size of the photo marker displayed on a map.</string>
-    <string-array name="pref_example_list_titles">
+    <string-array name="photo_size_list_titles">
         <item>x0.2</item>
         <item>x0.4</item>
         <item>x0.6</item>
@@ -124,7 +123,7 @@
         <item>x1.2</item>
         <item>x1.4</item>
     </string-array>
-    <string-array name="pref_example_list_values">
+    <string-array name="photo_size_list_values">
         <item>0.2</item>
         <item>0.4</item>
         <item>0.6</item>
@@ -133,6 +132,7 @@
         <item>1.2</item>
         <item>1.4</item>
     </string-array>
+    <string name="photo_size_default_value">0.6</string>
 
     <string name="photo_marker_setting">Photo marker type</string>
     <string name="photo_marker_setting_summary">Change the type of the photo marker displayed on a map</string>
@@ -148,6 +148,7 @@
         <item>basicFrame</item>
         <item>redCircle</item>
     </string-array>
+    <string name="photo_marker_default_value">basicFrame</string>
 
     <string-array name="photo_marker_enable_minimum_cluster_list_titles">
         <item>more than 5</item>

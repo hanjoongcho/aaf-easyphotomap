@@ -35,9 +35,9 @@
             android:key="photo_size_setting"
             android:title="@string/photo_size_setting"
             android:summary="@string/photo_size_setting_summary"
-            android:defaultValue="0.6"
-            android:entries="@array/pref_example_list_titles"
-            android:entryValues="@array/pref_example_list_values"
+            android:defaultValue="@string/photo_size_default_value"
+            android:entries="@array/photo_size_list_titles"
+            android:entryValues="@array/photo_size_list_values"
             android:negativeButtonText="@null"
             android:positiveButtonText="@null" />
 
@@ -45,7 +45,7 @@
             android:key="photo_marker_setting"
             android:title="@string/photo_marker_setting"
             android:summary="@string/photo_marker_setting_summary"
-            android:defaultValue="filmFrame"
+            android:defaultValue="@string/photo_marker_default_value"
             android:entries="@array/photo_marker_list_titles"
             android:entryValues="@array/photo_marker_list_values"
             android:negativeButtonText="@null"
