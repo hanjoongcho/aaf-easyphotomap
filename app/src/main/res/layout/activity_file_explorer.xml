@@ -50,7 +50,7 @@
             <com.beardedhen.androidbootstrap.BootstrapButton
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                app:bootstrapText="{fa_folder_open_o} 현재폴더 일괄등록"
+                app:bootstrapText="@string/registration_batch_mode"
                 app:bootstrapBrand="primary"
                 app:roundedCorners="true"
                 app:bootstrapSize="sm"

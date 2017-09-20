@@ -9,7 +9,7 @@
     <string name="maps_activity_overlay">View your registration photos</string>
     <string name="maps_activity_folder">Register with explorer</string>
     <string name="maps_activity_explorer">Register with preview</string>
-    <string name="maps_activity_camera">Register with photographic</string>
+    <string name="maps_activity_camera">Register with photo</string>
 
     <!--ThumbnailExplorerActivity-->
     <string name="thumbnail_explorer_compact_activity_title">Register with preview</string>
@@ -18,6 +18,7 @@
 
     <!--FileExplorerActivity-->
     <string name="file_explorer_activity_title">Register with explorer</string>
+    <string name="registration_batch_mode">Batch registration of current folder</string>
 
     <!--SettingsActivity-->
     <string name="setting_activity_title">Environment settings</string>
@@ -153,6 +154,7 @@
     <string-array name="photo_marker_enable_minimum_cluster_list_titles">
         <item>more than 5</item>
         <item>more than 10</item>
+        <item>more than 50</item>
         <item>more than 100</item>
         <item>more than 200</item>
         <item>more than 500</item>
@@ -161,6 +163,7 @@
     <string-array name="photo_marker_enable_minimum_cluster_list_values">
         <item>5</item>
         <item>10</item>
+        <item>50</item>
         <item>100</item>
         <item>200</item>
         <item>500</item>

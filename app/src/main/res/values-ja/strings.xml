@@ -18,6 +18,7 @@
 
     <!--FileExplorerActivity-->
     <string name="file_explorer_activity_title">エクスプローラ</string>
+    <string name="registration_batch_mode">現在のフォルダ一括登録</string>
 
     <!--SettingsActivity-->
     <string name="setting_activity_title">環境設定</string>
@@ -153,6 +154,7 @@
     <string-array name="photo_marker_enable_minimum_cluster_list_titles">
         <item>5以上</item>
         <item>10以上</item>
+        <item>50以上</item>
         <item>100以上</item>
         <item>200以上</item>
         <item>500以上</item>
@@ -161,6 +163,7 @@
     <string-array name="photo_marker_enable_minimum_cluster_list_values">
         <item>5</item>
         <item>10</item>
+        <item>50</item>
         <item>100</item>
         <item>200</item>
         <item>500</item>

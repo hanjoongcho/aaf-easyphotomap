@@ -18,6 +18,7 @@
 
     <!--FileExplorerActivity-->
     <string name="file_explorer_activity_title">탐색기</string>
+    <string name="registration_batch_mode">현재폴더 일괄등록</string>
 
     <!--SettingsActivity-->
     <string name="setting_activity_title">환경설정</string>
@@ -153,6 +154,7 @@
     <string-array name="photo_marker_enable_minimum_cluster_list_titles">
         <item>5개 이상</item>
         <item>10개 이상</item>
+        <item>50개 이상</item>
         <item>100개 이상</item>
         <item>200개 이상</item>
         <item>500개 이상</item>
@@ -161,6 +163,7 @@
     <string-array name="photo_marker_enable_minimum_cluster_list_values">
         <item>5</item>
         <item>10</item>
+        <item>50</item>
         <item>100</item>
         <item>200</item>
         <item>500</item>
