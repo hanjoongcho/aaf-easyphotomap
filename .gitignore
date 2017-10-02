@@ -10,6 +10,7 @@
 .idea/scopes/scope_settings.xml
 .idea/vcs.xml
 .idea/gradle.xml
+.idea/markdown-exported-files.xml
 
 *.iml
 .gradle

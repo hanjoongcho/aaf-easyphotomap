@@ -38,13 +38,13 @@ import me.blog.korn123.easyphotomap.utils.CommonUtils;
  */
 public class SettingsActivity extends AppPreferenceActivity {
 
-    private static Context context;
+    private static Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupActionBar();
-        context = getBaseContext();
+        mContext = getBaseContext();
 
         getFragmentManager().beginTransaction()
                 .replace(android.R.id.content, new GeneralPreferenceFragment())
@@ -111,7 +111,7 @@ public class SettingsActivity extends AppPreferenceActivity {
                 } else if (StringUtils.equals(key, "photo_size_setting")) {
                     ListPreference listPreference = (ListPreference) findPreference("photo_size_setting");
                     String photoSizeKey = listPreference.getValue();
-                    CommonUtils.saveStringPreference(context, "photo_size_setting", photoSizeKey);
+                    CommonUtils.saveStringPreference(mContext, "photo_size_setting", photoSizeKey);
                 }
             }
         };
@@ -152,7 +152,7 @@ public class SettingsActivity extends AppPreferenceActivity {
             mOpenSourceLicensesInfo.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    Intent intent = new Intent(context, LicensesActivity.class);
+                    Intent intent = new Intent(mContext, LicensesActivity.class);
                     startActivity(intent);
                     return false;
                 }

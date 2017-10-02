@@ -33,17 +33,17 @@ import me.blog.korn123.easyphotomap.utils.CommonUtils;
  */
 public class ExplorerItemAdapter extends ArrayAdapter<FileItem> {
 
-    private final Activity activity;
-    private final Context context;
-    private final List<FileItem> entities;
-    private final int layoutResourceId;
+    private final Activity mActivity;
+    private final Context mContext;
+    private final List<FileItem> mEntities;
+    private final int mLayoutResourceId;
 
     public ExplorerItemAdapter(Activity activity, Context context, int layoutResourceId, List<FileItem> entities) {
         super(context, layoutResourceId, entities);
-        this.activity = activity;
-        this.context = context;
-        this.entities = entities;
-        this.layoutResourceId = layoutResourceId;
+        this.mActivity = activity;
+        this.mContext = context;
+        this.mEntities = entities;
+        this.mLayoutResourceId = layoutResourceId;
     }
 
     @Override
@@ -52,8 +52,8 @@ public class ExplorerItemAdapter extends ArrayAdapter<FileItem> {
         ViewHolder holder = null;
 
         if(row == null) {
-            LayoutInflater inflater = ((Activity)context).getLayoutInflater();
-            row = inflater.inflate(layoutResourceId, parent, false);
+            LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
+            row = inflater.inflate(mLayoutResourceId, parent, false);
             holder = new ViewHolder();
             // bind view
             holder.textView1 = (TextView)row.findViewById(R.id.text1);
@@ -70,10 +70,10 @@ public class ExplorerItemAdapter extends ArrayAdapter<FileItem> {
             holder = (ViewHolder)row.getTag();
         }
 
-        FileItem entity = entities.get(position);
+        FileItem entity = mEntities.get(position);
 
         // init default option
-        int widthHeight = (int)(CommonUtils.getDefaultDisplay(activity).x / 5);
+        int widthHeight = (int)(CommonUtils.getDefaultDisplay(mActivity).x / 5);
 //        holder.imageView1.getLayoutParams().height = widthHeight;
 //        holder.imageView1.getLayoutParams().width = widthHeight;
 
@@ -89,11 +89,11 @@ public class ExplorerItemAdapter extends ArrayAdapter<FileItem> {
         if (entity.isDirectory) {
             holder.textView2.setVisibility(View.GONE);
             holder.textView3.setVisibility(View.GONE);
-            new ThumbnailTask(activity, position, holder).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null, String.valueOf(widthHeight));
+            new ThumbnailTask(mActivity, position, holder).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null, String.valueOf(widthHeight));
         } else {
             holder.textView2.setVisibility(View.VISIBLE);
             holder.textView3.setVisibility(View.VISIBLE);
-            new ThumbnailTask(activity, position, holder).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, imagePath, String.valueOf(widthHeight));
+            new ThumbnailTask(mActivity, position, holder).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, imagePath, String.valueOf(widthHeight));
         }
         return row;
     }
@@ -176,7 +176,7 @@ public class ExplorerItemAdapter extends ArrayAdapter<FileItem> {
     private Bitmap mDefaultBitmap = null;
     private Bitmap getDefaultImage() {
         if (mDefaultBitmap == null) {
-            mDefaultBitmap = BitmapFactory.decodeResource(activity.getResources(), android.R.drawable.ic_menu_gallery);
+            mDefaultBitmap = BitmapFactory.decodeResource(mActivity.getResources(), android.R.drawable.ic_menu_gallery);
         }
         return mDefaultBitmap;
     }

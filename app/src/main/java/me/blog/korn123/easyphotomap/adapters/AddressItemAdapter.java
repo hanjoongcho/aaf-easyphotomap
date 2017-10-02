@@ -16,15 +16,15 @@ import java.util.List;
  */
 public class AddressItemAdapter extends ArrayAdapter<Address> {
 
-    private final Context context;
-    private final List<Address> listAddress;
-    private final int layoutResourceId;
+    private final Context mContext;
+    private final List<Address> mListAddress;
+    private final int mLayoutResourceId;
 
     public AddressItemAdapter(Context context, int layoutResourceId, List<Address> listAddress) {
         super(context, layoutResourceId, listAddress);
-        this.context = context;
-        this.listAddress = listAddress;
-        this.layoutResourceId = layoutResourceId;
+        this.mContext = context;
+        this.mListAddress = listAddress;
+        this.mLayoutResourceId = layoutResourceId;
     }
 
     @Override
@@ -34,8 +34,8 @@ public class AddressItemAdapter extends ArrayAdapter<Address> {
         ViewHolder holder = null;
 
         if(row == null) {
-            LayoutInflater inflater = ((Activity)context).getLayoutInflater();
-            row = inflater.inflate(layoutResourceId, parent, false);
+            LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
+            row = inflater.inflate(mLayoutResourceId, parent, false);
             holder = new ViewHolder();
             holder.textView1 = (TextView)row.findViewById(android.R.id.text1);
             holder.textView2 = (TextView)row.findViewById(android.R.id.text2);
@@ -44,7 +44,7 @@ public class AddressItemAdapter extends ArrayAdapter<Address> {
             holder = (ViewHolder)row.getTag();
         }
 
-        Address address = listAddress.get(position);
+        Address address = mListAddress.get(position);
         StringBuilder addressBuilder = new StringBuilder();
         if (address.getCountryName() != null) addressBuilder.append(address.getCountryName()).append(" ");
         if (address.getLocality() != null) addressBuilder.append(address.getLocality()).append(" ");

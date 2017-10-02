@@ -48,18 +48,18 @@ import me.blog.korn123.easyphotomap.utils.DialogUtils;
  */
 public class FileExplorerActivity extends AppCompatActivity {
 
-    private String current;
-    private ArrayList<FileItem> listFileItem;
-    private ArrayList<FileItem> listDirectoryEntity;
-    private ViewGroup viewGroup;
-    private ProgressDialog progressDialog;
-    private ArrayAdapter<FileItem> adapter;
+    private String mCurrent;
+    private ArrayList<FileItem> mListFileItem;
+    private ArrayList<FileItem> mListDirectoryEntity;
+    private ViewGroup mViewGroup;
+    private ProgressDialog mProgressDialog;
+    private ArrayAdapter<FileItem> mAdapter;
 
     @BindView(R.id.filelist)
-    public ListView fileList;
+    public ListView mFileList;
 
     @BindView(R.id.scrollView)
-    public HorizontalScrollView scrollView;
+    public HorizontalScrollView mScrollView;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,15 +72,15 @@ public class FileExplorerActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(getString(R.string.file_explorer_activity_title));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        listFileItem = new ArrayList<>();
-        listDirectoryEntity = new ArrayList<>();
-        current = Constant.CAMERA_DIRECTORY;
+        mListFileItem = new ArrayList<>();
+        mListDirectoryEntity = new ArrayList<>();
+        mCurrent = Constant.CAMERA_DIRECTORY;
         ((TextView)findViewById(R.id.registerDirectory)).setTypeface(Typeface.DEFAULT);
 
-        adapter = new ExplorerItemAdapter(this, this, R.layout.item_file_explorer, this.listFileItem);
-        fileList.setAdapter(adapter);
-        viewGroup = (ViewGroup)findViewById(R.id.pathView);
-        scrollView = (HorizontalScrollView)findViewById(R.id.scrollView);
+        mAdapter = new ExplorerItemAdapter(this, this, R.layout.item_file_explorer, this.mListFileItem);
+        mFileList.setAdapter(mAdapter);
+        mViewGroup = (ViewGroup)findViewById(R.id.pathView);
+        mScrollView = (HorizontalScrollView)findViewById(R.id.scrollView);
 
         AdapterView.OnItemClickListener mItemClickListener =
                 new AdapterView.OnItemClickListener() {
@@ -92,11 +92,11 @@ public class FileExplorerActivity extends AppCompatActivity {
                             fileName = fileName.substring(1, fileName.length()-1);
                         }
 
-                        String path = current + "/" + fileName;
+                        String path = mCurrent + "/" + fileName;
                         File f = new File(path);
 
                         if (f.isDirectory()) {
-                            current = path;
+                            mCurrent = path;
                             refreshFiles();
                         } else {
                             if (!new File(Constant.WORKING_DIRECTORY).exists()) {
@@ -107,14 +107,14 @@ public class FileExplorerActivity extends AppCompatActivity {
                         }
                     }
                 };
-        fileList.setOnItemClickListener(mItemClickListener);
+        mFileList.setOnItemClickListener(mItemClickListener);
         refreshFiles();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        adapter.notifyDataSetChanged();
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -133,7 +133,7 @@ public class FileExplorerActivity extends AppCompatActivity {
     public void buttonClick(View view) {
         switch (view.getId()) {
             case R.id.registerDirectory:
-                if (listFileItem.size() - listDirectoryEntity.size() < 1) {
+                if (mListFileItem.size() - mListDirectoryEntity.size() < 1) {
                     DialogUtils.showAlertDialog(this, getString(R.string.file_explorer_message9));
                 } else {
                     PositiveListener positiveListener = new PositiveListener(FileExplorerActivity.this, FileExplorerActivity.this, null, null);
@@ -144,8 +144,8 @@ public class FileExplorerActivity extends AppCompatActivity {
     }
 
     void refreshFiles() {
-        String[] arrayPath = StringUtils.split(current, "/");
-        viewGroup.removeViews(0, viewGroup.getChildCount());
+        String[] arrayPath = StringUtils.split(mCurrent, "/");
+        mViewGroup.removeViews(0, mViewGroup.getChildCount());
         String currentPath = "";
         int index = 0;
         for (String path : arrayPath) {
@@ -171,16 +171,16 @@ public class FileExplorerActivity extends AppCompatActivity {
             textView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    current = targetPath;
+                    mCurrent = targetPath;
                     refreshFiles();
                 }
             });
-            viewGroup.addView(textView);
+            mViewGroup.addView(textView);
             index++;
         }
-        scrollView.postDelayed(new Runnable() {
+        mScrollView.postDelayed(new Runnable() {
             public void run() {
-                scrollView.fullScroll(HorizontalScrollView.FOCUS_RIGHT);
+                mScrollView.fullScroll(HorizontalScrollView.FOCUS_RIGHT);
             }
         }, 100L);
         new RefreshThread().start();
@@ -215,14 +215,14 @@ public class FileExplorerActivity extends AppCompatActivity {
 
         public void register() {
             if (fileName != null && path != null) {
-                progressDialog = ProgressDialog.show(FileExplorerActivity.this, getString(R.string.file_explorer_message5), getString(R.string.file_explorer_message6));
-                Thread registerThread = new RegistrationThread(context, activity, progressDialog, fileName, path);
+                mProgressDialog = ProgressDialog.show(FileExplorerActivity.this, getString(R.string.file_explorer_message5), getString(R.string.file_explorer_message6));
+                Thread registerThread = new RegistrationThread(context, activity, mProgressDialog, fileName, path);
                 registerThread.start();
             } else {
                 Intent batchIntent = new Intent(FileExplorerActivity.this, BatchPopupActivity.class);
                 ArrayList<String> listImagePath = new ArrayList<>();
-                for (int i = listDirectoryEntity.size(); i < listFileItem.size(); i++) {
-                    listImagePath.add(listFileItem.get(i).getImagePath());
+                for (int i = mListDirectoryEntity.size(); i < mListFileItem.size(); i++) {
+                    listImagePath.add(mListFileItem.get(i).getImagePath());
                 }
                 batchIntent.putStringArrayListExtra("listImagePath", listImagePath);
                 startActivity(batchIntent);
@@ -233,45 +233,45 @@ public class FileExplorerActivity extends AppCompatActivity {
     class RefreshThread extends Thread {
         @Override
         public void run() {
-            listFileItem.clear();
-            listDirectoryEntity.clear();
-            File current = new File(FileExplorerActivity.this.current);
+            mListFileItem.clear();
+            mListDirectoryEntity.clear();
+            File current = new File(FileExplorerActivity.this.mCurrent);
             String[] files = current.list();
             if (files != null) {
                 for (int i = 0; i < files.length;i++) {
                     FileItem thumbnailEntity = new FileItem();
-                    String path = FileExplorerActivity.this.current + "/" + files[i];
+                    String path = FileExplorerActivity.this.mCurrent + "/" + files[i];
                     String name = "";
                     File f = new File(path);
                     if (f.isDirectory()) {
                         name = "[" + files[i] + "]";
                         thumbnailEntity.setImagePath(name);
                         thumbnailEntity.isDirectory = true;
-                        listDirectoryEntity.add(thumbnailEntity);
+                        mListDirectoryEntity.add(thumbnailEntity);
                     } else {
                         name = files[i];
                         String extension = FilenameUtils.getExtension(name).toLowerCase();
                         if (!extension.matches("jpg|jpeg")) continue;
                         thumbnailEntity.setImagePath(path);
-                        listFileItem.add(thumbnailEntity);
+                        mListFileItem.add(thumbnailEntity);
                     }
                 }
             }
 
             if (CommonUtils.loadBooleanPreference(FileExplorerActivity.this, "enable_reverse_order")) {
-                Collections.sort(listDirectoryEntity, Collections.reverseOrder());
-                Collections.sort(listFileItem, Collections.reverseOrder());
+                Collections.sort(mListDirectoryEntity, Collections.reverseOrder());
+                Collections.sort(mListFileItem, Collections.reverseOrder());
             } else {
-                Collections.sort(listDirectoryEntity);
-                Collections.sort(listFileItem);
+                Collections.sort(mListDirectoryEntity);
+                Collections.sort(mListFileItem);
             }
-            listFileItem.addAll(0, listDirectoryEntity);
+            mListFileItem.addAll(0, mListDirectoryEntity);
 
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
-                    adapter.notifyDataSetChanged();
-                    fileList.setSelection(0);
+                    mAdapter.notifyDataSetChanged();
+                    mFileList.setSelection(0);
                 }
             });
         }

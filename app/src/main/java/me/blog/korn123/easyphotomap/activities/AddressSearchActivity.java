@@ -36,13 +36,13 @@ import me.blog.korn123.easyphotomap.utils.DialogUtils;
  */
 public class AddressSearchActivity extends AppCompatActivity {
 
-    private List<Address> listAddress = new ArrayList<>();
-    private AddressItemAdapter addressAdapter;
-    private SearchView searchView = null;
-    private SearchView.OnQueryTextListener queryTextListener;
+    private List<Address> mListAddress = new ArrayList<>();
+    private AddressItemAdapter mAddressAdapter;
+    private SearchView mSearchView = null;
+    private SearchView.OnQueryTextListener mQueryTextListener;
 
     @BindView(R.id.listView)
-    public ListView listView;
+    public ListView mListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,11 +61,11 @@ public class AddressSearchActivity extends AppCompatActivity {
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchManager searchManager = (SearchManager)getSystemService(Context.SEARCH_SERVICE);
         if (searchItem != null) {
-            searchView = (SearchView) searchItem.getActionView();
+            mSearchView = (SearchView) searchItem.getActionView();
         }
-        if (searchView != null) {
-            searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-            queryTextListener = new SearchView.OnQueryTextListener() {
+        if (mSearchView != null) {
+            mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+            mQueryTextListener = new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextChange(String query) {
                     return true;
@@ -73,12 +73,12 @@ public class AddressSearchActivity extends AppCompatActivity {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
                     refreshList(query, 50);
-                    searchView.clearFocus();
+                    mSearchView.clearFocus();
                     return true;
                 }
             };
-            searchView.setOnQueryTextListener(queryTextListener);
-            searchView.setIconified(false);
+            mSearchView.setOnQueryTextListener(mQueryTextListener);
+            mSearchView.setIconified(false);
         }
         return true;
     }
@@ -94,7 +94,7 @@ public class AddressSearchActivity extends AppCompatActivity {
             default:
                 break;
         }
-        searchView.setOnQueryTextListener(queryTextListener);
+        mSearchView.setOnQueryTextListener(mQueryTextListener);
         return super.onOptionsItemSelected(item);
     }
 
@@ -104,14 +104,14 @@ public class AddressSearchActivity extends AppCompatActivity {
 
     public void refreshList(String query, int maxResults) {
         if (StringUtils.length(query) < 1) return;
-        listAddress.clear();
+        mListAddress.clear();
         try {
             List<Address> listAddress = CommonUtils.getFromLocationName(AddressSearchActivity.this, query, maxResults, 0);
-            this.listAddress.addAll(listAddress);
-            if (addressAdapter == null) {
-                addressAdapter = new AddressItemAdapter(this, android.R.layout.simple_list_item_2, listAddress);
-                listView.setAdapter(addressAdapter);
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            this.mListAddress.addAll(listAddress);
+            if (mAddressAdapter == null) {
+                mAddressAdapter = new AddressItemAdapter(this, android.R.layout.simple_list_item_2, listAddress);
+                mListView.setAdapter(mAddressAdapter);
+                mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Address address = (Address) parent.getAdapter().getItem(position);
                         Intent intent = getIntent();
@@ -149,7 +149,7 @@ public class AddressSearchActivity extends AppCompatActivity {
                     }
                 });
             } else {
-                addressAdapter.notifyDataSetChanged();
+                mAddressAdapter.notifyDataSetChanged();
             }
         } catch (Exception e) {
             e.printStackTrace();

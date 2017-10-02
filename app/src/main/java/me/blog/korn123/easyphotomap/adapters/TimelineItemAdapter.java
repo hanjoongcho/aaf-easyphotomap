@@ -19,24 +19,23 @@ import me.blog.korn123.easyphotomap.R;
 import me.blog.korn123.easyphotomap.constants.Constant;
 import me.blog.korn123.easyphotomap.models.PhotoMapItem;
 import me.blog.korn123.easyphotomap.utils.BitmapUtils;
-import me.blog.korn123.easyphotomap.utils.CommonUtils;
 
 /**
  * Created by CHO HANJOONG on 2016-07-20.
  */
 public class TimelineItemAdapter extends ArrayAdapter<PhotoMapItem> {
 
-    private final Context context;
-    private final int layoutResourceId;
-    private final ArrayList<PhotoMapItem> listPhotoMapItem;
-    private Activity activity;
+    private final Context mContext;
+    private final int mLayoutResourceId;
+    private final ArrayList<PhotoMapItem> mListPhotoMapItem;
+    private Activity mActivity;
 
     public TimelineItemAdapter(Context context, Activity activity, int layoutResourceId, ArrayList<PhotoMapItem> listPhotoMapItem) {
         super(context, layoutResourceId, listPhotoMapItem);
-        this.context = context;
-        this.layoutResourceId = layoutResourceId;
-        this.listPhotoMapItem = listPhotoMapItem;
-        this.activity = activity;
+        this.mContext = context;
+        this.mLayoutResourceId = layoutResourceId;
+        this.mListPhotoMapItem = listPhotoMapItem;
+        this.mActivity = activity;
     }
 
     @Override
@@ -45,8 +44,8 @@ public class TimelineItemAdapter extends ArrayAdapter<PhotoMapItem> {
         ViewHolder holder = null;
 
         if(row == null) {
-            LayoutInflater inflater = ((Activity)context).getLayoutInflater();
-            row = inflater.inflate(layoutResourceId, parent, false);
+            LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
+            row = inflater.inflate(mLayoutResourceId, parent, false);
             holder = new ViewHolder();
             holder.textView1 = (TextView)row.findViewById(R.id.address);
             holder.imageView1 = (ImageView)row.findViewById(R.id.thumbnail);
@@ -55,7 +54,7 @@ public class TimelineItemAdapter extends ArrayAdapter<PhotoMapItem> {
             holder = (ViewHolder)row.getTag();
         }
 
-        PhotoMapItem photoMapItem = listPhotoMapItem.get(position);
+        PhotoMapItem photoMapItem = mListPhotoMapItem.get(position);
         if (isDateChange(position)) {
             row.findViewById(R.id.timelineHeader).setVisibility(View.VISIBLE);
             ((TextView)row.findViewById(R.id.timelineDate)).setText(photoMapItem.dateWithoutTime);
@@ -64,7 +63,7 @@ public class TimelineItemAdapter extends ArrayAdapter<PhotoMapItem> {
         }
         holder.textView1.setText(photoMapItem.date + "\n" + photoMapItem.info);
         String fileName = FilenameUtils.getName(photoMapItem.imagePath);
-        Bitmap bm = BitmapUtils.decodeFile(activity, Constant.WORKING_DIRECTORY + fileName + ".thumb");
+        Bitmap bm = BitmapUtils.decodeFile(mActivity, Constant.WORKING_DIRECTORY + fileName + ".thumb");
         holder.imageView1.setImageBitmap(bm);
 
         return row;
@@ -75,8 +74,8 @@ public class TimelineItemAdapter extends ArrayAdapter<PhotoMapItem> {
         String previousDate = null;
         String currentDate = null;
         if (position > 0) {
-            PhotoMapItem previous = listPhotoMapItem.get(position - 1);
-            PhotoMapItem current = listPhotoMapItem.get(position);
+            PhotoMapItem previous = mListPhotoMapItem.get(position - 1);
+            PhotoMapItem current = mListPhotoMapItem.get(position);
             previousDate = previous.dateWithoutTime;
             currentDate = current.dateWithoutTime;
             if (!StringUtils.equals(previousDate, currentDate)) {

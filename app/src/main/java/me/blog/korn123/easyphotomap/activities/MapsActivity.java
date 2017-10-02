@@ -77,20 +77,20 @@ import me.blog.korn123.easyphotomap.utils.GPSUtils;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
-    private GoogleMap map;
-    private ProgressDialog progressDialog;
-    private PopupWindow popupWindow;
-    private ClusterManager<MyItem> clusterManager;
-    private ArrayList<PhotoMapItem> listPhotoMapItem;
-    private Map<String, Integer> recommendMap;
-    private List<LatLng> listLatLng = new ArrayList<>();
-    private List<PhotoMapItem> listPhotoEntity = new ArrayList<>();
-    private List<Recommendation> listRecommendationOrigin = new ArrayList<>();
-    private List<Recommendation> listRecommendation = new ArrayList<>();
-    private List<MarkerOptions> listMarkerOptions = new ArrayList<>();
-    private boolean enableDateFilter;
-    private ArrayAdapter adapter;
-    private ListView listView;
+    private GoogleMap mMap;
+    private ProgressDialog mProgressDialog;
+    private PopupWindow mPopupWindow;
+    private ClusterManager<MyItem> mClusterManager;
+    private ArrayList<PhotoMapItem> mListPhotoMapItem;
+    private Map<String, Integer> mRecommendMap;
+    private List<LatLng> mListLatLng = new ArrayList<>();
+    private List<PhotoMapItem> mListPhotoEntity = new ArrayList<>();
+    private List<Recommendation> mListRecommendationOrigin = new ArrayList<>();
+    private List<Recommendation> mListRecommendation = new ArrayList<>();
+    private List<MarkerOptions> mListMarkerOptions = new ArrayList<>();
+    private boolean mEnableDateFilter;
+    private ArrayAdapter mAdapter;
+    private ListView mListView;
 
     @BindView(R.id.floatingMenu)
     public FloatingActionMenu mFloatingMenu;
@@ -105,7 +105,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             new File(Constant.WORKING_DIRECTORY).mkdirs();
         }
 
-        // Obtain the SupportMapFragment and get notified when the recommendMap is ready to be used.
+        // Obtain the SupportMapFragment and get notified when the mRecommendMap is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -120,8 +120,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     /**
-     * Manipulates the recommendMap once available.
-     * This callback is triggered when the recommendMap is ready to be used.
+     * Manipulates the mRecommendMap once available.
+     * This callback is triggered when the mRecommendMap is ready to be used.
      * This is where we can add markers or lines, add listeners or move the activity_camera. In this case,
      * we just add a marker near Sydney, Australia.
      * If Google Play services is not installed on the device, the user will be prompted to install
@@ -130,12 +130,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        map = googleMap;
-        map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+        mMap = googleMap;
+        mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
             @Override
             public void onCameraChange(CameraPosition cameraPosition) {
                 if (cameraPosition.zoom > Constant.GOOGLE_MAP_MAX_ZOOM_IN_VALUE) {
-                    map.animateCamera(CameraUpdateFactory.zoomTo(Constant.GOOGLE_MAP_MAX_ZOOM_IN_VALUE));
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(Constant.GOOGLE_MAP_MAX_ZOOM_IN_VALUE));
                 }
             }
         });
@@ -152,13 +152,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             fOptions.position(latLng);
             fOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_marker));
             final String fImagePath = imagePath;
-            map.setInfoWindowAdapter(new InfoWindow(info, imagePath, latitude, longitude, date));
-            map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 15.0f), new GoogleMap.CancelableCallback() {
+            mMap.setInfoWindowAdapter(new InfoWindow(info, imagePath, latitude, longitude, date));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 15.0f), new GoogleMap.CancelableCallback() {
                 @Override
                 public void onFinish() {
 //                  options.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_menu_myplaces));
-                    Marker marker = map.addMarker(fOptions);
-                    map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                    Marker marker = mMap.addMarker(fOptions);
+                    mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                         @Override
                         public void onInfoWindowClick(Marker marker) {
                             Intent imageViewIntent = new Intent(MapsActivity.this, PopupImageActivity.class);
@@ -175,12 +175,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } else {
             Location location = GPSUtils.getLocationWithGPSProvider(this);
             if (location == null) {
-                map.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                         new LatLng(Constant.GOOGLE_MAP_DEFAULT_LATITUDE, Constant.GOOGLE_MAP_DEFAULT_LONGITUDE),
                         Constant.GOOGLE_MAP_DEFAULT_ZOOM_VALUE)
                 );
             } else {
-                map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), Constant.GOOGLE_MAP_DEFAULT_ZOOM_VALUE));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), Constant.GOOGLE_MAP_DEFAULT_ZOOM_VALUE));
             }
         }
 
@@ -214,14 +214,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void parseMetadata() {
-        if (recommendMap == null) {
-            recommendMap = new HashMap<String, Integer>();
+        if (mRecommendMap == null) {
+            mRecommendMap = new HashMap<String, Integer>();
         } else {
-            recommendMap.clear();
+            mRecommendMap.clear();
         }
         List<String> infoLines = new ArrayList();
-        listPhotoMapItem = PhotoMapDbHelper.selectPhotoMapItemAll();
-        Collections.sort(listPhotoMapItem);
+        mListPhotoMapItem = PhotoMapDbHelper.selectPhotoMapItemAll();
+        Collections.sort(mListPhotoMapItem);
     }
 
     @OnClick({R.id.setting, R.id.camera, R.id.explorer, R.id.overlay, R.id.find, R.id.folder, R.id.timeline})
@@ -236,13 +236,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     final View infoView = getLayoutInflater().inflate(R.layout.popup_window_camera, null);
                     TextView textView2 = (TextView)infoView.findViewById(R.id.textView2);
                     TextView textView3 = (TextView)infoView.findViewById(R.id.textView3);
-                    popupWindow = new PopupWindow(infoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                    mPopupWindow = new PopupWindow(infoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                     CommonUtils.bindButtonEffect(textView2);
                     CommonUtils.bindButtonEffect(textView3);
                     textView2.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            popupWindow.dismiss();
+                            mPopupWindow.dismiss();
                             Intent camera = new Intent(v.getContext(), CameraActivity.class);
                             startActivity(camera);
                         }
@@ -251,12 +251,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         @Override
                         public void onClick(View v) {
                             CommonUtils.saveBooleanPreference(MapsActivity.this, "disable_info_popup", true);
-                            popupWindow.dismiss();
+                            mPopupWindow.dismiss();
                             Intent camera = new Intent(v.getContext(), CameraActivity.class);
                             startActivity(camera);
                         }
                     });
-                    popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+                    mPopupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
                 }
                 break;
             case R.id.explorer:
@@ -264,61 +264,61 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 startActivity(intent);
                 break;
             case R.id.overlay:
-                enableDateFilter = CommonUtils.loadBooleanPreference(MapsActivity.this, "date_filter_setting");
-                map.clear();
+                mEnableDateFilter = CommonUtils.loadBooleanPreference(MapsActivity.this, "date_filter_setting");
+                mMap.clear();
                 parseMetadata();
-                if (listPhotoMapItem.size() < 1) {
+                if (mListPhotoMapItem.size() < 1) {
                     DialogUtils.showAlertDialog(this, getString(R.string.maps_activity_message2));
                     return;
                 }
 
                 LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
                 View customView = inflater.inflate(R.layout.popup_window_recommendation, null);
-                listView = (ListView) customView.findViewById(R.id.listView);
+                mListView = (ListView) customView.findViewById(R.id.listView);
                 FontUtils.setChildViewTypeface((ViewGroup) customView);
                 Set<String> set = new HashSet<>();
-                if (enableDateFilter) {
-                    for (PhotoMapItem item : listPhotoMapItem) {
+                if (mEnableDateFilter) {
+                    for (PhotoMapItem item : mListPhotoMapItem) {
                         String date = null;
                         if (item.date.contains("(")) {
                             date = item.date.substring(0, item.date.lastIndexOf("("));
                         } else {
                             date = item.date;
                         }
-                        if (recommendMap.containsKey(date)) {
-                            recommendMap.put(date, recommendMap.get(date) + 1);
+                        if (mRecommendMap.containsKey(date)) {
+                            mRecommendMap.put(date, mRecommendMap.get(date) + 1);
                         } else {
-                            recommendMap.put(date, 1);
+                            mRecommendMap.put(date, 1);
                         }
                     }
                 } else {
-                    for (PhotoMapItem item : listPhotoMapItem) {
+                    for (PhotoMapItem item : mListPhotoMapItem) {
                         String[] arr = StringUtils.split(item.info, " ");
                         for (String keyword : arr) {
                             if (Pattern.matches("^(([0-9]{1,9})-([0-9]{1,9}))|(([0-9]{1,9}))$", keyword) || keyword.length() < 2)
                                 continue;
-                            if (recommendMap.containsKey(keyword)) {
-                                recommendMap.put(keyword, recommendMap.get(keyword) + 1);
+                            if (mRecommendMap.containsKey(keyword)) {
+                                mRecommendMap.put(keyword, mRecommendMap.get(keyword) + 1);
                             } else {
-                                recommendMap.put(keyword, 1);
+                                mRecommendMap.put(keyword, 1);
                             }
                         }
                     }
                 }
-                List<Map.Entry<String, Integer>> listOfSortEntry = CommonUtils.entriesSortedByValues(recommendMap);
-                listRecommendationOrigin.clear();
-                listRecommendation.clear();
+                List<Map.Entry<String, Integer>> listOfSortEntry = CommonUtils.entriesSortedByValues(mRecommendMap);
+                mListRecommendationOrigin.clear();
+                mListRecommendation.clear();
                 for (Map.Entry<String, Integer> entry : listOfSortEntry) {
-                    listRecommendationOrigin.add(new Recommendation(entry.getKey(), entry.getValue()));
+                    mListRecommendationOrigin.add(new Recommendation(entry.getKey(), entry.getValue()));
                 }
 
-                listRecommendation.addAll(listRecommendationOrigin);
-                adapter = new ArrayAdapter<Recommendation>(this, R.layout.item_recommendation, listRecommendation);
-                listView.setAdapter(adapter);
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                mListRecommendation.addAll(mListRecommendationOrigin);
+                mAdapter = new ArrayAdapter<Recommendation>(this, R.layout.item_recommendation, mListRecommendation);
+                mListView.setAdapter(mAdapter);
+                mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Recommendation recommendation = (Recommendation) parent.getAdapter().getItem(position);
-                        popupWindow.dismiss();
+                        mPopupWindow.dismiss();
                         overlayIcons(recommendation.keyWord, true);
                     }
                 });
@@ -326,14 +326,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 customView.findViewById(R.id.viewWorld).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        popupWindow.dismiss();
+                        mPopupWindow.dismiss();
                         overlayIcons("", false);
                     }
                 });
                 customView.findViewById(R.id.close).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        popupWindow.dismiss();
+                        mPopupWindow.dismiss();
                     }
                 });
 
@@ -347,21 +347,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     @Override
                     public boolean onQueryTextChange(String newText) {
                         List<Recommendation> listTemp = new ArrayList<Recommendation>();
-                        listRecommendation.clear();
-                        for (Recommendation recommendation : listRecommendationOrigin) {
+                        mListRecommendation.clear();
+                        for (Recommendation recommendation : mListRecommendationOrigin) {
                             if (StringUtils.contains(recommendation.keyWord, newText)) {
-                                listRecommendation.add(recommendation);
+                                mListRecommendation.add(recommendation);
                             }
                         }
-                        adapter.notifyDataSetChanged();
+                        mAdapter.notifyDataSetChanged();
                         return false;
                     }
                 });
-                popupWindow = new PopupWindow(customView, (int)(point.x * 0.9), (int)((point.y - CommonUtils.dpToPixel(this, 25)) * 0.8), true);
-                popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+                mPopupWindow = new PopupWindow(customView, (int)(point.x * 0.9), (int)((point.y - CommonUtils.dpToPixel(this, 25)) * 0.8), true);
+                mPopupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
                 break;
             case R.id.find:
-                if (listPhotoMapItem.size() < 1) {
+                if (mListPhotoMapItem.size() < 1) {
                     DialogUtils.showAlertDialog(this, getString(R.string.maps_activity_message2));
                     return;
                 }
@@ -377,7 +377,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 startActivity(fileExplorerIntent);
                 break;
             case R.id.timeline:
-                if (listPhotoMapItem.size() < 1) {
+                if (mListPhotoMapItem.size() < 1) {
                     DialogUtils.showAlertDialog(this, getString(R.string.maps_activity_message2));
                     return;
                 }
@@ -390,27 +390,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void setUpCluster() {
-        // Initialize the manager with the context and the recommendMap.
+        // Initialize the manager with the context and the mRecommendMap.
         // (Activity extends context, so we can pass 'this' in the constructor.)
-        if (clusterManager == null) {
-            clusterManager = new ClusterManager<MyItem>(this, map);
-//            clusterManager.setAlgorithm(new PreCachingAlgorithmDecorator<MyItem>(new NonHierarchicalDistanceBasedAlgorithm<MyItem>()));
+        if (mClusterManager == null) {
+            mClusterManager = new ClusterManager<MyItem>(this, mMap);
+//            mClusterManager.setAlgorithm(new PreCachingAlgorithmDecorator<MyItem>(new NonHierarchicalDistanceBasedAlgorithm<MyItem>()));
         } else {
-            clusterManager.clearItems();
+            mClusterManager.clearItems();
         }
 
-        // Point the recommendMap's listeners at the listeners implemented by the cluster
+        // Point the mRecommendMap's listeners at the listeners implemented by the cluster
         // manager.
-//        getMap().setOnCameraChangeListener(clusterManager);
-//        getMap().setOnMarkerClickListener(clusterManager);
+//        getMap().setOnCameraChangeListener(mClusterManager);
+//        getMap().setOnMarkerClickListener(mClusterManager);
     }
 
     Handler overlayHandler = new Handler(new Handler.Callback() {
         public boolean handleMessage(Message msg) {
             if (msg.obj instanceof OverlayThread.ProgressInfo) {
                 OverlayThread.ProgressInfo progressInfo = (OverlayThread.ProgressInfo)msg.obj;
-                progressDialog.setProgress(progressInfo.getProgress());
-                progressDialog.setMessage(progressInfo.getMessage());
+                mProgressDialog.setProgress(progressInfo.getProgress());
+                mProgressDialog.setMessage(progressInfo.getMessage());
             }
             return true;
         }
@@ -419,11 +419,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void overlayIcons(String keyword, boolean applyFilter) {
         Thread overlayThread = new OverlayThread(keyword, applyFilter);
         overlayThread.start();
-        progressDialog = new ProgressDialog(MapsActivity.this);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        progressDialog.setMessage("find " + keyword + "...");
-        progressDialog.setMax(PhotoMapDbHelper.containsPhotoMapItemBy("info", keyword).size());
-        progressDialog.show();
+        mProgressDialog = new ProgressDialog(MapsActivity.this);
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        mProgressDialog.setMessage("find " + keyword + "...");
+        mProgressDialog.setMax(PhotoMapDbHelper.containsPhotoMapItemBy("info", keyword).size());
+        mProgressDialog.show();
     }
 
     class OverlayThread extends Thread {
@@ -470,16 +470,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         public void run() {
             ArrayList<PhotoMapItem> listTemp = PhotoMapDbHelper.containsPhotoMapItemBy("info", keyword);
             super.run();
-            listLatLng.clear();
-            listMarkerOptions.clear();
-            listPhotoEntity.clear();
+            mListLatLng.clear();
+            mListMarkerOptions.clear();
+            mListPhotoEntity.clear();
             int index = 0;
             for (PhotoMapItem item : listTemp) {
                 Message progressMsg = overlayHandler.obtainMessage();
                 index++;
                 progressMsg.obj = new ProgressInfo(index, item.info, listTemp.size());
                 overlayHandler.sendMessage(progressMsg);
-//                if (enableDateFilter) {
+//                if (mEnableDateFilter) {
 //                    if (applyFilter && !item.date.contains(keyword) && !keyword.equals("대한민국")) continue;
 //                } else {
 //                    if (applyFilter && !item.info.contains(keyword)) continue;
@@ -516,39 +516,39 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     image = BitmapDescriptorFactory.fromBitmap(mDotMarkerBitmap);
                 }
                 options.icon(image);
-                listMarkerOptions.add(options);
-                listPhotoEntity.add(item);
+                mListMarkerOptions.add(options);
+                mListPhotoEntity.add(item);
             }
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
-                    progressDialog.dismiss();
+                    mProgressDialog.dismiss();
                     setUpCluster();
                     ArrayList<PhotoMapItem> listTemp = PhotoMapDbHelper.containsPhotoMapItemBy("info", keyword);
-                    for (int i = 0; i < listMarkerOptions.size(); i++) {
-                        MyItem item = new MyItem(listMarkerOptions.get(i), listTemp.get(i));
-                        clusterManager.addItem(item);
-                        listLatLng.add(listMarkerOptions.get(i).getPosition());
+                    for (int i = 0; i < mListMarkerOptions.size(); i++) {
+                        MyItem item = new MyItem(mListMarkerOptions.get(i), listTemp.get(i));
+                        mClusterManager.addItem(item);
+                        mListLatLng.add(mListMarkerOptions.get(i).getPosition());
                     }
 
-                    map.setOnMarkerClickListener(clusterManager);
-                    map.setOnCameraChangeListener(clusterManager);
+                    mMap.setOnMarkerClickListener(mClusterManager);
+                    mMap.setOnCameraChangeListener(mClusterManager);
 
-                    MyClusterRenderer clusterRenderer = new MyClusterRenderer(MapsActivity.this, map, clusterManager);
-                    clusterManager.setRenderer(clusterRenderer);
+                    MyClusterRenderer clusterRenderer = new MyClusterRenderer(MapsActivity.this, mMap, mClusterManager);
+                    mClusterManager.setRenderer(clusterRenderer);
 
-                    clusterManager.setOnClusterClickListener(new ClusterManager.OnClusterClickListener<MyItem>() {
+                    mClusterManager.setOnClusterClickListener(new ClusterManager.OnClusterClickListener<MyItem>() {
                         @Override
                         public boolean onClusterClick(Cluster<MyItem> cluster) {
-                            map.setInfoWindowAdapter(null);
+                            mMap.setInfoWindowAdapter(null);
                             return false;
                         }
                     });
 
-                    clusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<MyItem>() {
+                    mClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<MyItem>() {
                         @Override
                         public boolean onClusterItemClick(MyItem item) {
-                            map.setInfoWindowAdapter(new InfoWindow(
+                            mMap.setInfoWindowAdapter(new InfoWindow(
                                     item.getPhotoEntity().info,
                                     item.getPhotoEntity().imagePath,
                                     item.getPhotoEntity().latitude,
@@ -556,7 +556,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                     item.getPhotoEntity().date
                             ));
                             final String fImagePath = item.getPhotoEntity().imagePath;
-                            map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                            mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                                 @Override
                                 public void onInfoWindowClick(Marker marker) {
                                     Intent imageViewIntent = new Intent(MapsActivity.this, PopupImageActivity.class);
@@ -569,11 +569,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     });
 
                     LatLngBounds.Builder builder = new LatLngBounds.Builder();
-                    for (LatLng latLng: listLatLng) {
+                    for (LatLng latLng: mListLatLng) {
                         builder.include(latLng);
                     }
                     LatLngBounds bounds = builder.build();
-                    map.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 200));
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 200));
                 }
             });
         }
@@ -653,7 +653,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         @Override
         public void onCameraChange(CameraPosition cameraPosition) {
             if (cameraPosition.zoom > Constant.GOOGLE_MAP_MAX_ZOOM_IN_VALUE) {
-                map.animateCamera(CameraUpdateFactory.zoomTo(Constant.GOOGLE_MAP_MAX_ZOOM_IN_VALUE));
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(Constant.GOOGLE_MAP_MAX_ZOOM_IN_VALUE));
             }
             mapZoom = cameraPosition.zoom;
         }

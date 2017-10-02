@@ -38,18 +38,18 @@ import me.blog.korn123.easyphotomap.utils.DialogUtils;
  */
 
 public class RegistrationThread extends Thread {
-    private Context context;
-    private Activity activity;
-    private ProgressDialog progressDialog;
-    private String fileName;
-    private String path;
+    private Context mContext;
+    private Activity mActivity;
+    private ProgressDialog mProgressDialog;
+    private String mFileName;
+    private String mPath;
 
     public RegistrationThread(Context context, Activity activity, ProgressDialog progressDialog, String fileName, String path) {
-        this.context = context;
-        this.activity = activity;
-        this.progressDialog = progressDialog;
-        this.fileName = fileName;
-        this.path = path;
+        this.mContext = context;
+        this.mActivity = activity;
+        this.mProgressDialog = progressDialog;
+        this.mFileName = fileName;
+        this.mPath = path;
     }
 
     public void registerSingleFile() {
@@ -57,15 +57,15 @@ public class RegistrationThread extends Thread {
         try {
 
             File targetFile = null;
-            if (CommonUtils.loadBooleanPreference(context, "enable_create_copy")) {
-                targetFile = new File(Constant.WORKING_DIRECTORY + fileName);
+            if (CommonUtils.loadBooleanPreference(mContext, "enable_create_copy")) {
+                targetFile = new File(Constant.WORKING_DIRECTORY + mFileName);
                 if (!targetFile.exists()) {
-                    FileUtils.copyFile(new File(path), targetFile);
+                    FileUtils.copyFile(new File(mPath), targetFile);
                 }
             } else {
-                targetFile = new File(path);
+                targetFile = new File(mPath);
                 // remove .origin extension
-                fileName = FilenameUtils.getBaseName(fileName);
+                mFileName = FilenameUtils.getBaseName(mFileName);
             }
 
             Metadata metadata = JpegMetadataReader.readMetadata(targetFile);
@@ -76,25 +76,25 @@ public class RegistrationThread extends Thread {
             if (date != null) {
                 item.date = CommonUtils.DATE_TIME_PATTERN.format(date);
             } else {
-                item.date = context.getString(R.string.file_explorer_message2);
+                item.date = mContext.getString(R.string.file_explorer_message2);
             }
 
             GpsDirectory gpsDirectory = metadata.getFirstDirectoryOfType(GpsDirectory.class);
             if (gpsDirectory != null && gpsDirectory.getGeoLocation() != null) {
                 item.longitude = gpsDirectory.getGeoLocation().getLongitude();
                 item.latitude = gpsDirectory.getGeoLocation().getLatitude();
-                List<Address> listAddress = CommonUtils.getFromLocation(context, item.latitude, item.longitude, 1, 0);
+                List<Address> listAddress = CommonUtils.getFromLocation(mContext, item.latitude, item.longitude, 1, 0);
                 if (listAddress.size() > 0) {
                     item.info = CommonUtils.fullAddress(listAddress.get(0));
                 }
 
                 ArrayList<PhotoMapItem> tempList = PhotoMapDbHelper.selectPhotoMapItemBy("imagePath", item.imagePath);
                 if (tempList.size() > 0) {
-                    resultMessage = context.getString(R.string.file_explorer_message3);
+                    resultMessage = mContext.getString(R.string.file_explorer_message3);
                 } else {
                     PhotoMapDbHelper.insertPhotoMapItem(item);
-                    BitmapUtils.createScaledBitmap(targetFile.getAbsolutePath(), Constant.WORKING_DIRECTORY + fileName + ".thumb", 200);
-                    resultMessage = context.getString(R.string.file_explorer_message4);
+                    BitmapUtils.createScaledBitmap(targetFile.getAbsolutePath(), Constant.WORKING_DIRECTORY + mFileName + ".thumb", 200);
+                    resultMessage = mContext.getString(R.string.file_explorer_message4);
                 }
             } else {
                 // does not exits gps data
@@ -102,20 +102,20 @@ public class RegistrationThread extends Thread {
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-                        progressDialog.dismiss();
-                        final Intent addressIntent = new Intent(context, AddressSearchActivity.class);
-                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                        builder.setMessage(context.getString(R.string.file_explorer_message1)).setCancelable(false).setPositiveButton(context.getString(R.string.confirm),
+                        mProgressDialog.dismiss();
+                        final Intent addressIntent = new Intent(mContext, AddressSearchActivity.class);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                        builder.setMessage(mContext.getString(R.string.file_explorer_message1)).setCancelable(false).setPositiveButton(mContext.getString(R.string.confirm),
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         addressIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                         addressIntent.putExtra("imagePath", temp.imagePath);
                                         addressIntent.putExtra("date", temp.date);
-                                        context.startActivity(addressIntent);
+                                        mContext.startActivity(addressIntent);
                                         return;
                                     }
-                                }).setNegativeButton(context.getString(R.string.cancel),
+                                }).setNegativeButton(mContext.getString(R.string.cancel),
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -135,8 +135,8 @@ public class RegistrationThread extends Thread {
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
-                    progressDialog.dismiss();
-                    DialogUtils.makeSnackBar(activity.findViewById(android.R.id.content), message);
+                    mProgressDialog.dismiss();
+                    DialogUtils.makeSnackBar(mActivity.findViewById(android.R.id.content), message);
                 }
             });
         }

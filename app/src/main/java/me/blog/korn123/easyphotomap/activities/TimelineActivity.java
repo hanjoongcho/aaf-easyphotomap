@@ -25,10 +25,10 @@ import me.blog.korn123.easyphotomap.models.PhotoMapItem;
 
 public class TimelineActivity extends AppCompatActivity {
 
-    private ArrayAdapter<PhotoMapItem> arrayAdapter;
-    private ArrayList<PhotoMapItem> listPhotoMapItem;
+    private ArrayAdapter<PhotoMapItem> mArrayAdapter;
+    private ArrayList<PhotoMapItem> mListPhotoMapItem;
 
-    @BindView(R.id.listTimeline) ListView listView;
+    @BindView(R.id.listTimeline) ListView mListView;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,10 +41,10 @@ public class TimelineActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         parseMetadata();
-        arrayAdapter = new TimelineItemAdapter(this, this, R.layout.item_timeline, listPhotoMapItem);
-        listView.setAdapter(arrayAdapter);
-        listView.setSelection(arrayAdapter.getCount() - 1);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mArrayAdapter = new TimelineItemAdapter(this, this, R.layout.item_timeline, mListPhotoMapItem);
+        mListView.setAdapter(mArrayAdapter);
+        mListView.setSelection(mArrayAdapter.getCount() - 1);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 PhotoMapItem imageEntity = (PhotoMapItem) parent.getAdapter().getItem(position);
                 Intent intent = new Intent(TimelineActivity.this, MapsActivity.class);
@@ -71,7 +71,7 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     public void parseMetadata() {
-        listPhotoMapItem = PhotoMapDbHelper.selectTimeLineItemAll(getString(R.string.file_explorer_message2));
+        mListPhotoMapItem = PhotoMapDbHelper.selectTimeLineItemAll(getString(R.string.file_explorer_message2));
     }
 
 }

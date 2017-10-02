@@ -37,9 +37,8 @@ import me.blog.korn123.easyphotomap.utils.DialogUtils;
  */
 public class CameraActivity extends Activity {
 
-    public static final int MEDIA_TYPE_IMAGE = 1;
-    public static final int MEDIA_TYPE_VIDEO = 2;
-    private Uri fileUri;
+
+    private Uri mFileUri;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,8 +47,8 @@ public class CameraActivity extends Activity {
 
         // create Intent to take a picture and return control to the calling application
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        fileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE); // create a file to save the image
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
+        mFileUri = getOutputMediaFileUri(Constant.MEDIA_TYPE_IMAGE); // create a file to save the image
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, mFileUri); // set the image file name
 
         // start the image capture Intent
         startActivityForResult(intent, Constant.CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
@@ -81,10 +80,10 @@ public class CameraActivity extends Activity {
         // Create a media file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         File mediaFile;
-        if (type == MEDIA_TYPE_IMAGE){
+        if (type == Constant.MEDIA_TYPE_IMAGE){
             mediaFile = new File(mediaStorageDir.getPath() + File.separator +
                     "IMG_"+ timeStamp + ".jpg");
-        } else if(type == MEDIA_TYPE_VIDEO) {
+        } else if(type == Constant.MEDIA_TYPE_VIDEO) {
             mediaFile = new File(mediaStorageDir.getPath() + File.separator +
                     "VID_"+ timeStamp + ".mp4");
         } else {
@@ -98,10 +97,10 @@ public class CameraActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Constant.CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                // Image captured and saved to fileUri specified in the Intent
+                // Image captured and saved to mFileUri specified in the Intent
 //                Toast.makeText(this, "Image saved to:\n" +
-//                        fileUri.toString(), Toast.LENGTH_LONG).show();
-                String srcFilepath = StringUtils.substring(fileUri.toString(), 6);
+//                        mFileUri.toString(), Toast.LENGTH_LONG).show();
+                String srcFilepath = StringUtils.substring(mFileUri.toString(), 6);
                 String fileName = null;
                 try {
                     File targetFile = null;

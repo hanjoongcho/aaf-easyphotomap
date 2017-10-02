@@ -106,4 +106,5 @@ public abstract class AppPreferenceActivity extends PreferenceActivity {
         }
         return mDelegate;
     }
+
 }

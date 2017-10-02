@@ -14,12 +14,13 @@ import me.blog.korn123.easyphotomap.R;
 
 public class LicensesActivity extends AppCompatActivity {
 
-    @BindView(R.id.licenses) WebView webView;
+    @BindView(R.id.licenses) WebView mWebView;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_licenses);
         ButterKnife.bind(this);
-        webView.loadUrl("https://github.com/hanjoongcho/aaf-easyphotomap/blob/master/LICENSE.md");
+        mWebView.loadUrl("https://github.com/hanjoongcho/aaf-easyphotomap/blob/master/LICENSE.md");
     }
+
 }

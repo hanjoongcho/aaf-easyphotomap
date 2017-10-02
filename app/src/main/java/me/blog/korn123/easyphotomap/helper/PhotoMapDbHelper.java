@@ -14,11 +14,11 @@ import me.blog.korn123.easyphotomap.models.PhotoMapItem;
 
 public class PhotoMapDbHelper {
 
-    private volatile static RealmConfiguration diaryConfig;
+    private volatile static RealmConfiguration sDiaryConfig;
 
     private static Realm getRealmInstance() {
-        if (diaryConfig == null) {
-            diaryConfig = new RealmConfiguration.Builder()
+        if (sDiaryConfig == null) {
+            sDiaryConfig = new RealmConfiguration.Builder()
                     .name("easyphotomap.realm")
                     .schemaVersion(1)
                     .migration(new PhotoMapMigration())
@@ -26,7 +26,7 @@ public class PhotoMapDbHelper {
                     .build();
 
         }
-        return Realm.getInstance(diaryConfig);
+        return Realm.getInstance(sDiaryConfig);
     }
 
     public static void insertPhotoMapItem(PhotoMapItem photoMapItem) {

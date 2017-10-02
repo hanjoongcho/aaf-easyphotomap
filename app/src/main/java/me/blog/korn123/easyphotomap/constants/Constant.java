@@ -22,4 +22,9 @@ public class Constant {
     /* CameraActivity */
     final static public int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
     final static public int CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE = 200;
+    final static public int MEDIA_TYPE_IMAGE = 1;
+    final static public int MEDIA_TYPE_VIDEO = 2;
+
+    /* IntroActivity */
+    final static public int START_MAIN_ACTIVITY = 0;
 }

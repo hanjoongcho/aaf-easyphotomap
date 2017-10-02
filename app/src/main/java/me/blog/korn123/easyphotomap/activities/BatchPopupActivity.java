@@ -44,21 +44,21 @@ import me.blog.korn123.easyphotomap.utils.DialogUtils;
 public class BatchPopupActivity extends Activity {
 
     ProgressBar mProgressBar;
-    private boolean enableUpdate = true;
+    private boolean mEnableUpdate = true;
 
-    int totalPhoto = 0;
-    int successCount = 0;
-    int failCount = 0;
-    int noGPSInfoCount = 0;
-    int reduplicationCount = 0;
+    int mTotalPhoto = 0;
+    int mSuccessCount = 0;
+    int mFailCount = 0;
+    int mNoGPSInfoCount = 0;
+    int mReduplicationCount = 0;
     private int mProgressStatus = 0;
 
-    TextView infoText;
-    TextView infoText2;
-    TextView infoText3;
-    TextView infoText4;
-    TextView infoText5;
-    TextView infoText6;
+    TextView mInfoText;
+    TextView mInfoText2;
+    TextView mInfoText3;
+    TextView mInfoText4;
+    TextView mInfoText5;
+    TextView mInfoText6;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,23 +67,23 @@ public class BatchPopupActivity extends Activity {
         setContentView(R.layout.activity_batch_popup);
         ButterKnife.bind(this);
         mProgressBar = (ProgressBar)findViewById(R.id.progressBar);
-        infoText = (TextView)findViewById(R.id.infoText);
-        infoText2 = (TextView)findViewById(R.id.infoText2);
-        infoText3 = (TextView)findViewById(R.id.infoText3);
-        infoText4 = (TextView)findViewById(R.id.infoText4);
-        infoText5 = (TextView)findViewById(R.id.infoText5);
-        infoText6 = (TextView)findViewById(R.id.infoText6);
-        infoText.setTypeface(Typeface.DEFAULT);
-        infoText2.setTypeface(Typeface.DEFAULT);
-        infoText3.setTypeface(Typeface.DEFAULT);
-        infoText4.setTypeface(Typeface.DEFAULT);
-        infoText5.setTypeface(Typeface.DEFAULT);
-        infoText6.setTypeface(Typeface.DEFAULT);
+        mInfoText = (TextView)findViewById(R.id.infoText);
+        mInfoText2 = (TextView)findViewById(R.id.infoText2);
+        mInfoText3 = (TextView)findViewById(R.id.infoText3);
+        mInfoText4 = (TextView)findViewById(R.id.infoText4);
+        mInfoText5 = (TextView)findViewById(R.id.infoText5);
+        mInfoText6 = (TextView)findViewById(R.id.infoText6);
+        mInfoText.setTypeface(Typeface.DEFAULT);
+        mInfoText2.setTypeface(Typeface.DEFAULT);
+        mInfoText3.setTypeface(Typeface.DEFAULT);
+        mInfoText4.setTypeface(Typeface.DEFAULT);
+        mInfoText5.setTypeface(Typeface.DEFAULT);
+        mInfoText6.setTypeface(Typeface.DEFAULT);
 
         ArrayList<String> listImagePath = getIntent().getStringArrayListExtra("listImagePath");
-        totalPhoto = listImagePath.size();
+        mTotalPhoto = listImagePath.size();
         Thread thread = new RegisterThread(BatchPopupActivity.this, listImagePath);
-        mProgressBar.setMax(totalPhoto);
+        mProgressBar.setMax(mTotalPhoto);
         thread.start();
     }
 
@@ -91,7 +91,7 @@ public class BatchPopupActivity extends Activity {
     public void buttonClick(View view) {
         switch (view.getId()) {
             case R.id.stop:
-                enableUpdate = false;
+                mEnableUpdate = false;
                 break;
             case R.id.close:
                 finish();
@@ -101,11 +101,11 @@ public class BatchPopupActivity extends Activity {
 
     Handler progressHandler = new Handler(new Handler.Callback() {
         public boolean handleMessage(Message msg) {
-            infoText.setText(++mProgressStatus + " / " + totalPhoto);
-            infoText2.setText(getString(R.string.batch_popup_message2) + ": " + successCount);
-            infoText3.setText(getString(R.string.batch_popup_message3) + ": " + reduplicationCount);
-            infoText4.setText(getString(R.string.batch_popup_message4) + ": " + noGPSInfoCount);
-            infoText5.setText(getString(R.string.batch_popup_message5) + ": " + failCount);
+            mInfoText.setText(++mProgressStatus + " / " + mTotalPhoto);
+            mInfoText2.setText(getString(R.string.batch_popup_message2) + ": " + mSuccessCount);
+            mInfoText3.setText(getString(R.string.batch_popup_message3) + ": " + mReduplicationCount);
+            mInfoText4.setText(getString(R.string.batch_popup_message4) + ": " + mNoGPSInfoCount);
+            mInfoText5.setText(getString(R.string.batch_popup_message5) + ": " + mFailCount);
             mProgressBar.setProgress(mProgressStatus);
             return true;
         }
@@ -124,7 +124,7 @@ public class BatchPopupActivity extends Activity {
             for (String imagePath : listImagePath) {
                 StopWatch stopWatch = new StopWatch();
                 stopWatch.start();
-                if (!enableUpdate) return;
+                if (!mEnableUpdate) return;
                 Message message = progressHandler.obtainMessage();
                 try {
                     String fileName = FilenameUtils.getName(imagePath) + ".origin";
@@ -166,20 +166,20 @@ public class BatchPopupActivity extends Activity {
                         stopWatch.reset();
                         stopWatch.start();
                         if (tempList.size() > 0) {
-                            reduplicationCount++;
+                            mReduplicationCount++;
                         } else {
                             PhotoMapDbHelper.insertPhotoMapItem(item);
                             BitmapUtils.createScaledBitmap(targetFile.getAbsolutePath(), Constant.WORKING_DIRECTORY + fileName + ".thumb", 200);
-                            successCount++;
+                            mSuccessCount++;
                             Log.i("elapsed", String.format("create bitmap %d", stopWatch.getTime()));
                             stopWatch.stop();
                         }
                     } else {
-                        noGPSInfoCount++;
+                        mNoGPSInfoCount++;
                     }
 
                 } catch (Exception e) {
-                    failCount++;
+                    mFailCount++;
                 }
                 progressHandler.sendMessage(message);
             }
@@ -190,4 +190,5 @@ public class BatchPopupActivity extends Activity {
     public void onBackPressed() {
         DialogUtils.showAlertDialog(BatchPopupActivity.this, getString(R.string.batch_popup_message6));
     }
+
 }

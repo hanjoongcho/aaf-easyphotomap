@@ -29,10 +29,10 @@ import me.blog.korn123.easyphotomap.adapters.SearchItemAdapter;
  */
 public class PhotoSearchActivity extends AppCompatActivity {
 
-    private SearchView searchView = null;
-    private SearchView.OnQueryTextListener queryTextListener;
-    private SearchItemAdapter searchItemAdapter;
-    private ArrayList<PhotoMapItem> listPhotoMapItem = new ArrayList<>();
+    private SearchView mSearchView = null;
+    private SearchView.OnQueryTextListener mQueryTextListener;
+    private SearchItemAdapter mSearchItemAdapter;
+    private ArrayList<PhotoMapItem> mListPhotoMapItem = new ArrayList<>();
 
     @BindView(R.id.listView)
     public ListView mListView;
@@ -56,11 +56,11 @@ public class PhotoSearchActivity extends AppCompatActivity {
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchManager searchManager = (SearchManager)getSystemService(Context.SEARCH_SERVICE);
         if (searchItem != null) {
-            searchView = (SearchView) searchItem.getActionView();
+            mSearchView = (SearchView) searchItem.getActionView();
         }
-        if (searchView != null) {
-            searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-            queryTextListener = new SearchView.OnQueryTextListener() {
+        if (mSearchView != null) {
+            mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+            mQueryTextListener = new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextChange(String query) {
                     refreshList(query, 0);
@@ -69,12 +69,12 @@ public class PhotoSearchActivity extends AppCompatActivity {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
                     refreshList(query, 0);
-                    searchView.clearFocus();
+                    mSearchView.clearFocus();
                     return true;
                 }
             };
-            searchView.setOnQueryTextListener(queryTextListener);
-            searchView.setIconified(false);
+            mSearchView.setOnQueryTextListener(mQueryTextListener);
+            mSearchView.setIconified(false);
         }
         return true;
     }
@@ -91,7 +91,7 @@ public class PhotoSearchActivity extends AppCompatActivity {
             default:
                 break;
         }
-        searchView.setOnQueryTextListener(queryTextListener);
+        mSearchView.setOnQueryTextListener(mQueryTextListener);
         return super.onOptionsItemSelected(item);
     }
 
@@ -105,8 +105,8 @@ public class PhotoSearchActivity extends AppCompatActivity {
 
     public void refreshList(String query, int position, int top) {
         parseMetadata(query);
-        searchItemAdapter = new SearchItemAdapter(this, this, R.layout.item_search, listPhotoMapItem);
-        mListView.setAdapter(searchItemAdapter);
+        mSearchItemAdapter = new SearchItemAdapter(this, this, R.layout.item_search, mListPhotoMapItem);
+        mListView.setAdapter(mSearchItemAdapter);
         final Context context = this;
         final String fQuery = query;
 
@@ -137,9 +137,9 @@ public class PhotoSearchActivity extends AppCompatActivity {
     }
 
     public void parseMetadata(String query) {
-        listPhotoMapItem.clear();
+        mListPhotoMapItem.clear();
         ArrayList<PhotoMapItem> listTemp = PhotoMapDbHelper.containsPhotoMapItemBy("info", query);
-        listPhotoMapItem.addAll(listTemp);
+        mListPhotoMapItem.addAll(listTemp);
     }
 
 }

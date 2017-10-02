@@ -37,13 +37,12 @@ import me.blog.korn123.easyphotomap.utils.DialogUtils;
  */
 public class ThumbnailExplorerActivity extends AppCompatActivity {
 
-    private ThumbnailItemAdapter thumbnailEntityAdapter;
-    private GridView gridView;
-    private boolean enableUpdate = false;
-    private ProgressDialog progressDialog;
-    private Context explorerContext = this;
-    private int thumbnailTotal = 0;
-    private int completed = 0;
+    private ThumbnailItemAdapter mThumbnailEntityAdapter;
+    private GridView mGridView;
+    private boolean mEnableUpdate = false;
+    private ProgressDialog mProgressDialog;
+    private int mThumbnailTotal = 0;
+    private int mCompleted = 0;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,23 +52,23 @@ public class ThumbnailExplorerActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getString(R.string.thumbnail_explorer_compact_activity_title));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        gridView = (GridView)findViewById(R.id.filelist);
+        mGridView = (GridView)findViewById(R.id.filelist);
         setAdapter();
-        gridView.setColumnWidth((int) ((CommonUtils.getDefaultDisplay(this).x - CommonUtils.dpToPixel(ThumbnailExplorerActivity.this, 30, 1)) / 3));
+        mGridView.setColumnWidth((int) ((CommonUtils.getDefaultDisplay(this).x - CommonUtils.dpToPixel(ThumbnailExplorerActivity.this, 30, 1)) / 3));
         setOnItemClickListener();
 
         findViewById(R.id.startSync).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ThumbnailCreatorThread thread = new ThumbnailCreatorThread(ThumbnailExplorerActivity.this);
-                enableUpdate = true;
+                mEnableUpdate = true;
                 thread.start();
             }
         });
         findViewById(R.id.stopSync).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                enableUpdate = false;
+                mEnableUpdate = false;
             }
         });
     }
@@ -103,12 +102,12 @@ public class ThumbnailExplorerActivity extends AppCompatActivity {
 
     public void setAdapter() {
         List<ThumbnailItem> listPhotoEntity = CommonUtils.fetchAllThumbnail(ThumbnailExplorerActivity.this);
-        thumbnailEntityAdapter = new ThumbnailItemAdapter(this, this, R.layout.item_thumbnail, listPhotoEntity);
-        gridView.setAdapter(thumbnailEntityAdapter);
+        mThumbnailEntityAdapter = new ThumbnailItemAdapter(this, this, R.layout.item_thumbnail, listPhotoEntity);
+        mGridView.setAdapter(mThumbnailEntityAdapter);
     }
 
     public void setOnItemClickListener() {
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long l) {
                 ThumbnailItem photoEntity = (ThumbnailItem)parent.getAdapter().getItem(position);
@@ -138,8 +137,8 @@ public class ThumbnailExplorerActivity extends AppCompatActivity {
 
         public void register() {
             if (fileName != null && path != null) {
-                progressDialog = ProgressDialog.show(ThumbnailExplorerActivity.this, getString(R.string.file_explorer_message5), getString(R.string.file_explorer_message6));
-                Thread registerThread = new RegistrationThread(context, activity, progressDialog, fileName, path);
+                mProgressDialog = ProgressDialog.show(ThumbnailExplorerActivity.this, getString(R.string.file_explorer_message5), getString(R.string.file_explorer_message6));
+                Thread registerThread = new RegistrationThread(context, activity, mProgressDialog, fileName, path);
                 registerThread.start();
             }
         }
@@ -161,7 +160,7 @@ public class ThumbnailExplorerActivity extends AppCompatActivity {
             for (ThumbnailItem te : listThumbnail) {
                 listImageId.add(te.imageId);
             }
-            completed = listThumbnail.size();
+            mCompleted = listThumbnail.size();
 
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
@@ -172,7 +171,7 @@ public class ThumbnailExplorerActivity extends AppCompatActivity {
             });
 
             for (ThumbnailItem entity : listOriginImage) {
-                if (!enableUpdate) break;
+                if (!mEnableUpdate) break;
                 if (listImageId.contains(entity.imageId)) {
                     continue;
                 }
@@ -180,20 +179,20 @@ public class ThumbnailExplorerActivity extends AppCompatActivity {
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-                        ((TextView)findViewById(R.id.progressView)).setText("total: " + thumbnailTotal);
-                        ((TextView)findViewById(R.id.progressView2)).setText("completed: " + (++completed));
+                        ((TextView)findViewById(R.id.progressView)).setText("total: " + mThumbnailTotal);
+                        ((TextView)findViewById(R.id.progressView2)).setText("mCompleted: " + (++mCompleted));
                     }
                 });
             }
 
-            thumbnailTotal = listOriginImage.size();
+            mThumbnailTotal = listOriginImage.size();
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
-                    ((TextView)findViewById(R.id.progressView)).setText("total: " + thumbnailTotal);
-                    ((TextView)findViewById(R.id.progressView2)).setText("completed: " + completed);
+                    ((TextView)findViewById(R.id.progressView)).setText("total: " + mThumbnailTotal);
+                    ((TextView)findViewById(R.id.progressView2)).setText("mCompleted: " + mCompleted);
                     setAdapter();
-                    thumbnailEntityAdapter.notifyDataSetChanged();
+                    mThumbnailEntityAdapter.notifyDataSetChanged();
                 }
             });
         }

@@ -32,16 +32,16 @@ import me.blog.korn123.easyphotomap.utils.CommonUtils;
  */
 public class ThumbnailItemAdapter extends ArrayAdapter<ThumbnailItem> {
 
-    private final Context context;
-    private final Activity activity;
-    private final List<ThumbnailItem> entities;
-    private final int layoutResourceId;
+    private final Context mContext;
+    private final Activity mActivity;
+    private final List<ThumbnailItem> mEntities;
+    private final int mLayoutResourceId;
     public ThumbnailItemAdapter(Activity activity, Context context, int layoutResourceId, List<ThumbnailItem> entities) {
         super(context, layoutResourceId, entities);
-        this.activity = activity;
-        this.context = context;
-        this.entities = entities;
-        this.layoutResourceId = layoutResourceId;
+        this.mActivity = activity;
+        this.mContext = context;
+        this.mEntities = entities;
+        this.mLayoutResourceId = layoutResourceId;
     }
 
     ProgressDialog progressDialog;
@@ -52,8 +52,8 @@ public class ThumbnailItemAdapter extends ArrayAdapter<ThumbnailItem> {
         ViewHolder holder = null;
 
         if(row == null) {
-            LayoutInflater inflater = ((Activity)context).getLayoutInflater();
-            row = inflater.inflate(layoutResourceId, parent, false);
+            LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
+            row = inflater.inflate(mLayoutResourceId, parent, false);
             holder = new ViewHolder();
             holder.imageView1 = (ImageView)row.findViewById(R.id.image1);
             row.setTag(holder);
@@ -61,18 +61,18 @@ public class ThumbnailItemAdapter extends ArrayAdapter<ThumbnailItem> {
             holder = (ViewHolder)row.getTag();
         }
 //        holder.imageView1.setImageBitmap(null);
-        int widthHeight = (int)((CommonUtils.getDefaultDisplay(activity).x - CommonUtils.dpToPixel(activity, 30, 1)) / 3);
-//        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_menu_gallery);
+        int widthHeight = (int)((CommonUtils.getDefaultDisplay(mActivity).x - CommonUtils.dpToPixel(mActivity, 30, 1)) / 3);
+//        Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ic_menu_gallery);
 //        Bitmap resized = Bitmap.createScaledBitmap(bitmap, widthHeight, widthHeight, true);
 //        holder.imageView1.setImageBitmap(bitmap);
-        ThumbnailItem entity = entities.get(position);
+        ThumbnailItem entity = mEntities.get(position);
         String imagePath = entity.imagePath ;
         String thumbnailPath = entity.thumbnailPath;
         String imageName = FilenameUtils.getName(imagePath);
         holder.position = position;
         holder.imageView1.getLayoutParams().height = widthHeight;
-        holder.imageView1.setImageBitmap(BitmapFactory.decodeResource(activity.getResources(), R.drawable.ic_menu_gallery));
-        new ThumbnailTask(activity, position, holder).execute(thumbnailPath, String.valueOf(widthHeight));
+        holder.imageView1.setImageBitmap(BitmapFactory.decodeResource(mActivity.getResources(), R.drawable.ic_menu_gallery));
+        new ThumbnailTask(mActivity, position, holder).execute(thumbnailPath, String.valueOf(widthHeight));
 //        new ThumbnailTask(position, holder).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, thumbnailPath, String.valueOf(widthHeight));
 //        AsyncUtils.loadBitmap(holder.imageView1, thumbnailPath, widthHeight);
 //        BitmapFactory.Options options = new BitmapFactory.Options();
