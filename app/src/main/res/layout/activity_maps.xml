@@ -10,7 +10,7 @@
         android:orientation="horizontal">
 
         <com.github.clans.fab.FloatingActionMenu
-            android:id="@+id/floatingMenu"
+            android:id="@+id/mFloatingMenu"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
@@ -28,59 +28,66 @@
             fab:menu_backgroundColor="#461544f4"
             fab:menu_openDirection="down">
             <com.github.clans.fab.FloatingActionButton
+                android:onClick="buttonClick"
                 android:id="@+id/setting"
-                style="@style/MenuButtonsBlue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_settings"
+                style="@style/MenuButtonsBlue"
                 fab:fab_size="mini"
                 fab:fab_label="@string/maps_activity_setting" />
             <com.github.clans.fab.FloatingActionButton
+                android:onClick="buttonClick"
                 android:id="@+id/timeline"
-                style="@style/MenuButtonsBlue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_timeline"
+                style="@style/MenuButtonsBlue"
                 fab:fab_size="mini"
                 fab:fab_label="@string/maps_activity_timeline" />
             <com.github.clans.fab.FloatingActionButton
+                android:onClick="buttonClick"
                 android:id="@+id/find"
-                style="@style/MenuButtonsBlue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_search"
+                style="@style/MenuButtonsBlue"
                 fab:fab_size="mini"
                 fab:fab_label="@string/maps_activity_find" />
             <com.github.clans.fab.FloatingActionButton
+                android:onClick="buttonClick"
                 android:id="@+id/overlay"
-                style="@style/MenuButtonsBlue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_marker"
+                style="@style/MenuButtonsBlue"
                 fab:fab_size="mini"
                 fab:fab_label="@string/maps_activity_overlay" />
             <com.github.clans.fab.FloatingActionButton
+                android:onClick="buttonClick"
                 android:id="@+id/folder"
-                style="@style/MenuButtonsBlue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_folder"
+                style="@style/MenuButtonsBlue"
                 fab:fab_size="mini"
                 fab:fab_label="@string/maps_activity_folder" />
             <com.github.clans.fab.FloatingActionButton
+                android:onClick="buttonClick"
                 android:id="@+id/explorer"
-                style="@style/MenuButtonsBlue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_image"
+                style="@style/MenuButtonsBlue"
                 fab:fab_size="mini"
                 fab:fab_label="@string/maps_activity_explorer" />
             <com.github.clans.fab.FloatingActionButton
+                android:onClick="buttonClick"
                 android:id="@+id/camera"
-                style="@style/MenuButtonsBlue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_camera"
+                style="@style/MenuButtonsBlue"
                 fab:fab_size="mini"
                 fab:fab_label="@string/maps_activity_camera" />
         </com.github.clans.fab.FloatingActionMenu>
