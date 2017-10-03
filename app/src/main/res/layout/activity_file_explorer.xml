@@ -58,6 +58,7 @@
                 />
         </LinearLayout>
         <ListView
+            android:fastScrollEnabled="true"
             android:paddingRight="5dp"
             android:paddingLeft="5dp"
             android:background="@drawable/bg_common"

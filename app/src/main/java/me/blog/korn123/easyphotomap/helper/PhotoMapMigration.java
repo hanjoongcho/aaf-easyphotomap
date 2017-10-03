@@ -12,7 +12,7 @@ import io.realm.RealmSchema;
 public class PhotoMapMigration implements RealmMigration {
 
     @Override
-    public void migrate(DynamicRealm realm, long oldVersion, long   newVersion) {
+    public void migrate(DynamicRealm realm, long oldVersion, long newVersion) {
         RealmSchema schema = realm.getSchema();
         if (oldVersion == 1) {
             RealmObjectSchema diarySchema = schema.get("PhotoMapItem");

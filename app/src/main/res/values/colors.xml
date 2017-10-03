@@ -4,7 +4,7 @@
     <!--common-->
     <color name="colorPrimaryDark">#01549c</color>
     <color name="colorPrimary">#0275d8</color>
-    <color name="colorAccent">#63635e</color>
+    <color name="colorAccent">#0275d8</color>
     <color name="white">#f0ffffff</color>
     <color name="defaultFont">#5a5959</color>
     <color name="divider">#2785fce2</color>
