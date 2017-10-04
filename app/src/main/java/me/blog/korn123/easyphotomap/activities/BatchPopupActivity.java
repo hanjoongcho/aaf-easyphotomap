@@ -169,7 +169,7 @@ public class BatchPopupActivity extends Activity {
                             mReduplicationCount++;
                         } else {
                             PhotoMapDbHelper.insertPhotoMapItem(item);
-                            BitmapUtils.createScaledBitmap(targetFile.getAbsolutePath(), Constant.WORKING_DIRECTORY + fileName + ".thumb", 200);
+                            BitmapUtils.INSTANCE.createScaledBitmap(targetFile.getAbsolutePath(), Constant.WORKING_DIRECTORY + fileName + ".thumb", 200);
                             mSuccessCount++;
                             Log.i("elapsed", String.format("create bitmap %d", stopWatch.getTime()));
                             stopWatch.stop();
@@ -188,7 +188,7 @@ public class BatchPopupActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        DialogUtils.showAlertDialog(BatchPopupActivity.this, getString(R.string.batch_popup_message6));
+        DialogUtils.INSTANCE.showAlertDialog(BatchPopupActivity.this, getString(R.string.batch_popup_message6));
     }
 
 }

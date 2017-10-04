@@ -103,7 +103,7 @@ public class FileExplorerActivity extends AppCompatActivity {
                                 new File(Constant.WORKING_DIRECTORY).mkdirs();
                             }
                             PositiveListener positiveListener = new PositiveListener(FileExplorerActivity.this, FileExplorerActivity.this, FilenameUtils.getName(path) + ".origin", path);
-                            DialogUtils.showAlertDialog(FileExplorerActivity.this, getString(R.string.file_explorer_message7), FileExplorerActivity.this, path, positiveListener);
+                            DialogUtils.INSTANCE.showAlertDialog(FileExplorerActivity.this, getString(R.string.file_explorer_message7), FileExplorerActivity.this, path, positiveListener);
                         }
                     }
                 };
@@ -134,10 +134,10 @@ public class FileExplorerActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.registerDirectory:
                 if (mListFileItem.size() - mListDirectoryEntity.size() < 1) {
-                    DialogUtils.showAlertDialog(this, getString(R.string.file_explorer_message9));
+                    DialogUtils.INSTANCE.showAlertDialog(this, getString(R.string.file_explorer_message9));
                 } else {
                     PositiveListener positiveListener = new PositiveListener(FileExplorerActivity.this, FileExplorerActivity.this, null, null);
-                    DialogUtils.showAlertDialog(FileExplorerActivity.this, getString(R.string.file_explorer_message11) , FileExplorerActivity.this, positiveListener);
+                    DialogUtils.INSTANCE.showAlertDialog(FileExplorerActivity.this, getString(R.string.file_explorer_message11) , FileExplorerActivity.this, positiveListener);
                 }
                 break;
         }
@@ -188,7 +188,7 @@ public class FileExplorerActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        DialogUtils.showAlertDialog(FileExplorerActivity.this, getString(R.string.file_explorer_message12), new DialogInterface.OnClickListener() {
+        DialogUtils.INSTANCE.showAlertDialog(FileExplorerActivity.this, getString(R.string.file_explorer_message12), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 finish();

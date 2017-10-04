@@ -130,11 +130,11 @@ public class AddressSearchActivity extends AppCompatActivity {
                                 resultMessage = getString(R.string.file_explorer_message3);
                             } else {
                                 PhotoMapDbHelper.insertPhotoMapItem(item);
-                                BitmapUtils.createScaledBitmap(item.imagePath, Constant.WORKING_DIRECTORY + fileName + ".thumb", 200);
+                                BitmapUtils.INSTANCE.createScaledBitmap(item.imagePath, Constant.WORKING_DIRECTORY + fileName + ".thumb", 200);
                                 resultMessage = getString(R.string.file_explorer_message4);
                             }
                         }
-                        DialogUtils.makeSnackBar(view, resultMessage);
+                        DialogUtils.INSTANCE.makeSnackBar(view, resultMessage);
                         new Thread(new Runnable() {
                             @Override
                             public void run() {

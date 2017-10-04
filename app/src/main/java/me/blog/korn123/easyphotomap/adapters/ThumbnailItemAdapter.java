@@ -108,7 +108,7 @@ public class ThumbnailItemAdapter extends ArrayAdapter<ThumbnailItem> {
             Bitmap resized = null;
             if (mHolder.position == mPosition) {
                 try {
-                    Bitmap bitmap = BitmapUtils.decodeFile(activity, filePath, options);
+                    Bitmap bitmap = BitmapUtils.INSTANCE.decodeFile(activity, filePath, options);
                     resized = Bitmap.createScaledBitmap(bitmap, widthHeight, widthHeight, true);
                 } catch (Exception e) {
                     e.printStackTrace();

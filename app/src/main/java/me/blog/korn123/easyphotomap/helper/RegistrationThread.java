@@ -93,7 +93,7 @@ public class RegistrationThread extends Thread {
                     resultMessage = mContext.getString(R.string.file_explorer_message3);
                 } else {
                     PhotoMapDbHelper.insertPhotoMapItem(item);
-                    BitmapUtils.createScaledBitmap(targetFile.getAbsolutePath(), Constant.WORKING_DIRECTORY + mFileName + ".thumb", 200);
+                    BitmapUtils.INSTANCE.createScaledBitmap(targetFile.getAbsolutePath(), Constant.WORKING_DIRECTORY + mFileName + ".thumb", 200);
                     resultMessage = mContext.getString(R.string.file_explorer_message4);
                 }
             } else {
@@ -136,7 +136,7 @@ public class RegistrationThread extends Thread {
                 @Override
                 public void run() {
                     mProgressDialog.dismiss();
-                    DialogUtils.makeSnackBar(mActivity.findViewById(android.R.id.content), message);
+                    DialogUtils.INSTANCE.makeSnackBar(mActivity.findViewById(android.R.id.content), message);
                 }
             });
         }

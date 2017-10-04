@@ -384,24 +384,24 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                 val latLng = LatLng(item.latitude, item.longitude)
                 options.position(latLng)
                 val fileName = FilenameUtils.getName(item.imagePath)
-                val bm = BitmapUtils.decodeFile(this@MapsActivity, Constant.WORKING_DIRECTORY + fileName + ".thumb")
+                val bm: Bitmap = BitmapUtils.decodeFile(this@MapsActivity, Constant.WORKING_DIRECTORY + fileName + ".thumb")!!
                 var image = when (CommonUtils.loadStringPreference(this@MapsActivity, "photo_marker_setting", "filmFrame")) {
                     "filmFrame" -> {
                         val point = Point(bm.width, bm.height)
                         val fixedWidthHeight = java.lang.Double.parseDouble(CommonUtils.loadStringPreference(this@MapsActivity, "photo_size_setting", "0.6"))
-                        val bm2 = BitmapUtils.createScaledBitmap(bm, point, fixedWidthHeight, fixedWidthHeight)
+                        val bm2 = BitmapUtils.createScaledBitmap(bm, point, fixedWidthHeight, fixedWidthHeight)!!
                         BitmapDescriptorFactory.fromBitmap(BitmapUtils.addFrame(this@MapsActivity, bm2, CommonUtils.dpToPixel(this@MapsActivity, 6f), R.drawable.frame_03))
                     }
                     "basicFrame" -> {
                         val point = Point(bm.width, bm.height)
                         val fixedWidthHeight = java.lang.Double.parseDouble(CommonUtils.loadStringPreference(this@MapsActivity, "photo_size_setting", "0.6"))
-                        val bm2 = BitmapUtils.createScaledBitmap(bm, point, fixedWidthHeight, fixedWidthHeight)
+                        val bm2 = BitmapUtils.createScaledBitmap(bm, point, fixedWidthHeight, fixedWidthHeight)!!
                         BitmapDescriptorFactory.fromBitmap(BitmapUtils.border(bm2, CommonUtils.dpToPixel(this@MapsActivity, 1.5f)))
                     }
                     "flowerFrame" -> {
                         val point = Point(bm.width, bm.height)
                         val fixedWidthHeight = java.lang.Double.parseDouble(CommonUtils.loadStringPreference(this@MapsActivity, "photo_size_setting", "0.6"))
-                        val bm2 = BitmapUtils.createScaledBitmap(bm, point, fixedWidthHeight, fixedWidthHeight)
+                        val bm2 = BitmapUtils.createScaledBitmap(bm, point, fixedWidthHeight, fixedWidthHeight)!!
                         BitmapDescriptorFactory.fromBitmap(BitmapUtils.addFrame(this@MapsActivity, bm2, CommonUtils.dpToPixel(this@MapsActivity, 6f), R.drawable.frame_02))
                     }
                     else -> {
@@ -556,7 +556,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                 val options = BitmapFactory.Options()
                 options.inJustDecodeBounds = false
                 options.inSampleSize = 5
-                var bitmap = BitmapUtils.decodeFile(this@MapsActivity, imgFile.absolutePath, options)
+                var bitmap = BitmapUtils.decodeFile(this@MapsActivity, imgFile.absolutePath, options)!!
                 if (orientation > 1) {
                     bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true) // rotating bitmap
                 }

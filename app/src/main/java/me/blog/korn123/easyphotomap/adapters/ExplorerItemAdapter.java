@@ -122,17 +122,17 @@ public class ExplorerItemAdapter extends ArrayAdapter<FileItem> {
             if (mHolder.position == mPosition) {
                 if (filePath == null) {
                     isDirectory = true;
-                    Bitmap bitmap = BitmapUtils.getBitmapFromMemCache("defaultBitmap");
+                    Bitmap bitmap = BitmapUtils.INSTANCE.getBitmapFromMemCache("defaultBitmap");
                     if (bitmap == null) {
                         bitmap = BitmapFactory.decodeResource(mActivity.getResources(), R.drawable.ic_menu_archive);
-                        BitmapUtils.addBitmapToMemoryCache("defaultBitmap", bitmap);
+                        BitmapUtils.INSTANCE.addBitmapToMemoryCache("defaultBitmap", bitmap);
                     }
                     resized = bitmap;
                 } else {
-                    Bitmap bitmap = BitmapUtils.getBitmapFromMemCache(filePath);
+                    Bitmap bitmap = BitmapUtils.INSTANCE.getBitmapFromMemCache(filePath);
                     if (bitmap == null) {
-                        bitmap = BitmapUtils.decodeFile(mActivity, filePath, options);
-                        BitmapUtils.addBitmapToMemoryCache(filePath, bitmap);
+                        bitmap = BitmapUtils.INSTANCE.decodeFile(mActivity, filePath, options);
+                        BitmapUtils.INSTANCE.addBitmapToMemoryCache(filePath, bitmap);
                     }
                     resized = Bitmap.createScaledBitmap(bitmap, widthHeight, widthHeight, true);
 

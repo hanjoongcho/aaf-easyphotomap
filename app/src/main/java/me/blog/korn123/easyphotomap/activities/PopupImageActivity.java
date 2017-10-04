@@ -32,11 +32,11 @@ public class PopupImageActivity extends Activity {
         Bitmap bitmap = null;
         Bitmap targetBitmap = null;
         if (new File(imagePath).exists()) {
-            BitmapUtils.decodeFile(PopupImageActivity.this, imagePath, options);
+            BitmapUtils.INSTANCE.decodeFile(PopupImageActivity.this, imagePath, options);
             int width = options.outWidth;
             int height = options.outHeight;
             options.inJustDecodeBounds = false;
-            bitmap = BitmapUtils.decodeFile(PopupImageActivity.this, imagePath, options);
+            bitmap = BitmapUtils.INSTANCE.decodeFile(PopupImageActivity.this, imagePath, options);
             if ((width > height && CommonUtils.getDisplayOrientation(this) == 0) ||
                     (width < height && CommonUtils.getDisplayOrientation(this) == 1)) {
                 Matrix matrix = new Matrix();

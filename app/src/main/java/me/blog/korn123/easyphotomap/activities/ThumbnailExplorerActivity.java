@@ -114,9 +114,9 @@ public class ThumbnailExplorerActivity extends AppCompatActivity {
                 String imagePath = CommonUtils.getOrignImagepath(ThumbnailExplorerActivity.this, photoEntity.imageId);
                 PositiveListener positiveListener = new PositiveListener(ThumbnailExplorerActivity.this, ThumbnailExplorerActivity.this, FilenameUtils.getName(imagePath) + ".origin", imagePath);
                 if (imagePath == null) {
-                    DialogUtils.showAlertDialog(ThumbnailExplorerActivity.this, getString(R.string.thumbnail_explorer_message4));
+                    DialogUtils.INSTANCE.showAlertDialog(ThumbnailExplorerActivity.this, getString(R.string.thumbnail_explorer_message4));
                 } else {
-                    DialogUtils.showAlertDialog(ThumbnailExplorerActivity.this, getString(R.string.file_explorer_message7), ThumbnailExplorerActivity.this, imagePath, positiveListener);
+                    DialogUtils.INSTANCE.showAlertDialog(ThumbnailExplorerActivity.this, getString(R.string.file_explorer_message7), ThumbnailExplorerActivity.this, imagePath, positiveListener);
                 }
             }
         });

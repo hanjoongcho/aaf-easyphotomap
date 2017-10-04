@@ -139,7 +139,7 @@ public class CameraActivity extends Activity {
                         }
 
                         PhotoMapDbHelper.insertPhotoMapItem(entity);
-                        BitmapUtils.createScaledBitmap(targetFile.getAbsolutePath(), Constant.WORKING_DIRECTORY + fileName + ".thumb", 200);
+                        BitmapUtils.INSTANCE.createScaledBitmap(targetFile.getAbsolutePath(), Constant.WORKING_DIRECTORY + fileName + ".thumb", 200);
                         Intent intent = new Intent(CameraActivity.this, MapsActivity.class);
                         intent.putExtra("info", entity.info);
                         intent.putExtra("imagePath", entity.imagePath);
@@ -148,7 +148,7 @@ public class CameraActivity extends Activity {
                         intent.putExtra("date", entity.date);
                         startActivity(intent);
                     } else {
-                        DialogUtils.makeToast(this, getString(R.string.camera_activity_message1));
+                        DialogUtils.INSTANCE.makeToast(this, getString(R.string.camera_activity_message1));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
