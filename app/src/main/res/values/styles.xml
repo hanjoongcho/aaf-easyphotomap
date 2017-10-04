@@ -21,6 +21,30 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <!--activity_maps.xml-->
+    <style name="FloatingMenu">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:padding">10dp</item>
+        <item name="menu_colorNormal">@color/floatingButtonNormal</item>
+        <item name="menu_colorPressed">@color/floatingButtonPressed</item>
+        <item name="menu_colorRipple">@color/floatingButtonRipple</item>
+        <item name="menu_backgroundColor">@color/floatingButtonBackground</item>
+        <item name="menu_labels_ellipsize">end</item>
+        <item name="menu_labels_singleLine">true</item>
+        <item name="menu_fab_size">mini</item>
+        <item name="menu_openDirection">down</item>
+    </style>
+    <style name="FloatingButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="fab_colorNormal">@color/floatingButtonNormal</item>
+        <item name="fab_colorPressed">@color/floatingButtonPressed</item>
+        <item name="fab_colorRipple">@color/floatingButtonRipple</item>
+        <item name="fab_size">mini</item>
+    </style>
+
     <!--item_file_explorer.xml-->
     <style name="item_file_explorer_info">
         <item name="android:layout_width">match_parent</item>
@@ -38,12 +62,6 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsFloating">true</item>
         <item name="android:backgroundDimEnabled">false</item>
-    </style>
-
-    <style name="MenuButtonsBlue">
-        <item name="fab_colorNormal">#1565C0</item>
-        <item name="fab_colorPressed">#2272CD</item>
-        <item name="fab_colorRipple">#62B2FF</item>
     </style>
 
 </resources>

@@ -12,6 +12,15 @@
     <color name="transparent">#00ffffff</color>
     <color name="appBackground">#ffd4d3d3</color>
 
+    <!--activity_popup_image.xml-->
+    <color name="popupImageBackground">#90000000</color>
+
+    <!--activity_maps.xml-->
+    <color name="floatingButtonNormal">#1565C0</color>
+    <color name="floatingButtonPressed">#2272CD</color>
+    <color name="floatingButtonRipple">#62B2FF</color>
+    <color name="floatingButtonBackground">#461544f4</color>
+
     <!--item_search.xml-->
     <color name="photoMapInfoText">#5a5959</color>
     <color name="photoMapDateText">#0275d8</color>
@@ -21,8 +30,5 @@
 
     <!--item_timeline.xml-->
     <color name="timelineItemText">#60000000</color>
-
-    <!--activity_popup_image.xml-->
-    <color name="popupImageBackground">#90000000</color>
 
 </resources>
