@@ -2,7 +2,6 @@ package me.blog.korn123.easyphotomap.activities
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import butterknife.ButterKnife
 import kotlinx.android.synthetic.main.activity_licenses.*
 import me.blog.korn123.easyphotomap.R
 
@@ -15,7 +14,6 @@ class LicensesActivity : AppCompatActivity() {
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_licenses)
-        ButterKnife.bind(this)
         licenses.loadUrl("https://github.com/hanjoongcho/aaf-easyphotomap/blob/master/LICENSE.md")
     }
 

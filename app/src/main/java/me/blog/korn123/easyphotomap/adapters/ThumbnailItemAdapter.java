@@ -66,8 +66,8 @@ public class ThumbnailItemAdapter extends ArrayAdapter<ThumbnailItem> {
 //        Bitmap resized = Bitmap.createScaledBitmap(bitmap, widthHeight, widthHeight, true);
 //        holder.imageView1.setImageBitmap(bitmap);
         ThumbnailItem entity = mEntities.get(position);
-        String imagePath = entity.imagePath ;
-        String thumbnailPath = entity.thumbnailPath;
+        String imagePath = entity.getImagePath();
+        String thumbnailPath = entity.getThumbnailPath();
         String imageName = FilenameUtils.getName(imagePath);
         holder.position = position;
         holder.imageView1.getLayoutParams().height = widthHeight;

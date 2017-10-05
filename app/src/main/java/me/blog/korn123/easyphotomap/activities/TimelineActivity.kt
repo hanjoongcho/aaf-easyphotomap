@@ -7,7 +7,6 @@ import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import butterknife.ButterKnife
 import kotlinx.android.synthetic.main.activity_timeline.*
 import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.adapters.TimelineItemAdapter
@@ -27,7 +26,6 @@ class TimelineActivity : AppCompatActivity() {
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_timeline)
-        ButterKnife.bind(this)
 
         val toolbar = findViewById(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)

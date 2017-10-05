@@ -151,7 +151,7 @@ class CommonUtils {
 
             imageCursor.let {
                 if (imageCursor.moveToFirst()) {
-                    photo = ThumbnailItem(imageCursor.getString(idColumnIndex), null, imageCursor.getString(dataColumnIndex))
+                    photo = ThumbnailItem(imageCursor.getString(idColumnIndex), "", imageCursor.getString(dataColumnIndex))
                 }
                 imageCursor.close()
             }
@@ -181,7 +181,7 @@ class CommonUtils {
                             //                Uri imageUri = Uri.parse(filePath);
                             //                Log.i("fetchAllImages", imageUri.toString());
                             // 원본 이미지와 썸네일 이미지의 uri를 모두 담을 수 있는 클래스를 선언합니다.
-                            val photo = ThumbnailItem(imageId, null, filePath)
+                            val photo = ThumbnailItem(imageId, "", filePath)
                             result.add(photo)
                         } while (imageCursor.moveToNext())
                         imageCursor.close()
@@ -217,7 +217,7 @@ class CommonUtils {
                             //                Uri imageUri = Uri.parse(filePath);
                             //                Log.i("fetchAllImages", imageUri.toString());
                             // 원본 이미지와 썸네일 이미지의 uri를 모두 담을 수 있는 클래스를 선언합니다.
-                            val photo = ThumbnailItem(imageId, filePath, null)
+                            val photo = ThumbnailItem(imageId, filePath, "")
                             result.add(photo)
                         } while (imageCursor.moveToNext())
                         imageCursor.close()

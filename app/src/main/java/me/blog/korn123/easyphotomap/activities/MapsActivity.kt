@@ -12,7 +12,6 @@ import android.support.v4.app.FragmentActivity
 import android.util.Log
 import android.view.*
 import android.widget.*
-import butterknife.ButterKnife
 import com.beardedhen.androidbootstrap.TypefaceProvider
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -57,7 +56,6 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
         super.onCreate(null)
         TypefaceProvider.registerDefaultIconSets()
         setContentView(R.layout.activity_maps)
-        ButterKnife.bind(this)
         if (!File(Constant.WORKING_DIRECTORY).exists()) {
             File(Constant.WORKING_DIRECTORY).mkdirs()
         }
@@ -215,8 +213,8 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                     FontUtils.setChildViewTypeface(customView as ViewGroup)
                     if (mEnableDateFilter) {
                         mListPhotoMapItem!!.map { it ->
-                            val date = when (it.date.contains("(")) {
-                                true -> it.date.substring(0, it.date.lastIndexOf("("))
+                            val date = when (it.date!!.contains("(")) {
+                                true -> it.date!!.substring(0, it.date!!.lastIndexOf("("))
                                 false -> it.date
                             }
 
@@ -378,7 +376,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
             for (item in listTemp) {
                 val progressMsg = overlayHandler.obtainMessage()
                 index++
-                progressMsg.obj = ProgressInfo(index, item.info, listTemp.size)
+                progressMsg.obj = ProgressInfo(index, item.info!!, listTemp.size)
                 overlayHandler.sendMessage(progressMsg)
                 val options = MarkerOptions()
                 val latLng = LatLng(item.latitude, item.longitude)
@@ -442,11 +440,11 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
 
                 mClusterManager!!.setOnClusterItemClickListener { item ->
                     mMap!!.setInfoWindowAdapter(InfoWindow(
-                            item.photoEntity.info,
-                            item.photoEntity.imagePath,
+                            item.photoEntity.info!!,
+                            item.photoEntity.imagePath!!,
                             item.photoEntity.latitude,
                             item.photoEntity.longitude,
-                            item.photoEntity.date
+                            item.photoEntity.date!!
                     ))
                     val fImagePath = item.photoEntity.imagePath
                     mMap!!.setOnInfoWindowClickListener {

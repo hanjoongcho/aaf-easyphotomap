@@ -1,7 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'android-apt'
 apply plugin: 'realm-android'
 
 android {
@@ -63,11 +62,6 @@ dependencies {
 
     // Bearded-Hen
     compile 'com.beardedhen:androidbootstrap:2.0.0'
-
-    // Jake Wharton
-    apt 'com.jakewharton:butterknife-compiler:8.4.0'
-    compile 'com.jakewharton:butterknife:8.4.0'
-
 
     // Clans
     compile 'com.github.clans:fab:1.6.4'

@@ -111,7 +111,7 @@ public class ThumbnailExplorerActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long l) {
                 ThumbnailItem photoEntity = (ThumbnailItem)parent.getAdapter().getItem(position);
-                String imagePath = CommonUtils.getOriginImagePath(ThumbnailExplorerActivity.this, photoEntity.imageId);
+                String imagePath = CommonUtils.getOriginImagePath(ThumbnailExplorerActivity.this, photoEntity.getImageId());
                 PositiveListener positiveListener = new PositiveListener(ThumbnailExplorerActivity.this, ThumbnailExplorerActivity.this, FilenameUtils.getName(imagePath) + ".origin", imagePath);
                 if (imagePath == null) {
                     DialogUtils.INSTANCE.showAlertDialog(ThumbnailExplorerActivity.this, getString(R.string.thumbnail_explorer_message4));
@@ -158,7 +158,7 @@ public class ThumbnailExplorerActivity extends AppCompatActivity {
             List<ThumbnailItem> listThumbnail = CommonUtils.fetchAllThumbnail(context);
             List<String> listImageId = new ArrayList<>();
             for (ThumbnailItem te : listThumbnail) {
-                listImageId.add(te.imageId);
+                listImageId.add(te.getImageId());
             }
             mCompleted = listThumbnail.size();
 
@@ -172,10 +172,10 @@ public class ThumbnailExplorerActivity extends AppCompatActivity {
 
             for (ThumbnailItem entity : listOriginImage) {
                 if (!mEnableUpdate) break;
-                if (listImageId.contains(entity.imageId)) {
+                if (listImageId.contains(entity.getImageId())) {
                     continue;
                 }
-                MediaStore.Images.Thumbnails.getThumbnail(context.getContentResolver(), Long.parseLong(entity.imageId), MediaStore.Images.Thumbnails.MINI_KIND, null);
+                MediaStore.Images.Thumbnails.getThumbnail(context.getContentResolver(), Long.parseLong(entity.getImageId()), MediaStore.Images.Thumbnails.MINI_KIND, null);
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {

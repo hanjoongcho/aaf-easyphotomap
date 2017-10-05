@@ -63,7 +63,7 @@ class ExplorerItemAdapter(private val mActivity: Activity, private val mContext:
         holder.imageView1!!.setImageBitmap(defaultImage())
 
         // init async process
-        val imagePath = entity.getImagePath()
+        val imagePath = entity.imagePath
         holder.position = position
         if (entity.isDirectory) {
             holder.textView2!!.visibility = View.GONE
