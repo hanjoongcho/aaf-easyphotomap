@@ -121,7 +121,7 @@ public class CameraActivity extends Activity {
                     if (exifSubIFDDirectory != null) {
                         Date date = exifSubIFDDirectory.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL, TimeZone.getDefault());
                         if (date != null) {
-                            entity.date = CommonUtils.DATE_TIME_PATTERN.format(date);
+                            entity.date = CommonUtils.getDateTimePattern().format(date);
                         } else {
                             entity.date = getString(R.string.file_explorer_message2);
                         }

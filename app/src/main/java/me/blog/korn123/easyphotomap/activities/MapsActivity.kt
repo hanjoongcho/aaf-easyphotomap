@@ -43,7 +43,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
     private var mPopupWindow: PopupWindow? = null
     private var mClusterManager: ClusterManager<MyItem>? = null
     private var mListPhotoMapItem: ArrayList<PhotoMapItem>? = null
-    private var mRecommendMap: MutableMap<String, Int>? = null
+    private var mRecommendMap: HashMap<String, Int>? = null
     private val mListLatLng = ArrayList<LatLng>()
     private val mListPhotoEntity = ArrayList<PhotoMapItem>()
     private val mListRecommendationOrigin = ArrayList<Recommendation>()
@@ -240,7 +240,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                             }
                         }
                     }
-                    val listOfSortEntry = CommonUtils.entriesSortedByValues(mRecommendMap)
+                    val listOfSortEntry = CommonUtils.entriesSortedByValues(mRecommendMap!!)
                     mListRecommendationOrigin.clear()
                     mListRecommendation.clear()
                     for ((key, value) in listOfSortEntry) {

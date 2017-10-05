@@ -3,21 +3,17 @@ package me.blog.korn123.easyphotomap.adapters
 import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
-
-import org.apache.commons.io.FilenameUtils
-
-import java.util.ArrayList
-
 import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.constants.Constant
 import me.blog.korn123.easyphotomap.models.PhotoMapItem
 import me.blog.korn123.easyphotomap.utils.BitmapUtils
+import org.apache.commons.io.FilenameUtils
+import java.util.*
 
 /**
  * Created by CHO HANJOONG on 2016-07-20.

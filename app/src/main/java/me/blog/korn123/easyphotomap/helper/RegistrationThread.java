@@ -74,7 +74,7 @@ public class RegistrationThread extends Thread {
             ExifSubIFDDirectory exifSubIFDDirectory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
             Date date = exifSubIFDDirectory.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL, TimeZone.getDefault());
             if (date != null) {
-                item.date = CommonUtils.DATE_TIME_PATTERN.format(date);
+                item.date = CommonUtils.getDateTimePattern().format(date);
             } else {
                 item.date = mContext.getString(R.string.file_explorer_message2);
             }

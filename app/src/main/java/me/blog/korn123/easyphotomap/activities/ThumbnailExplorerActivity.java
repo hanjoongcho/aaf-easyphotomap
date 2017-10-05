@@ -111,7 +111,7 @@ public class ThumbnailExplorerActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long l) {
                 ThumbnailItem photoEntity = (ThumbnailItem)parent.getAdapter().getItem(position);
-                String imagePath = CommonUtils.getOrignImagepath(ThumbnailExplorerActivity.this, photoEntity.imageId);
+                String imagePath = CommonUtils.getOriginImagePath(ThumbnailExplorerActivity.this, photoEntity.imageId);
                 PositiveListener positiveListener = new PositiveListener(ThumbnailExplorerActivity.this, ThumbnailExplorerActivity.this, FilenameUtils.getName(imagePath) + ".origin", imagePath);
                 if (imagePath == null) {
                     DialogUtils.INSTANCE.showAlertDialog(ThumbnailExplorerActivity.this, getString(R.string.thumbnail_explorer_message4));
