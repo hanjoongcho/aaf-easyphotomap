@@ -383,7 +383,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                 options.position(latLng)
                 val fileName = FilenameUtils.getName(item.imagePath)
                 val bm: Bitmap = BitmapUtils.decodeFile(this@MapsActivity, Constant.WORKING_DIRECTORY + fileName + ".thumb")!!
-                var image = when (CommonUtils.loadStringPreference(this@MapsActivity, "photo_marker_setting", "filmFrame")) {
+                var image = when (CommonUtils.loadStringPreference(this@MapsActivity, "photo_marker_setting", "basicFrame")) {
                     "filmFrame" -> {
                         val point = Point(bm.width, bm.height)
                         val fixedWidthHeight = java.lang.Double.parseDouble(CommonUtils.loadStringPreference(this@MapsActivity, "photo_size_setting", "0.6"))

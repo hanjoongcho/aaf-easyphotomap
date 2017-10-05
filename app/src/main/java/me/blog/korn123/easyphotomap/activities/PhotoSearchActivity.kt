@@ -81,7 +81,7 @@ class PhotoSearchActivity : AppCompatActivity() {
     }
 
     @JvmOverloads
-    fun refreshList(query: String? = null, position: Int = 0, top: Int = 0) {
+    fun refreshList(query: String? = "", position: Int = 0, top: Int = 0) {
         parseMetadata(query)
         mSearchItemAdapter = SearchItemAdapter(this, this, R.layout.item_search, mListPhotoMapItem)
         listView.adapter = mSearchItemAdapter
