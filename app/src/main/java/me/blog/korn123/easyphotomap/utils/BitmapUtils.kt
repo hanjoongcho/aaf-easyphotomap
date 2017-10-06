@@ -127,7 +127,7 @@ object BitmapUtils {
         return downscaledBitmap
     }
 
-    fun decodeFile(activity: Activity, imagePath: String?, options: BitmapFactory.Options? = null): Bitmap {
+    fun decodeFile(activity: Activity, imagePath: String?, options: BitmapFactory.Options? = null): Bitmap? {
         var bitmap: Bitmap? = null
         if (imagePath != null && File(imagePath).exists()) {
             if (options == null) {

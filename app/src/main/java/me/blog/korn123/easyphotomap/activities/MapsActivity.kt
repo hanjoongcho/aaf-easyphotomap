@@ -34,6 +34,7 @@ import org.apache.commons.lang.StringUtils
 import java.io.File
 import java.util.*
 import java.util.regex.Pattern
+import kotlin.collections.ArrayList
 
 class MapsActivity : FragmentActivity(), OnMapReadyCallback {
 
@@ -211,6 +212,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                     val customView = inflater.inflate(R.layout.popup_window_recommendation, null)
                     mListView = customView.findViewById(R.id.listView) as ListView
                     FontUtils.setChildViewTypeface(customView as ViewGroup)
+                    var listOfSortEntry: List<Map.Entry<String, Int>>? = null
                     if (mEnableDateFilter) {
                         mListPhotoMapItem!!.map { it ->
                             val date = when (it.date!!.contains("(")) {
@@ -225,6 +227,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                             }
 
                         }
+                        listOfSortEntry = CommonUtils.entriesSortedByKeys(mRecommendMap!!)
                     } else {
                         mListPhotoMapItem!!.map { it ->
                             val arr = StringUtils.split(it.info, " ")
@@ -237,8 +240,9 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                                 }
                             }
                         }
+                        listOfSortEntry = CommonUtils.entriesSortedByValues(mRecommendMap!!)
                     }
-                    val listOfSortEntry = CommonUtils.entriesSortedByValues(mRecommendMap!!)
+
                     mListRecommendationOrigin.clear()
                     mListRecommendation.clear()
                     for ((key, value) in listOfSortEntry) {
@@ -251,7 +255,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                     mListView!!.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
                         val recommendation = parent.adapter.getItem(position) as Recommendation
                         mPopupWindow!!.dismiss()
-                        overlayIcons(recommendation.keyWord, true)
+                        overlayIcons(recommendation.keyWord, mEnableDateFilter)
                     }
                     val point = CommonUtils.getDefaultDisplay(this)
                     customView.findViewById(R.id.viewWorld).setOnClickListener {
@@ -275,7 +279,8 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                             return false
                         }
                     })
-                    mPopupWindow = PopupWindow(customView, (point.x * 0.9).toInt(), ((point.y - CommonUtils.dpToPixel(this, 25f)) * 0.8).toInt(), true)
+                    val contentViewTop = window.findViewById(Window.ID_ANDROID_CONTENT).getTop();
+                    mPopupWindow = PopupWindow(customView, point.x, point.y - contentViewTop, true)
                     mPopupWindow!!.showAtLocation(view, Gravity.CENTER, 0, 0)
                 }
             }
@@ -339,7 +344,10 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
         mProgressDialog = ProgressDialog(this@MapsActivity)
         mProgressDialog!!.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL)
         mProgressDialog!!.setMessage("find $keyword...")
-        mProgressDialog!!.max = PhotoMapDbHelper.containsPhotoMapItemBy("info", keyword).size
+        mProgressDialog!!.max = when(applyFilter) {
+            true -> PhotoMapDbHelper.containsPhotoMapItemBy("dateWithoutTime", keyword).size
+            false -> PhotoMapDbHelper.containsPhotoMapItemBy("info", keyword).size
+        }
         mProgressDialog!!.show()
     }
 
@@ -367,8 +375,15 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
         }
 
         override fun run() {
-            val listTemp = PhotoMapDbHelper.containsPhotoMapItemBy("info", keyword)
             super.run()
+            val listTemp = when(applyFilter) {
+                true -> {
+                    PhotoMapDbHelper.containsPhotoMapItemBy("dateWithoutTime", keyword)
+                }
+                false -> {
+                    PhotoMapDbHelper.containsPhotoMapItemBy("info", keyword)
+                }
+            }
             mListLatLng.clear()
             mListMarkerOptions.clear()
             mListPhotoEntity.clear()
@@ -420,7 +435,14 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
             Handler(Looper.getMainLooper()).post {
                 mProgressDialog!!.dismiss()
                 setUpCluster()
-                val listTemp = PhotoMapDbHelper.containsPhotoMapItemBy("info", keyword)
+                val listTemp = when(applyFilter) {
+                    true -> {
+                        PhotoMapDbHelper.containsPhotoMapItemBy("dateWithoutTime", keyword)
+                    }
+                    false -> {
+                        PhotoMapDbHelper.containsPhotoMapItemBy("info", keyword)
+                    }
+                }
                 for (i in mListMarkerOptions.indices) {
                     val item = MyItem(mListMarkerOptions[i], listTemp[i])
                     mClusterManager!!.addItem(item)
@@ -584,7 +606,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
     private inner class Recommendation(internal var keyWord: String, internal var count: Int) {
 
         override fun toString(): String {
-            return keyWord + " [" + count + "건]"
+            return keyWord + " [$count" + getString(R.string.photo_map_item_count_unit) + "]"
         }
     }
 

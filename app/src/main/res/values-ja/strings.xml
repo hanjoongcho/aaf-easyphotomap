@@ -10,6 +10,7 @@
     <string name="maps_activity_folder">エクスプローラで登録</string>
     <string name="maps_activity_explorer">プレビューで登録</string>
     <string name="maps_activity_camera">撮影して登録</string>
+    <string name="photo_map_item_count_unit">件</string>
 
     <!--ThumbnailExplorerActivity-->
     <string name="thumbnail_explorer_compact_activity_title">プレビューで登録</string>

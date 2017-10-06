@@ -10,6 +10,7 @@
     <string name="maps_activity_folder">Register with explorer</string>
     <string name="maps_activity_explorer">Register with preview</string>
     <string name="maps_activity_camera">Register with photo</string>
+    <string name="photo_map_item_count_unit">&#160;cases</string>
 
     <!--ThumbnailExplorerActivity-->
     <string name="thumbnail_explorer_compact_activity_title">Register with preview</string>

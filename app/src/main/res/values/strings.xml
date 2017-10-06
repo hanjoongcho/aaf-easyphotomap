@@ -10,6 +10,7 @@
     <string name="maps_activity_folder">탐색기로 등록</string>
     <string name="maps_activity_explorer">미리보기로 등록</string>
     <string name="maps_activity_camera">촬영하여 등록</string>
+    <string name="photo_map_item_count_unit">건</string>
 
     <!--ThumbnailExplorerActivity-->
     <string name="thumbnail_explorer_compact_activity_title">미리보기로 등록</string>

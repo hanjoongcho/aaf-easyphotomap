@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <!--item_file_explorer.xml-->
     <dimen name="item_file_explorer_height">60dp</dimen>
+
+    <!--popup_window_recommendation.xml-->
+    <dimen name="item_recommendation_height">60dp</dimen>
 
     <!--item_search.xml-->
     <dimen name="photo_map_info_text">13dp</dimen>
@@ -13,4 +17,5 @@
     <dimen name="default_circle_size">250dp</dimen>
 
     <dimen name="map_dot_marker_size">12dp</dimen>
+
 </resources>

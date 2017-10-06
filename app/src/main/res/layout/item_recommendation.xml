@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@drawable/dialog_bg2"
-    android:padding="10dp"
     android:id="@android:id/text1"
+    android:gravity="center_vertical"
+    android:padding="10dp"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/item_recommendation_height"
     android:textSize="15dp"
-    android:textColor="#9f000000" />
+    android:textColor="@color/defaultFont" />

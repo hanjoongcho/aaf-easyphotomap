@@ -101,7 +101,7 @@ class ExplorerItemAdapter(private val mActivity: Activity, private val mContext:
                 } else {
                     var bitmap = BitmapUtils.getBitmapFromMemCache(filePath)
                     if (bitmap == null) {
-                        bitmap = BitmapUtils.decodeFile(mActivity, filePath, options)
+                        bitmap = BitmapUtils.decodeFile(mActivity, filePath, options)!!
                         BitmapUtils.addBitmapToMemoryCache(filePath, bitmap)
                     }
                     resized = Bitmap.createScaledBitmap(bitmap, widthHeight, widthHeight, true)

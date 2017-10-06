@@ -80,6 +80,12 @@ class CommonUtils {
             return sortedEntries
         }
 
+        fun <K, V : Comparable<V>> entriesSortedByKeys(map: Map<K, V>): List<Map.Entry<K, V>> {
+            val sortedEntries = ArrayList(map.entries)
+            Collections.sort(sortedEntries) { e1, e2 -> e2.key.toString().compareTo(e1.key.toString()) }
+            return sortedEntries
+        }
+
         fun bindButtonEffect(targetView: View) {
             val onTouchListener = View.OnTouchListener { view, motionEvent ->
                 if (motionEvent.action == MotionEvent.ACTION_DOWN) {
