@@ -64,7 +64,7 @@
             android:background="@drawable/bg_common"
             android:drawSelectorOnTop="true"
             android:listSelector="@drawable/selector_listview"
-            android:id="@+id/filelist"
+            android:id="@+id/fileList"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>

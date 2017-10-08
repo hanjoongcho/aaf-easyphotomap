@@ -1,6 +1,5 @@
 <resources>
-    <string name="app_name">EasyPhotoMap</string>
-    <string name="title_activity_maps">Easy\nPhotoMap</string>
+    <string name="app_name">Easy\nPhotoMap</string>
 
     <!--MapsActivity-->
     <string name="maps_activity_timeline">Timeline</string>
