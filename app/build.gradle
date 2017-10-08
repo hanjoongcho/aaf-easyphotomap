@@ -11,10 +11,15 @@ android {
         applicationId "me.blog.korn123.easyphotomap"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 58
-        versionName "1.1.47"
+        versionCode 59
+        versionName "1.1.48"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
+    }
+
+    dexOptions {
+        jumboMode true
+        javaMaxHeapSize "4g"
     }
 
     packagingOptions {

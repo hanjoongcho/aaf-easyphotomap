@@ -1,5 +1,6 @@
 # User-specific configurations
 .idea/libraries/
+.idea/inspectionProfiles/
 .idea/workspace.xml
 .idea/tasks.xml
 .idea/.name
@@ -11,6 +12,7 @@
 .idea/vcs.xml
 .idea/gradle.xml
 .idea/markdown-exported-files.xml
+
 
 *.iml
 .gradle
