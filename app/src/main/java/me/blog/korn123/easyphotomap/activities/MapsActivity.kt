@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.support.v4.app.FragmentActivity
+import android.text.TextUtils
 import android.util.Log
 import android.view.*
 import android.widget.*
@@ -334,6 +335,9 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
             val progressInfo = msg.obj as OverlayThread.ProgressInfo
             mProgressDialog!!.progress = progressInfo.getProgress()
             mProgressDialog!!.setMessage(progressInfo.getMessage())
+            val textView = mProgressDialog!!.findViewById(android.R.id.message) as TextView
+            textView.ellipsize = TextUtils.TruncateAt.MIDDLE
+            textView.maxLines = 1
         }
         true
     })
@@ -365,7 +369,8 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
             }
 
             fun getMessage(): String? {
-                return StringUtils.abbreviate(message, 17)
+                return message
+//                return StringUtils.abbreviate(message, 17)
             }
 
             fun setMessage(message: String) {
