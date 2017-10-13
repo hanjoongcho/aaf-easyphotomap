@@ -70,14 +70,14 @@ class BatchPopupActivity : Activity() {
         close.setOnClickListener({ _ -> finish() })
     }
 
-    val listFilePath: java.util.ArrayList<String> = arrayListOf()
+    private val listFilePath: java.util.ArrayList<String> = arrayListOf()
     private fun determinePhotoFiles(directory: File) {
         directory.listFiles().map { file ->
             when (file.isFile) {
                 true -> {
                     if (file.absoluteFile.extension.toLowerCase().matches("jpg|jpeg".toRegex())) {
                         listFilePath.add(file.absolutePath)
-                        println(file.absolutePath)
+//                        println(file.absolutePath)
                     }
                 }
                 false -> determinePhotoFiles(file)
@@ -99,8 +99,6 @@ class BatchPopupActivity : Activity() {
 
         override fun run() {
             for (imagePath in listImagePath) {
-                val stopWatch = StopWatch()
-                stopWatch.start()
                 if (!mEnableUpdate) return
                 val message = progressHandler.obtainMessage()
                 try {
@@ -117,48 +115,38 @@ class BatchPopupActivity : Activity() {
                         fileName = FilenameUtils.getBaseName(fileName)
                     }
 
-                    val metadata = JpegMetadataReader.readMetadata(targetFile)
-                    val item = PhotoMapItem()
-                    item.imagePath = targetFile.absolutePath
-                    val exifSubIFDDirectory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory::class.java)
-                    val date = exifSubIFDDirectory.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL, TimeZone.getDefault())
-                    if (date != null) {
-                        item.date = CommonUtils.dateTimePattern.format(date)
+
+                    if (PhotoMapDbHelper.selectPhotoMapItemBy("imagePath", targetFile.absolutePath).size > 0) {
+                        mReduplicationCount++
                     } else {
-                        item.date = getString(R.string.file_explorer_message2)
-                    }
-                    Log.i("elapsed", String.format("meta %d", stopWatch.time))
-                    stopWatch.reset()
-                    stopWatch.start()
-                    val gpsDirectory = metadata.getFirstDirectoryOfType(GpsDirectory::class.java)
-                    if (gpsDirectory != null && gpsDirectory.geoLocation != null) {
-                        item.longitude = gpsDirectory.geoLocation.longitude
-                        item.latitude = gpsDirectory.geoLocation.latitude
-                        val listAddress = CommonUtils.getFromLocation(this@BatchPopupActivity, item.latitude, item.longitude, 1, 0)
-                        if (listAddress!!.size > 0) {
-                            item.info = CommonUtils.fullAddress(listAddress[0])
-                        }
-                        Log.i("elapsed", String.format("geo coding %d", stopWatch.time))
-                        val tempList = PhotoMapDbHelper.selectPhotoMapItemBy("imagePath", item.imagePath!!)
-                        stopWatch.reset()
-                        stopWatch.start()
-                        if (tempList.size > 0) {
-                            mReduplicationCount++
+                        val metadata = JpegMetadataReader.readMetadata(targetFile)
+                        val item = PhotoMapItem()
+                        item.imagePath = targetFile.absolutePath
+                        val exifSubIFDDirectory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory::class.java)
+                        val date = exifSubIFDDirectory.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL, TimeZone.getDefault())
+                        if (date != null) {
+                            item.date = CommonUtils.dateTimePattern.format(date)
                         } else {
+                            item.date = getString(R.string.file_explorer_message2)
+                        }
+                        val gpsDirectory = metadata.getFirstDirectoryOfType(GpsDirectory::class.java)
+                        if (gpsDirectory != null && gpsDirectory.geoLocation != null) {
+                            item.longitude = gpsDirectory.geoLocation.longitude
+                            item.latitude = gpsDirectory.geoLocation.latitude
+                            val listAddress = CommonUtils.getFromLocation(this@BatchPopupActivity, item.latitude, item.longitude, 1, 0)
+                            if (listAddress!!.isNotEmpty()) {
+                                item.info = CommonUtils.fullAddress(listAddress[0])
+                            }
                             PhotoMapDbHelper.insertPhotoMapItem(item)
                             BitmapUtils.createScaledBitmap(targetFile.absolutePath, Constant.WORKING_DIRECTORY + fileName + ".thumb", 200)
                             mSuccessCount++
-                            Log.i("elapsed", String.format("create bitmap %d", stopWatch.time))
-                            stopWatch.stop()
+                        } else {
+                            mNoGPSInfoCount++
                         }
-                    } else {
-                        mNoGPSInfoCount++
                     }
-
                 } catch (e: Exception) {
                     mFailCount++
                 }
-
                 progressHandler.sendMessage(message)
             }
         }

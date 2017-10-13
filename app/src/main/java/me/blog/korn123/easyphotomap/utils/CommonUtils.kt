@@ -29,9 +29,18 @@ class CommonUtils {
 
     companion object {
 
-        private val MAX_RETRY = 5
+        @JvmStatic @Volatile private var mGeoCoder: Geocoder? = null
 
         @JvmStatic val dateTimePattern = SimpleDateFormat("yyyy-MM-dd(EEE) HH:mm", Locale.getDefault())
+
+        private val MAX_RETRY = 5
+
+        fun getGeoCoderInstance(context: Context): Geocoder {
+            if (mGeoCoder == null) {
+                mGeoCoder = Geocoder(context, Locale.getDefault())
+            }
+            return mGeoCoder!!;
+        }
 
         @JvmStatic
         @Throws(Exception::class)
@@ -42,10 +51,8 @@ class CommonUtils {
             latitude = java.lang.Double.parseDouble(String.format("%.6f", latitude))
             longitude = java.lang.Double.parseDouble(String.format("%.7f", longitude))
             var listAddress: List<Address>? = null
-            val locale = Locale.getDefault()
-            val geoCoder = Geocoder(context, locale)
             try {
-                listAddress = geoCoder.getFromLocation(latitude, longitude, maxResults)
+                listAddress = getGeoCoderInstance(context).getFromLocation(latitude, longitude, maxResults)
             } catch (e: Exception) {
                 if (retryCount < MAX_RETRY) {
                     return getFromLocation(context, latitude, longitude, maxResults, ++retryCount)
