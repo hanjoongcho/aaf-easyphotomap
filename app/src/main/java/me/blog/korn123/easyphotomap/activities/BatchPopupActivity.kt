@@ -24,6 +24,7 @@ import org.apache.commons.io.FilenameUtils
 import org.apache.commons.lang.time.StopWatch
 import java.io.File
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Created by CHO HANJOONG on 2016-09-11.
@@ -52,13 +53,36 @@ class BatchPopupActivity : Activity() {
         infoText5.typeface = Typeface.DEFAULT
         infoText6.typeface = Typeface.DEFAULT
 
-        val listImagePath = intent.getStringArrayListExtra("listImagePath")
-        mTotalPhoto = listImagePath.size
+        var listImagePath = when (intent.getStringExtra("currentPath") == null) {
+            true -> intent.getStringArrayListExtra("listImagePath")
+            false -> {
+                val targetPath = intent.getStringExtra("currentPath")
+                determinePhotoFiles(File(targetPath))
+                listFilePath
+            }
+        }
+
+        mTotalPhoto = listImagePath!!.size
         val thread = RegisterThread(this@BatchPopupActivity, listImagePath)
         mProgressBar!!.max = mTotalPhoto
         thread.start()
         stop.setOnClickListener({ _ -> mEnableUpdate = false })
         close.setOnClickListener({ _ -> finish() })
+    }
+
+    val listFilePath: java.util.ArrayList<String> = arrayListOf()
+    private fun determinePhotoFiles(directory: File) {
+        directory.listFiles().map { file ->
+            when (file.isFile) {
+                true -> {
+                    if (file.absoluteFile.extension.toLowerCase().matches("jpg|jpeg".toRegex())) {
+                        listFilePath.add(file.absolutePath)
+                        println(file.absolutePath)
+                    }
+                }
+                false -> determinePhotoFiles(file)
+            }
+        }
     }
 
     internal var progressHandler = Handler(Handler.Callback {
