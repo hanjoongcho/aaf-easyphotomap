@@ -72,6 +72,14 @@ class FileExplorerActivity : AppCompatActivity() {
             }
         })
 
+        batchModeB.setOnClickListener({
+            listFilePath.clear()
+            determinePhotoFiles(File(mCurrent))
+            val batchIntent = Intent(this@FileExplorerActivity, BatchPopupActivity::class.java)
+            batchIntent.putStringArrayListExtra("listImagePath", listFilePath)
+            startActivity(batchIntent)
+        })
+
         fileList.setOnItemClickListener { parent, _, position, _ ->
             val thumbnailEntity = parent.adapter.getItem(position) as FileItem
             var fileName = thumbnailEntity.fileName!!
@@ -96,6 +104,21 @@ class FileExplorerActivity : AppCompatActivity() {
         }
 
         refreshFiles()
+    }
+
+    val listFilePath: ArrayList<String> = arrayListOf()
+    private fun determinePhotoFiles(directory: File) {
+        directory.listFiles().map { file ->
+            when (file.isFile) {
+                true -> {
+                    if (file.absoluteFile.extension.toLowerCase().matches("jpg|jpeg".toRegex())) {
+                        listFilePath.add(file.absolutePath)
+                        println(file.absolutePath)
+                    }
+                }
+                false -> determinePhotoFiles(file)
+            }
+        }
     }
 
     override fun onResume() {

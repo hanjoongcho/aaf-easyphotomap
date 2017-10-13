@@ -40,6 +40,7 @@
             </HorizontalScrollView>
         </LinearLayout>
         <LinearLayout
+            android:orientation="horizontal"
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -48,7 +49,8 @@
             android:paddingRight="0dp"
             android:paddingBottom="5dp">
             <com.beardedhen.androidbootstrap.BootstrapButton
-                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_width="0dp"
                 android:layout_height="40dp"
                 app:bootstrapText="@string/registration_batch_mode"
                 app:bootstrapBrand="primary"
@@ -56,6 +58,15 @@
                 app:bootstrapSize="sm"
                 android:id="@+id/registerDirectory"
                 />
+            <Button
+                android:layout_marginLeft="5dp"
+                android:id="@+id/batchModeB"
+                android:textColor="@color/white"
+                android:background="@drawable/dialog_bg_primary"
+                android:text="Batch Mode B"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="40dp" />
         </LinearLayout>
         <ListView
             android:fastScrollEnabled="true"
