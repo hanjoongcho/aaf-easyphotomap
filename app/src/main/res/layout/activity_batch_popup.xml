@@ -10,14 +10,14 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        >
+        android:gravity="center_vertical">
         <TextView
             android:id="@+id/infoText6"
             android:padding="5dp"
             android:gravity="left"
-            android:textSize="11dp"
+            android:textSize="@dimen/batch_popup_guide_message_text"
             android:textColor="@color/defaultFont"
+            android:lineSpacingExtra="@dimen/batch_popup_guide_message_line_space"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/batch_popup_message1"
@@ -30,41 +30,40 @@
             android:id="@+id/progressBar"
             />
         <TextView
-            android:typeface="normal"
-            android:gravity="center"
-            android:textSize="15dp"
-            android:textColor="@color/colorPrimary"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
             android:id="@+id/infoText"
+            android:gravity="center"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/batch_popup_info_text"
+            android:layout_height="@dimen/batch_popup_info_height"
+            android:layout_width="match_parent"
             />
         <TextView
-            android:textSize="15dp"
-            android:textColor="@color/colorPrimary"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
             android:id="@+id/infoText2"
-            />
-        <TextView
-            android:textSize="15dp"
             android:textColor="@color/colorPrimary"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:textSize="@dimen/batch_popup_info_text"
+            android:layout_height="@dimen/batch_popup_info_height"
+            />
+        <TextView
             android:id="@+id/infoText3"
-            />
-        <TextView
-            android:textSize="15dp"
             android:textColor="@color/colorPrimary"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:textSize="@dimen/batch_popup_info_text"
+            android:layout_height="@dimen/batch_popup_info_height"
+            />
+        <TextView
             android:id="@+id/infoText4"
-            />
-        <TextView
-            android:textSize="15dp"
             android:textColor="@color/colorPrimary"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:textSize="@dimen/batch_popup_info_text"
+            android:layout_height="@dimen/batch_popup_info_height"
+            />
+        <TextView
             android:id="@+id/infoText5"
+            android:textColor="@color/colorPrimary"
+            android:layout_width="match_parent"
+            android:textSize="@dimen/batch_popup_info_text"
+            android:layout_height="@dimen/batch_popup_info_height"
             />
         <LinearLayout
             android:gravity="right"

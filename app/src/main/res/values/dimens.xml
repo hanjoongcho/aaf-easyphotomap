@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!--activity_batch_popup.xml-->
+    <dimen name="batch_popup_guide_message_text">15dp</dimen>
+    <dimen name="batch_popup_guide_message_line_space">5dp</dimen>
+    <dimen name="batch_popup_info_text">15dp</dimen>
+    <dimen name="batch_popup_info_height">35dp</dimen>
+
     <!--item_file_explorer.xml-->
     <dimen name="item_file_explorer_height">60dp</dimen>
 

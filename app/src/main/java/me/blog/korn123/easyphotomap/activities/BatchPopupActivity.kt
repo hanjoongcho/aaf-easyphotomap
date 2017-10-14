@@ -156,7 +156,10 @@ class BatchPopupActivity : Activity() {
                                 item.info = CommonUtils.fullAddress(listAddress[0])
                             }
                             PhotoMapDbHelper.insertPhotoMapItem(item)
-                            BitmapUtils.createScaledBitmap(targetFile.absolutePath, Constant.WORKING_DIRECTORY + fileName + ".thumb", 200)
+                            val srcPath = targetFile.absolutePath
+                            Thread(Runnable {
+                                BitmapUtils.createScaledBitmap(srcPath, Constant.WORKING_DIRECTORY + fileName + ".thumb", 200)
+                            }).start()
                             mSuccessCount++
                         } else {
                             mNoGPSInfoCount++
