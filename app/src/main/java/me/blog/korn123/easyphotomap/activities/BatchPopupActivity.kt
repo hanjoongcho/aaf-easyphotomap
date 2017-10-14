@@ -68,6 +68,9 @@ class BatchPopupActivity : Activity() {
         mTotalPhoto = listImagePath.size
         when (mTotalPhoto > 0) {
             true -> {
+                if (!File(Constant.WORKING_DIRECTORY).exists()) {
+                    File(Constant.WORKING_DIRECTORY).mkdirs()
+                }
                 val thread = RegisterThread(this@BatchPopupActivity, listImagePath)
                 mProgressBar!!.max = mTotalPhoto
                 thread.start()
