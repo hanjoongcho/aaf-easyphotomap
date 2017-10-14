@@ -18,7 +18,8 @@
 
     <!--FileExplorerActivity-->
     <string name="file_explorer_activity_title">エクスプローラ</string>
-    <string name="registration_batch_mode">現在のフォルダ一括登録</string>
+    <string name="registration_batch_a">一括登録 A</string>
+    <string name="registration_batch_b">一括登録 B</string>
 
     <!--SettingsActivity-->
     <string name="setting_activity_title">環境設定</string>
@@ -70,6 +71,7 @@
     <string name="file_explorer_message10">Update list..</string>
     <string name="file_explorer_message11">現在のフォルダのすべての写真を登録しますか？</string>
     <string name="file_explorer_message12">\'確認\' ボタンを選択するとフォトマップ画面に移動します。\n前のフォルダに移動をご希望の場合 \'キャンセル\' ボタンを選択し、ナビゲーションのフォルダ名をクリックしてください。</string>
+    <string name="file_explorer_message13">現在のフォルダとサブフォルダのすべての写真を登録しますか?</string>
 
     <string name="thumbnail_explorer_message1">サムネイル情報更新中...</string>
     <string name="thumbnail_explorer_message2">写真を選択してください。</string>

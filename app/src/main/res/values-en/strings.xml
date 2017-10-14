@@ -18,7 +18,8 @@
 
     <!--FileExplorerActivity-->
     <string name="file_explorer_activity_title">Register with explorer</string>
-    <string name="registration_batch_mode">Batch registration of current folder</string>
+    <string name="registration_batch_a">Batch Registration A</string>
+    <string name="registration_batch_b">Batch Registration B</string>
 
     <!--SettingsActivity-->
     <string name="setting_activity_title">Environment settings</string>
@@ -70,6 +71,7 @@
     <string name="file_explorer_message10">Update list..</string>
     <string name="file_explorer_message11">Do you want to register all photos in the current folder?</string>
     <string name="file_explorer_message12">Select the \'OK\' button to go to the Photo Map screen.\nIf you want to move to the previous folder, select the \'Cancel\' button and click the folder name of the navigation.</string>
+    <string name="file_explorer_message13">Do you want to register all the photos in the current folder and its subfolders?</string>
 
     <string name="thumbnail_explorer_message1">Thumbnail of the updated information...</string>
     <string name="thumbnail_explorer_message2">Choose a picture.</string>

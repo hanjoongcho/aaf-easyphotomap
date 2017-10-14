@@ -48,25 +48,25 @@
             android:paddingTop="5dp"
             android:paddingRight="0dp"
             android:paddingBottom="5dp">
-            <com.beardedhen.androidbootstrap.BootstrapButton
+            <Button
+                android:id="@+id/batchModeA"
+                android:textSize="12dp"
+                android:textColor="@color/white"
+                android:background="@drawable/dialog_bg_primary"
+                android:text="@string/registration_batch_a"
                 android:layout_weight="1"
                 android:layout_width="0dp"
-                android:layout_height="40dp"
-                app:bootstrapText="@string/registration_batch_mode"
-                app:bootstrapBrand="primary"
-                app:roundedCorners="true"
-                app:bootstrapSize="sm"
-                android:id="@+id/registerDirectory"
-                />
+                android:layout_height="wrap_content" />
             <Button
+                android:textSize="12dp"
                 android:layout_marginLeft="5dp"
                 android:id="@+id/batchModeB"
                 android:textColor="@color/white"
                 android:background="@drawable/dialog_bg_primary"
-                android:text="Batch Mode B"
+                android:text="@string/registration_batch_b"
                 android:layout_weight="1"
                 android:layout_width="0dp"
-                android:layout_height="40dp" />
+                android:layout_height="wrap_content" />
         </LinearLayout>
         <ListView
             android:fastScrollEnabled="true"

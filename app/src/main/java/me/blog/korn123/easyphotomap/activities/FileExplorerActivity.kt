@@ -1,6 +1,7 @@
 package me.blog.korn123.easyphotomap.activities
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.DialogInterface
@@ -54,28 +55,58 @@ class FileExplorerActivity : AppCompatActivity() {
         mListFile = ArrayList()
         mListDirectory = ArrayList()
         mCurrent = Constant.CAMERA_DIRECTORY
-        registerDirectory.typeface = Typeface.DEFAULT
+        batchModeA.typeface = Typeface.DEFAULT
+        batchModeB.typeface = Typeface.DEFAULT
 
         mAdapter = ExplorerItemAdapter(this, this, R.layout.item_file_explorer, this.mListFile!!)
         fileList.adapter = mAdapter
 
         // binding listener
-        registerDirectory.setOnClickListener({
-            when(mListFile!!.size - mListDirectory!!.size < 1) {
-                true -> {
-                    DialogUtils.showAlertDialog(this, getString(R.string.file_explorer_message9))
+        batchModeA.setOnClickListener({
+//            when(mListFile!!.size - mListDirectory!!.size < 1) {
+//                true -> {
+//                    DialogUtils.showAlertDialog(this, getString(R.string.file_explorer_message9))
+//                }
+//                false -> {
+//                    val positiveListener = PositiveListener(this@FileExplorerActivity, this@FileExplorerActivity, null, null)
+//                    DialogUtils.showAlertDialog(this@FileExplorerActivity, getString(R.string.file_explorer_message11), this@FileExplorerActivity, positiveListener)
+//                }
+//            }
+            val builder = AlertDialog.Builder(this@FileExplorerActivity)
+            val positiveListener = DialogInterface.OnClickListener { _, _ ->
+                val batchIntent = Intent(this@FileExplorerActivity, BatchPopupActivity::class.java)
+                val listImagePath = arrayListOf<String>()
+                File(mCurrent).listFiles().map { file ->
+                    if (file.absoluteFile.extension.toLowerCase().matches("jpg|jpeg".toRegex())) {
+                        listImagePath.add(file.absolutePath)
+                    }
                 }
-                false -> {
-                    val positiveListener = PositiveListener(this@FileExplorerActivity, this@FileExplorerActivity, null, null)
-                    DialogUtils.showAlertDialog(this@FileExplorerActivity, getString(R.string.file_explorer_message11), this@FileExplorerActivity, positiveListener)
-                }
+                batchIntent.putStringArrayListExtra("listImagePath", listImagePath)
+                startActivity(batchIntent)
+                return@OnClickListener
             }
+
+            builder.setMessage(getString(R.string.file_explorer_message11))
+            builder.setPositiveButton(getString(R.string.confirm), positiveListener)
+            builder.setNegativeButton(getString(R.string.cancel), null)
+            val alertDialog = builder.create()
+            alertDialog.show()
         })
 
         batchModeB.setOnClickListener({
-            val batchIntent = Intent(this@FileExplorerActivity, BatchPopupActivity::class.java)
-            batchIntent.putExtra("currentPath", mCurrent)
-            startActivity(batchIntent)
+            val builder = AlertDialog.Builder(this@FileExplorerActivity)
+            val positiveListener = DialogInterface.OnClickListener { _, _ ->
+                val batchIntent = Intent(this@FileExplorerActivity, BatchPopupActivity::class.java)
+                batchIntent.putExtra("currentPath", mCurrent)
+                startActivity(batchIntent)
+                return@OnClickListener
+            }
+
+            builder.setMessage(getString(R.string.file_explorer_message13))
+            builder.setPositiveButton(getString(R.string.confirm), positiveListener)
+            builder.setNegativeButton(getString(R.string.cancel), null)
+            val alertDialog = builder.create()
+            alertDialog.show()
         })
 
         fileList.setOnItemClickListener { parent, _, position, _ ->
@@ -167,7 +198,7 @@ class FileExplorerActivity : AppCompatActivity() {
                 mProgressDialog = ProgressDialog.show(this@FileExplorerActivity, getString(R.string.file_explorer_message5), getString(R.string.file_explorer_message6))
                 val registerThread = RegistrationThread(context, activity, mProgressDialog!!, fileName, path!!)
                 registerThread.start()
-            } else {
+            } /*else {
                 val batchIntent = Intent(this@FileExplorerActivity, BatchPopupActivity::class.java)
                 val listImagePath = ArrayList<String>()
                 for (i in mListDirectory!!.size..mListFile!!.size - 1) {
@@ -176,7 +207,7 @@ class FileExplorerActivity : AppCompatActivity() {
 
                 batchIntent.putStringArrayListExtra("listImagePath", listImagePath)
                 startActivity(batchIntent)
-            }
+            }*/
         }
     }
 

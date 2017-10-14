@@ -18,7 +18,8 @@
 
     <!--FileExplorerActivity-->
     <string name="file_explorer_activity_title">탐색기</string>
-    <string name="registration_batch_mode">현재폴더 일괄등록</string>
+    <string name="registration_batch_a">일괄등록 A</string>
+    <string name="registration_batch_b">일괄등록 B</string>
 
     <!--SettingsActivity-->
     <string name="setting_activity_title">환경설정</string>
@@ -70,6 +71,7 @@
     <string name="file_explorer_message10">Update list..</string>
     <string name="file_explorer_message11">현재 폴더의 모든 사진을 등록 하시겠습니까?</string>
     <string name="file_explorer_message12">\'확인\' 버튼을 선택하시면 포토맵 화면으로 이동합니다.\n이전 폴더로 이동을 원하시면 \'취소\' 버튼을 선택하시고 네비게이션의 폴더명을 클릭하세요.</string>
+    <string name="file_explorer_message13">현재 폴더 및 하위 폴더의 모든 사진을 등록 하시겠습니까?</string>
 
     <string name="thumbnail_explorer_message1">썸네일정보 업데이트중...</string>
     <string name="thumbnail_explorer_message2">사진을 선택하세요.</string>

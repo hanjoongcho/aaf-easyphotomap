@@ -1,7 +1,10 @@
 package me.blog.korn123.easyphotomap.activities
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
@@ -62,12 +65,27 @@ class BatchPopupActivity : Activity() {
             }
         }
 
-        mTotalPhoto = listImagePath!!.size
-        val thread = RegisterThread(this@BatchPopupActivity, listImagePath)
-        mProgressBar!!.max = mTotalPhoto
-        thread.start()
-        stop.setOnClickListener({ _ -> mEnableUpdate = false })
-        close.setOnClickListener({ _ -> finish() })
+        mTotalPhoto = listImagePath.size
+        when (mTotalPhoto > 0) {
+            true -> {
+                val thread = RegisterThread(this@BatchPopupActivity, listImagePath)
+                mProgressBar!!.max = mTotalPhoto
+                thread.start()
+                stop.setOnClickListener({ _ -> mEnableUpdate = false })
+                close.setOnClickListener({ _ -> finish() })
+            }
+            false -> {
+                val builder = AlertDialog.Builder(this@BatchPopupActivity)
+                val positiveListener = DialogInterface.OnClickListener { _, _ ->
+                    finish()
+                    return@OnClickListener
+                }
+                builder.setMessage(getString(R.string.file_explorer_message9))
+                builder.setPositiveButton(getString(R.string.confirm), positiveListener)
+                val alertDialog = builder.create()
+                alertDialog.show()
+            }
+        }
     }
 
     private val listFilePath: java.util.ArrayList<String> = arrayListOf()
