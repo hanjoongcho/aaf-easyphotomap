@@ -37,9 +37,9 @@ import java.util.*
  */
 class FileExplorerActivity : AppCompatActivity() {
 
-    private var mCurrent: String? = null
     private val mListFile: ArrayList<FileItem> = arrayListOf()
     private val mListDirectory: ArrayList<FileItem> = arrayListOf()
+    private var mCurrent: String? = null
     private var mProgressDialog: ProgressDialog? = null
     private var mAdapter: ArrayAdapter<FileItem>? = null
 
@@ -116,7 +116,13 @@ class FileExplorerActivity : AppCompatActivity() {
                     File(Constant.WORKING_DIRECTORY).mkdirs()
                 }
                 val positiveListener = PositiveListener(this@FileExplorerActivity, this@FileExplorerActivity, FilenameUtils.getName(path) + ".origin", path)
-                DialogUtils.showAlertDialog(this@FileExplorerActivity, getString(R.string.file_explorer_message7), this@FileExplorerActivity, path, positiveListener)
+                DialogUtils.showAlertDialog(
+                        this@FileExplorerActivity,
+                        getString(R.string.file_explorer_message7),
+                        this@FileExplorerActivity,
+                        path,
+                        positiveListener
+                )
             }
         }
 
@@ -124,7 +130,12 @@ class FileExplorerActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        DialogUtils.showAlertDialog(this@FileExplorerActivity, getString(R.string.file_explorer_message12), DialogInterface.OnClickListener { dialogInterface, i -> finish() }, DialogInterface.OnClickListener { dialogInterface, i -> })
+        DialogUtils.showAlertDialog(
+                this@FileExplorerActivity,
+                getString(R.string.file_explorer_message12),
+                DialogInterface.OnClickListener { _, _ -> finish() },
+                DialogInterface.OnClickListener { _, _ -> }
+        )
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -209,7 +220,7 @@ class FileExplorerActivity : AppCompatActivity() {
                     }
                 }
 
-                if (CommonUtils.loadBooleanPreference(this@FileExplorerActivity, "enable_reverse_order")) {
+                if (CommonUtils.loadBooleanPreference(this@FileExplorerActivity, Constant.SETTING_REVERSE_ORDER)) {
                     Collections.sort(mListDirectory, Collections.reverseOrder<Any>())
                     Collections.sort(mListFile, Collections.reverseOrder<Any>())
                 } else {
@@ -217,7 +228,7 @@ class FileExplorerActivity : AppCompatActivity() {
                     Collections.sort(mListFile)
                 }
                 mListFile.addAll(0, mListDirectory)
-                mAdapter!!.notifyDataSetChanged()
+                mAdapter?.notifyDataSetChanged()
                 fileList.setSelection(0)
                 scrollView.fullScroll(HorizontalScrollView.FOCUS_RIGHT)
             }

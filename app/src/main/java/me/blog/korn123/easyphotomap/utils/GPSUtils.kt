@@ -30,13 +30,13 @@ object GPSUtils {
         return mLocationManagerWithNetwork!!
     }
 
-    fun getLocationWithGPSProvider(context: Context): Location {
+    fun getLocationWithGPSProvider(context: Context): Location? {
         var location: Location? = getGPSProvider(context).getLastKnownLocation(LocationManager.GPS_PROVIDER)
         if (location == null) {
             //Toast.makeText(context, "gps provider unknown", Toast.LENGTH_SHORT);
             location = getNetworkProvider(context).getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
         }
-        return location!!
+        return location
     }
 
     fun getLocationWithNetworkProvider(context: Context): Location {

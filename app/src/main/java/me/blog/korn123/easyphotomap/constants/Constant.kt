@@ -11,6 +11,7 @@ object Constant {
 
     /* FileExplorerActivity */
     val CAMERA_DIRECTORY = Environment.getExternalStorageDirectory().absolutePath + "/DCIM"
+    val SETTING_REVERSE_ORDER = "enable_reverse_order"
 
     /* MapsActivity */
     val LEGACY_PHOTO_DATA_PATH = WORKING_DIRECTORY + "photodata.dat"

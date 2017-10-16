@@ -13,6 +13,7 @@ import android.view.View
 import com.drew.imaging.jpeg.JpegMetadataReader
 import com.drew.imaging.jpeg.JpegProcessingException
 import com.drew.metadata.exif.GpsDirectory
+import me.blog.korn123.easyphotomap.constants.Constant
 import me.blog.korn123.easyphotomap.models.ThumbnailItem
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
@@ -40,6 +41,12 @@ class CommonUtils {
                 mGeoCoder = Geocoder(context, Locale.getDefault())
             }
             return mGeoCoder!!;
+        }
+
+        fun initWorkingDirectory() {
+            if (!File(Constant.WORKING_DIRECTORY).exists()) {
+                File(Constant.WORKING_DIRECTORY).mkdirs()
+            }
         }
 
         @JvmStatic
