@@ -12,7 +12,6 @@ import android.os.Handler
 import android.os.Looper
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.MenuItem
@@ -39,8 +38,8 @@ import java.util.*
 class FileExplorerActivity : AppCompatActivity() {
 
     private var mCurrent: String? = null
-    private var mListFile: ArrayList<FileItem>? = null
-    private var mListDirectory: ArrayList<FileItem>? = null
+    private val mListFile: ArrayList<FileItem> = arrayListOf()
+    private val mListDirectory: ArrayList<FileItem> = arrayListOf()
     private var mProgressDialog: ProgressDialog? = null
     private var mAdapter: ArrayAdapter<FileItem>? = null
 
@@ -48,31 +47,21 @@ class FileExplorerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_file_explorer)
 
-        setSupportActionBar(findViewById(R.id.toolbar) as Toolbar)
-        supportActionBar?.title = getString(R.string.file_explorer_activity_title)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        setSupportActionBar(toolbar)
+        supportActionBar?.run {
+            title = getString(R.string.file_explorer_activity_title)
+            setDisplayHomeAsUpEnabled(true)
+        }
 
-        mListFile = ArrayList()
-        mListDirectory = ArrayList()
         mCurrent = Constant.CAMERA_DIRECTORY
         batchModeA.typeface = Typeface.DEFAULT
         batchModeB.typeface = Typeface.DEFAULT
 
-        mAdapter = ExplorerItemAdapter(this, this, R.layout.item_file_explorer, this.mListFile!!)
+        mAdapter = ExplorerItemAdapter(this, this, R.layout.item_file_explorer, this.mListFile)
         fileList.adapter = mAdapter
 
         // binding listener
         batchModeA.setOnClickListener({
-//            when(mListFile!!.size - mListDirectory!!.size < 1) {
-//                true -> {
-//                    DialogUtils.showAlertDialog(this, getString(R.string.file_explorer_message9))
-//                }
-//                false -> {
-//                    val positiveListener = PositiveListener(this@FileExplorerActivity, this@FileExplorerActivity, null, null)
-//                    DialogUtils.showAlertDialog(this@FileExplorerActivity, getString(R.string.file_explorer_message11), this@FileExplorerActivity, positiveListener)
-//                }
-//            }
-            val builder = AlertDialog.Builder(this@FileExplorerActivity)
             val positiveListener = DialogInterface.OnClickListener { _, _ ->
                 val batchIntent = Intent(this@FileExplorerActivity, BatchPopupActivity::class.java)
                 val listImagePath = arrayListOf<String>()
@@ -86,15 +75,14 @@ class FileExplorerActivity : AppCompatActivity() {
                 return@OnClickListener
             }
 
-            builder.setMessage(getString(R.string.file_explorer_message11))
-            builder.setPositiveButton(getString(R.string.confirm), positiveListener)
-            builder.setNegativeButton(getString(R.string.cancel), null)
-            val alertDialog = builder.create()
-            alertDialog.show()
+            AlertDialog.Builder(this@FileExplorerActivity).apply {
+                setMessage(getString(R.string.file_explorer_message11))
+                setPositiveButton(getString(R.string.confirm), positiveListener)
+                setNegativeButton(getString(R.string.cancel), null)
+            }.create().show()
         })
 
         batchModeB.setOnClickListener({
-            val builder = AlertDialog.Builder(this@FileExplorerActivity)
             val positiveListener = DialogInterface.OnClickListener { _, _ ->
                 val batchIntent = Intent(this@FileExplorerActivity, BatchPopupActivity::class.java)
                 batchIntent.putExtra("currentPath", mCurrent)
@@ -102,11 +90,11 @@ class FileExplorerActivity : AppCompatActivity() {
                 return@OnClickListener
             }
 
-            builder.setMessage(getString(R.string.file_explorer_message13))
-            builder.setPositiveButton(getString(R.string.confirm), positiveListener)
-            builder.setNegativeButton(getString(R.string.cancel), null)
-            val alertDialog = builder.create()
-            alertDialog.show()
+            AlertDialog.Builder(this@FileExplorerActivity).apply {
+                setMessage(getString(R.string.file_explorer_message13))
+                setPositiveButton(getString(R.string.confirm), positiveListener)
+                setNegativeButton(getString(R.string.cancel), null)
+            }.create().show()
         })
 
         fileList.setOnItemClickListener { parent, _, position, _ ->
@@ -135,11 +123,8 @@ class FileExplorerActivity : AppCompatActivity() {
         refreshFiles()
     }
 
-
-
-
-    override fun onResume() {
-        super.onResume()
+    override fun onBackPressed() {
+        DialogUtils.showAlertDialog(this@FileExplorerActivity, getString(R.string.file_explorer_message12), DialogInterface.OnClickListener { dialogInterface, i -> finish() }, DialogInterface.OnClickListener { dialogInterface, i -> })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -183,39 +168,24 @@ class FileExplorerActivity : AppCompatActivity() {
             pathView!!.addView(textView)
             index++
         }
-//        scrollView.postDelayed({ scrollView.fullScroll(HorizontalScrollView.FOCUS_RIGHT) }, 100L)
         RefreshThread().start()
     }
 
-    override fun onBackPressed() {
-        DialogUtils.showAlertDialog(this@FileExplorerActivity, getString(R.string.file_explorer_message12), DialogInterface.OnClickListener { dialogInterface, i -> finish() }, DialogInterface.OnClickListener { dialogInterface, i -> })
-    }
-
-    inner class PositiveListener internal constructor(internal var context: Context, internal var activity: Activity, internal var fileName: String?, internal var path: String?) {
-
+    inner class PositiveListener internal constructor(val context: Context, val activity: Activity, val fileName: String, private val path: String) {
         fun register() {
-            if (fileName != null && path != null) {
-                mProgressDialog = ProgressDialog.show(this@FileExplorerActivity, getString(R.string.file_explorer_message5), getString(R.string.file_explorer_message6))
-                val registerThread = RegistrationThread(context, activity, mProgressDialog!!, fileName, path!!)
+            mProgressDialog = ProgressDialog.show(this@FileExplorerActivity, getString(R.string.file_explorer_message5), getString(R.string.file_explorer_message6))
+            mProgressDialog?.let { it ->
+                val registerThread = RegistrationThread(context, activity, it, fileName, path)
                 registerThread.start()
-            } /*else {
-                val batchIntent = Intent(this@FileExplorerActivity, BatchPopupActivity::class.java)
-                val listImagePath = ArrayList<String>()
-                for (i in mListDirectory!!.size..mListFile!!.size - 1) {
-                    listImagePath.add(mListFile!![i].imagePath!!)
-                }
-
-                batchIntent.putStringArrayListExtra("listImagePath", listImagePath)
-                startActivity(batchIntent)
-            }*/
+            }
         }
     }
 
-    internal inner class RefreshThread : Thread() {
+    inner class RefreshThread : Thread() {
         override fun run() {
             Handler(Looper.getMainLooper()).post {
-                mListFile!!.clear()
-                mListDirectory!!.clear()
+                mListFile.clear()
+                mListDirectory.clear()
                 val current = File(this@FileExplorerActivity.mCurrent!!)
                 val files = current.list()
                 if (files != null) {
@@ -228,25 +198,25 @@ class FileExplorerActivity : AppCompatActivity() {
                             name = "[" + files[i] + "]"
                             thumbnailEntity.setImagePathAndFileName(name)
                             thumbnailEntity.isDirectory = true
-                            mListDirectory!!.add(thumbnailEntity)
+                            mListDirectory.add(thumbnailEntity)
                         } else {
                             name = files[i]
                             val extension = FilenameUtils.getExtension(name).toLowerCase()
                             if (!extension.matches("jpg|jpeg".toRegex())) continue
                             thumbnailEntity.setImagePathAndFileName(path)
-                            mListFile!!.add(thumbnailEntity)
+                            mListFile.add(thumbnailEntity)
                         }
                     }
                 }
 
                 if (CommonUtils.loadBooleanPreference(this@FileExplorerActivity, "enable_reverse_order")) {
-                    Collections.sort(mListDirectory!!, Collections.reverseOrder<Any>())
-                    Collections.sort(mListFile!!, Collections.reverseOrder<Any>())
+                    Collections.sort(mListDirectory, Collections.reverseOrder<Any>())
+                    Collections.sort(mListFile, Collections.reverseOrder<Any>())
                 } else {
-                    Collections.sort(mListDirectory!!)
-                    Collections.sort(mListFile!!)
+                    Collections.sort(mListDirectory)
+                    Collections.sort(mListFile)
                 }
-                mListFile!!.addAll(0, mListDirectory!!)
+                mListFile.addAll(0, mListDirectory)
                 mAdapter!!.notifyDataSetChanged()
                 fileList.setSelection(0)
                 scrollView.fullScroll(HorizontalScrollView.FOCUS_RIGHT)
