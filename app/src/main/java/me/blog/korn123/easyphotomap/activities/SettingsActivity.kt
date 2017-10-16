@@ -79,7 +79,7 @@ class SettingsActivity : AppPreferenceActivity() {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     class GeneralPreferenceFragment : PreferenceFragment() {
 
-        internal var listener: SharedPreferences.OnSharedPreferenceChangeListener = SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
+        internal var listener: SharedPreferences.OnSharedPreferenceChangeListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
             if (StringUtils.equals(key, "date_filter_setting")) {
                 val switchPreference = findPreference("date_filter_setting") as SwitchPreference
                 val checked = switchPreference.isChecked
@@ -102,7 +102,7 @@ class SettingsActivity : AppPreferenceActivity() {
                 e.printStackTrace()
             }
 
-            val version = pInfo!!.versionName
+            val version = pInfo?.versionName
             mAppVersionPreference.title = "Easy Photo Map Version"
             mAppVersionPreference.summary = "v " + version
             mAppVersionPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {

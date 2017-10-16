@@ -103,7 +103,7 @@
             android:layout_gravity="center"
             android:drawSelectorOnTop="true"
             android:listSelector="@drawable/selector_listview"
-            android:id="@+id/filelist"
+            android:id="@+id/thumbnailGrid"
             android:numColumns="auto_fit"
             android:stretchMode="columnWidth"
             android:layout_width="match_parent"

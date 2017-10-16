@@ -26,22 +26,22 @@ import me.blog.korn123.easyphotomap.utils.CommonUtils
  */
 class ExplorerItemAdapter(private val mActivity: Activity, private val mContext: Context, private val mLayoutResourceId: Int, private val mEntities: List<FileItem>) : ArrayAdapter<FileItem>(mContext, mLayoutResourceId, mEntities) {
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
         var row = convertView
-        var holder: ViewHolder? = null
+        var holder: ViewHolder?
 
         if (row == null) {
             val inflater = (mContext as Activity).layoutInflater
             row = inflater.inflate(mLayoutResourceId, parent, false)
             holder = ViewHolder()
             // bind view
-            holder.textView1 = row!!.findViewById(R.id.text1) as TextView
+            holder.textView1 = row.findViewById(R.id.text1) as TextView
             holder.textView2 = row.findViewById(R.id.text2) as TextView
             holder.textView3 = row.findViewById(R.id.text3) as TextView
             holder.imageView1 = row.findViewById(R.id.image1) as ImageView
-            holder.textView1!!.typeface = Typeface.DEFAULT
-            holder.textView2!!.typeface = Typeface.DEFAULT
-            holder.textView3!!.typeface = Typeface.DEFAULT
+            holder.textView1?.typeface = Typeface.DEFAULT
+            holder.textView2?.typeface = Typeface.DEFAULT
+            holder.textView3?.typeface = Typeface.DEFAULT
 
             // set tag
             row.tag = holder
@@ -57,21 +57,21 @@ class ExplorerItemAdapter(private val mActivity: Activity, private val mContext:
         //        holder.imageView1.getLayoutParams().width = widthHeight;
 
         // init default value
-        holder.textView1!!.text = entity.fileName
-        holder.textView2!!.text = ""
-        holder.textView3!!.text = ""
-        holder.imageView1!!.setImageBitmap(defaultImage())
+        holder.textView1?.text = entity.fileName
+        holder.textView2?.text = ""
+        holder.textView3?.text = ""
+        holder.imageView1?.setImageBitmap(defaultImage())
 
         // init async process
         val imagePath = entity.imagePath
         holder.position = position
         if (entity.isDirectory) {
-            holder.textView2!!.visibility = View.GONE
-            holder.textView3!!.visibility = View.GONE
+            holder.textView2?.visibility = View.GONE
+            holder.textView3?.visibility = View.GONE
             ThumbnailTask(mActivity, position, holder).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null, widthHeight.toString())
         } else {
-            holder.textView2!!.visibility = View.VISIBLE
-            holder.textView3!!.visibility = View.VISIBLE
+            holder.textView2?.visibility = View.VISIBLE
+            holder.textView3?.visibility = View.VISIBLE
             ThumbnailTask(mActivity, position, holder).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, imagePath, widthHeight.toString())
         }
         return row
@@ -95,20 +95,22 @@ class ExplorerItemAdapter(private val mActivity: Activity, private val mContext:
                     var bitmap = BitmapUtils.getBitmapFromMemCache("defaultBitmap")
                     if (bitmap == null) {
                         bitmap = BitmapFactory.decodeResource(mActivity.resources, R.drawable.ic_menu_archive)
-                        BitmapUtils.addBitmapToMemoryCache("defaultBitmap", bitmap!!)
+                        BitmapUtils.addBitmapToMemoryCache("defaultBitmap", bitmap)
                     }
                     resized = bitmap
                 } else {
                     var bitmap = BitmapUtils.getBitmapFromMemCache(filePath)
                     if (bitmap == null) {
-                        bitmap = BitmapUtils.decodeFile(mActivity, filePath, options)!!
-                        BitmapUtils.addBitmapToMemoryCache(filePath, bitmap)
+                        bitmap = BitmapUtils.decodeFile(mActivity, filePath, options)
+                        bitmap?.let {
+                            BitmapUtils.addBitmapToMemoryCache(filePath, it)
+                        }
                     }
                     resized = Bitmap.createScaledBitmap(bitmap, widthHeight, widthHeight, true)
 
                     val gpsDirectory = CommonUtils.getGPSDirectory(filePath)
-                    if (gpsDirectory != null && gpsDirectory!!.getGeoLocation() != null) {
-                        geoLocation = gpsDirectory!!.getGeoLocation()
+                    gpsDirectory?.geoLocation?.let {
+                        geoLocation = it
                     }
                 }
             } else {
@@ -121,17 +123,17 @@ class ExplorerItemAdapter(private val mActivity: Activity, private val mContext:
         override fun onPostExecute(bitmap: Bitmap) {
             if (mHolder.position == mPosition) {
                 if (isDirectory) {
-                    mHolder.imageView1!!.setImageBitmap(bitmap)
+                    mHolder.imageView1?.setImageBitmap(bitmap)
                 } else {
                     if (geoLocation != null) {
-                        mHolder.textView2!!.text = "위도: " + geoLocation!!.latitude.toString()
-                        mHolder.textView3!!.text = "경도: " + geoLocation!!.longitude.toString()
+                        mHolder.textView2?.text = "위도: " + geoLocation?.latitude.toString()
+                        mHolder.textView3?.text = "경도: " + geoLocation?.longitude.toString()
                     } else {
-                        mHolder.textView2!!.text = "위도: 정보없음"
-                        mHolder.textView3!!.text = "경도: 정보없음"
+                        mHolder.textView2?.text = "위도: 정보없음"
+                        mHolder.textView3?.text = "경도: 정보없음"
                     }
                     val td = TransitionDrawable(arrayOf(ColorDrawable(Color.TRANSPARENT), BitmapDrawable(mActivity.resources, bitmap)))
-                    mHolder.imageView1!!.setImageDrawable(td)
+                    mHolder.imageView1?.setImageDrawable(td)
                     td.startTransition(1000)
                 }
             }
@@ -139,11 +141,11 @@ class ExplorerItemAdapter(private val mActivity: Activity, private val mContext:
     }
 
     private var mDefaultBitmap: Bitmap? = null
-    private fun defaultImage(): Bitmap {
+    private fun defaultImage(): Bitmap? {
         if (mDefaultBitmap == null) {
-                mDefaultBitmap = BitmapFactory.decodeResource(mActivity.resources, android.R.drawable.ic_menu_gallery)
+            mDefaultBitmap = BitmapFactory.decodeResource(mActivity.resources, android.R.drawable.ic_menu_gallery)
         }
-        return mDefaultBitmap!!
+        return mDefaultBitmap
     }
 
     private class ViewHolder {

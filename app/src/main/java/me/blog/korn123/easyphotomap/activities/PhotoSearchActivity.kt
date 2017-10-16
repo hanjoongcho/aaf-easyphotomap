@@ -8,7 +8,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.SearchView
-import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.AdapterView
@@ -17,25 +16,25 @@ import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.adapters.SearchItemAdapter
 import me.blog.korn123.easyphotomap.helper.PhotoMapDbHelper
 import me.blog.korn123.easyphotomap.models.PhotoMapItem
-import java.util.*
 
 /**
  * Created by CHO HANJOONG on 2016-07-22.
  */
 class PhotoSearchActivity : AppCompatActivity() {
 
+    private val mListPhotoMapItem = arrayListOf<PhotoMapItem>()
     private var mSearchView: SearchView? = null
     private var mQueryTextListener: SearchView.OnQueryTextListener? = null
     private var mSearchItemAdapter: SearchItemAdapter? = null
-    private val mListPhotoMapItem = ArrayList<PhotoMapItem>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_photo_search)
-        val toolbar = findViewById(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
-        supportActionBar!!.setTitle(R.string.photo_search_message1)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.run {
+            setTitle(R.string.photo_search_message1)
+            setDisplayHomeAsUpEnabled(true)
+        }
         refreshList()
     }
 
@@ -47,8 +46,8 @@ class PhotoSearchActivity : AppCompatActivity() {
         if (searchItem != null) {
             mSearchView = searchItem.actionView as SearchView
         }
-        if (mSearchView != null) {
-            mSearchView!!.setSearchableInfo(searchManager.getSearchableInfo(componentName))
+        mSearchView?.let { searchView ->
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
             mQueryTextListener = object : SearchView.OnQueryTextListener {
                 override fun onQueryTextChange(query: String): Boolean {
                     refreshList(query, 0)
@@ -57,12 +56,12 @@ class PhotoSearchActivity : AppCompatActivity() {
 
                 override fun onQueryTextSubmit(query: String): Boolean {
                     refreshList(query, 0)
-                    mSearchView!!.clearFocus()
+                    searchView.clearFocus()
                     return true
                 }
             }
-            mSearchView!!.setOnQueryTextListener(mQueryTextListener)
-            mSearchView!!.isIconified = false
+            searchView.setOnQueryTextListener(mQueryTextListener)
+            searchView.isIconified = false
         }
         return true
     }
@@ -76,7 +75,7 @@ class PhotoSearchActivity : AppCompatActivity() {
             else -> {
             }
         }
-        mSearchView!!.setOnQueryTextListener(mQueryTextListener)
+        mSearchView?.setOnQueryTextListener(mQueryTextListener)
         return super.onOptionsItemSelected(item)
     }
 
@@ -87,18 +86,19 @@ class PhotoSearchActivity : AppCompatActivity() {
         listView.adapter = mSearchItemAdapter
         val context = this
 
-        listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+        listView.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
             val item = parent.adapter.getItem(position) as PhotoMapItem
-            val intent = Intent(context, MapsActivity::class.java)
-            intent.putExtra("info", item.info)
-            intent.putExtra("imagePath", item.imagePath)
-            intent.putExtra("latitude", item.latitude)
-            intent.putExtra("longitude", item.longitude)
-            intent.putExtra("date", item.date)
+            val intent = Intent(context, MapsActivity::class.java).apply {
+                putExtra("info", item.info)
+                putExtra("imagePath", item.imagePath)
+                putExtra("latitude", item.latitude)
+                putExtra("longitude", item.longitude)
+                putExtra("date", item.date)
+            }
             startActivity(intent)
         }
 
-        listView.onItemLongClickListener = AdapterView.OnItemLongClickListener { parent, view, position, l ->
+        listView.onItemLongClickListener = AdapterView.OnItemLongClickListener { parent, view, position, _ ->
             val item = parent.adapter.getItem(position) as PhotoMapItem
             PhotoMapDbHelper.deletePhotoMapItemBy(item.sequence)
             refreshList(query, position, view.top)

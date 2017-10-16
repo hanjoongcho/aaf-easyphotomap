@@ -27,7 +27,7 @@ class ThumbnailItemAdapter(private val mActivity: Activity, private val mContext
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
 
         var row = convertView
-        var holder: ViewHolder? = null
+        var holder: ViewHolder?
 
         if (row == null) {
             val inflater = (mContext as Activity).layoutInflater
@@ -42,8 +42,8 @@ class ThumbnailItemAdapter(private val mActivity: Activity, private val mContext
         val entity = mEntities[position]
         val thumbnailPath = entity.thumbnailPath
         holder.position = position
-        holder.imageView1!!.layoutParams.height = widthHeight
-        holder.imageView1!!.setImageBitmap(BitmapFactory.decodeResource(mActivity.resources, R.drawable.ic_menu_gallery))
+        holder.imageView1?.layoutParams?.height = widthHeight
+        holder.imageView1?.setImageBitmap(BitmapFactory.decodeResource(mActivity.resources, R.drawable.ic_menu_gallery))
         ThumbnailTask(mActivity, position, holder).execute(thumbnailPath, widthHeight.toString())
         return row
     }
@@ -65,7 +65,6 @@ class ThumbnailItemAdapter(private val mActivity: Activity, private val mContext
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
-
             } else {
                 // listView holder가 재활용되면 task cancel 되도록 수정 2016.11.07 Hanjoong Cho
                 this.cancel(true)

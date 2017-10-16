@@ -86,67 +86,67 @@ class CameraActivity : Activity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == Constant.CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                // Image captured and saved to mFileUri specified in the Intent
-                //                Toast.makeText(this, "Image saved to:\n" +
-                //                        mFileUri.toString(), Toast.LENGTH_LONG).show();
-                val srcFilepath = StringUtils.substring(mFileUri!!.toString(), 6)
-                var fileName: String? = null
-                try {
-                    var targetFile: File? = null
-                    if (CommonUtils.loadBooleanPreference(this@CameraActivity, "enable_create_copy")) {
-                        fileName = FilenameUtils.getName(srcFilepath) + ".origin"
-                        targetFile = File(Constant.WORKING_DIRECTORY + fileName)
-                        if (!targetFile.exists()) {
-                            FileUtils.copyFile(File(srcFilepath), targetFile)
+            when (resultCode) {
+                Activity.RESULT_OK -> {
+                    // Image captured and saved to mFileUri specified in the Intent
+                    //                Toast.makeText(this, "Image saved to:\n" +
+                    //                        mFileUri.toString(), Toast.LENGTH_LONG).show();
+                    val srcFilepath = StringUtils.substring(mFileUri!!.toString(), 6)
+                    var fileName: String?
+                    try {
+                        var targetFile: File?
+                        if (CommonUtils.loadBooleanPreference(this@CameraActivity, "enable_create_copy")) {
+                            fileName = FilenameUtils.getName(srcFilepath) + ".origin"
+                            targetFile = File(Constant.WORKING_DIRECTORY + fileName)
+                            if (!targetFile.exists()) {
+                                FileUtils.copyFile(File(srcFilepath), targetFile)
+                            }
+                        } else {
+                            targetFile = File(srcFilepath)
+                            fileName = FilenameUtils.getName(srcFilepath)
                         }
-                    } else {
-                        targetFile = File(srcFilepath)
-                        fileName = FilenameUtils.getName(srcFilepath)
-                    }
-                    val metadata = JpegMetadataReader.readMetadata(targetFile)
-                    val entity = PhotoMapItem()
-                    entity.imagePath = targetFile.absolutePath
-                    val exifSubIFDDirectory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory::class.java)
-                    if (exifSubIFDDirectory != null) {
-                        val date = exifSubIFDDirectory.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL, TimeZone.getDefault())
-                        if (date != null) {
-                            entity.date = CommonUtils.dateTimePattern.format(date)
+                        val metadata = JpegMetadataReader.readMetadata(targetFile)
+                        val entity = PhotoMapItem()
+                        entity.imagePath = targetFile.absolutePath
+                        val exifSubIFDDirectory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory::class.java)
+                        if (exifSubIFDDirectory != null) {
+                            val date = exifSubIFDDirectory.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL, TimeZone.getDefault())
+                            if (date != null) {
+                                entity.date = CommonUtils.dateTimePattern.format(date)
+                            } else {
+                                entity.date = getString(R.string.file_explorer_message2)
+                            }
                         } else {
                             entity.date = getString(R.string.file_explorer_message2)
                         }
-                    } else {
-                        entity.date = getString(R.string.file_explorer_message2)
-                    }
 
-                    val gpsDirectory = metadata.getFirstDirectoryOfType(GpsDirectory::class.java)
-                    if (gpsDirectory != null && gpsDirectory.geoLocation != null) {
-                        entity.longitude = gpsDirectory.geoLocation.longitude
-                        entity.latitude = gpsDirectory.geoLocation.latitude
-                        val listAddress = CommonUtils.getFromLocation(this@CameraActivity, entity.latitude, entity.longitude, 1, 0)
-                        if (listAddress!!.size > 0) {
-                            entity.info = CommonUtils.fullAddress(listAddress[0])
+                        val gpsDirectory = metadata.getFirstDirectoryOfType(GpsDirectory::class.java)
+                        if (gpsDirectory != null && gpsDirectory.geoLocation != null) {
+                            entity.longitude = gpsDirectory.geoLocation.longitude
+                            entity.latitude = gpsDirectory.geoLocation.latitude
+                            val listAddress = CommonUtils.getFromLocation(this@CameraActivity, entity.latitude, entity.longitude, 1, 0)
+                            listAddress?.let { it ->
+                                entity.info = CommonUtils.fullAddress(it[0])
+                            }
+
+                            PhotoMapDbHelper.insertPhotoMapItem(entity)
+                            BitmapUtils.createScaledBitmap(targetFile.absolutePath, Constant.WORKING_DIRECTORY + fileName + ".thumb", 200)
+                            val intent = Intent(this@CameraActivity, MapsActivity::class.java)
+                            intent.putExtra("info", entity.info)
+                            intent.putExtra("imagePath", entity.imagePath)
+                            intent.putExtra("latitude", entity.latitude)
+                            intent.putExtra("longitude", entity.longitude)
+                            intent.putExtra("date", entity.date)
+                            startActivity(intent)
+                        } else {
+                            DialogUtils.makeToast(this, getString(R.string.camera_activity_message1))
                         }
-
-                        PhotoMapDbHelper.insertPhotoMapItem(entity)
-                        BitmapUtils.createScaledBitmap(targetFile.absolutePath, Constant.WORKING_DIRECTORY + fileName + ".thumb", 200)
-                        val intent = Intent(this@CameraActivity, MapsActivity::class.java)
-                        intent.putExtra("info", entity.info)
-                        intent.putExtra("imagePath", entity.imagePath)
-                        intent.putExtra("latitude", entity.latitude)
-                        intent.putExtra("longitude", entity.longitude)
-                        intent.putExtra("date", entity.date)
-                        startActivity(intent)
-                    } else {
-                        DialogUtils.makeToast(this, getString(R.string.camera_activity_message1))
+                    } catch (e: Exception) {
+                        e.printStackTrace()
                     }
-                } catch (e: Exception) {
-                    e.printStackTrace()
                 }
-
-            } else if (resultCode == Activity.RESULT_CANCELED) {
-                // User cancelled the image capture
-            } else {
+                Activity.RESULT_CANCELED -> {}
+                else -> {}
             }
             finish()
         }

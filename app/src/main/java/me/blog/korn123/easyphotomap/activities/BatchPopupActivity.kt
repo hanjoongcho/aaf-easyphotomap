@@ -4,11 +4,9 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
-import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.widget.ProgressBar
 import com.beardedhen.androidbootstrap.TypefaceProvider
 import com.drew.imaging.jpeg.JpegMetadataReader
@@ -24,19 +22,15 @@ import me.blog.korn123.easyphotomap.utils.CommonUtils
 import me.blog.korn123.easyphotomap.utils.DialogUtils
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
-import org.apache.commons.lang.time.StopWatch
 import java.io.File
 import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * Created by CHO HANJOONG on 2016-09-11.
  */
 class BatchPopupActivity : Activity() {
 
-    private var mProgressBar: ProgressBar? = null
     private var mEnableUpdate = true
-
     private var mTotalPhoto = 0
     private var mSuccessCount = 0
     private var mFailCount = 0
@@ -48,7 +42,6 @@ class BatchPopupActivity : Activity() {
         super.onCreate(savedInstanceState)
         TypefaceProvider.registerDefaultIconSets()
         setContentView(R.layout.activity_batch_popup)
-        mProgressBar = findViewById(R.id.progressBar) as ProgressBar
         infoText.typeface = Typeface.DEFAULT
         infoText2.typeface = Typeface.DEFAULT
         infoText3.typeface = Typeface.DEFAULT
@@ -72,7 +65,7 @@ class BatchPopupActivity : Activity() {
                     File(Constant.WORKING_DIRECTORY).mkdirs()
                 }
                 val thread = RegisterThread(this@BatchPopupActivity, listImagePath)
-                mProgressBar!!.max = mTotalPhoto
+                progressBar.max = mTotalPhoto
                 thread.start()
                 stop.setOnClickListener({ _ -> mEnableUpdate = false })
                 close.setOnClickListener({ _ -> finish() })
@@ -112,7 +105,7 @@ class BatchPopupActivity : Activity() {
         infoText3.text = getString(R.string.batch_popup_message3) + ": " + mReduplicationCount
         infoText4.text = getString(R.string.batch_popup_message4) + ": " + mNoGPSInfoCount
         infoText5.text = getString(R.string.batch_popup_message5) + ": " + mFailCount
-        mProgressBar?.progress = mProgressStatus
+        progressBar.progress = mProgressStatus
         true
     })
 

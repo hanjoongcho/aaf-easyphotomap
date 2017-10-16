@@ -20,15 +20,15 @@ import java.util.*
  */
 class SearchItemAdapter(private val mContext: Context, private val mActivity: Activity, private val mLayoutResourceId: Int, private val mEntities: ArrayList<PhotoMapItem>) : ArrayAdapter<PhotoMapItem>(mContext, mLayoutResourceId, mEntities) {
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
         var row = convertView
-        var holder: ViewHolder? = null
+        var holder: ViewHolder?
 
         if (row == null) {
             val inflater = (mContext as Activity).layoutInflater
             row = inflater.inflate(mLayoutResourceId, parent, false)
             holder = ViewHolder()
-            holder.textView1 = row!!.findViewById(R.id.text1) as TextView
+            holder.textView1 = row.findViewById(R.id.text1) as TextView
             holder.textView2 = row.findViewById(R.id.text2) as TextView
             holder.textView3 = row.findViewById(R.id.text3) as TextView
             holder.imageView1 = row.findViewById(R.id.image1) as ImageView
@@ -38,13 +38,13 @@ class SearchItemAdapter(private val mContext: Context, private val mActivity: Ac
         }
 
         val imageEntity = mEntities[position]
-        var bitmap: Bitmap? = null
+        var bitmap: Bitmap?
         val fileName = FilenameUtils.getName(imageEntity.imagePath)
         bitmap = BitmapUtils.decodeFile(mActivity, Constant.WORKING_DIRECTORY + fileName + ".thumb")
-        holder.textView1!!.text = imageEntity.info
-        holder.textView2!!.text = imageEntity.date.toString()
-        holder.textView3!!.text = imageEntity.imagePath
-        holder.imageView1!!.setImageBitmap(bitmap)
+        holder.textView1?.text = imageEntity.info
+        holder.textView2?.text = imageEntity.date.toString()
+        holder.textView3?.text = imageEntity.imagePath
+        holder.imageView1?.setImageBitmap(bitmap)
         return row
     }
 

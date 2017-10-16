@@ -162,7 +162,9 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
     private fun parseMetadata() {
         mRecommendMap.clear()
         mListPhotoMapItem = PhotoMapDbHelper.selectPhotoMapItemAll()
-        Collections.sort(mListPhotoMapItem!!)
+        mListPhotoMapItem?.let {
+            Collections.sort(it)
+        }
     }
 
     private var mMenuClickListener: View.OnClickListener = View.OnClickListener { view ->
@@ -346,9 +348,10 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
             mListPhotoEntity.clear()
 
             for ((index, item) in listTemp.withIndex()) {
+                val info = item.info
                 Handler(Looper.getMainLooper()).post {
                     mProgressDialog?.progress = index + 1
-                    mProgressDialog?.setMessage(item.info)
+                    mProgressDialog?.setMessage(info)
                     val textView = mProgressDialog?.findViewById(android.R.id.message) as TextView?
                     textView?.ellipsize = TextUtils.TruncateAt.MIDDLE
                     textView?.maxLines = 1

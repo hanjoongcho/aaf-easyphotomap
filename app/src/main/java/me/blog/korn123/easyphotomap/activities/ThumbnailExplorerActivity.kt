@@ -9,15 +9,14 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
-import android.widget.GridView
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.beardedhen.androidbootstrap.TypefaceProvider
+import kotlinx.android.synthetic.main.activity_thumbnail_explorer.*
 import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.adapters.ThumbnailItemAdapter
 import me.blog.korn123.easyphotomap.helper.RegistrationThread
@@ -33,7 +32,6 @@ import java.util.*
 class ThumbnailExplorerActivity : AppCompatActivity() {
 
     private var mThumbnailEntityAdapter: ThumbnailItemAdapter? = null
-    private var mGridView: GridView? = null
     private var mEnableUpdate = false
     private var mProgressDialog: ProgressDialog? = null
     private var mThumbnailTotal = 0
@@ -43,13 +41,13 @@ class ThumbnailExplorerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         TypefaceProvider.registerDefaultIconSets()
         setContentView(R.layout.activity_thumbnail_explorer)
-        val toolbar = findViewById(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
-        supportActionBar!!.title = getString(R.string.thumbnail_explorer_compact_activity_title)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        mGridView = findViewById(R.id.filelist) as GridView
+        supportActionBar?.run {
+            title = getString(R.string.thumbnail_explorer_compact_activity_title)
+            setDisplayHomeAsUpEnabled(true)
+        }
         setAdapter()
-        mGridView!!.columnWidth = ((CommonUtils.getDefaultDisplay(this).x - CommonUtils.dpToPixel(this@ThumbnailExplorerActivity, 30f, 1)) / 3).toInt()
+        thumbnailGrid.columnWidth = ((CommonUtils.getDefaultDisplay(this).x - CommonUtils.dpToPixel(this@ThumbnailExplorerActivity, 30f, 1)) / 3).toInt()
         setOnItemClickListener()
 
         findViewById(R.id.startSync).setOnClickListener {
@@ -86,11 +84,11 @@ class ThumbnailExplorerActivity : AppCompatActivity() {
     fun setAdapter() {
         val listPhotoEntity = CommonUtils.fetchAllThumbnail(this@ThumbnailExplorerActivity)
         mThumbnailEntityAdapter = ThumbnailItemAdapter(this, this, R.layout.item_thumbnail, listPhotoEntity)
-        mGridView!!.adapter = mThumbnailEntityAdapter
+        thumbnailGrid.adapter = mThumbnailEntityAdapter
     }
 
     private fun setOnItemClickListener() {
-        mGridView!!.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, l ->
+        thumbnailGrid.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
             val photoEntity = parent.adapter.getItem(position) as ThumbnailItem
             val imagePath = CommonUtils.getOriginImagePath(this@ThumbnailExplorerActivity, photoEntity.imageId!!)
             val positiveListener = PositiveListener(this@ThumbnailExplorerActivity, this@ThumbnailExplorerActivity, FilenameUtils.getName(imagePath) + ".origin", imagePath)
@@ -102,7 +100,7 @@ class ThumbnailExplorerActivity : AppCompatActivity() {
         }
     }
 
-    inner class PositiveListener internal constructor(internal var context: Context, internal var activity: Activity, internal var fileName: String?, internal var path: String?) {
+    inner class PositiveListener internal constructor(internal var context: Context, internal var activity: Activity, internal var fileName: String?, private var path: String?) {
 
         fun register() {
             if (fileName != null && path != null) {
@@ -141,10 +139,10 @@ class ThumbnailExplorerActivity : AppCompatActivity() {
 
             mThumbnailTotal = listOriginImage.size
             Handler(Looper.getMainLooper()).post {
-                (findViewById(R.id.progressView) as TextView).text = "total: " + mThumbnailTotal
-                (findViewById(R.id.progressView2) as TextView).text = "mCompleted: " + mCompleted
+                progressView.text = "total: " + mThumbnailTotal
+                progressView2.text = "mCompleted: " + mCompleted
                 setAdapter()
-                mThumbnailEntityAdapter!!.notifyDataSetChanged()
+                mThumbnailEntityAdapter?.notifyDataSetChanged()
             }
         }
     }

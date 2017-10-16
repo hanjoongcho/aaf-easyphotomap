@@ -3,7 +3,6 @@ package me.blog.korn123.easyphotomap.activities
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -26,24 +25,25 @@ class TimelineActivity : AppCompatActivity() {
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_timeline)
-
-        val toolbar = findViewById(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
-        supportActionBar!!.title = getString(R.string.timeline_compat_activity_title)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.run {
+            title = getString(R.string.timeline_compat_activity_title)
+            setDisplayHomeAsUpEnabled(true)
+        }
 
         parseMetadata()
         mArrayAdapter = TimelineItemAdapter(this, this, R.layout.item_timeline, mListPhotoMapItem!!)
         listTimeline.adapter = mArrayAdapter
         listTimeline.setSelection(mArrayAdapter!!.count - 1)
-        listTimeline.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+        listTimeline.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
             val imageEntity = parent.adapter.getItem(position) as PhotoMapItem
-            val intent = Intent(this@TimelineActivity, MapsActivity::class.java)
-            intent.putExtra("info", imageEntity.info)
-            intent.putExtra("imagePath", imageEntity.imagePath)
-            intent.putExtra("latitude", imageEntity.latitude)
-            intent.putExtra("longitude", imageEntity.longitude)
-            intent.putExtra("date", imageEntity.date)
+            val intent = Intent(this@TimelineActivity, MapsActivity::class.java).apply {
+                putExtra("info", imageEntity.info)
+                putExtra("imagePath", imageEntity.imagePath)
+                putExtra("latitude", imageEntity.latitude)
+                putExtra("longitude", imageEntity.longitude)
+                putExtra("date", imageEntity.date)
+            }
             startActivity(intent)
         }
     }
