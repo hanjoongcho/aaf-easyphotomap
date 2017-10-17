@@ -1,12 +1,10 @@
 package me.blog.korn123.easyphotomap.helper
 
-import java.util.ArrayList
-
 import io.realm.Realm
 import io.realm.RealmConfiguration
-import io.realm.RealmResults
 import io.realm.Sort
 import me.blog.korn123.easyphotomap.models.PhotoMapItem
+import java.util.*
 
 /**
  * Created by CHO HANJOONG on 2017-09-12.
@@ -27,20 +25,18 @@ object PhotoMapDbHelper {
                         .build()
 
             }
-            return Realm.getInstance(sDiaryConfig!!)
+            return Realm.getInstance(sDiaryConfig)
         }
 
     fun insertPhotoMapItem(photoMapItem: PhotoMapItem) {
-        val realm = realmInstance
-        realm.beginTransaction()
+        realmInstance.beginTransaction()
         var sequence = 1
-        if (realm.where(PhotoMapItem::class.java).count() > 0) {
-            val number = realm.where(PhotoMapItem::class.java).max("sequence")
-            sequence = number.toInt() + 1
+        realmInstance.where(PhotoMapItem::class.java)?.max("sequence")?.let { max ->
+            sequence = max.toInt() + 1
         }
         photoMapItem.sequence = sequence
-        realm.insert(photoMapItem!!)
-        realm.commitTransaction()
+        realmInstance.insert(photoMapItem)
+        realmInstance.commitTransaction()
     }
 
     fun selectPhotoMapItemAll(): ArrayList<PhotoMapItem> {
@@ -51,24 +47,22 @@ object PhotoMapDbHelper {
     }
 
     fun selectTimeLineItemAll(excludeDate: String): ArrayList<PhotoMapItem> {
-        val realm = realmInstance
-        val realmResults = realm.where(PhotoMapItem::class.java).notEqualTo("date", excludeDate).findAllSorted("date", Sort.ASCENDING)
+        val realmResults = realmInstance.where(PhotoMapItem::class.java).notEqualTo("date", excludeDate).findAllSorted("date", Sort.ASCENDING)
         val list = ArrayList<PhotoMapItem>()
         list.addAll(realmResults.subList(0, realmResults.size))
-        realm.beginTransaction()
+        realmInstance.beginTransaction()
         for (item in list) {
-            item.dateWithoutTime = getSimpleDate(item.date!!)
+            item.date?.let {
+                item.dateWithoutTime = getSimpleDate(it)
+            }
         }
-        realm.commitTransaction()
+        realmInstance.commitTransaction()
         return list
     }
 
-    private fun getSimpleDate(date: String): String {
-        var simpleDate = when(date.contains("(")) {
-            true -> date.substring(0, date.lastIndexOf("("))
-            false -> date
-        }
-        return simpleDate
+    private fun getSimpleDate(date: String): String = when(date.contains("(")) {
+        true -> date.substring(0, date.lastIndexOf("("))
+        false -> date
     }
 
     fun selectPhotoMapItemBy(targetColumn: String, value: String): ArrayList<PhotoMapItem> {
@@ -86,12 +80,11 @@ object PhotoMapDbHelper {
     }
 
     fun deletePhotoMapItemBy(sequence: Int) {
-        val realm = realmInstance
-        val item = realm.where(PhotoMapItem::class.java).equalTo("sequence", sequence).findFirst()
-        if (item != null) {
-            realm.beginTransaction()
-            item.deleteFromRealm()
-            realm.commitTransaction()
+        val item: PhotoMapItem? = realmInstance.where(PhotoMapItem::class.java).equalTo("sequence", sequence).findFirst()
+        item?.let {
+            realmInstance.beginTransaction()
+            it.deleteFromRealm()
+            realmInstance.commitTransaction()
         }
     }
 
