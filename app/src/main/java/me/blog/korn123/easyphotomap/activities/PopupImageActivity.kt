@@ -33,7 +33,7 @@ class PopupImageActivity : Activity() {
             val width = options.outWidth
             val height = options.outHeight
             options.inJustDecodeBounds = false
-            bitmap = BitmapUtils.decodeFile(this@PopupImageActivity, imagePath, options)!!
+            bitmap = BitmapUtils.decodeFile(this@PopupImageActivity, imagePath, options)
             if (width > height && CommonUtils.getDisplayOrientation(this) == 0 || width < height && CommonUtils.getDisplayOrientation(this) == 1) {
                 val matrix = Matrix()
                 matrix.postRotate(90f)

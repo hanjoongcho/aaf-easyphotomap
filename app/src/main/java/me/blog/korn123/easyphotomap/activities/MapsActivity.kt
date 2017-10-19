@@ -168,7 +168,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
     }
 
     private var mMenuClickListener: View.OnClickListener = View.OnClickListener { view ->
-        floatingMenu!!.close(false)
+        floatingMenu.close(false)
         when (view.id) {
             R.id.camera -> if (CommonUtils.loadBooleanPreference(this@MapsActivity, "disable_info_popup")) {
                 val camera = Intent(view.context, CameraActivity::class.java)
@@ -201,92 +201,96 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                 mEnableDateFilter = CommonUtils.loadBooleanPreference(this@MapsActivity, "date_filter_setting")
                 mMap?.clear()
                 parseMetadata()
-                mListPhotoMapItem?.size
-                if (mListPhotoMapItem?.size == null) {
-                    DialogUtils.showAlertDialog(this, getString(R.string.maps_activity_message2))
-                } else {
-                    val inflater = this.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-                    val customView = inflater.inflate(R.layout.popup_window_recommendation, null)
-                    mListView = customView.findViewById(R.id.listView) as ListView
-                    FontUtils.setChildViewTypeface(customView as ViewGroup)
-                    val listOfSortEntry: List<Map.Entry<String, Int>>?
-                    if (mEnableDateFilter) {
-                        mListPhotoMapItem?.map { item ->
-                            val date: String? = when (item.date?.contains("(")) {
-                                true -> item.date?.substring(0, item.date!!.lastIndexOf("("))
-                                false -> item.date
-                                null -> null
-                            }
-                            date?.let {
-                                if (mRecommendMap.containsKey(it)) {
-                                    mRecommendMap.put(it, mRecommendMap[it]!!.plus(1))
-                                } else {
-                                    mRecommendMap.put(it, 1)
-                                }
-                            }
-                        }
-                        listOfSortEntry = CommonUtils.entriesSortedByKeys(mRecommendMap)
+                mListPhotoMapItem?.let { listPhotoMapItem ->
+                    if (listPhotoMapItem.size == 0) {
+                        DialogUtils.showAlertDialog(this, getString(R.string.maps_activity_message2))
                     } else {
-                        mListPhotoMapItem!!.map { it ->
-                            val arr = StringUtils.split(it.info, " ")
-                            arr.map { str ->
-                                if (Pattern.matches("^(([0-9]{1,9})-([0-9]{1,9}))|(([0-9]{1,9}))$", str) || str.length < 2) {
-                                } else if (mRecommendMap.containsKey(str)) {
-                                    mRecommendMap.put(str, mRecommendMap[str]!!.plus(1))
-                                } else {
-                                    mRecommendMap.put(str, 1)
+                        val inflater = this.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                        val customView = inflater.inflate(R.layout.popup_window_recommendation, null)
+                        mListView = customView.findViewById(R.id.listView) as ListView
+                        FontUtils.setChildViewTypeface(customView as ViewGroup)
+                        val listOfSortEntry: List<Map.Entry<String, Int>>?
+                        if (mEnableDateFilter) {
+                            listPhotoMapItem.map { item ->
+                                val date: String? = when (item.date?.contains("(")) {
+                                    true -> item.date?.substring(0, item.date!!.lastIndexOf("("))
+                                    false -> item.date
+                                    null -> null
+                                }
+                                date?.let {
+                                    if (mRecommendMap.containsKey(it)) {
+                                        mRecommendMap.put(it, mRecommendMap[it]!!.plus(1))
+                                    } else {
+                                        mRecommendMap.put(it, 1)
+                                    }
                                 }
                             }
+                            listOfSortEntry = CommonUtils.entriesSortedByKeys(mRecommendMap)
+                        } else {
+                            listPhotoMapItem.map { it ->
+                                val arr = StringUtils.split(it.info, " ")
+                                arr.map { str ->
+                                    if (Pattern.matches("^(([0-9]{1,9})-([0-9]{1,9}))|(([0-9]{1,9}))$", str) || str.length < 2) {
+                                    } else if (mRecommendMap.containsKey(str)) {
+                                        mRecommendMap.put(str, mRecommendMap[str]!!.plus(1))
+                                    } else {
+                                        mRecommendMap.put(str, 1)
+                                    }
+                                }
+                            }
+                            listOfSortEntry = CommonUtils.entriesSortedByValues(mRecommendMap)
                         }
-                        listOfSortEntry = CommonUtils.entriesSortedByValues(mRecommendMap)
-                    }
 
-                    mListRecommendationOrigin.clear()
-                    mListRecommendation.clear()
-                    for ((key, value) in listOfSortEntry) {
-                        mListRecommendationOrigin.add(Recommendation(key, value))
-                    }
-
-                    mListRecommendation.addAll(mListRecommendationOrigin)
-                    mAdapter = ArrayAdapter(this, R.layout.item_recommendation, mListRecommendation)
-                    mListView!!.adapter = mAdapter
-                    mListView!!.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, id ->
-                        val recommendation = parent.adapter.getItem(position) as Recommendation
-                        mPopupWindow!!.dismiss()
-                        overlayIcons(recommendation.keyWord, mEnableDateFilter)
-                    }
-                    val point = CommonUtils.getDefaultDisplay(this)
-                    customView.findViewById(R.id.viewWorld).setOnClickListener {
-                        mPopupWindow!!.dismiss()
-                        overlayIcons("", false)
-                    }
-                    customView.findViewById(R.id.close).setOnClickListener { mPopupWindow!!.dismiss() }
-
-                    val searchView = customView.findViewById(R.id.searchKey) as SearchView
-                    searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                        override fun onQueryTextSubmit(query: String): Boolean = false
-
-                        override fun onQueryTextChange(newText: String): Boolean {
-                            mListRecommendation.clear()
-                            mListRecommendationOrigin.map{ it -> if (StringUtils.contains(it.keyWord, newText)) {
-                                mListRecommendation.add(it)
-                            }}
-                            mAdapter!!.notifyDataSetChanged()
-                            return false
+                        mListRecommendationOrigin.clear()
+                        mListRecommendation.clear()
+                        for ((key, value) in listOfSortEntry) {
+                            mListRecommendationOrigin.add(Recommendation(key, value))
                         }
-                    })
-                    val contentViewTop = window.findViewById(Window.ID_ANDROID_CONTENT).top
-                    mPopupWindow = PopupWindow(customView, point.x, point.y - contentViewTop, true)
-                    mPopupWindow!!.showAtLocation(view, Gravity.CENTER, 0, 0)
+
+                        mListRecommendation.addAll(mListRecommendationOrigin)
+                        mAdapter = ArrayAdapter(this, R.layout.item_recommendation, mListRecommendation)
+                        mListView?.adapter = mAdapter
+                        mListView?.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, id ->
+                            val recommendation = parent.adapter.getItem(position) as Recommendation
+                            mPopupWindow?.dismiss()
+                            overlayIcons(recommendation.keyWord, mEnableDateFilter)
+                        }
+                        val point = CommonUtils.getDefaultDisplay(this)
+                        customView.findViewById(R.id.viewWorld).setOnClickListener {
+                            mPopupWindow?.dismiss()
+                            overlayIcons("", false)
+                        }
+                        customView.findViewById(R.id.close).setOnClickListener { mPopupWindow?.dismiss() }
+
+                        val searchView = customView.findViewById(R.id.searchKey) as SearchView
+                        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                            override fun onQueryTextSubmit(query: String): Boolean = false
+
+                            override fun onQueryTextChange(newText: String): Boolean {
+                                mListRecommendation.clear()
+                                mListRecommendationOrigin.map{ it -> if (StringUtils.contains(it.keyWord, newText)) {
+                                    mListRecommendation.add(it)
+                                }}
+                                mAdapter?.notifyDataSetChanged()
+                                return false
+                            }
+                        })
+                        val contentViewTop = window.findViewById(Window.ID_ANDROID_CONTENT).top
+                        mPopupWindow = PopupWindow(customView, point.x, point.y - contentViewTop, true)
+                        mPopupWindow!!.showAtLocation(view, Gravity.CENTER, 0, 0)
+                    }
                 }
             }
             R.id.find -> {
-                if (mListPhotoMapItem!!.size < 1) {
-                    DialogUtils.showAlertDialog(this, getString(R.string.maps_activity_message2))
-                } else {
-                    val photoSearchIntent = Intent(this, PhotoSearchActivity::class.java)
-                    startActivity(photoSearchIntent)
+                mListPhotoMapItem?.let { listPhotoMapItem ->
+                    if (listPhotoMapItem.size == 0) {
+                        DialogUtils.showAlertDialog(this, getString(R.string.maps_activity_message2))
+                    } else {
+                        val photoSearchIntent = Intent(this, PhotoSearchActivity::class.java)
+                        startActivity(photoSearchIntent)
+                    }
                 }
+
             }
             R.id.setting -> {
                 val settingIntent = Intent(this, SettingsActivity::class.java)
@@ -297,11 +301,13 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                 startActivity(fileExplorerIntent)
             }
             R.id.timeline -> {
-                if (mListPhotoMapItem!!.size < 1) {
-                    DialogUtils.showAlertDialog(this, getString(R.string.maps_activity_message2))
-                } else {
-                    val timelineIntent = Intent(this@MapsActivity, TimelineActivity::class.java)
-                    startActivity(timelineIntent)
+                mListPhotoMapItem?.let {
+                    if (it.size == 0) {
+                        DialogUtils.showAlertDialog(this, getString(R.string.maps_activity_message2))
+                    } else {
+                        val timelineIntent = Intent(this@MapsActivity, TimelineActivity::class.java)
+                        startActivity(timelineIntent)
+                    }
                 }
             }
             else -> {
@@ -361,24 +367,24 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                 val latLng = LatLng(item.latitude, item.longitude)
                 options.position(latLng)
                 val fileName = FilenameUtils.getName(item.imagePath)
-                val bm: Bitmap = BitmapUtils.decodeFile(this@MapsActivity, Constant.WORKING_DIRECTORY + fileName + ".thumb")!!
+                val bm: Bitmap = BitmapUtils.decodeFile(this@MapsActivity, Constant.WORKING_DIRECTORY + fileName + ".thumb")
                 val image = when (CommonUtils.loadStringPreference(this@MapsActivity, "photo_marker_setting", "basicFrame")) {
                     "filmFrame" -> {
                         val point = Point(bm.width, bm.height)
                         val fixedWidthHeight = java.lang.Double.parseDouble(CommonUtils.loadStringPreference(this@MapsActivity, "photo_size_setting", "0.6"))
-                        val bm2 = BitmapUtils.createScaledBitmap(bm, point, fixedWidthHeight, fixedWidthHeight)!!
+                        val bm2 = BitmapUtils.createScaledBitmap(bm, point, fixedWidthHeight, fixedWidthHeight)
                         BitmapDescriptorFactory.fromBitmap(BitmapUtils.addFrame(this@MapsActivity, bm2, CommonUtils.dpToPixel(this@MapsActivity, 6f), R.drawable.frame_03))
                     }
                     "basicFrame" -> {
                         val point = Point(bm.width, bm.height)
                         val fixedWidthHeight = java.lang.Double.parseDouble(CommonUtils.loadStringPreference(this@MapsActivity, "photo_size_setting", "0.6"))
-                        val bm2 = BitmapUtils.createScaledBitmap(bm, point, fixedWidthHeight, fixedWidthHeight)!!
+                        val bm2 = BitmapUtils.createScaledBitmap(bm, point, fixedWidthHeight, fixedWidthHeight)
                         BitmapDescriptorFactory.fromBitmap(BitmapUtils.border(bm2, CommonUtils.dpToPixel(this@MapsActivity, 1.5f)))
                     }
                     "flowerFrame" -> {
                         val point = Point(bm.width, bm.height)
                         val fixedWidthHeight = java.lang.Double.parseDouble(CommonUtils.loadStringPreference(this@MapsActivity, "photo_size_setting", "0.6"))
-                        val bm2 = BitmapUtils.createScaledBitmap(bm, point, fixedWidthHeight, fixedWidthHeight)!!
+                        val bm2 = BitmapUtils.createScaledBitmap(bm, point, fixedWidthHeight, fixedWidthHeight)
                         BitmapDescriptorFactory.fromBitmap(BitmapUtils.addFrame(this@MapsActivity, bm2, CommonUtils.dpToPixel(this@MapsActivity, 6f), R.drawable.frame_02))
                     }
                     else -> {
@@ -523,7 +529,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                 val options = BitmapFactory.Options()
                 options.inJustDecodeBounds = false
                 options.inSampleSize = 5
-                var bitmap = BitmapUtils.decodeFile(this@MapsActivity, imgFile.absolutePath, options)!!
+                var bitmap = BitmapUtils.decodeFile(this@MapsActivity, imgFile.absolutePath, options)
                 if (orientation > 1) {
                     bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true) // rotating bitmap
                 }

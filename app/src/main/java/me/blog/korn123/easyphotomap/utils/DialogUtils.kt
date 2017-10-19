@@ -50,7 +50,7 @@ object DialogUtils {
         val options = BitmapFactory.Options()
         options.inJustDecodeBounds = false
         options.inSampleSize = 5
-        val originBitmap = BitmapUtils.decodeFile(activity, imagePath, options)!!
+        val originBitmap = BitmapUtils.decodeFile(activity, imagePath, options)
         val scaledBitmap = BitmapUtils.createScaledBitmap(originBitmap, CommonUtils.getDefaultDisplay(activity))
         val thumbView = ImageView(activity)
         thumbView.setImageBitmap(scaledBitmap)
@@ -77,7 +77,7 @@ object DialogUtils {
         val options = BitmapFactory.Options()
         options.inJustDecodeBounds = false
         options.inSampleSize = 5
-        val originBitmap = BitmapUtils.decodeFile(activity, imagePath, options)!!
+        val originBitmap = BitmapUtils.decodeFile(activity, imagePath, options)
         val scaledBitmap = BitmapUtils.createScaledBitmap(originBitmap, CommonUtils.getDefaultDisplay(activity))
         val thumbView = ImageView(activity)
         thumbView.setImageBitmap(scaledBitmap)
@@ -121,7 +121,7 @@ object DialogUtils {
         val options = BitmapFactory.Options()
         options.inJustDecodeBounds = false
         options.inSampleSize = 5
-        val originBitmap = BitmapUtils.decodeFile(activity, imagePath, options)!!
+        val originBitmap = BitmapUtils.decodeFile(activity, imagePath, options)
         val scaledBitmap = BitmapUtils.createScaledBitmap(originBitmap, CommonUtils.getDefaultDisplay(activity))
         val thumbView = ImageView(activity)
         thumbView.setImageBitmap(scaledBitmap)

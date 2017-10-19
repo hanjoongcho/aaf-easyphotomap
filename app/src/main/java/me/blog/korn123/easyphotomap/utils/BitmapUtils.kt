@@ -11,6 +11,7 @@ import android.util.LruCache
 import org.apache.commons.io.IOUtils
 
 import java.io.File
+import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.OutputStream
 
@@ -75,6 +76,7 @@ object BitmapUtils {
         } finally {
             IOUtils.closeQuietly(outputStream)
         }
+
         return result
     }
 
@@ -100,45 +102,35 @@ object BitmapUtils {
     }
 
     @JvmOverloads
-    fun createScaledBitmap(bitmap: Bitmap, point: Point, scaleFactorX: Double = 0.8, scaleFactorY: Double = 0.5): Bitmap? {
-        var downscaledBitmap: Bitmap? = null
+    fun createScaledBitmap(bitmap: Bitmap, point: Point, scaleFactorX: Double = 0.8, scaleFactorY: Double = 0.5): Bitmap {
         val fixedWidth = point.x * scaleFactorX
         val fixedHeight = point.y * scaleFactorY
-        try {
-            val height = bitmap.height
-            val width = bitmap.width
-            val downSampleWidth = width / height.toFloat() * fixedHeight
-            val downSampleHeight = height / width.toFloat() * fixedWidth
-            if (width > height && point.x < point.y) { // 가로이미지 & 세로보기 화면에서는 width값에 맞춰 고정함
-                downscaledBitmap = Bitmap.createScaledBitmap(bitmap, fixedWidth.toInt(), downSampleHeight.toInt(), false)
-            } else if (width > height && point.x > point.y) { // 가로이미지 & 가로보기 화면에서는 height값에 맞춰 고정함
-                downscaledBitmap = Bitmap.createScaledBitmap(bitmap, downSampleWidth.toInt(), fixedHeight.toInt(), false)
-            } else if (width < height) {
-                downscaledBitmap = Bitmap.createScaledBitmap(bitmap, downSampleWidth.toInt(), fixedHeight.toInt(), false)
-            } else if (width == height) {
-                downscaledBitmap = Bitmap.createScaledBitmap(bitmap, downSampleWidth.toInt(), fixedHeight.toInt(), false)
-            } else {
-                downscaledBitmap = bitmap
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
+        val height = bitmap.height
+        val width = bitmap.width
+        val downSampleWidth = width / height.toFloat() * fixedHeight
+        val downSampleHeight = height / width.toFloat() * fixedWidth
+        return when {
+            // 가로이미지 & 세로보기 화면에서는 width값에 맞춰 고정함
+            width > height && point.x < point.y -> Bitmap.createScaledBitmap(bitmap, fixedWidth.toInt(), downSampleHeight.toInt(), false)
+            // 가로이미지 & 가로보기 화면에서는 height값에 맞춰 고정함
+            width > height && point.x > point.y -> Bitmap.createScaledBitmap(bitmap, downSampleWidth.toInt(), fixedHeight.toInt(), false)
+            width < height -> Bitmap.createScaledBitmap(bitmap, downSampleWidth.toInt(), fixedHeight.toInt(), false)
+            width == height -> Bitmap.createScaledBitmap(bitmap, downSampleWidth.toInt(), fixedHeight.toInt(), false)
+            else -> bitmap
         }
-
-        return downscaledBitmap
     }
 
-    fun decodeFile(activity: Activity, imagePath: String?, options: BitmapFactory.Options? = null): Bitmap? {
-        var bitmap: Bitmap? = null
-        if (imagePath != null && File(imagePath).exists()) {
+    fun decodeFile(activity: Activity, imagePath: String?, options: BitmapFactory.Options? = null): Bitmap = when (imagePath != null && File(imagePath).exists()) {
+        true -> {
             if (options == null) {
-                bitmap = BitmapFactory.decodeFile(imagePath)
+                BitmapFactory.decodeFile(imagePath)
             } else {
-                bitmap = BitmapFactory.decodeFile(imagePath, options)
+                BitmapFactory.decodeFile(imagePath, options)
             }
-        } else {
-            bitmap = BitmapFactory.decodeResource(activity.resources, android.R.drawable.ic_menu_gallery)
         }
-        return bitmap
+        false -> {
+            BitmapFactory.decodeResource(activity.resources, android.R.drawable.ic_menu_gallery)
+        }
     }
 
     fun border(bmp: Bitmap, borderSize: Int): Bitmap {
