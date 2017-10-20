@@ -4,15 +4,14 @@
 
 ---------------------------------------------------
 
-# Changes in 1.1.49 (date: 2017/10/09)
+# Changes in 1.1.50 (date: 2017/10/20)
   * 사용자 인터페이스 최적화
 
 # Changes in 1.1.47 (date: 2017/09/17)
   * 포토맵 관리를 위한 realm 데이터베이스 적용
 
 # Changes in 1.1.46 (date: 2017/06/03)
-  [기능개선/Improvement]
-  1. GPS 정보를 이용한 지도 초기화기능 적용/Apply map initialization function using GPS information
+  * GPS 정보를 이용한 지도 초기화기능 적용
 
 # Changes in 1.1.44 (date: 2017/05/23)
   [기능추가/New Feature]

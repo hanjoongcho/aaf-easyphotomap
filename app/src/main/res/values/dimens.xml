@@ -23,5 +23,6 @@
     <dimen name="default_circle_size">250dp</dimen>
 
     <dimen name="map_dot_marker_size">12dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 
 </resources>

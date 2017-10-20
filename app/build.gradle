@@ -4,15 +4,15 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'realm-android'
 
 android {
-    compileSdkVersion 23
+    compileSdkVersion 25
     buildToolsVersion '25.0.0'
 
     defaultConfig {
         applicationId "me.blog.korn123.easyphotomap"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 60
-        versionName "1.1.49"
+        versionCode 61
+        versionName "1.1.50"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
     }
@@ -52,8 +52,9 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
     // google
-    compile 'com.android.support:appcompat-v7:23.0.0'
-    compile 'com.android.support:design:23.0.0'
+    compile 'com.android.support:appcompat-v7:25.3.0'
+    compile 'com.android.support:design:25.3.0'
+    compile 'com.android.support:support-v4:25.3.0'
     compile 'com.android.support:multidex:1.0.0'
     compile 'com.google.android.gms:play-services:6.5.87'
     compile 'com.google.maps.android:android-maps-utils:0.4'

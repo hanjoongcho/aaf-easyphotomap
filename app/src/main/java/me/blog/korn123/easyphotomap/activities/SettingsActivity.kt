@@ -15,6 +15,7 @@ import android.os.Bundle
 import android.preference.*
 import android.view.MenuItem
 import me.blog.korn123.easyphotomap.R
+import me.blog.korn123.easyphotomap.constants.Constant
 import me.blog.korn123.easyphotomap.utils.CommonUtils
 import org.apache.commons.lang.StringUtils
 
@@ -123,7 +124,8 @@ class SettingsActivity : AppPreferenceActivity() {
                 false
             }
             mOpenSourceLicensesInfo.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                val intent = Intent(mContext, LicensesActivity::class.java)
+                val intent = Intent(mContext, WebViewActivity::class.java)
+                intent.putExtra(Constant.OPEN_URL_INFO, "https://github.com/hanjoongcho/aaf-easyphotomap/blob/master/LICENSE.md")
                 startActivity(intent)
                 false
             }

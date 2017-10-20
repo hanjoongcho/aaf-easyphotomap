@@ -122,11 +122,7 @@ object BitmapUtils {
 
     fun decodeFile(activity: Activity, imagePath: String?, options: BitmapFactory.Options? = null): Bitmap = when (imagePath != null && File(imagePath).exists()) {
         true -> {
-            if (options == null) {
-                BitmapFactory.decodeFile(imagePath)
-            } else {
-                BitmapFactory.decodeFile(imagePath, options)
-            }
+            options?.let { BitmapFactory.decodeFile(imagePath, options) } ?: BitmapFactory.decodeFile(imagePath)
         }
         false -> {
             BitmapFactory.decodeResource(activity.resources, android.R.drawable.ic_menu_gallery)

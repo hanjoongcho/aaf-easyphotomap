@@ -28,4 +28,7 @@ object Constant {
 
     /* IntroActivity */
     val START_MAIN_ACTIVITY = 0
+
+    /* WebViewActivity */
+    val OPEN_URL_INFO = "open_url_info"
 }
