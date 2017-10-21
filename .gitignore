@@ -13,7 +13,6 @@
 .idea/gradle.xml
 .idea/markdown-exported-files.xml
 
-
 *.iml
 .gradle
 build
@@ -22,4 +21,5 @@ app/*.apk
 app/*.iml
 .idea/misc.xml
 .idea/runConfigurations.xml
-
+.idea/markdown-navigator/profiles_settings.xml
+local.properties
