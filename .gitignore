@@ -12,8 +12,9 @@
 .idea/vcs.xml
 .idea/gradle.xml
 .idea/markdown-exported-files.xml
+.idea/markdown-navigator/
 
-
+.local.properties
 *.iml
 .gradle
 build
