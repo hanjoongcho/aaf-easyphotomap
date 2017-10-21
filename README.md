@@ -1,6 +1,9 @@
 # Easy Photo Map
 
-[![License][licensesvg]][LICENSE.md] [![Awesome Kotlin Badge](https://kotlin.link/awesome-kotlin.svg)](https://github.com/KotlinBy/awesome-kotlin)  
+[![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/unicodeveloper/awesome-opensource-apps)
+[![Awesome Kotlin Badge](https://kotlin.link/awesome-kotlin.svg)](https://github.com/KotlinBy/awesome-kotlin)
+[![License][licensesvg]][LICENSE.md]   
+
 <img src="screenshots/ic_launcher.png">  
 
 Easy Photo Map is a photomap application that displays the location of the photo on the map using the location information included in the photo.  
