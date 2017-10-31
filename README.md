@@ -13,6 +13,7 @@ Latest version can be download from the link below.
 
 # Screen Shot
 <img src="screenshots/1.png" width="288" height="512">&nbsp;
+<img src="screenshots/8.gif" width="288" height="512">   
 <img src="screenshots/2.png" width="288" height="512">&nbsp;
 <img src="screenshots/3.png" width="288" height="512">&nbsp;
 <img src="screenshots/4.png" width="288" height="512">&nbsp;
