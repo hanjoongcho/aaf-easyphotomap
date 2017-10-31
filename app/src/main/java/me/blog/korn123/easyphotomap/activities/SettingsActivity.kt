@@ -46,9 +46,7 @@ class SettingsActivity : AppPreferenceActivity() {
      * Set up the [android.app.ActionBar], if the API is available.
      */
     private fun setupActionBar() {
-        val actionBar = supportActionBar
-        if (actionBar != null) {
-            // Show the Up button in the action bar.
+        supportActionBar.run {
             actionBar.setDisplayHomeAsUpEnabled(true)
             actionBar.title = getString(R.string.setting_activity_title)
         }
@@ -65,22 +63,18 @@ class SettingsActivity : AppPreferenceActivity() {
     /**
      * {@inheritDoc}
      */
-    override fun onIsMultiPane(): Boolean {
-        return isXLargeTablet(this)
-    }
+    override fun onIsMultiPane(): Boolean = isXLargeTablet(this)
 
     /**
      * This method stops fragment injection in malicious applications.
      * Make sure to deny any unknown fragments here.
      */
-    override fun isValidFragment(fragmentName: String): Boolean {
-        return PreferenceFragment::class.java.name == fragmentName || GeneralPreferenceFragment::class.java.name == fragmentName
-    }
+    override fun isValidFragment(fragmentName: String): Boolean = PreferenceFragment::class.java.name == fragmentName || GeneralPreferenceFragment::class.java.name == fragmentName
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     class GeneralPreferenceFragment : PreferenceFragment() {
 
-        internal var listener: SharedPreferences.OnSharedPreferenceChangeListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+        private var listener: SharedPreferences.OnSharedPreferenceChangeListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
             if (StringUtils.equals(key, "date_filter_setting")) {
                 val switchPreference = findPreference("date_filter_setting") as SwitchPreference
                 val checked = switchPreference.isChecked
@@ -112,7 +106,7 @@ class SettingsActivity : AppPreferenceActivity() {
                 // To count with Play market backstack, After pressing back button,
                 // to taken back to our application, we need to add following flags to intent.
                 goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY or
-                        Intent.FLAG_ACTIVITY_NEW_DOCUMENT or
+                        /*Intent.FLAG_ACTIVITY_NEW_DOCUMENT or*/
                         Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
                 try {
                     startActivity(goToMarket)
@@ -166,9 +160,7 @@ class SettingsActivity : AppPreferenceActivity() {
          * Helper method to determine if the device has an extra-large screen. For
          * example, 10" tablets are extra-large.
          */
-        private fun isXLargeTablet(context: Context): Boolean {
-            return context.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK >= Configuration.SCREENLAYOUT_SIZE_XLARGE
-        }
+        private fun isXLargeTablet(context: Context): Boolean = context.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK >= Configuration.SCREENLAYOUT_SIZE_XLARGE
     }
 
 }

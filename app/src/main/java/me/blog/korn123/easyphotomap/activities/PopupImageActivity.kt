@@ -26,20 +26,21 @@ class PopupImageActivity : Activity() {
         options.inJustDecodeBounds = true
         options.inSampleSize = 5
         val imagePath = intent.getStringExtra("imagePath")
-        var bitmap: Bitmap? = null
-        var targetBitmap: Bitmap? = null
+        val bitmap: Bitmap?
+        val targetBitmap: Bitmap?
         if (File(imagePath).exists()) {
             BitmapUtils.decodeFile(this@PopupImageActivity, imagePath, options)
             val width = options.outWidth
             val height = options.outHeight
             options.inJustDecodeBounds = false
             bitmap = BitmapUtils.decodeFile(this@PopupImageActivity, imagePath, options)
-            if (width > height && CommonUtils.getDisplayOrientation(this) == 0 || width < height && CommonUtils.getDisplayOrientation(this) == 1) {
-                val matrix = Matrix()
-                matrix.postRotate(90f)
-                targetBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
-            } else {
-                targetBitmap = bitmap
+            targetBitmap = when (width > height && CommonUtils.getDisplayOrientation(this) == 0 || width < height && CommonUtils.getDisplayOrientation(this) == 1) {
+                true -> {
+                    val matrix = Matrix()
+                    matrix.postRotate(90f)
+                    Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+                }
+                false -> bitmap
             }
         } else {
             bitmap = BitmapFactory.decodeResource(resources, android.R.drawable.ic_menu_gallery)

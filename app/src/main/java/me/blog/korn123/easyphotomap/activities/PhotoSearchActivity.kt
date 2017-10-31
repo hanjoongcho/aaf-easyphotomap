@@ -86,8 +86,8 @@ class PhotoSearchActivity : AppCompatActivity() {
         listView.adapter = mSearchItemAdapter
         val context = this
 
-        listView.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
-            val item = parent.adapter.getItem(position) as PhotoMapItem
+        listView.onItemClickListener = AdapterView.OnItemClickListener { parent, _, clickPosition, _ ->
+            val item = parent.adapter.getItem(clickPosition) as PhotoMapItem
             val intent = Intent(context, MapsActivity::class.java).apply {
                 putExtra("info", item.info)
                 putExtra("imagePath", item.imagePath)
@@ -98,10 +98,10 @@ class PhotoSearchActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        listView.onItemLongClickListener = AdapterView.OnItemLongClickListener { parent, view, position, _ ->
-            val item = parent.adapter.getItem(position) as PhotoMapItem
+        listView.onItemLongClickListener = AdapterView.OnItemLongClickListener { parent, view, longClickPosition, _ ->
+            val item = parent.adapter.getItem(longClickPosition) as PhotoMapItem
             PhotoMapDbHelper.deletePhotoMapItemBy(item.sequence)
-            refreshList(query, position, view.top)
+            refreshList(query, longClickPosition, view.top)
             true
         }
 
@@ -109,9 +109,11 @@ class PhotoSearchActivity : AppCompatActivity() {
     }
 
     private fun parseMetadata(query: String?) {
-        mListPhotoMapItem.clear()
-        val listTemp = PhotoMapDbHelper.containsPhotoMapItemBy("info", query!!)
-        mListPhotoMapItem.addAll(listTemp)
+        query?.let {
+            mListPhotoMapItem.clear()
+            val listTemp = PhotoMapDbHelper.containsPhotoMapItemBy("info", it)
+            mListPhotoMapItem.addAll(listTemp)
+        }
     }
 
 }

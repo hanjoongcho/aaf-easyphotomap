@@ -47,7 +47,7 @@ class ThumbnailExplorerActivity : AppCompatActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
         setAdapter()
-        thumbnailGrid.columnWidth = ((CommonUtils.getDefaultDisplay(this).x - CommonUtils.dpToPixel(this@ThumbnailExplorerActivity, 30f, 1)) / 3).toInt()
+        thumbnailGrid.columnWidth = ((CommonUtils.getDefaultDisplay(this).x - CommonUtils.dpToPixel(this@ThumbnailExplorerActivity, 30f, 1)) / 3)
         setOnItemClickListener()
 
         findViewById(R.id.startSync).setOnClickListener {
@@ -90,7 +90,7 @@ class ThumbnailExplorerActivity : AppCompatActivity() {
     private fun setOnItemClickListener() {
         thumbnailGrid.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
             val photoEntity = parent.adapter.getItem(position) as ThumbnailItem
-            val imagePath = CommonUtils.getOriginImagePath(this@ThumbnailExplorerActivity, photoEntity.imageId!!)
+            val imagePath = CommonUtils.getOriginImagePath(this@ThumbnailExplorerActivity, photoEntity.imageId)
             val positiveListener = PositiveListener(this@ThumbnailExplorerActivity, this@ThumbnailExplorerActivity, FilenameUtils.getName(imagePath) + ".origin", imagePath)
             if (imagePath == null) {
                 DialogUtils.showAlertDialog(this@ThumbnailExplorerActivity, getString(R.string.thumbnail_explorer_message4))
@@ -117,7 +117,7 @@ class ThumbnailExplorerActivity : AppCompatActivity() {
             val listOriginImage = CommonUtils.fetchAllImages(context)
             val listThumbnail = CommonUtils.fetchAllThumbnail(context)
             val listImageId = ArrayList<String>()
-            listThumbnail.map { thumbnailItem -> listImageId.add(thumbnailItem.imageId!!) }
+            listThumbnail.map { thumbnailItem -> listImageId.add(thumbnailItem.imageId) }
             mCompleted = listThumbnail.size
 
             Handler(Looper.getMainLooper()).post {
@@ -132,15 +132,15 @@ class ThumbnailExplorerActivity : AppCompatActivity() {
                 }
                 MediaStore.Images.Thumbnails.getThumbnail(context.contentResolver, java.lang.Long.parseLong(entity.imageId), MediaStore.Images.Thumbnails.MINI_KIND, null)
                 Handler(Looper.getMainLooper()).post {
-                    (findViewById(R.id.progressView) as TextView).text = "total: " + mThumbnailTotal
-                    (findViewById(R.id.progressView2) as TextView).text = "mCompleted: " + ++mCompleted
+                    (findViewById(R.id.progressView) as TextView).text = "total: $mThumbnailTotal"
+                    (findViewById(R.id.progressView2) as TextView).text = "mCompleted: ${++mCompleted}"
                 }
             }
 
             mThumbnailTotal = listOriginImage.size
             Handler(Looper.getMainLooper()).post {
-                progressView.text = "total: " + mThumbnailTotal
-                progressView2.text = "mCompleted: " + mCompleted
+                progressView.text = "Total: $mThumbnailTotal"
+                progressView2.text = "Completed: $mCompleted"
                 setAdapter()
                 mThumbnailEntityAdapter?.notifyDataSetChanged()
             }

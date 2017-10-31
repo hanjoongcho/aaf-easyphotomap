@@ -99,7 +99,7 @@ class FileExplorerActivity : AppCompatActivity() {
 
         fileList.setOnItemClickListener { parent, _, position, _ ->
             val thumbnailEntity = parent.adapter.getItem(position) as FileItem
-            var fileName = thumbnailEntity.fileName!!
+            var fileName = thumbnailEntity.fileName
 
             if (fileName.startsWith("[") && fileName.endsWith("]")) {
                 fileName = fileName.substring(1, fileName.length - 1)
@@ -149,7 +149,7 @@ class FileExplorerActivity : AppCompatActivity() {
 
     private fun refreshFiles() {
         val arrayPath = StringUtils.split(mCurrent, "/")
-        pathView!!.removeViews(0, pathView!!.childCount)
+        pathView.removeViews(0, pathView.childCount)
         var currentPath = ""
         var index = 0
         arrayPath.map { path ->
@@ -157,7 +157,7 @@ class FileExplorerActivity : AppCompatActivity() {
             val targetPath = currentPath
             val textView = TextView(this)
             if (index < arrayPath.size - 1) {
-                textView.text = path + "  >  "
+                textView.text = "$path  >  "
             } else {
                 textView.text = path
             }
@@ -176,7 +176,7 @@ class FileExplorerActivity : AppCompatActivity() {
                 mCurrent = targetPath
                 refreshFiles()
             }
-            pathView!!.addView(textView)
+            pathView.addView(textView)
             index++
         }
         RefreshThread().start()
@@ -197,13 +197,13 @@ class FileExplorerActivity : AppCompatActivity() {
             Handler(Looper.getMainLooper()).post {
                 mListFile.clear()
                 mListDirectory.clear()
-                val current = File(this@FileExplorerActivity.mCurrent!!)
+                val current = File(this@FileExplorerActivity.mCurrent)
                 val files = current.list()
                 if (files != null) {
                     for (i in files.indices) {
                         val thumbnailEntity = FileItem()
                         val path = this@FileExplorerActivity.mCurrent + "/" + files[i]
-                        var name = ""
+                        val name: String
                         val f = File(path)
                         if (f.isDirectory) {
                             name = "[" + files[i] + "]"

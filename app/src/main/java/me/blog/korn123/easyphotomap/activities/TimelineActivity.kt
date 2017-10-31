@@ -32,19 +32,22 @@ class TimelineActivity : AppCompatActivity() {
         }
 
         parseMetadata()
-        mArrayAdapter = TimelineItemAdapter(this, this, R.layout.item_timeline, mListPhotoMapItem!!)
-        listTimeline.adapter = mArrayAdapter
-        listTimeline.setSelection(mArrayAdapter!!.count - 1)
-        listTimeline.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
-            val imageEntity = parent.adapter.getItem(position) as PhotoMapItem
-            val intent = Intent(this@TimelineActivity, MapsActivity::class.java).apply {
-                putExtra("info", imageEntity.info)
-                putExtra("imagePath", imageEntity.imagePath)
-                putExtra("latitude", imageEntity.latitude)
-                putExtra("longitude", imageEntity.longitude)
-                putExtra("date", imageEntity.date)
+        mListPhotoMapItem?.let {
+            mArrayAdapter = TimelineItemAdapter(this, this, R.layout.item_timeline, it)
+            listTimeline.adapter = mArrayAdapter
+            val currentIndex = mArrayAdapter?.count ?: 1
+            listTimeline.setSelection(currentIndex - 1)
+            listTimeline.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
+                val imageEntity = parent.adapter.getItem(position) as PhotoMapItem
+                val intent = Intent(this@TimelineActivity, MapsActivity::class.java).apply {
+                    putExtra("info", imageEntity.info)
+                    putExtra("imagePath", imageEntity.imagePath)
+                    putExtra("latitude", imageEntity.latitude)
+                    putExtra("longitude", imageEntity.longitude)
+                    putExtra("date", imageEntity.date)
+                }
+                startActivity(intent)
             }
-            startActivity(intent)
         }
     }
 
