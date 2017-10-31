@@ -94,7 +94,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
         }
 
         if (intent.hasExtra("info")) {
-            mMap?.let { it ->
+            mMap?.let { map ->
                 val info = intent.getStringExtra("info")
                 val imagePath = intent.getStringExtra("imagePath")
                 val latitude = intent.getDoubleExtra("latitude", 0.0)
@@ -104,11 +104,11 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                 val latLng = LatLng(latitude, longitude)
                 fOptions.position(latLng)
                 fOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_marker))
-                it.setInfoWindowAdapter(InfoWindow(info, imagePath, latitude, longitude, date))
-                it.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(latitude, longitude), 15.0f), object : GoogleMap.CancelableCallback {
+                map.setInfoWindowAdapter(InfoWindow(info, imagePath, latitude, longitude, date))
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(latitude, longitude), 15.0f), object : GoogleMap.CancelableCallback {
                     override fun onFinish() {
-                        val marker = mMap!!.addMarker(fOptions)
-                        it.setOnInfoWindowClickListener {
+                        val marker = map.addMarker(fOptions)
+                        map.setOnInfoWindowClickListener {
                             val imageViewIntent = Intent(this@MapsActivity, PopupImageActivity::class.java)
                             imageViewIntent.putExtra("imagePath", imagePath)
                             startActivity(imageViewIntent)
@@ -181,17 +181,17 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                 CommonUtils.bindButtonEffect(textView2)
                 CommonUtils.bindButtonEffect(textView3)
                 textView2.setOnClickListener { v ->
-                    mPopupWindow!!.dismiss()
+                    mPopupWindow?.dismiss()
                     val camera = Intent(v.context, CameraActivity::class.java)
                     startActivity(camera)
                 }
                 textView3.setOnClickListener { v ->
                     CommonUtils.saveBooleanPreference(this@MapsActivity, "disable_info_popup", true)
-                    mPopupWindow!!.dismiss()
+                    mPopupWindow?.dismiss()
                     val camera = Intent(v.context, CameraActivity::class.java)
                     startActivity(camera)
                 }
-                mPopupWindow!!.showAtLocation(view, Gravity.CENTER, 0, 0)
+                mPopupWindow?.showAtLocation(view, Gravity.CENTER, 0, 0)
             }
             R.id.explorer -> {
                 val intent = Intent(view.context, ThumbnailExplorerActivity::class.java)
@@ -213,16 +213,14 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                         if (mEnableDateFilter) {
                             listPhotoMapItem.map { item ->
                                 val date: String? = when (item.date?.contains("(")) {
-                                    true -> item.date?.substring(0, item.date!!.lastIndexOf("("))
+                                    true -> item.date?.let { it.substring(0, it.lastIndexOf("(")) }
                                     false -> item.date
                                     null -> null
                                 }
+
                                 date?.let {
-                                    if (mRecommendMap.containsKey(it)) {
-                                        mRecommendMap.put(it, mRecommendMap[it]!!.plus(1))
-                                    } else {
-                                        mRecommendMap.put(it, 1)
-                                    }
+                                    val count = mRecommendMap[it]?.plus(1) ?: 1
+                                    mRecommendMap.put(it, count)
                                 }
                             }
                             listOfSortEntry = CommonUtils.entriesSortedByKeys(mRecommendMap)
@@ -243,9 +241,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
 
                         mListRecommendationOrigin.clear()
                         mListRecommendation.clear()
-                        for ((key, value) in listOfSortEntry) {
-                            mListRecommendationOrigin.add(Recommendation(key, value))
-                        }
+                        listOfSortEntry?.map { mListRecommendationOrigin.add(Recommendation(it.key, it.value)) }
 
                         mListRecommendation.addAll(mListRecommendationOrigin)
                         mAdapter = ArrayAdapter(this, R.layout.item_recommendation, mListRecommendation)
@@ -277,7 +273,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                         })
                         val contentViewTop = window.findViewById(Window.ID_ANDROID_CONTENT).top
                         mPopupWindow = PopupWindow(customView, point.x, point.y - contentViewTop, true)
-                        mPopupWindow!!.showAtLocation(view, Gravity.CENTER, 0, 0)
+                        mPopupWindow?.showAtLocation(view, Gravity.CENTER, 0, 0)
                     }
                 }
             }
@@ -478,7 +474,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
         override fun onBeforeClusterItemRendered(item: MyItem?,
                                                  markerOptions: MarkerOptions?) {
             super.onBeforeClusterItemRendered(item, markerOptions)
-            markerOptions!!.icon(item!!.markerOptions.icon)
+            markerOptions?.icon(item?.markerOptions?.icon)
         }
 
         override fun shouldRenderAsCluster(cluster: Cluster<MyItem>): Boolean {
