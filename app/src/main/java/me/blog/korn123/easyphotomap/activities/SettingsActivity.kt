@@ -46,9 +46,9 @@ class SettingsActivity : AppPreferenceActivity() {
      * Set up the [android.app.ActionBar], if the API is available.
      */
     private fun setupActionBar() {
-        supportActionBar.run {
-            actionBar.setDisplayHomeAsUpEnabled(true)
-            actionBar.title = getString(R.string.setting_activity_title)
+        supportActionBar?.run {
+            setDisplayHomeAsUpEnabled(true)
+            title = getString(R.string.setting_activity_title)
         }
     }
 
