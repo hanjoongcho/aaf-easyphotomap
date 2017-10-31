@@ -19,7 +19,6 @@ import me.blog.korn123.easyphotomap.utils.BitmapUtils
 import me.blog.korn123.easyphotomap.utils.CommonUtils
 import me.blog.korn123.easyphotomap.utils.DialogUtils
 import org.apache.commons.io.FilenameUtils
-import org.apache.commons.lang.StringUtils
 
 /**
  * Created by CHO HANJOONG on 2016-07-22.
@@ -50,11 +49,9 @@ class AddressSearchActivity : AppCompatActivity() {
         }
 
         mSearchView?.let { searchView ->
-            searchView?.setSearchableInfo(searchManager.getSearchableInfo(componentName))
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
             mQueryTextListener = object : SearchView.OnQueryTextListener {
-                override fun onQueryTextChange(query: String): Boolean {
-                    return true
-                }
+                override fun onQueryTextChange(query: String): Boolean = true
 
                 override fun onQueryTextSubmit(query: String): Boolean {
                     refreshList(query, 50)
@@ -81,53 +78,55 @@ class AddressSearchActivity : AppCompatActivity() {
 
     @JvmOverloads
     fun refreshList(query: String? = null, maxResults: Int = 50) {
-        if (StringUtils.length(query) < 1) return
-        mListAddress.clear()
-        try {
-            val listAddress = CommonUtils.getFromLocationName(this@AddressSearchActivity, query!!, maxResults, 0)
-            this.mListAddress.addAll(listAddress!!)
-            if (mAddressAdapter == null) {
-                mAddressAdapter = AddressItemAdapter(this, android.R.layout.simple_list_item_2, listAddress!!)
-                listView.adapter = mAddressAdapter
-                listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, _ ->
-                    val address = parent.adapter.getItem(position) as Address
-                    val intent = intent
-                    var resultMessage: String? = null
-                    if (intent.hasExtra("imagePath")) {
-                        val fileName = FilenameUtils.getName(intent.getStringExtra("imagePath"))
-                        val item = PhotoMapItem()
-                        item.imagePath = intent.getStringExtra("imagePath")
-                        item.info = CommonUtils.fullAddress(address)
-                        item.latitude = address.latitude
-                        item.longitude = address.longitude
-                        item.date = intent.getStringExtra("date")
+        query?.let {
+            mListAddress.clear()
+            try {
+                val listAddress = CommonUtils.getFromLocationName(this@AddressSearchActivity, it, maxResults, 0)
+                listAddress?.let {
+                    this.mListAddress.addAll(it)
+                    if (mAddressAdapter == null) {
+                        mAddressAdapter = AddressItemAdapter(this, android.R.layout.simple_list_item_2, it)
+                        listView.adapter = mAddressAdapter
+                        listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, _ ->
+                            val address = parent.adapter.getItem(position) as Address
+                            val intent = intent
+                            if (intent.hasExtra("imagePath")) {
+                                val fileName = FilenameUtils.getName(intent.getStringExtra("imagePath"))
+                                val item = PhotoMapItem()
+                                item.imagePath = intent.getStringExtra("imagePath")
+                                item.info = CommonUtils.fullAddress(address)
+                                item.latitude = address.latitude
+                                item.longitude = address.longitude
+                                item.date = intent.getStringExtra("date")
 
-                        val tempList = PhotoMapDbHelper.selectPhotoMapItemBy("imagePath", item.imagePath!!)
-                        resultMessage = when(tempList.size > 0) {
-                            true -> getString(R.string.file_explorer_message3)
-                            false -> {
-                                PhotoMapDbHelper.insertPhotoMapItem(item)
-                                BitmapUtils.createScaledBitmap(item.imagePath!!, Constant.WORKING_DIRECTORY + fileName + ".thumb", 200)
-                                getString(R.string.file_explorer_message4)
+                                val tempList = PhotoMapDbHelper.selectPhotoMapItemBy("imagePath", item.imagePath)
+                                val resultMessage = when(tempList.size > 0) {
+                                    true -> getString(R.string.file_explorer_message3)
+                                    false -> {
+                                        PhotoMapDbHelper.insertPhotoMapItem(item)
+                                        BitmapUtils.createScaledBitmap(item.imagePath, Constant.WORKING_DIRECTORY + fileName + ".thumb", 200)
+                                        getString(R.string.file_explorer_message4)
+                                    }
+                                }
+                                DialogUtils.makeSnackBar(view, resultMessage)
                             }
-                        }
-                    }
-                    DialogUtils.makeSnackBar(view, resultMessage!!)
-                    Thread(Runnable {
-                        try {
-                            Thread.sleep(1000)
-                            finish()
-                        } catch (e: InterruptedException) {
-                            e.printStackTrace()
-                        }
+                            Thread(Runnable {
+                                try {
+                                    Thread.sleep(1000)
+                                    finish()
+                                } catch (e: InterruptedException) {
+                                    e.printStackTrace()
+                                }
 
-                    }).start()
+                            }).start()
+                        }
+                    } else {
+                        mAddressAdapter?.notifyDataSetChanged()
+                    }
                 }
-            } else {
-                mAddressAdapter?.notifyDataSetChanged()
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
     }
 

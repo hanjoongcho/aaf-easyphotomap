@@ -46,9 +46,7 @@ class CameraActivity : Activity() {
     }
 
     /** Create a file Uri for saving an image or video  */
-    private fun getOutputMediaFileUri(type: Int): Uri {
-        return Uri.fromFile(getOutputMediaFile(type))
-    }
+    private fun getOutputMediaFileUri(type: Int): Uri = Uri.fromFile(getOutputMediaFile(type))
 
     /** Create a File for saving an image or video  */
     private fun getOutputMediaFile(type: Int): File? {
@@ -69,8 +67,9 @@ class CameraActivity : Activity() {
         }
 
         // Create a media file name
-        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        var mediaFile = when(type) {
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+
+        return when(type) {
             Constant.MEDIA_TYPE_IMAGE -> {
                 File(mediaStorageDir.path + File.separator + "IMG_" + timeStamp + ".jpg")
             }
@@ -79,8 +78,6 @@ class CameraActivity : Activity() {
             }
             else -> {null}
         }
-
-        return mediaFile
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -91,10 +88,10 @@ class CameraActivity : Activity() {
                     // Image captured and saved to mFileUri specified in the Intent
                     //                Toast.makeText(this, "Image saved to:\n" +
                     //                        mFileUri.toString(), Toast.LENGTH_LONG).show();
-                    val srcFilepath = StringUtils.substring(mFileUri!!.toString(), 6)
-                    var fileName: String?
+                    val srcFilepath = StringUtils.substring(mFileUri?.toString(), 6)
+                    val fileName: String
                     try {
-                        var targetFile: File?
+                        val targetFile: File
                         if (CommonUtils.loadBooleanPreference(this@CameraActivity, "enable_create_copy")) {
                             fileName = FilenameUtils.getName(srcFilepath) + ".origin"
                             targetFile = File(Constant.WORKING_DIRECTORY + fileName)

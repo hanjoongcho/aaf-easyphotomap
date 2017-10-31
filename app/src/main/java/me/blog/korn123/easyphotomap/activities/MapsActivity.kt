@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.support.v4.app.FragmentActivity
+import android.support.v4.content.ContextCompat
 import android.text.TextUtils
 import android.view.*
 import android.widget.*
@@ -212,10 +213,9 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                         val listOfSortEntry: List<Map.Entry<String, Int>>?
                         if (mEnableDateFilter) {
                             listPhotoMapItem.map { item ->
-                                val date: String? = when (item.date?.contains("(")) {
-                                    true -> item.date?.let { it.substring(0, it.lastIndexOf("(")) }
+                                val date: String? = when (item.date.contains("(")) {
+                                    true -> item.date.substring(0, item.date.lastIndexOf("("))
                                     false -> item.date
-                                    null -> null
                                 }
 
                                 date?.let {
@@ -226,13 +226,12 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                             listOfSortEntry = CommonUtils.entriesSortedByKeys(mRecommendMap)
                         } else {
                             listPhotoMapItem.map { it ->
-                                val arr = StringUtils.split(it.info, " ")
-                                arr.map { str ->
-                                    if (Pattern.matches("^(([0-9]{1,9})-([0-9]{1,9}))|(([0-9]{1,9}))$", str) || str.length < 2) {
-                                    } else if (mRecommendMap.containsKey(str)) {
-                                        mRecommendMap.put(str, mRecommendMap[str]!!.plus(1))
-                                    } else {
-                                        mRecommendMap.put(str, 1)
+                                val pattern = "[0-9]{1,9}"
+                                val regexString = "^($pattern-$pattern)|$pattern$"
+                                StringUtils.split(it.info, " ")?.map { str ->
+                                    if (!Pattern.matches(regexString, str) && str.length > 1) {
+                                        val count = mRecommendMap[str]?.plus(1) ?: 1
+                                        mRecommendMap.put(str, count)
                                     }
                                 }
                             }
@@ -241,12 +240,12 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
 
                         mListRecommendationOrigin.clear()
                         mListRecommendation.clear()
-                        listOfSortEntry?.map { mListRecommendationOrigin.add(Recommendation(it.key, it.value)) }
+                        listOfSortEntry.map { mListRecommendationOrigin.add(Recommendation(it.key, it.value)) }
 
                         mListRecommendation.addAll(mListRecommendationOrigin)
                         mAdapter = ArrayAdapter(this, R.layout.item_recommendation, mListRecommendation)
                         mListView?.adapter = mAdapter
-                        mListView?.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, id ->
+                        mListView?.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
                             val recommendation = parent.adapter.getItem(position) as Recommendation
                             mPopupWindow?.dismiss()
                             overlayIcons(recommendation.keyWord, mEnableDateFilter)
@@ -388,7 +387,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                         px = (px * java.lang.Double.parseDouble(CommonUtils.loadStringPreference(this@MapsActivity, "photo_size_setting", "0.6"))).toInt()
                         val mDotMarkerBitmap = Bitmap.createBitmap(px, px, Bitmap.Config.ARGB_8888)
                         val canvas = Canvas(mDotMarkerBitmap)
-                        val shape = resources.getDrawable(R.drawable.circle)
+                        val shape = ContextCompat.getDrawable(this@MapsActivity, R.drawable.circle)
                         shape.setBounds(0, 0, mDotMarkerBitmap.width, mDotMarkerBitmap.height)
                         shape.draw(canvas)
                         BitmapDescriptorFactory.fromBitmap(mDotMarkerBitmap)
@@ -402,7 +401,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
             Handler(Looper.getMainLooper()).post {
                 mProgressDialog?.dismiss()
                 setUpCluster()
-                val listTemp = when(applyFilter) {
+                val listForCluster = when(applyFilter) {
                     true -> {
                         PhotoMapDbHelper.containsPhotoMapItemBy("dateWithoutTime", keyword)
                     }
@@ -411,7 +410,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                     }
                 }
                 for (i in mListMarkerOptions.indices) {
-                    val item = MyItem(mListMarkerOptions[i], listTemp[i])
+                    val item = MyItem(mListMarkerOptions[i], listForCluster[i])
                     mClusterManager?.addItem(item)
                     mListLatLng.add(mListMarkerOptions[i].position)
                 }
@@ -431,11 +430,11 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
 
                         clusterManager.setOnClusterItemClickListener { item ->
                             map.setInfoWindowAdapter(InfoWindow(
-                                    item.photoEntity.info!!,
-                                    item.photoEntity.imagePath!!,
+                                    item.photoEntity.info,
+                                    item.photoEntity.imagePath,
                                     item.photoEntity.latitude,
                                     item.photoEntity.longitude,
-                                    item.photoEntity.date!!
+                                    item.photoEntity.date
                             ))
                             val fImagePath = item.photoEntity.imagePath
                             map.setOnInfoWindowClickListener {

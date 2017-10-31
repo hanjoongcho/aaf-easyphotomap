@@ -7,7 +7,6 @@ import android.content.DialogInterface
 import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
-import android.widget.ProgressBar
 import com.beardedhen.androidbootstrap.TypefaceProvider
 import com.drew.imaging.jpeg.JpegMetadataReader
 import com.drew.metadata.exif.ExifSubIFDDirectory
@@ -49,7 +48,7 @@ class BatchPopupActivity : Activity() {
         infoText5.typeface = Typeface.DEFAULT
         infoText6.typeface = Typeface.DEFAULT
 
-        var listImagePath = when (intent.getStringExtra("currentPath") == null) {
+        val listImagePath = when (intent.getStringExtra("currentPath") == null) {
             true -> intent.getStringArrayListExtra("listImagePath")
             false -> {
                 val targetPath = intent.getStringExtra("currentPath")
@@ -100,16 +99,16 @@ class BatchPopupActivity : Activity() {
     }
 
     internal var progressHandler = Handler(Handler.Callback {
-        infoText.text = (++mProgressStatus).toString() + " / " + mTotalPhoto
-        infoText2.text = getString(R.string.batch_popup_message2) + ": " + mSuccessCount
-        infoText3.text = getString(R.string.batch_popup_message3) + ": " + mReduplicationCount
-        infoText4.text = getString(R.string.batch_popup_message4) + ": " + mNoGPSInfoCount
-        infoText5.text = getString(R.string.batch_popup_message5) + ": " + mFailCount
+        infoText.text = "${++mProgressStatus} / $mTotalPhoto"
+        infoText2.text = "${getString(R.string.batch_popup_message2)}: $mSuccessCount"
+        infoText3.text = "${getString(R.string.batch_popup_message3)}: $mReduplicationCount"
+        infoText4.text = "${getString(R.string.batch_popup_message4)}: $mNoGPSInfoCount"
+        infoText5.text = "${getString(R.string.batch_popup_message5)}: $mFailCount"
         progressBar.progress = mProgressStatus
         true
     })
 
-    internal inner class RegisterThread(var context: Context, var listImagePath: ArrayList<String>) : Thread() {
+    internal inner class RegisterThread(var context: Context, private var listImagePath: ArrayList<String>) : Thread() {
 
         override fun run() {
             for (imagePath in listImagePath) {
@@ -117,7 +116,7 @@ class BatchPopupActivity : Activity() {
                 val message = progressHandler.obtainMessage()
                 try {
                     var fileName = FilenameUtils.getName(imagePath) + ".origin"
-                    var targetFile: File? = null
+                    var targetFile: File?
                     if (CommonUtils.loadBooleanPreference(this@BatchPopupActivity, "enable_create_copy")) {
                         targetFile = File(Constant.WORKING_DIRECTORY + fileName)
                         if (!targetFile.exists()) {
@@ -148,8 +147,8 @@ class BatchPopupActivity : Activity() {
                             item.longitude = gpsDirectory.geoLocation.longitude
                             item.latitude = gpsDirectory.geoLocation.latitude
                             val listAddress = CommonUtils.getFromLocation(this@BatchPopupActivity, item.latitude, item.longitude, 1, 0)
-                            if (listAddress!!.isNotEmpty()) {
-                                item.info = CommonUtils.fullAddress(listAddress[0])
+                            listAddress?.let {
+                                if (it.isNotEmpty()) item.info = CommonUtils.fullAddress(it[0])
                             }
                             PhotoMapDbHelper.insertPhotoMapItem(item)
                             val srcPath = targetFile.absolutePath

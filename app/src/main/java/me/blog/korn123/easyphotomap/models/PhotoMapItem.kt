@@ -13,24 +13,24 @@ open class PhotoMapItem : RealmObject(), Comparable<PhotoMapItem> {
     var sequence = 0
     var latitude = 0.0
     var longitude = 0.0
-    var info: String? = null
-    var imagePath: String? = null
-    var date: String? = null
-    var dateWithoutTime: String? = null
+    var info: String = ""
+    var imagePath: String = ""
+    var date: String = ""
+    var dateWithoutTime: String = ""
     var sortFlag = 0
 
     override fun toString(): String {
         if (sortFlag == 1) {
             info = date
         }
-        return info!!
+        return info
     }
 
-    override fun compareTo(item: PhotoMapItem): Int {
+    override fun compareTo(other: PhotoMapItem): Int {
         val result = -1
         when (sortFlag) {
-            0 -> info!!.compareTo(item.info!!)
-            1 -> dateWithoutTime!!.compareTo(item.dateWithoutTime!!)
+            0 -> info.compareTo(other.info)
+            1 -> dateWithoutTime.compareTo(other.dateWithoutTime)
         }
         return result
     }
