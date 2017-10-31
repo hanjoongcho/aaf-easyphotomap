@@ -2,6 +2,7 @@ package me.blog.korn123.easyphotomap.activities
 
 //import android.app.Fragment;
 
+import android.app.AlertDialog
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
@@ -26,6 +27,7 @@ class PhotoSearchActivity : AppCompatActivity() {
     private var mSearchView: SearchView? = null
     private var mQueryTextListener: SearchView.OnQueryTextListener? = null
     private var mSearchItemAdapter: SearchItemAdapter? = null
+    private var mCurrentQuery: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +37,19 @@ class PhotoSearchActivity : AppCompatActivity() {
             setTitle(R.string.photo_search_message1)
             setDisplayHomeAsUpEnabled(true)
         }
+        delete.setOnClickListener({ _ ->
+            val message = when (mCurrentQuery.isEmpty()) {
+                true -> getString(R.string.delete_all_confirm_message)
+                false -> getString(R.string.delete_contain_keyword_confirm_message, mCurrentQuery)
+            }
+            AlertDialog.Builder(this@PhotoSearchActivity).apply {
+                setMessage(message)
+                setPositiveButton(getString(R.string.confirm), { _, _ ->
+                    PhotoMapDbHelper.deletePhotoMapItemBy(mCurrentQuery)
+                    refreshList(mCurrentQuery)
+                })
+            }.show()
+        })
         refreshList()
     }
 
@@ -50,11 +65,13 @@ class PhotoSearchActivity : AppCompatActivity() {
             searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
             mQueryTextListener = object : SearchView.OnQueryTextListener {
                 override fun onQueryTextChange(query: String): Boolean {
+                    mCurrentQuery = query
                     refreshList(query, 0)
                     return true
                 }
 
                 override fun onQueryTextSubmit(query: String): Boolean {
+                    mCurrentQuery = query
                     refreshList(query, 0)
                     searchView.clearFocus()
                     return true
@@ -82,29 +99,32 @@ class PhotoSearchActivity : AppCompatActivity() {
     @JvmOverloads
     fun refreshList(query: String? = "", position: Int = 0, top: Int = 0) {
         parseMetadata(query)
-        mSearchItemAdapter = SearchItemAdapter(this, this, R.layout.item_search, mListPhotoMapItem)
-        listView.adapter = mSearchItemAdapter
-        val context = this
+        if (mSearchItemAdapter == null) {
+            mSearchItemAdapter = SearchItemAdapter(this, this, R.layout.item_search, mListPhotoMapItem)
+            listView.adapter = mSearchItemAdapter
+            val context = this
 
-        listView.onItemClickListener = AdapterView.OnItemClickListener { parent, _, clickPosition, _ ->
-            val item = parent.adapter.getItem(clickPosition) as PhotoMapItem
-            val intent = Intent(context, MapsActivity::class.java).apply {
-                putExtra("info", item.info)
-                putExtra("imagePath", item.imagePath)
-                putExtra("latitude", item.latitude)
-                putExtra("longitude", item.longitude)
-                putExtra("date", item.date)
+            listView.onItemClickListener = AdapterView.OnItemClickListener { parent, _, clickPosition, _ ->
+                val item = parent.adapter.getItem(clickPosition) as PhotoMapItem
+                val intent = Intent(context, MapsActivity::class.java).apply {
+                    putExtra("info", item.info)
+                    putExtra("imagePath", item.imagePath)
+                    putExtra("latitude", item.latitude)
+                    putExtra("longitude", item.longitude)
+                    putExtra("date", item.date)
+                }
+                startActivity(intent)
             }
-            startActivity(intent)
-        }
 
-        listView.onItemLongClickListener = AdapterView.OnItemLongClickListener { parent, view, longClickPosition, _ ->
-            val item = parent.adapter.getItem(longClickPosition) as PhotoMapItem
-            PhotoMapDbHelper.deletePhotoMapItemBy(item.sequence)
-            refreshList(query, longClickPosition, view.top)
-            true
+            listView.onItemLongClickListener = AdapterView.OnItemLongClickListener { parent, view, longClickPosition, _ ->
+                val item = parent.adapter.getItem(longClickPosition) as PhotoMapItem
+                PhotoMapDbHelper.deletePhotoMapItemBy(item.sequence)
+                refreshList(query, longClickPosition, view.top)
+                true
+            }
+        } else {
+            mSearchItemAdapter?.notifyDataSetChanged()
         }
-
         listView.setSelectionFromTop(position, top)
     }
 

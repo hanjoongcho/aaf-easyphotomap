@@ -2,6 +2,7 @@ package me.blog.korn123.easyphotomap.helper
 
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import io.realm.RealmResults
 import io.realm.Sort
 import me.blog.korn123.easyphotomap.models.PhotoMapItem
 import java.util.*
@@ -82,6 +83,15 @@ object PhotoMapDbHelper {
         item?.let {
             realmInstance.beginTransaction()
             it.deleteFromRealm()
+            realmInstance.commitTransaction()
+        }
+    }
+
+    fun deletePhotoMapItemBy(query: String) {
+        val realmResults = realmInstance.where(PhotoMapItem::class.java).contains("info", query).findAll()
+        realmResults?.let {
+            realmInstance.beginTransaction()
+            realmResults.deleteAllFromRealm()
             realmInstance.commitTransaction()
         }
     }

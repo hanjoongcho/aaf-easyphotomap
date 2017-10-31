@@ -29,6 +29,10 @@
     <!--TimelineActivity-->
     <string name="timeline_compat_activity_title">타임라인</string>
 
+    <!--PhotoSearchActivity-->
+    <string name="delete_all_confirm_message">현재까지 저장된 모든 포토맵을 삭제하시겠습니까?</string>
+    <string name="delete_contain_keyword_confirm_message">현재까지 저장된 포토맵중 \'%1$s\' 키워드가 포함된 포토맵을 삭제하시겠습니까?</string>
+
     <string name="explorer">explorer</string>
     <string name="overlay">overlay photos</string>
     <string name="action_settings">action_settings</string>

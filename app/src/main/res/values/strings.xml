@@ -29,6 +29,10 @@
     <!--TimelineActivity-->
     <string name="timeline_compat_activity_title">Timeline</string>
 
+    <!--PhotoSearchActivity-->
+    <string name="delete_all_confirm_message">Are you sure you want delete all saved photo maps?</string>
+    <string name="delete_contain_keyword_confirm_message">Are you sure you want delete all saved photo maps when contains \'%1$s\' keyword?</string>
+
     <string name="explorer">explorer</string>
     <string name="overlay">overlay photos</string>
     <string name="action_settings">action_settings</string>

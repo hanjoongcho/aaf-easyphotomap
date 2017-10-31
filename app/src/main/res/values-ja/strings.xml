@@ -29,6 +29,10 @@
     <!--TimelineActivity-->
     <string name="timeline_compat_activity_title">タイムライン</string>
 
+    <!--PhotoSearchActivity-->
+    <string name="delete_all_confirm_message">保存したフォトマップをすべて削除してもよろしいですか?</string>
+    <string name="delete_contain_keyword_confirm_message">\'%1$s\' というキーワードが含まれている場合、保存されているフォトマップをすべて削除してもよろしいですか?</string>
+
     <string name="explorer">explorer</string>
     <string name="overlay">overlay photos</string>
     <string name="action_settings">action_settings</string>
