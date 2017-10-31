@@ -36,12 +36,7 @@ class CommonUtils {
 
         private val MAX_RETRY = 5
 
-        fun getGeoCoderInstance(context: Context): Geocoder {
-            if (mGeoCoder == null) {
-                mGeoCoder = Geocoder(context, Locale.getDefault())
-            }
-            return mGeoCoder!!;
-        }
+        private fun getGeoCoderInstance(context: Context): Geocoder = mGeoCoder?.let { it } ?: Geocoder(context, Locale.getDefault())
 
         fun initWorkingDirectory() {
             if (!File(Constant.WORKING_DIRECTORY).exists()) {
@@ -52,17 +47,14 @@ class CommonUtils {
         @JvmStatic
         @Throws(Exception::class)
         fun getFromLocation(context: Context, latitude: Double, longitude: Double, maxResults: Int, retryCount: Int): List<Address>? {
-            var latitude = latitude
-            var longitude = longitude
-            var retryCount = retryCount
-            latitude = java.lang.Double.parseDouble(String.format("%.6f", latitude))
-            longitude = java.lang.Double.parseDouble(String.format("%.7f", longitude))
-            var listAddress: List<Address>? = null
+            val lat = java.lang.Double.parseDouble(String.format("%.6f", latitude))
+            val lon = java.lang.Double.parseDouble(String.format("%.7f", longitude))
+            val listAddress: List<Address>?
             try {
-                listAddress = getGeoCoderInstance(context).getFromLocation(latitude, longitude, maxResults)
+                listAddress = getGeoCoderInstance(context).getFromLocation(lat, lon, maxResults)
             } catch (e: Exception) {
                 if (retryCount < MAX_RETRY) {
-                    return getFromLocation(context, latitude, longitude, maxResults, ++retryCount)
+                    return getFromLocation(context, lat, lon, maxResults, retryCount + 1)
                 }
                 throw Exception(e.message)
             }
@@ -73,14 +65,14 @@ class CommonUtils {
         @JvmStatic
         @Throws(Exception::class)
         fun getFromLocationName(context: Context, locationName: String, maxResults: Int, retryCount: Int): List<Address>? {
-            var retryCount = retryCount
+            var count = retryCount
             val geoCoder = Geocoder(context, Locale.getDefault())
-            var listAddress: List<Address>? = null
+            val listAddress: List<Address>?
             try {
                 listAddress = geoCoder.getFromLocationName(locationName, maxResults)
             } catch (e: Exception) {
-                if (retryCount < MAX_RETRY) {
-                    return getFromLocationName(context, locationName, maxResults, ++retryCount)
+                if (count < MAX_RETRY) {
+                    return getFromLocationName(context, locationName, maxResults, ++count)
                 }
                 throw Exception(e.message)
             }
@@ -123,13 +115,13 @@ class CommonUtils {
             val preferences = PreferenceManager.getDefaultSharedPreferences(context)
             val edit = preferences.edit()
             edit.putBoolean(key, isEnable)
-            edit.commit()
+            edit.apply()
         }
 
-        fun loadIntPreference(context: Context, key: String, defaultValue: Int): Int {
-            val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-            return preferences.getInt(key, defaultValue)
-        }
+//        fun loadIntPreference(context: Context, key: String, defaultValue: Int): Int {
+//            val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+//            return preferences.getInt(key, defaultValue)
+//        }
 
         fun loadStringPreference(context: Context, key: String, defaultValue: String): String {
             val preferences = PreferenceManager.getDefaultSharedPreferences(context)
@@ -141,43 +133,43 @@ class CommonUtils {
             val preferences = PreferenceManager.getDefaultSharedPreferences(context)
             val edit = preferences.edit()
             edit.putString(key, value)
-            edit.commit()
+            edit.apply()
         }
 
-        fun loadFontScaleFactor(activity: Activity): Float {
-            val mPreferences = activity.getPreferences(Activity.MODE_PRIVATE)
-            return mPreferences.getFloat("fontScaleFactor", 1.0f)
-        }
+//        fun loadFontScaleFactor(activity: Activity): Float {
+//            val mPreferences = activity.getPreferences(Activity.MODE_PRIVATE)
+//            return mPreferences.getFloat("fontScaleFactor", 1.0f)
+//        }
 
-        fun saveFontScaleFactor(activity: Activity, scaleFactor: Float) {
-            val mPreferences = activity.getPreferences(Activity.MODE_PRIVATE)
-            val edit = mPreferences.edit()
-            edit.putFloat("fontScaleFactor", scaleFactor)
-            edit.commit()
-        }
+//        fun saveFontScaleFactor(activity: Activity, scaleFactor: Float) {
+//            val mPreferences = activity.getPreferences(Activity.MODE_PRIVATE)
+//            val edit = mPreferences.edit()
+//            edit.putFloat("fontScaleFactor", scaleFactor)
+//            edit.commit()
+//        }
 
-        fun fetchThumbnailBy(context: Context, imageId: String): ThumbnailItem? {
-            var photo: ThumbnailItem? = null
-            val projection = arrayOf(MediaStore.Images.Thumbnails.DATA, MediaStore.Images.Thumbnails.IMAGE_ID)
-            val mSelectionArgs = arrayOf(imageId)
-            val imageCursor = context.contentResolver.query(
-                    MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI, // 이미지 컨텐트 테이블
-                    projection,
-                    MediaStore.Images.Thumbnails.IMAGE_ID + " = ?",
-                    mSelectionArgs,
-                    MediaStore.Images.Thumbnails.DATA + " desc")
-            val dataColumnIndex = imageCursor.getColumnIndex(projection[0])
-            val idColumnIndex = imageCursor.getColumnIndex(projection[1])
-
-            imageCursor.let {
-                if (imageCursor.moveToFirst()) {
-                    photo = ThumbnailItem(imageCursor.getString(idColumnIndex), "", imageCursor.getString(dataColumnIndex))
-                }
-                imageCursor.close()
-            }
-
-            return photo
-        }
+//        fun fetchThumbnailBy(context: Context, imageId: String): ThumbnailItem? {
+//            var photo: ThumbnailItem? = null
+//            val projection = arrayOf(MediaStore.Images.Thumbnails.DATA, MediaStore.Images.Thumbnails.IMAGE_ID)
+//            val mSelectionArgs = arrayOf(imageId)
+//            val imageCursor = context.contentResolver.query(
+//                    MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI, // 이미지 컨텐트 테이블
+//                    projection,
+//                    MediaStore.Images.Thumbnails.IMAGE_ID + " = ?",
+//                    mSelectionArgs,
+//                    MediaStore.Images.Thumbnails.DATA + " desc")
+//            val dataColumnIndex = imageCursor.getColumnIndex(projection[0])
+//            val idColumnIndex = imageCursor.getColumnIndex(projection[1])
+//
+//            imageCursor.let {
+//                if (imageCursor.moveToFirst()) {
+//                    photo = ThumbnailItem(imageCursor.getString(idColumnIndex), "", imageCursor.getString(dataColumnIndex))
+//                }
+//                imageCursor.close()
+//            }
+//
+//            return photo
+//        }
 
         @JvmStatic
         fun fetchAllThumbnail(context: Context): List<ThumbnailItem> {
@@ -397,7 +389,7 @@ class CommonUtils {
 //    }
 
         fun readDataFile(targetPath: String): List<String>? {
-            var inputStream: InputStream? = null
+            val inputStream: InputStream?
             var listData: List<String>? = null
             try {
                 inputStream = FileUtils.openInputStream(File(targetPath))
@@ -424,18 +416,15 @@ class CommonUtils {
         @JvmStatic
         fun dpToPixel(context: Context, dp: Float, policy: Int = 0): Int {
             val px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.resources.displayMetrics)
-            var pixel = 0
-            when (policy) {
-                0 -> pixel = px.toInt()
-                1 -> pixel = Math.round(px)
+            return when (policy) {
+                0 -> px.toInt()
+                1 -> Math.round(px)
+                else -> 0
             }
-            return pixel
         }
 
         @JvmStatic
-        fun dpToPixel(context: Context, dp: Float): Int {
-            return dpToPixel(context, dp, 0)
-        }
+        fun dpToPixel(context: Context, dp: Float): Int = dpToPixel(context, dp, 0)
 
         @JvmStatic
         fun getDisplayOrientation(activity: Activity): Int {

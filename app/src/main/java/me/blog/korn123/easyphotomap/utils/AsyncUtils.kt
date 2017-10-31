@@ -10,14 +10,14 @@ import org.apache.commons.lang.StringUtils
  */
 object AsyncUtils {
 
-    fun loadBitmap(imageView: ImageView, imagePath: String, widthHeight: Int) {
-        if (cancelPotentialWork(imagePath, imageView)) {
-            val task = BitmapWorkerTask(imagePath, imageView)
-            val asyncDrawable = AsyncDrawable(task, imagePath)
-            imageView.setImageDrawable(asyncDrawable)
-            task.execute(imagePath, widthHeight.toString())
-        }
-    }
+//    fun loadBitmap(imageView: ImageView, imagePath: String, widthHeight: Int) {
+//        if (cancelPotentialWork(imagePath, imageView)) {
+//            val task = BitmapWorkerTask(imagePath, imageView, null)
+//            val asyncDrawable = AsyncDrawable(task, imagePath)
+//            imageView.setImageDrawable(asyncDrawable)
+//            task.execute(imagePath, widthHeight.toString())
+//        }
+//    }
 
     fun getBitmapWorkerTask(imageView: ImageView?): BitmapWorkerTask? {
         var bitmapWorkerTask: BitmapWorkerTask? = null
@@ -30,29 +30,24 @@ object AsyncUtils {
         return bitmapWorkerTask
     }
 
-    fun cancelPotentialWork(filePath: String, imageView: ImageView): Boolean {
-
-        var previousFilepath = "empty"
-        var task: BitmapWorkerTask? = null
-        if (imageView.drawable is AsyncDrawable) {
-            val asyncDrawable = imageView.drawable as AsyncDrawable
-            if (asyncDrawable != null) {
-                task = asyncDrawable.bitmapWorkerTask
-                previousFilepath = task!!.filePath
-            }
-        }
-
-        if (StringUtils.equals(filePath, previousFilepath)) {
-            //                Log.i("cancelPotentialWork", "bitmapData " + bitmapData);
-            // Cancel previous task
-            return false
-        } else {
-            if (task != null) {
-                task.cancel(true)
-            }
-            // The same work is already in progress
-            return true
-        }
-    }
+//    private fun cancelPotentialWork(filePath: String, imageView: ImageView): Boolean {
+//        var previousFilepath = "empty"
+//        var task: BitmapWorkerTask? = null
+//        if (imageView.drawable is AsyncDrawable) {
+//            val asyncDrawable = imageView.drawable as AsyncDrawable
+//            task = asyncDrawable.bitmapWorkerTask
+//            previousFilepath = task.filePath
+//        }
+//
+//        return when (StringUtils.equals(filePath, previousFilepath)) {
+//            true -> false
+//            false -> {
+//                if (task != null) {
+//                    task.cancel(true)
+//                }
+//                true
+//            }
+//        }
+//    }
 
 }

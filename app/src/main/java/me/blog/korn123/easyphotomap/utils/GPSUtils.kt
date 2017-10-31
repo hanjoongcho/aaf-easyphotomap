@@ -10,8 +10,8 @@ import android.location.LocationManager
 
 object GPSUtils {
 
-    private val MIN_DISTANCE_CHANGE_FOR_UPDATES: Long = 3
-    private val MIN_TIME_BW_UPDATES = (1000 * 3).toLong()
+//    private val MIN_DISTANCE_CHANGE_FOR_UPDATES: Long = 3
+//    private val MIN_TIME_BW_UPDATES = (1000 * 3).toLong()
 
     private var mLocationManagerWithGPS: LocationManager? = null
     private var mLocationManagerWithNetwork: LocationManager? = null
@@ -23,12 +23,7 @@ object GPSUtils {
         return mLocationManagerWithGPS!!
     }
 
-    private fun getNetworkProvider(context: Context): LocationManager {
-        if (mLocationManagerWithNetwork == null) {
-            mLocationManagerWithNetwork = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        }
-        return mLocationManagerWithNetwork!!
-    }
+    private fun getNetworkProvider(context: Context): LocationManager = mLocationManagerWithNetwork?.let { it } ?: context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
     fun getLocationWithGPSProvider(context: Context): Location? {
         var location: Location? = getGPSProvider(context).getLastKnownLocation(LocationManager.GPS_PROVIDER)
@@ -39,12 +34,12 @@ object GPSUtils {
         return location
     }
 
-    fun getLocationWithNetworkProvider(context: Context): Location {
-        var location: Location? = getNetworkProvider(context).getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
-        if (location == null) {
-            location = getGPSProvider(context).getLastKnownLocation(LocationManager.GPS_PROVIDER)
-        }
-        return location!!
-    }
+//    fun getLocationWithNetworkProvider(context: Context): Location {
+//        var location: Location? = getNetworkProvider(context).getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+//        if (location == null) {
+//            location = getGPSProvider(context).getLastKnownLocation(LocationManager.GPS_PROVIDER)
+//        }
+//        return location!!
+//    }
 
 }

@@ -1,17 +1,10 @@
 package me.blog.korn123.easyphotomap.utils
 
 import android.app.Activity
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Point
+import android.graphics.*
 import android.util.LruCache
-
 import org.apache.commons.io.IOUtils
-
 import java.io.File
-import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.OutputStream
 
@@ -32,11 +25,7 @@ object BitmapUtils {
         val cacheSize = maxMemory / 8
 
         mMemoryCache = object : LruCache<String, Bitmap>(cacheSize) {
-            override fun sizeOf(key: String, bitmap: Bitmap): Int {
-                // The cache size will be measured in kilobytes rather than
-                // number of items.
-                return bitmap.byteCount / 1024
-            }
+            override fun sizeOf(key: String, bitmap: Bitmap): Int = bitmap.byteCount / 1024
         }
     }
 
@@ -46,9 +35,7 @@ object BitmapUtils {
         }
     }
 
-    fun getBitmapFromMemCache(key: String): Bitmap? {
-        return mMemoryCache!!.get(key)
-    }
+    fun getBitmapFromMemCache(key: String): Bitmap? = mMemoryCache?.get(key)
 
     fun createScaledBitmap(srcPath: String, destPath: String, fixedWidthHeight: Int): Boolean {
         var result = true
@@ -62,11 +49,9 @@ object BitmapUtils {
             val width = bitmap.width
             val downSampleHeight = height / width.toFloat() * fixedWidthHeight
             val downSampleWidth = width / height.toFloat() * fixedWidthHeight
-            var thumbNail: Bitmap? = null
-            if (width > height) {
-                thumbNail = Bitmap.createScaledBitmap(bitmap, fixedWidthHeight, downSampleHeight.toInt(), false)
-            } else {
-                thumbNail = Bitmap.createScaledBitmap(bitmap, downSampleWidth.toInt(), fixedWidthHeight, false)
+            val thumbNail = when (width > height) {
+                true -> Bitmap.createScaledBitmap(bitmap, fixedWidthHeight, downSampleHeight.toInt(), false)
+                false -> Bitmap.createScaledBitmap(bitmap, downSampleWidth.toInt(), fixedWidthHeight, false)
             }
             outputStream = FileOutputStream(destPath)
             thumbNail!!.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
@@ -81,7 +66,6 @@ object BitmapUtils {
     }
 
     fun createScaledBitmap(srcPath: String, fixedWidth: Int): Bitmap? {
-        val result = true
         val outputStream: OutputStream? = null
         var thumbNail: Bitmap? = null
         try {

@@ -28,7 +28,7 @@ class ExplorerItemAdapter(private val mActivity: Activity, private val mContext:
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
         var row = convertView
-        var holder: ViewHolder?
+        val holder: ViewHolder
 
         if (row == null) {
             val inflater = (mContext as Activity).layoutInflater
@@ -52,7 +52,7 @@ class ExplorerItemAdapter(private val mActivity: Activity, private val mContext:
         val entity = mEntities[position]
 
         // init default option
-        val widthHeight = (CommonUtils.getDefaultDisplay(mActivity).x / 5) as Int
+        val widthHeight = (CommonUtils.getDefaultDisplay(mActivity).x / 5)
         //        holder.imageView1.getLayoutParams().height = widthHeight;
         //        holder.imageView1.getLayoutParams().width = widthHeight;
 
@@ -102,9 +102,7 @@ class ExplorerItemAdapter(private val mActivity: Activity, private val mContext:
                     var bitmap = BitmapUtils.getBitmapFromMemCache(filePath)
                     if (bitmap == null) {
                         bitmap = BitmapUtils.decodeFile(mActivity, filePath, options)
-                        bitmap?.let {
-                            BitmapUtils.addBitmapToMemoryCache(filePath, it)
-                        }
+                        BitmapUtils.addBitmapToMemoryCache(filePath, bitmap)
                     }
                     resized = Bitmap.createScaledBitmap(bitmap, widthHeight, widthHeight, true)
 
@@ -126,8 +124,8 @@ class ExplorerItemAdapter(private val mActivity: Activity, private val mContext:
                     mHolder.imageView1?.setImageBitmap(bitmap)
                 } else {
                     if (geoLocation != null) {
-                        mHolder.textView2?.text = "위도: " + geoLocation?.latitude.toString()
-                        mHolder.textView3?.text = "경도: " + geoLocation?.longitude.toString()
+                        mHolder.textView2?.text = "위도: ${geoLocation?.latitude}"
+                        mHolder.textView3?.text = "경도: ${geoLocation?.longitude}"
                     } else {
                         mHolder.textView2?.text = "위도: 정보없음"
                         mHolder.textView3?.text = "경도: 정보없음"

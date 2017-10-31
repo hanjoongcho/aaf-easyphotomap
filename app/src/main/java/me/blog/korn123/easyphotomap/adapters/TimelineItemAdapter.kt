@@ -22,7 +22,7 @@ class TimelineItemAdapter(private val mContext: Context, private val mActivity: 
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
         var row = convertView
-        var holder: ViewHolder?
+        val holder: ViewHolder
 
         if (row == null) {
             val inflater = (mContext as Activity).layoutInflater
@@ -42,7 +42,7 @@ class TimelineItemAdapter(private val mContext: Context, private val mActivity: 
         } else {
             row?.findViewById(R.id.timelineHeader)?.visibility = View.GONE
         }
-        holder.textView1?.text = photoMapItem.date + "\n" + photoMapItem.info
+        holder.textView1?.text = "${photoMapItem.date}\n${photoMapItem.info}"
         val fileName = FilenameUtils.getName(photoMapItem.imagePath)
         val bm = BitmapUtils.decodeFile(mActivity, Constant.WORKING_DIRECTORY + fileName + ".thumb")
 
@@ -53,8 +53,8 @@ class TimelineItemAdapter(private val mContext: Context, private val mActivity: 
 
     private fun isDateChange(position: Int): Boolean {
         var isChange = false
-        var previousDate: String? = null
-        var currentDate: String? = null
+        val previousDate: String
+        val currentDate: String
         if (position > 0) {
             val previous = mListPhotoMapItem[position - 1]
             val current = mListPhotoMapItem[position]
@@ -74,4 +74,5 @@ class TimelineItemAdapter(private val mContext: Context, private val mActivity: 
         var textView2: TextView? = null
         var imageView1: ImageView? = null
     }
+
 }

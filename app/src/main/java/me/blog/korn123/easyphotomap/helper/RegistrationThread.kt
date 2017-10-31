@@ -20,7 +20,6 @@ import me.blog.korn123.easyphotomap.utils.CommonUtils
 import me.blog.korn123.easyphotomap.utils.DialogUtils
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
-import org.apache.commons.lang.StringUtils
 import java.io.File
 import java.util.*
 
@@ -31,12 +30,12 @@ import java.util.*
 class RegistrationThread(private val mContext: Context, private val mActivity: Activity, private val mProgressDialog: ProgressDialog, private var mFileName: String?, private val mPath: String) : Thread() {
 
     private fun registerSingleFile() {
-        var resultMessage = ""
+        var resultMessage: String? = null
         try {
 
-            var targetFile: File? = null
+            val targetFile: File
             if (CommonUtils.loadBooleanPreference(mContext, "enable_create_copy")) {
-                targetFile = File(Constant.WORKING_DIRECTORY + mFileName!!)
+                targetFile = File(Constant.WORKING_DIRECTORY + mFileName)
                 if (!targetFile.exists()) {
                     FileUtils.copyFile(File(mPath), targetFile)
                 }
@@ -62,17 +61,18 @@ class RegistrationThread(private val mContext: Context, private val mActivity: A
                 item.longitude = gpsDirectory.geoLocation.longitude
                 item.latitude = gpsDirectory.geoLocation.latitude
                 val listAddress = CommonUtils.getFromLocation(mContext, item.latitude, item.longitude, 1, 0)
-                if (listAddress!!.size > 0) {
-                    item.info = CommonUtils.fullAddress(listAddress[0])
+                listAddress?.let {
+                    if (it.isNotEmpty()) item.info = CommonUtils.fullAddress(listAddress[0])
                 }
 
-                val tempList = PhotoMapDbHelper.selectPhotoMapItemBy("imagePath", item.imagePath!!)
-                if (tempList.size > 0) {
-                    resultMessage = mContext.getString(R.string.file_explorer_message3)
-                } else {
-                    PhotoMapDbHelper.insertPhotoMapItem(item)
-                    BitmapUtils.createScaledBitmap(targetFile.absolutePath, Constant.WORKING_DIRECTORY + mFileName + ".thumb", 200)
-                    resultMessage = mContext.getString(R.string.file_explorer_message4)
+                val tempList = PhotoMapDbHelper.selectPhotoMapItemBy("imagePath", item.imagePath)
+                resultMessage = when (tempList.isNotEmpty()) {
+                    true -> mContext.getString(R.string.file_explorer_message3)
+                    false -> {
+                        PhotoMapDbHelper.insertPhotoMapItem(item)
+                        BitmapUtils.createScaledBitmap(targetFile.absolutePath, Constant.WORKING_DIRECTORY + mFileName + ".thumb", 200)
+                        mContext.getString(R.string.file_explorer_message4)
+                    }
                 }
             } else {
                 // does not exits gps data
@@ -81,27 +81,26 @@ class RegistrationThread(private val mContext: Context, private val mActivity: A
                     val addressIntent = Intent(mContext, AddressSearchActivity::class.java)
                     val builder = AlertDialog.Builder(mContext)
                     builder.setMessage(mContext.getString(R.string.file_explorer_message1)).setCancelable(false).setPositiveButton(mContext.getString(R.string.confirm),
-                            DialogInterface.OnClickListener { dialog, which ->
+                            DialogInterface.OnClickListener { _, _ ->
                                 addressIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                                 addressIntent.putExtra("imagePath", item.imagePath)
                                 addressIntent.putExtra("date", item.date)
                                 mContext.startActivity(addressIntent)
                                 return@OnClickListener
                             }).setNegativeButton(mContext.getString(R.string.cancel),
-                            DialogInterface.OnClickListener { dialog, which -> return@OnClickListener })
+                            DialogInterface.OnClickListener { _, _ -> return@OnClickListener })
                     val alert = builder.create()
                     alert.show()
                 }
             }
         } catch (e: Exception) {
-            resultMessage = e.message!!
+            resultMessage = e.message
         }
 
-        val message = resultMessage
-        if (StringUtils.isNotEmpty(message)) {
+        resultMessage?.let {
             Handler(Looper.getMainLooper()).post {
                 mProgressDialog.dismiss()
-                DialogUtils.makeSnackBar(mActivity.findViewById(android.R.id.content), message)
+                DialogUtils.makeSnackBar(mActivity.findViewById(android.R.id.content), it)
             }
         }
     }

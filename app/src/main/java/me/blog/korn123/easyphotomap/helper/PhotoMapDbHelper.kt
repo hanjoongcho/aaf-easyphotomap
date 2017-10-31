@@ -52,9 +52,7 @@ object PhotoMapDbHelper {
         list.addAll(realmResults.subList(0, realmResults.size))
         realmInstance.beginTransaction()
         for (item in list) {
-            item.date?.let {
-                item.dateWithoutTime = getSimpleDate(it)
-            }
+            item.dateWithoutTime = getSimpleDate(item.date)
         }
         realmInstance.commitTransaction()
         return list

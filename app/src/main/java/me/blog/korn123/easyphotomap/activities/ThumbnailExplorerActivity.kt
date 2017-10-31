@@ -132,8 +132,8 @@ class ThumbnailExplorerActivity : AppCompatActivity() {
                 }
                 MediaStore.Images.Thumbnails.getThumbnail(context.contentResolver, java.lang.Long.parseLong(entity.imageId), MediaStore.Images.Thumbnails.MINI_KIND, null)
                 Handler(Looper.getMainLooper()).post {
-                    (findViewById(R.id.progressView) as TextView).text = "total: $mThumbnailTotal"
-                    (findViewById(R.id.progressView2) as TextView).text = "mCompleted: ${++mCompleted}"
+                    (findViewById(R.id.progressView) as TextView).text = "Total: $mThumbnailTotal"
+                    (findViewById(R.id.progressView2) as TextView).text = "Completed: ${++mCompleted}"
                 }
             }
 

@@ -27,7 +27,7 @@ class ThumbnailItemAdapter(private val mActivity: Activity, private val mContext
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
 
         var row = convertView
-        var holder: ViewHolder?
+        val holder: ViewHolder
 
         if (row == null) {
             val inflater = (mContext as Activity).layoutInflater

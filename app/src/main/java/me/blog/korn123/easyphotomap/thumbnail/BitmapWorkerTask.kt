@@ -10,8 +10,7 @@ import java.lang.ref.WeakReference
 /**
  * Created by CHO HANJOONG on 2016-08-02.
  */
-class BitmapWorkerTask(var filePath: String, imageView: ImageView) : AsyncTask<String, Void, Bitmap>() {
-    private val imageViewReference: WeakReference<ImageView>
+class BitmapWorkerTask(var filePath: String, imageView: ImageView, private var imageViewReference: WeakReference<ImageView>?) : AsyncTask<String, Void, Bitmap>() {
 
     init {
         // WeakReference 를 사용하는 이유는 image 처럼 메모리를 많이 차지하는 객체에 대한 가비지컬렉터를 보장하기 위해서입니다.
@@ -20,7 +19,7 @@ class BitmapWorkerTask(var filePath: String, imageView: ImageView) : AsyncTask<S
 
     override fun doInBackground(vararg params: String): Bitmap {
         val filePath = params[0]
-        val widthHeight = Integer.valueOf(params[1])!!
+        val widthHeight = Integer.valueOf(params[1])
         this.filePath = filePath
         val options = BitmapFactory.Options()
         options.inJustDecodeBounds = false
@@ -32,14 +31,14 @@ class BitmapWorkerTask(var filePath: String, imageView: ImageView) : AsyncTask<S
     }
 
     override fun onPostExecute(bitmap: Bitmap?) {
-        var bitmap = bitmap
+        var resultBitmap = bitmap
         if (isCancelled) {
-            bitmap = null
+            resultBitmap = null
         }
-        val imageView = imageViewReference.get()
+        val imageView = imageViewReference?.get()
         val task = AsyncUtils.getBitmapWorkerTask(imageView)
-        if (this === task && bitmap != null) {
-            imageView!!.setImageBitmap(bitmap)
+        if (this === task && resultBitmap != null) {
+            imageView?.setImageBitmap(resultBitmap)
         }
     }
 

@@ -16,7 +16,7 @@ class AddressItemAdapter(private val mContext: Context, private val mLayoutResou
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
 
         var row = convertView
-        var holder: ViewHolder?
+        val holder: ViewHolder
         if (row == null) {
             val inflater = (mContext as Activity).layoutInflater
             row = inflater.inflate(mLayoutResourceId, parent, false)
