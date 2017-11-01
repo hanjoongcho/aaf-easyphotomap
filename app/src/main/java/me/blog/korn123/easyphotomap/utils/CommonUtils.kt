@@ -7,6 +7,7 @@ import android.location.Address
 import android.location.Geocoder
 import android.preference.PreferenceManager
 import android.provider.MediaStore
+import android.util.Log
 import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
@@ -180,30 +181,31 @@ class CommonUtils {
                     MediaStore.Images.Thumbnails.DATA + " desc")
             val result = ArrayList<ThumbnailItem>()
 
-            imageCursor.let {
-                when (imageCursor.moveToFirst()) {
-                    true -> {
-                        val dataColumnIndex = imageCursor.getColumnIndex(projection[0])
-                        val idColumnIndex = imageCursor.getColumnIndex(projection[1])
-                        do {
-                            val filePath = imageCursor.getString(dataColumnIndex)
-                            val imageId = imageCursor.getString(idColumnIndex)
+            when (imageCursor.moveToFirst()) {
+                true -> {
+                    val dataColumnIndex = imageCursor.getColumnIndex(projection[0])
+                    val idColumnIndex = imageCursor.getColumnIndex(projection[1])
+                    do {
+                        val filePath = imageCursor.getString(dataColumnIndex)
+                        val imageId = imageCursor.getString(idColumnIndex)
 
-                            //                Uri thumbnailUri = uriToThumbnail(context, imageId);
-                            //                Uri imageUri = Uri.parse(filePath);
-                            //                Log.i("fetchAllImages", imageUri.toString());
-                            // 원본 이미지와 썸네일 이미지의 uri를 모두 담을 수 있는 클래스를 선언합니다.
-                            val photo = ThumbnailItem(imageId, "", filePath)
-                            result.add(photo)
-                        } while (imageCursor.moveToNext())
-                        imageCursor.close()
-                    }
-                    false -> {
-                        // imageCursor is empty
-                    }
+                        //                Uri thumbnailUri = uriToThumbnail(context, imageId);
+                        //                Uri imageUri = Uri.parse(filePath);
+                        //                Log.i("fetchAllImages", imageUri.toString());
+                        // 원본 이미지와 썸네일 이미지의 uri를 모두 담을 수 있는 클래스를 선언합니다.
+                        val photo = ThumbnailItem(imageId, "", filePath)
+                        result.add(photo)
+                    } while (imageCursor.moveToNext())
+                    imageCursor.close()
+                }
+                false -> {
+                    // imageCursor is empty
                 }
             }
-            return result
+
+            return result.filter {
+                File(it.thumbnailPath).exists()
+            }
         }
 
         @JvmStatic
@@ -215,28 +217,25 @@ class CommonUtils {
                     projection, null, null,
                     MediaStore.Images.Media.DATA + " asc")        // DATA, _ID를 출력
             val result = ArrayList<ThumbnailItem>(imageCursor!!.count)
+            when(imageCursor.moveToFirst()) {
+                true -> {
+                    val dataColumnIndex = imageCursor.getColumnIndex(projection[0])
+                    val idColumnIndex = imageCursor.getColumnIndex(projection[1])
+                    do {
+                        val filePath = imageCursor.getString(dataColumnIndex)
+                        val imageId = imageCursor.getString(idColumnIndex)
 
-            imageCursor.let {
-                when(imageCursor.moveToFirst()) {
-                    true -> {
-                        val dataColumnIndex = imageCursor.getColumnIndex(projection[0])
-                        val idColumnIndex = imageCursor.getColumnIndex(projection[1])
-                        do {
-                            val filePath = imageCursor.getString(dataColumnIndex)
-                            val imageId = imageCursor.getString(idColumnIndex)
-
-                            //                Uri thumbnailUri = uriToThumbnail(context, imageId);
-                            //                Uri imageUri = Uri.parse(filePath);
-                            //                Log.i("fetchAllImages", imageUri.toString());
-                            // 원본 이미지와 썸네일 이미지의 uri를 모두 담을 수 있는 클래스를 선언합니다.
-                            val photo = ThumbnailItem(imageId, filePath, "")
-                            result.add(photo)
-                        } while (imageCursor.moveToNext())
-                        imageCursor.close()
-                    }
-                    false -> {
-                        // imageCursor is empty
-                    }
+                        //                Uri thumbnailUri = uriToThumbnail(context, imageId);
+                        //                Uri imageUri = Uri.parse(filePath);
+                        //                Log.i("fetchAllImages", imageUri.toString());
+                        // 원본 이미지와 썸네일 이미지의 uri를 모두 담을 수 있는 클래스를 선언합니다.
+                        val photo = ThumbnailItem(imageId, filePath, "")
+                        result.add(photo)
+                    } while (imageCursor.moveToNext())
+                    imageCursor.close()
+                }
+                false -> {
+                    // imageCursor is empty
                 }
             }
             return result
