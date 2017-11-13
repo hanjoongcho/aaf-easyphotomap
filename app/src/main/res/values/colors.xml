@@ -2,9 +2,9 @@
 <resources>
 
     <!--common-->
-    <color name="colorPrimaryDark">#01549c</color>
-    <color name="colorPrimary">#0275d8</color>
-    <color name="colorAccent">#0275d8</color>
+    <color name="colorPrimaryDark">#089C90</color>
+    <color name="colorPrimary">#07ABB3</color>
+    <color name="colorAccent">#07ABB3</color>
     <color name="white">#f0ffffff</color>
     <color name="defaultFont">#5a5959</color>
     <color name="divider">#2785fce2</color>
@@ -16,14 +16,14 @@
     <color name="popupImageBackground">#90000000</color>
 
     <!--activity_maps.xml-->
-    <color name="floatingButtonNormal">#1565C0</color>
-    <color name="floatingButtonPressed">#2272CD</color>
-    <color name="floatingButtonRipple">#62B2FF</color>
+    <color name="floatingButtonNormal">@color/colorPrimary</color>
+    <color name="floatingButtonPressed">@color/colorPrimary</color>
+    <color name="floatingButtonRipple">@color/colorPrimaryDark</color>
     <color name="floatingButtonBackground">#461544f4</color>
 
     <!--item_search.xml-->
     <color name="photoMapInfoText">#5a5959</color>
-    <color name="photoMapDateText">#0275d8</color>
+    <color name="photoMapDateText">@color/colorPrimary</color>
 
     <!--popup_window_camera.xml-->
     <color name="popupWindowCameraBackground">#90000000</color>

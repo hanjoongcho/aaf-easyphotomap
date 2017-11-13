@@ -26,6 +26,7 @@
             android:background="@drawable/bg_common"
             android:id="@+id/infoView"
             android:visibility="gone"
+            android:layout_marginBottom="5dp"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="65dp">
@@ -60,27 +61,26 @@
                 android:src="@android:drawable/ic_media_play"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent" />-->
-            <com.beardedhen.androidbootstrap.BootstrapButton
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:bootstrapText="{fa_play} Start"
-                app:bootstrapBrand="primary"
-                app:roundedCorners="true"
-                app:bootstrapSize="sm"
+            <TextView
                 android:id="@+id/startSync"
-                />
-            <com.beardedhen.androidbootstrap.BootstrapButton
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="10dp"
+                android:textSize="12dp"
+                android:textColor="@color/white"
+                android:background="@drawable/dialog_bg_primary"
+                android:text="Start"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:bootstrapText="{fa_stop} Stop"
-                app:bootstrapBrand="primary"
-                app:roundedCorners="true"
-                app:bootstrapSize="sm"
+                android:layout_height="wrap_content" />
+            <TextView
                 android:id="@+id/stopSync"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="10dp"
+                android:textSize="12dp"
+                android:textColor="@color/white"
+                android:background="@drawable/dialog_bg_primary"
+                android:text="Stop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
                 />
             <!--<ImageView
                 android:layout_marginRight="15dp"
@@ -96,7 +96,6 @@
             android:fastScrollEnabled="true"
             android:verticalSpacing="5dp"
             android:horizontalSpacing="5dp"
-            android:layout_marginTop="5dp"
             android:background="@drawable/bg_common"
             android:padding="5dp"
             android:gravity="center"

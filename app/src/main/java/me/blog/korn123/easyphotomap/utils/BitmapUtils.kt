@@ -1,8 +1,12 @@
 package me.blog.korn123.easyphotomap.utils
 
 import android.app.Activity
+import android.content.Context
+import android.content.res.Resources
 import android.graphics.*
+import android.support.v4.content.ContextCompat
 import android.util.LruCache
+import me.blog.korn123.easyphotomap.R
 import org.apache.commons.io.IOUtils
 import java.io.File
 import java.io.FileOutputStream
@@ -113,10 +117,10 @@ object BitmapUtils {
         }
     }
 
-    fun border(bmp: Bitmap, borderSize: Int): Bitmap {
+    fun border(context: Context, bmp: Bitmap, borderSize: Int): Bitmap {
         val bmpWithBorder = Bitmap.createBitmap(bmp.width + borderSize * 2, bmp.height + borderSize * 2, bmp.config)
         val canvas = Canvas(bmpWithBorder)
-        canvas.drawColor(Color.parseColor("#0275d8"))
+        canvas.drawColor(ContextCompat.getColor(context, R.color.colorPrimary))
         canvas.drawBitmap(bmp, borderSize.toFloat(), borderSize.toFloat(), null)
         return bmpWithBorder
     }

@@ -374,7 +374,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                         val point = Point(bm.width, bm.height)
                         val fixedWidthHeight = java.lang.Double.parseDouble(CommonUtils.loadStringPreference(this@MapsActivity, "photo_size_setting", "0.6"))
                         val bm2 = BitmapUtils.createScaledBitmap(bm, point, fixedWidthHeight, fixedWidthHeight)
-                        BitmapDescriptorFactory.fromBitmap(BitmapUtils.border(bm2, CommonUtils.dpToPixel(this@MapsActivity, 1.5f)))
+                        BitmapDescriptorFactory.fromBitmap(BitmapUtils.border(this@MapsActivity, bm2, CommonUtils.dpToPixel(this@MapsActivity, 1.5f)))
                     }
                     "flowerFrame" -> {
                         val point = Point(bm.width, bm.height)
