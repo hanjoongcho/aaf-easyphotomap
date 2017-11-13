@@ -71,25 +71,25 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <com.beardedhen.androidbootstrap.BootstrapButton
+            <TextView
+                android:gravity="center"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="40dp"
-                app:bootstrapText="{fa_stop} Stop"
-                app:bootstrapBrand="primary"
-                app:roundedCorners="true"
-                app:bootstrapSize="sm"
+                android:text="STOP"
+                android:textColor="@color/white"
+                android:background="@drawable/dialog_bg_primary"
                 android:id="@+id/stop"
                 />
-            <com.beardedhen.androidbootstrap.BootstrapButton
+            <TextView
+                android:gravity="center"
                 android:layout_marginLeft="10dp"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="40dp"
-                app:bootstrapText="{fa_close} Close"
-                app:bootstrapBrand="primary"
-                app:roundedCorners="true"
-                app:bootstrapSize="sm"
+                android:text="CLOSE"
+                android:textColor="@color/white"
+                android:background="@drawable/dialog_bg_primary"
                 android:id="@+id/close"
                 />
         </LinearLayout>

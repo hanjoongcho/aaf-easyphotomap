@@ -68,7 +68,7 @@
                 android:textSize="12dp"
                 android:textColor="@color/white"
                 android:background="@drawable/dialog_bg_primary"
-                android:text="Start"
+                android:text="START"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
@@ -78,7 +78,7 @@
                 android:textSize="12dp"
                 android:textColor="@color/white"
                 android:background="@drawable/dialog_bg_primary"
-                android:text="Stop"
+                android:text="STOP"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
                 />
