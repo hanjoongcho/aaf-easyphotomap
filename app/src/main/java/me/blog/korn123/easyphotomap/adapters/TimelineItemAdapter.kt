@@ -37,10 +37,10 @@ class TimelineItemAdapter(private val mContext: Context, private val mActivity: 
 
         val photoMapItem = mListPhotoMapItem[position]
         if (isDateChange(position)) {
-            row?.findViewById(R.id.timelineHeader)?.visibility = View.VISIBLE
+            row?.findViewById<View>(R.id.timelineHeader)?.visibility = View.VISIBLE
             (row?.findViewById(R.id.timelineDate) as TextView).text = photoMapItem.dateWithoutTime
         } else {
-            row?.findViewById(R.id.timelineHeader)?.visibility = View.GONE
+            row?.findViewById<View>(R.id.timelineHeader)?.visibility = View.GONE
         }
         holder.textView1?.text = "${photoMapItem.date}\n${photoMapItem.info}"
         val fileName = FilenameUtils.getName(photoMapItem.imagePath)

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">イージー\nフォトマップ</string>
+    <string name="app_name">イージー フォトマップ</string>
 
     <!--MapsActivity-->
     <string name="maps_activity_timeline">タイムライン</string>

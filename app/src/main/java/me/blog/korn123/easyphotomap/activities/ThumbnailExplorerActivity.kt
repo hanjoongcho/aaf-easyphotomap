@@ -50,12 +50,12 @@ class ThumbnailExplorerActivity : AppCompatActivity() {
         thumbnailGrid.columnWidth = ((CommonUtils.getDefaultDisplay(this).x - CommonUtils.dpToPixel(this@ThumbnailExplorerActivity, 30f, 1)) / 3)
         setOnItemClickListener()
 
-        findViewById(R.id.startSync).setOnClickListener {
+        findViewById<View>(R.id.startSync).setOnClickListener {
             val thread = ThumbnailCreatorThread(this@ThumbnailExplorerActivity)
             mEnableUpdate = true
             thread.start()
         }
-        findViewById(R.id.stopSync).setOnClickListener { mEnableUpdate = false }
+        findViewById<View>(R.id.stopSync).setOnClickListener { mEnableUpdate = false }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

@@ -251,11 +251,11 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                             overlayIcons(recommendation.keyWord, mEnableDateFilter)
                         }
                         val point = CommonUtils.getDefaultDisplay(this)
-                        customView.findViewById(R.id.viewWorld).setOnClickListener {
+                        customView.findViewById<View>(R.id.viewWorld).setOnClickListener {
                             mPopupWindow?.dismiss()
                             overlayIcons("", false)
                         }
-                        customView.findViewById(R.id.close).setOnClickListener { mPopupWindow?.dismiss() }
+                        customView.findViewById<View>(R.id.close).setOnClickListener { mPopupWindow?.dismiss() }
 
                         val searchView = customView.findViewById(R.id.searchKey) as SearchView
                         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -270,7 +270,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                                 return false
                             }
                         })
-                        val contentViewTop = window.findViewById(Window.ID_ANDROID_CONTENT).top
+                        val contentViewTop = window.findViewById<View>(Window.ID_ANDROID_CONTENT).top
                         mPopupWindow = PopupWindow(customView, point.x, point.y - contentViewTop, true)
                         mPopupWindow?.showAtLocation(view, Gravity.CENTER, 0, 0)
                     }
@@ -388,8 +388,8 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                         val mDotMarkerBitmap = Bitmap.createBitmap(px, px, Bitmap.Config.ARGB_8888)
                         val canvas = Canvas(mDotMarkerBitmap)
                         val shape = ContextCompat.getDrawable(this@MapsActivity, R.drawable.circle)
-                        shape.setBounds(0, 0, mDotMarkerBitmap.width, mDotMarkerBitmap.height)
-                        shape.draw(canvas)
+                        shape?.setBounds(0, 0, mDotMarkerBitmap.width, mDotMarkerBitmap.height)
+                        shape?.draw(canvas)
                         BitmapDescriptorFactory.fromBitmap(mDotMarkerBitmap)
                     }
                 }
