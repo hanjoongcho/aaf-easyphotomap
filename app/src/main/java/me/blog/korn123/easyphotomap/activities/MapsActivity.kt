@@ -8,7 +8,6 @@ import android.media.ExifInterface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.support.v4.app.FragmentActivity
 import android.support.v4.content.ContextCompat
 import android.text.TextUtils
 import android.view.*
@@ -24,6 +23,8 @@ import com.google.maps.android.clustering.ClusterItem
 import com.google.maps.android.clustering.ClusterManager
 import com.google.maps.android.clustering.view.DefaultClusterRenderer
 import com.google.maps.android.ui.IconGenerator
+import io.github.hanjoongcho.commons.helpers.PERMISSION_ACCESS_COARSE_LOCATION
+import io.github.hanjoongcho.commons.helpers.PERMISSION_ACCESS_FINE_LOCATION
 import kotlinx.android.synthetic.main.activity_maps.*
 import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.constants.Constant
@@ -36,7 +37,7 @@ import java.io.File
 import java.util.*
 import java.util.regex.Pattern
 
-class MapsActivity : FragmentActivity(), OnMapReadyCallback {
+class MapsActivity : SimpleActivity(), OnMapReadyCallback {
 
     private val mListLatLng = arrayListOf<LatLng>()
     private val mListPhotoEntity = arrayListOf<PhotoMapItem>()
@@ -121,18 +122,30 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                 })
             }
         } else {
-            val location = GPSUtils.getLocationWithGPSProvider(this)
-            if (location == null) {
-                mMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                        LatLng(Constant.GOOGLE_MAP_DEFAULT_LATITUDE, Constant.GOOGLE_MAP_DEFAULT_LONGITUDE),
-                        Constant.GOOGLE_MAP_DEFAULT_ZOOM_VALUE)
-                )
-            } else {
-                mMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), Constant.GOOGLE_MAP_DEFAULT_ZOOM_VALUE))
+            handlePermission(PERMISSION_ACCESS_COARSE_LOCATION) {
+                if (it) {
+                    handlePermission(PERMISSION_ACCESS_FINE_LOCATION) {
+                        if (it) {
+                            val location = GPSUtils.getLocationWithGPSProvider(this)
+                            location?.let {
+                                mMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), Constant.GOOGLE_MAP_DEFAULT_ZOOM_VALUE))
+                            }
+                        } else {
+                            animateDefaultCamera()
+                        }
+                    }
+                } else {
+                    animateDefaultCamera()
+                }
             }
         }
 
         migrateLegacyData()
+    }
+
+    private fun animateDefaultCamera() {
+        mMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                LatLng(Constant.GOOGLE_MAP_DEFAULT_LATITUDE, Constant.GOOGLE_MAP_DEFAULT_LONGITUDE), Constant.GOOGLE_MAP_DEFAULT_ZOOM_VALUE))
     }
 
     override fun onResume() {
@@ -176,8 +189,8 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                 startActivity(camera)
             } else {
                 val infoView = layoutInflater.inflate(R.layout.popup_window_camera, null)
-                val textView2 = infoView.findViewById(R.id.textView2) as TextView
-                val textView3 = infoView.findViewById(R.id.textView3) as TextView
+                val textView2 = infoView.findViewById<View>(R.id.textView2) as TextView
+                val textView3 = infoView.findViewById<View>(R.id.textView3) as TextView
                 mPopupWindow = PopupWindow(infoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
                 CommonUtils.bindButtonEffect(textView2)
                 CommonUtils.bindButtonEffect(textView3)
@@ -208,7 +221,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                     } else {
                         val inflater = this.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
                         val customView = inflater.inflate(R.layout.popup_window_recommendation, null)
-                        mListView = customView.findViewById(R.id.listView) as ListView
+                        mListView = customView.findViewById<View>(R.id.listView) as ListView
                         FontUtils.setChildViewTypeface(customView as ViewGroup)
                         val listOfSortEntry: List<Map.Entry<String, Int>>?
                         if (mEnableDateFilter) {
@@ -257,7 +270,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                         }
                         customView.findViewById<View>(R.id.close).setOnClickListener { mPopupWindow?.dismiss() }
 
-                        val searchView = customView.findViewById(R.id.searchKey) as SearchView
+                        val searchView = customView.findViewById<View>(R.id.searchKey) as SearchView
                         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                             override fun onQueryTextSubmit(query: String): Boolean = false
 
@@ -353,7 +366,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                 Handler(Looper.getMainLooper()).post {
                     mProgressDialog?.progress = index + 1
                     mProgressDialog?.setMessage(info)
-                    val textView = mProgressDialog?.findViewById(android.R.id.message) as TextView?
+                    val textView = mProgressDialog?.findViewById<View>(android.R.id.message) as TextView?
                     textView?.ellipsize = TextUtils.TruncateAt.MIDDLE
                     textView?.maxLines = 1
                 }
@@ -502,7 +515,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
             val cw = ContextThemeWrapper(applicationContext, R.style.Transparent)
             val inflater = cw.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             val view = inflater.inflate(R.layout.popup_window_photo_map_info, null)
-            val imageView = view.findViewById(R.id.info1) as ImageView
+            val imageView = view.findViewById<View>(R.id.info1) as ImageView
             //            imageView.setImageResource(imageId);
             val imgFile = File(imagePath)
 
@@ -547,8 +560,8 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
             }
             val lat = StringUtils.substring(latitude.toString(), 0, 6)
             val lon = StringUtils.substring(longitude.toString(), 0, 6)
-            (view.findViewById(R.id.info2) as TextView).text = "lat: $lat lon: $lon \n $info"
-            (view.findViewById(R.id.info3) as TextView).text = date
+            (view.findViewById<View>(R.id.info2) as TextView).text = "lat: $lat lon: $lon \n $info"
+            (view.findViewById<View>(R.id.info3) as TextView).text = date
             return view
         }
     }
