@@ -35,11 +35,11 @@
                 fab:fab_label="@string/maps_activity_overlay" />
             <com.github.clans.fab.FloatingActionButton
                 android:id="@+id/folder"
-                android:src="@drawable/ic_folder"
+                android:src="@drawable/ic_folder_01"
                 style="@style/FloatingButton"
                 fab:fab_label="@string/maps_activity_folder" />
             <com.github.clans.fab.FloatingActionButton
-                android:id="@+id/explorer"
+                android:id="@+id/thumbnailViewer"
                 android:src="@drawable/ic_image"
                 style="@style/FloatingButton"
                 fab:fab_label="@string/maps_activity_explorer" />

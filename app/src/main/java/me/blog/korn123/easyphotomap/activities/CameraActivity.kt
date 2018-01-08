@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.support.v4.content.FileProvider
 import android.util.Log
 import com.drew.imaging.jpeg.JpegMetadataReader
 import com.drew.metadata.exif.ExifSubIFDDirectory
@@ -27,11 +28,13 @@ import java.util.*
 /**
  * Created by CHO HANJOONG on 2016-08-20.
  */
-class CameraActivity : Activity() {
+class CameraActivity : SimpleActivity() {
 
 
     private var mFileUri: Uri? = null
-
+    private var mMediaStorageDir: File? = null
+    private var mCurrentFileName: String? = null
+    
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
@@ -46,23 +49,26 @@ class CameraActivity : Activity() {
     }
 
     /** Create a file Uri for saving an image or video  */
-    private fun getOutputMediaFileUri(type: Int): Uri = Uri.fromFile(getOutputMediaFile(type))
+//    private fun getOutputMediaFileUri(type: Int): Uri = Uri.fromFile(getOutputMediaFile(type))
+    private fun getOutputMediaFileUri(type: Int): Uri =  FileProvider.getUriForFile(this@CameraActivity,  "$packageName.provider", getOutputMediaFile(type)!!)
 
     /** Create a File for saving an image or video  */
     private fun getOutputMediaFile(type: Int): File? {
         // To be safe, you should check that the SDCard is mounted
         // using Environment.getExternalStorageState() before doing this.
 
-        val mediaStorageDir = File(Environment.getExternalStoragePublicDirectory(
+        mMediaStorageDir = File(Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES), "MyCameraApp")
         // This location works best if you want the created images to be shared
         // between applications and persist after your app has been uninstalled.
 
         // Create the storage directory if it does not exist
-        if (!mediaStorageDir.exists()) {
-            if (!mediaStorageDir.mkdirs()) {
-                Log.d("MyCameraApp", "failed to create directory")
-                return null
+        mMediaStorageDir?.let {
+            if (!it.exists()) {
+                if (!it.mkdirs()) {
+                    Log.d("MyCameraApp", "failed to create directory")
+                    return null
+                }
             }
         }
 
@@ -71,10 +77,11 @@ class CameraActivity : Activity() {
 
         return when(type) {
             Constant.MEDIA_TYPE_IMAGE -> {
-                File(mediaStorageDir.path + File.separator + "IMG_" + timeStamp + ".jpg")
+                mCurrentFileName = mMediaStorageDir!!.path + File.separator + "IMG_" + timeStamp + ".jpg"
+                File(mCurrentFileName)
             }
             Constant.MEDIA_TYPE_VIDEO -> {
-                File(mediaStorageDir.path + File.separator + "VID_" + timeStamp + ".mp4")
+                File(mMediaStorageDir!!.path + File.separator + "VID_" + timeStamp + ".mp4")
             }
             else -> {null}
         }
@@ -88,19 +95,19 @@ class CameraActivity : Activity() {
                     // Image captured and saved to mFileUri specified in the Intent
                     //                Toast.makeText(this, "Image saved to:\n" +
                     //                        mFileUri.toString(), Toast.LENGTH_LONG).show();
-                    val srcFilepath = StringUtils.substring(mFileUri?.toString(), 6)
+//                    val srcFilepath = StringUtils.substring(mFileUri?.toString(), 6)
                     val fileName: String
                     try {
                         val targetFile: File
                         if (CommonUtils.loadBooleanPreference(this@CameraActivity, "enable_create_copy")) {
-                            fileName = FilenameUtils.getName(srcFilepath) + ".origin"
+                            fileName = FilenameUtils.getName(mCurrentFileName) + ".origin"
                             targetFile = File(Constant.WORKING_DIRECTORY + fileName)
                             if (!targetFile.exists()) {
-                                FileUtils.copyFile(File(srcFilepath), targetFile)
+                                FileUtils.copyFile(File(mCurrentFileName), targetFile)
                             }
                         } else {
-                            targetFile = File(srcFilepath)
-                            fileName = FilenameUtils.getName(srcFilepath)
+                            targetFile = File(mCurrentFileName)
+                            fileName = FilenameUtils.getName(mCurrentFileName)
                         }
                         val metadata = JpegMetadataReader.readMetadata(targetFile)
                         val entity = PhotoMapItem()

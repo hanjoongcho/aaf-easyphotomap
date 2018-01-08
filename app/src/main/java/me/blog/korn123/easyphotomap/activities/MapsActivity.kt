@@ -23,6 +23,11 @@ import com.google.maps.android.clustering.ClusterItem
 import com.google.maps.android.clustering.ClusterManager
 import com.google.maps.android.clustering.view.DefaultClusterRenderer
 import com.google.maps.android.ui.IconGenerator
+import com.simplemobiletools.commons.extensions.toast
+import com.simplemobiletools.commons.helpers.PERMISSION_CAMERA
+import com.simplemobiletools.commons.helpers.PERMISSION_READ_CONTACTS
+import com.simplemobiletools.commons.helpers.PERMISSION_READ_STORAGE
+import com.simplemobiletools.commons.helpers.PERMISSION_WRITE_STORAGE
 import io.github.hanjoongcho.commons.helpers.PERMISSION_ACCESS_COARSE_LOCATION
 import io.github.hanjoongcho.commons.helpers.PERMISSION_ACCESS_FINE_LOCATION
 import kotlinx.android.synthetic.main.activity_maps.*
@@ -68,7 +73,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
         floatingMenu.setClosedOnTouchOutside(true)
         floatingMenu.setOnMenuButtonClickListener { floatingMenu.toggle(true) }
         camera.setOnClickListener(mMenuClickListener)
-        explorer.setOnClickListener(mMenuClickListener)
+        thumbnailViewer.setOnClickListener(mMenuClickListener)
         folder.setOnClickListener(mMenuClickListener)
         overlay.setOnClickListener(mMenuClickListener)
         find.setOnClickListener(mMenuClickListener)
@@ -184,32 +189,52 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
     private var mMenuClickListener: View.OnClickListener = View.OnClickListener { view ->
         floatingMenu.close(false)
         when (view.id) {
-            R.id.camera -> if (CommonUtils.loadBooleanPreference(this@MapsActivity, "disable_info_popup")) {
-                val camera = Intent(view.context, CameraActivity::class.java)
-                startActivity(camera)
-            } else {
-                val infoView = layoutInflater.inflate(R.layout.popup_window_camera, null)
-                val textView2 = infoView.findViewById<View>(R.id.textView2) as TextView
-                val textView3 = infoView.findViewById<View>(R.id.textView3) as TextView
-                mPopupWindow = PopupWindow(infoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-                CommonUtils.bindButtonEffect(textView2)
-                CommonUtils.bindButtonEffect(textView3)
-                textView2.setOnClickListener { v ->
-                    mPopupWindow?.dismiss()
-                    val camera = Intent(v.context, CameraActivity::class.java)
-                    startActivity(camera)
+            R.id.camera -> {
+                handlePermission(PERMISSION_CAMERA) {
+                    if (it) {
+                        if (CommonUtils.loadBooleanPreference(this@MapsActivity, "disable_info_popup")) {
+                            val camera = Intent(view.context, CameraActivity::class.java)
+                            startActivity(camera)
+                        } else {
+                            val infoView = layoutInflater.inflate(R.layout.popup_window_camera, null)
+                            val textView2 = infoView.findViewById<View>(R.id.textView2) as TextView
+                            val textView3 = infoView.findViewById<View>(R.id.textView3) as TextView
+                            mPopupWindow = PopupWindow(infoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+                            CommonUtils.bindButtonEffect(textView2)
+                            CommonUtils.bindButtonEffect(textView3)
+                            textView2.setOnClickListener { v ->
+                                mPopupWindow?.dismiss()
+                                val camera = Intent(v.context, CameraActivity::class.java)
+                                startActivity(camera)
+                            }
+                            textView3.setOnClickListener { v ->
+                                CommonUtils.saveBooleanPreference(this@MapsActivity, "disable_info_popup", true)
+                                mPopupWindow?.dismiss()
+                                val camera = Intent(v.context, CameraActivity::class.java)
+                                startActivity(camera)
+                            }
+                            mPopupWindow?.showAtLocation(view, Gravity.CENTER, 0, 0)
+                        }
+                    } else {
+                        toast(R.string.no_camera_permissions)
+                    }
                 }
-                textView3.setOnClickListener { v ->
-                    CommonUtils.saveBooleanPreference(this@MapsActivity, "disable_info_popup", true)
-                    mPopupWindow?.dismiss()
-                    val camera = Intent(v.context, CameraActivity::class.java)
-                    startActivity(camera)
+            } 
+            R.id.thumbnailViewer -> {
+                handlePermission(PERMISSION_READ_STORAGE) {
+                    if (it) {
+                        handlePermission(PERMISSION_WRITE_STORAGE) {
+                            if (it) {
+                                val intent = Intent(view.context, ThumbnailExplorerActivity::class.java)
+                                startActivity(intent)
+                            } else {
+                                toast(R.string.no_storage_permissions)
+                            }
+                        }
+                    } else {
+                        toast(R.string.no_storage_permissions)
+                    }
                 }
-                mPopupWindow?.showAtLocation(view, Gravity.CENTER, 0, 0)
-            }
-            R.id.explorer -> {
-                val intent = Intent(view.context, ThumbnailExplorerActivity::class.java)
-                startActivity(intent)
             }
             R.id.overlay -> {
                 mEnableDateFilter = CommonUtils.loadBooleanPreference(this@MapsActivity, "date_filter_setting")
