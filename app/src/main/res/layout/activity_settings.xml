@@ -30,9 +30,36 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
+                <LinearLayout
+                    style="@style/SettingsItemHolder"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    android:orientation="horizontal"
+                    android:id="@+id/date_filter_holder">
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content">
+                        <com.simplemobiletools.commons.views.MyTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/pref_title_social_recommendations"/>
+                        <com.simplemobiletools.commons.views.MyTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/pref_description_social_recommendations"/>
+                    </LinearLayout>
+                    <android.support.v7.widget.SwitchCompat
+                        android:id="@+id/pref2Switcher"
+                        android:clickable="false"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="20dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
                 
                 <RelativeLayout
-                    android:layout_marginTop="@dimen/spacing_normal"
                     style="@style/SettingsItemHolder"
                     android:id="@+id/pattern_lock_holder">
                     <com.simplemobiletools.commons.views.MyTextView
