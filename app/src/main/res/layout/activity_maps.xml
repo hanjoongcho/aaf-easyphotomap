@@ -14,10 +14,10 @@
             android:id="@+id/floatingMenu"
             style="@style/FloatingMenu">
             <com.github.clans.fab.FloatingActionButton
-                android:id="@+id/setting"
+                android:id="@+id/settings"
                 android:src="@drawable/ic_settings"
                 style="@style/FloatingButton"
-                fab:fab_label="@string/maps_activity_setting" />
+                fab:fab_label="@string/settings" />
             <com.github.clans.fab.FloatingActionButton
                 android:id="@+id/timeline"
                 android:src="@drawable/ic_timeline"

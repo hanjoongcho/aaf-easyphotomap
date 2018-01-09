@@ -25,7 +25,6 @@ import com.google.maps.android.clustering.view.DefaultClusterRenderer
 import com.google.maps.android.ui.IconGenerator
 import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.helpers.PERMISSION_CAMERA
-import com.simplemobiletools.commons.helpers.PERMISSION_READ_CONTACTS
 import com.simplemobiletools.commons.helpers.PERMISSION_READ_STORAGE
 import com.simplemobiletools.commons.helpers.PERMISSION_WRITE_STORAGE
 import io.github.hanjoongcho.commons.helpers.PERMISSION_ACCESS_COARSE_LOCATION
@@ -78,7 +77,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
         overlay.setOnClickListener(mMenuClickListener)
         find.setOnClickListener(mMenuClickListener)
         timeline.setOnClickListener(mMenuClickListener)
-        setting.setOnClickListener(mMenuClickListener)
+        settings.setOnClickListener(mMenuClickListener)
     }
 
     /**
@@ -325,7 +324,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                 }
 
             }
-            R.id.setting -> {
+            R.id.settings -> {
                 val settingIntent = Intent(this, SettingsActivity::class.java)
                 startActivity(settingIntent)
             }

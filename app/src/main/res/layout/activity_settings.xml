@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay">
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+        </android.support.design.widget.AppBarLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                
+                <RelativeLayout
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    style="@style/SettingsItemHolder"
+                    android:id="@+id/pattern_lock_holder">
+                    <com.simplemobiletools.commons.views.MyTextView
+                        android:id="@+id/pattern_lock_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/pref_title_social_recommendations"/>
+
+                    <com.simplemobiletools.commons.views.MyTextView
+                        android:id="@+id/pattern_lock_summary"
+                        android:layout_below="@+id/pattern_lock_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/pref_description_social_recommendations"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    style="@style/SettingsItemHolder"
+                    android:id="@+id/settings_font_size_holder">
+                    <com.simplemobiletools.commons.views.MyTextView
+                        android:id="@+id/settings_font_size_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/font_size"/>
+
+                    <com.simplemobiletools.commons.views.MyTextView
+                        android:id="@+id/settings_font_size"
+                        android:layout_below="@+id/settings_font_size_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+                </RelativeLayout>
+
+            </LinearLayout>
+            
+        </ScrollView>
+        
+    </LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

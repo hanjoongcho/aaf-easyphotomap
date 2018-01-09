@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">Easy PhotoMap</string>
 
+    <!--AboutActivity-->
+    <string name="aaf_copyright">aaf-easyphotomap v %1$s\nCopyright © Awesome Application Factory %2$d</string>
+    <string name="aaf_license_url">https://github.com/hanjoongcho/aaf-easyphotomap/blob/master/LICENSE.md</string>
+    
     <!--MapsActivity-->
     <string name="maps_activity_timeline">Timeline</string>
     <string name="maps_activity_setting">Environment settings</string>
@@ -21,7 +25,7 @@
     <string name="registration_batch_a">Batch Registration A</string>
     <string name="registration_batch_b">Batch Registration B</string>
 
-    <!--SettingsActivity-->
+    SettingsActivity2vity-->
     <string name="setting_activity_title">Environment settings</string>
     <string name="setting_activity_minimum_cluster_title">Photo marker minimum cluster</string>
     <string name="setting_activity_minimum_cluster_summary">If there are more markers than a set point within a certain distance, use cluster markers to increase readability.</string>

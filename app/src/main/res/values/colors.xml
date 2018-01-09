@@ -2,7 +2,7 @@
 <resources>
 
     <!--common-->
-    <color name="colorPrimaryDark">#089C90</color>
+    <color name="colorPrimaryDark">#05868C</color>
     <color name="colorPrimary">#07ABB3</color>
     <color name="colorAccent">#07ABB3</color>
     <color name="white">#f0ffffff</color>
@@ -12,6 +12,10 @@
     <color name="transparent">#00ffffff</color>
     <color name="appBackground">#ffd4d3d3</color>
 
+    <color name="color_primary_dark">@color/colorPrimaryDark</color>
+    <color name="color_primary">@color/colorPrimary</color>
+    <color name="color_accent">@color/colorAccent</color>
+    
     <!--activity_popup_image.xml-->
     <color name="popupImageBackground">#90000000</color>
 

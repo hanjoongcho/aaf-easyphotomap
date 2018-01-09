@@ -42,7 +42,7 @@
         <activity android:name=".activities.AddressSearchActivity" android:label="SearchFragment"
             android:theme="@style/AppTheme.NoActionBar"
             />
-        <activity android:name=".activities.SettingsActivity" android:label="SettingsActivity" />
+        <activity android:name=".activities.SettingsActivity" android:label="SettingsActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.CameraActivity" android:label="CameraActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.PopupImageActivity" android:label="PopupImageActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.BatchPopupActivity" android:label="BatchPopupActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme.NoActionBar" />
@@ -50,6 +50,7 @@
             android:theme="@style/AppTheme.NoActionBar"
             />
         <activity android:name=".activities.WebViewActivity" android:label="Licenses" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.AboutActivity" android:theme="@style/AppTheme.NoActionBar" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
