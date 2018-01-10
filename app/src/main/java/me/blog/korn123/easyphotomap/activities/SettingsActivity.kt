@@ -7,6 +7,7 @@ import com.simplemobiletools.commons.dialogs.RadioGroupDialog
 import com.simplemobiletools.commons.models.RadioItem
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.extensions.isBlackAndWhiteTheme
+import io.github.hanjoongcho.commons.activities.BaseSimpleActivity
 import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.helper.*
 import me.blog.korn123.easyphotomap.extensions.config
@@ -38,7 +39,12 @@ class SettingsActivity : SimpleActivity() {
         super.onResume()
 
         // handle option click
+        setupAbout()
         setupFontSize()
+    }
+
+    private fun setupAbout() {
+        about_label.setTextColor(linkColor)
     }
 
     private fun setupFontSize() {

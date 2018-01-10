@@ -37,17 +37,32 @@
                     android:orientation="vertical"
                     android:id="@+id/about_holder">
                     <com.simplemobiletools.commons.views.MyTextView
-                        android:id="@+id/about"
+                        android:id="@+id/about_label"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/about"/>
 
                     <com.simplemobiletools.commons.views.MyTextView
                         android:id="@+id/about_summary"
-                        android:layout_below="@+id/pattern_lock_label"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text=""/>
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/SettingsItemHolder"
+                    android:orientation="vertical"
+                    android:id="@+id/settings_font_size_holder">
+                    <com.simplemobiletools.commons.views.MyTextView
+                        android:id="@+id/settings_font_size_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/font_size"/>
+
+                    <com.simplemobiletools.commons.views.MyTextView
+                        android:id="@+id/settings_font_size"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -156,23 +171,6 @@
                         android:layout_marginLeft="20dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
-                </LinearLayout>
-
-                <LinearLayout
-                    style="@style/SettingsItemHolder"
-                    android:orientation="vertical"
-                    android:id="@+id/photo_size_holder">
-                    <com.simplemobiletools.commons.views.MyTextView
-                        android:id="@+id/settings_font_size_label"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/photo_size_setting"/>
-
-                    <com.simplemobiletools.commons.views.MyTextView
-                        android:id="@+id/settings_font_size"
-                        android:layout_below="@+id/photo_size_setting_summary"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
                 </LinearLayout>
 
                 <LinearLayout
