@@ -12,10 +12,7 @@ import kotlinx.android.synthetic.main.activity_settings.*
 import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.extensions.config
 import me.blog.korn123.easyphotomap.extensions.initTextSize
-import me.blog.korn123.easyphotomap.helper.FONT_SIZE_EXTRA_LARGE
-import me.blog.korn123.easyphotomap.helper.FONT_SIZE_LARGE
-import me.blog.korn123.easyphotomap.helper.FONT_SIZE_MEDIUM
-import me.blog.korn123.easyphotomap.helper.FONT_SIZE_SMALL
+import me.blog.korn123.easyphotomap.helper.*
 
 /**
  * Created by CHO HANJOONG on 2018-01-09.
@@ -42,10 +39,55 @@ class SettingsActivity : SimpleActivity() {
         super.onResume()
 
         // handle option click
+        setupPhotoMarkerScale()
+        setupPhotoMarker()
+        setupReversOrder()
+        setupPhotoCopy()
         setupCameraInfoPopup()
         setupDateFilter()
         setupAbout()
         setupFontSize()
+    }
+    
+    private fun setupPhotoMarkerScale() {
+        photo_marker_scale_label.setTextColor(linkColor)
+        photo_marker_scale_holder.setOnClickListener {  }    
+    }
+    
+    private fun setupPhotoMarker() {
+        photo_marker_label.setTextColor(linkColor)
+        photo_marker_label.text = "${getString(R.string.photo_marker_setting)} (${getPhotoMarkerText()})"
+        photo_marker_holder.setOnClickListener {
+            val items = arrayListOf(
+                    RadioItem(BASIC, res.getString(R.string.photo_marker_basic)),
+                    RadioItem(FILM, res.getString(R.string.photo_marker_film)),
+                    RadioItem(FLOWER, res.getString(R.string.photo_marker_flower)),
+                    RadioItem(CIRCLE, res.getString(R.string.photo_marker_circle)))
+
+            RadioGroupDialog(this@SettingsActivity, items, config.photoMarkerIcon) {
+                config.photoMarkerIcon = it as Int
+                photo_marker_label.text = "${getString(R.string.photo_marker_setting)} (${getPhotoMarkerText()})"
+//                updateWidget()
+            }
+        }
+    }
+    
+    private fun setupReversOrder() {
+        enable_reverse_order_label.setTextColor(linkColor)
+        enable_reverse_order_switcher.isChecked = config.enableReverseOrder
+        enable_reverse_order_holder.setOnClickListener {
+            enable_reverse_order_switcher.toggle()
+            config.enableReverseOrder = enable_reverse_order_switcher.isChecked
+        }
+    }
+    
+    private fun setupPhotoCopy() {
+        enable_copy_label.setTextColor(linkColor)
+        enable_copy_switcher.isChecked = config.enableCreateCopy
+        enable_copy_holder.setOnClickListener {
+            enable_copy_switcher.toggle()
+            config.enableCreateCopy = enable_copy_switcher.isChecked
+        }
     }
 
     private fun setupCameraInfoPopup() {
@@ -55,7 +97,6 @@ class SettingsActivity : SimpleActivity() {
             disable_info_popup_switcher.toggle()
             config.disableCameraInformation = disable_info_popup_switcher.isChecked
         }
-        
     }
     
     private fun setupDateFilter() {
@@ -98,5 +139,12 @@ class SettingsActivity : SimpleActivity() {
         FONT_SIZE_MEDIUM -> R.string.medium
         FONT_SIZE_LARGE -> R.string.large
         else -> R.string.extra_large
+    })
+    
+    private fun getPhotoMarkerText() = getString(when (config.photoMarkerIcon) {
+        FILM -> R.string.photo_marker_film
+        FLOWER -> R.string.photo_marker_flower
+        CIRCLE -> R.string.photo_marker_circle
+        else -> R.string.photo_marker_basic
     })
 }

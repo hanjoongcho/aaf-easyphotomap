@@ -27,4 +27,25 @@ class Config(context: Context) : BaseConfig(context) {
     var disableCameraInformation: Boolean
         get() = legacyPrefs.getBoolean(DISABLE_INFO_POPUP, false)
         set(isDisable) = legacyPrefs.edit().putBoolean(DISABLE_INFO_POPUP, isDisable).apply()
+
+    var enableCreateCopy: Boolean
+        get() = legacyPrefs.getBoolean(ENABLE_CREARE_COPY, false)
+        set(isEnable) = legacyPrefs.edit().putBoolean(ENABLE_CREARE_COPY, isEnable).apply()
+
+    var enableReverseOrder: Boolean
+        get() = legacyPrefs.getBoolean(ENABLE_REVERSE_ORDER, false)
+        set(isEnable) = legacyPrefs.edit().putBoolean(ENABLE_REVERSE_ORDER, isEnable).apply()
+
+    var photoMarkerIcon: Int
+        get() = prefs.getInt(PHOTO_MARKER_ICON, BASIC)
+        set(photoMarkerIcon) = prefs.edit().putInt(PHOTO_MARKER_ICON, photoMarkerIcon).apply()
+
+    var photoMarkerScale: Int
+        get() = prefs.getInt(PHOTO_MARKER_SCALE, 1)
+        set(photoMarkerScale) = prefs.edit().putInt(PHOTO_MARKER_SCALE, photoMarkerScale).apply()
+    
+    var photoMarkerMinimumCluster: String
+        get() = legacyPrefs.getString(PHOTO_MARKER_MINIMUN_CLUSTER, "10")
+        set(photoMarkerMinimumCluster) = legacyPrefs.edit().putString(PHOTO_MARKER_MINIMUN_CLUSTER, photoMarkerMinimumCluster).apply()
+    
 }

@@ -147,11 +147,16 @@
 
     <string name="photo_marker_setting">Photo marker type</string>
     <string name="photo_marker_setting_summary">Change the type of the photo marker displayed on a map</string>
+
+    <string name="photo_marker_film">Film Frame</string>
+    <string name="photo_marker_flower">Flower Frame</string>
+    <string name="photo_marker_basic">Basic Frame</string>
+    <string name="photo_marker_circle">Red Circle</string>
     <string-array name="photo_marker_list_titles">
-        <item>Film Frame</item>
-        <item>Flower Frame</item>
-        <item>Basic Frame</item>
-        <item>Red Circle</item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
     </string-array>
     <string-array name="photo_marker_list_values">
         <item>filmFrame</item>

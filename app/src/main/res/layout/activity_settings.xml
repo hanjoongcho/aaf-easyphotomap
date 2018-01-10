@@ -124,13 +124,14 @@
                 <LinearLayout
                     style="@style/SettingsItemHolder"
                     android:orientation="horizontal"
-                    android:id="@+id/enable_create_copy_holder">
+                    android:id="@+id/enable_copy_holder">
                     <LinearLayout
                         android:orientation="vertical"
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content">
                         <com.simplemobiletools.commons.views.MyTextView
+                            android:id="@+id/enable_copy_label"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/enable_create_copy"/>
@@ -140,7 +141,7 @@
                             android:text="@string/enable_create_copy_summary"/>
                     </LinearLayout>
                     <android.support.v7.widget.SwitchCompat
-                        android:id="@+id/enableCreateCopy"
+                        android:id="@+id/enable_copy_switcher"
                         android:clickable="false"
                         android:layout_gravity="center"
                         android:layout_marginLeft="20dp"
@@ -158,6 +159,7 @@
                         android:layout_weight="1"
                         android:layout_height="wrap_content">
                         <com.simplemobiletools.commons.views.MyTextView
+                            android:id="@+id/enable_reverse_order_label"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/enable_reverse_order"/>
@@ -167,7 +169,7 @@
                             android:text="@string/enable_reverse_order_summary"/>
                     </LinearLayout>
                     <android.support.v7.widget.SwitchCompat
-                        android:id="@+id/enableReverseOrder"
+                        android:id="@+id/enable_reverse_order_switcher"
                         android:clickable="false"
                         android:layout_gravity="center"
                         android:layout_marginLeft="20dp"
@@ -180,16 +182,35 @@
                     android:orientation="vertical"
                     android:id="@+id/photo_marker_holder">
                     <com.simplemobiletools.commons.views.MyTextView
+                        android:id="@+id/photo_marker_label"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/photo_marker_setting"/>
 
                     <com.simplemobiletools.commons.views.MyTextView
+                        android:id="@+id/photo_marker"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/photo_marker_setting_summary"/>/>
+                        android:text="@string/photo_marker_setting_summary"/>
                 </LinearLayout>
 
+                <LinearLayout
+                    style="@style/SettingsItemHolder"
+                    android:orientation="vertical"
+                    android:id="@+id/photo_marker_scale_holder">
+                    <com.simplemobiletools.commons.views.MyTextView
+                        android:id="@+id/photo_marker_scale_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/photo_size_setting"/>
+
+                    <com.simplemobiletools.commons.views.MyTextView
+                        android:id="@+id/photo_marker_scale"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/photo_size_setting_summary"/>
+                </LinearLayout>
+                
                 <LinearLayout
                     style="@style/SettingsItemHolder"
                     android:layout_marginBottom="@dimen/spacing_normal"
@@ -203,7 +224,7 @@
                     <com.simplemobiletools.commons.views.MyTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/setting_activity_minimum_cluster_summary"/>/>
+                        android:text="@string/setting_activity_minimum_cluster_summary"/>
                 </LinearLayout>
 
             </LinearLayout>
