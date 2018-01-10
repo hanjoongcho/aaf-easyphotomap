@@ -9,9 +9,12 @@ package me.blog.korn123.easyphotomap.helper
 
 // shared preferences
 val FONT_SIZE = "font_size"
+val DATE_FILTER ="date_filter_setting"
+val DISABLE_INFO_POPUP = "disable_info_popup"
 
 // font sizes
 val FONT_SIZE_SMALL = 0
 val FONT_SIZE_MEDIUM = 1
 val FONT_SIZE_LARGE = 2
 val FONT_SIZE_EXTRA_LARGE = 3
+

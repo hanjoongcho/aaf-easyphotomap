@@ -99,7 +99,7 @@ dependencies {
     implementation 'com.simplemobiletools:commons:3.5.4'
 //    implementation project(":commons")
     
-    implementation 'io.github.hanjoongcho:commons-android:0.0.4'
-//    implementation project(":commons-android")
+//    implementation 'io.github.hanjoongcho:commons-android:0.0.4'
+    implementation project(":commons-android")
 }
 

@@ -4,15 +4,18 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.os.Bundle
 import com.simplemobiletools.commons.dialogs.RadioGroupDialog
-import com.simplemobiletools.commons.models.RadioItem
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.extensions.isBlackAndWhiteTheme
-import io.github.hanjoongcho.commons.activities.BaseSimpleActivity
+import com.simplemobiletools.commons.models.RadioItem
+import io.github.hanjoongcho.commons.helpers.TransitionHelper
+import kotlinx.android.synthetic.main.activity_settings.*
 import me.blog.korn123.easyphotomap.R
-import me.blog.korn123.easyphotomap.helper.*
 import me.blog.korn123.easyphotomap.extensions.config
 import me.blog.korn123.easyphotomap.extensions.initTextSize
-import kotlinx.android.synthetic.main.activity_settings.*
+import me.blog.korn123.easyphotomap.helper.FONT_SIZE_EXTRA_LARGE
+import me.blog.korn123.easyphotomap.helper.FONT_SIZE_LARGE
+import me.blog.korn123.easyphotomap.helper.FONT_SIZE_MEDIUM
+import me.blog.korn123.easyphotomap.helper.FONT_SIZE_SMALL
 
 /**
  * Created by CHO HANJOONG on 2018-01-09.
@@ -39,12 +42,36 @@ class SettingsActivity : SimpleActivity() {
         super.onResume()
 
         // handle option click
+        setupCameraInfoPopup()
+        setupDateFilter()
         setupAbout()
         setupFontSize()
     }
 
+    private fun setupCameraInfoPopup() {
+        disable_info_popup_label.setTextColor(linkColor)
+        disable_info_popup_switcher.isChecked = config.disableCameraInformation
+        disable_info_popup_holder.setOnClickListener {
+            disable_info_popup_switcher.toggle()
+            config.disableCameraInformation = disable_info_popup_switcher.isChecked
+        }
+        
+    }
+    
+    private fun setupDateFilter() {
+        date_filter_label.setTextColor(linkColor)
+        date_filter_switcher.isChecked = config.enableDateFilter 
+        date_filter_holder.setOnClickListener {
+            date_filter_switcher.toggle()
+            config.enableDateFilter = date_filter_switcher.isChecked
+        }
+    }
+    
     private fun setupAbout() {
         about_label.setTextColor(linkColor)
+        about_holder.setOnClickListener {
+            TransitionHelper.startActivityWithTransition(this@SettingsActivity, AboutActivity::class.java)
+        }
     }
 
     private fun setupFontSize() {

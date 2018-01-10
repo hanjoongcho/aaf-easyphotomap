@@ -1,7 +1,7 @@
 package me.blog.korn123.easyphotomap.activities
 
-import android.os.Bundle
 import io.github.hanjoongcho.commons.activities.BaseSimpleActivity
+import me.blog.korn123.easyphotomap.extensions.initTextSize
 
 /**
  * Created by CHO HANJOONG on 2018-01-08.
@@ -10,4 +10,10 @@ import io.github.hanjoongcho.commons.activities.BaseSimpleActivity
  * https://github.com/SimpleMobileTools/Simple-Commons
  */
 
-open class SimpleActivity : BaseSimpleActivity()
+open class SimpleActivity : BaseSimpleActivity() {
+
+    override fun onResume() {
+        super.onResume()
+        initTextSize(findViewById(android.R.id.content), this@SimpleActivity);
+    }
+}
