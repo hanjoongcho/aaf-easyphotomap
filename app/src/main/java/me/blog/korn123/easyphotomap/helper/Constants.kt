@@ -17,6 +17,24 @@ val PHOTO_MARKER_ICON = "photo_marker_setting"
 val PHOTO_MARKER_MINIMUN_CLUSTER = "photo_marker_enable_minimum_cluster"
 val PHOTO_MARKER_SCALE = "photo_size_setting"
 
+// photo marker cluster
+val CLUSTER_L1 = 1
+val CLUSTER_L2 = 2
+val CLUSTER_L3 = 3
+val CLUSTER_L4 = 4
+val CLUSTER_L5 = 5
+val CLUSTER_L6 = 6
+val CLUSTER_L7 = 7
+
+// photo marker scale
+val SCALE_M4 = -4
+val SCALE_M3 = -3
+val SCALE_M2 = -2
+val SCALE_M1 = -1
+val SCALE_DEFAULT = 0 
+val SCALE_P1 = 1 
+val SCALE_P2 = 2 
+
 // photo marker frame
 val BASIC = 0
 val FILM = 1

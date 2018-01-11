@@ -14,6 +14,7 @@ import com.drew.metadata.exif.GpsDirectory
 import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.activities.AddressSearchActivity
 import me.blog.korn123.easyphotomap.constants.Constant
+import me.blog.korn123.easyphotomap.extensions.config
 import me.blog.korn123.easyphotomap.models.PhotoMapItem
 import me.blog.korn123.easyphotomap.utils.BitmapUtils
 import me.blog.korn123.easyphotomap.utils.CommonUtils
@@ -34,7 +35,7 @@ class RegistrationThread(private val mContext: Context, private val mActivity: A
         try {
 
             val targetFile: File
-            if (CommonUtils.loadBooleanPreference(mContext, "enable_create_copy")) {
+            if (mContext.config.enableCreateCopy) {
                 targetFile = File(Constant.WORKING_DIRECTORY + mFileName)
                 if (!targetFile.exists()) {
                     FileUtils.copyFile(File(mPath), targetFile)

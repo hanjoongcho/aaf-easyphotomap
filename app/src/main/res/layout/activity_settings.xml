@@ -217,6 +217,7 @@
                     android:orientation="vertical"
                     android:id="@+id/minimum_cluster_holder">
                     <com.simplemobiletools.commons.views.MyTextView
+                        android:id="@+id/minimum_cluster_label"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/setting_activity_minimum_cluster_title"/>

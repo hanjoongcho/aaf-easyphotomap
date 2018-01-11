@@ -78,7 +78,7 @@ class SettingsActivity2 : AppPreferenceActivity() {
             if (StringUtils.equals(key, "date_filter_setting")) {
                 val switchPreference = findPreference("date_filter_setting") as SwitchPreference
                 val checked = switchPreference.isChecked
-                CommonUtils.saveBooleanPreference(activity, "date_filter_setting", checked)
+//                CommonUtils.saveBooleanPreference(activity, "date_filter_setting", checked)
             } else if (StringUtils.equals(key, "photo_size_setting")) {
                 val listPreference = findPreference("photo_size_setting") as ListPreference
                 val photoSizeKey = listPreference.value

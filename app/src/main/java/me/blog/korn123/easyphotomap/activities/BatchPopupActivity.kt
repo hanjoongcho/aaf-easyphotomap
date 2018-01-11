@@ -1,6 +1,5 @@
 package me.blog.korn123.easyphotomap.activities
 
-import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
@@ -19,6 +18,7 @@ import me.blog.korn123.easyphotomap.models.PhotoMapItem
 import me.blog.korn123.easyphotomap.utils.BitmapUtils
 import me.blog.korn123.easyphotomap.utils.CommonUtils
 import me.blog.korn123.easyphotomap.utils.DialogUtils
+import me.blog.korn123.easyphotomap.extensions.config
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 import java.io.File
@@ -27,7 +27,7 @@ import java.util.*
 /**
  * Created by CHO HANJOONG on 2016-09-11.
  */
-class BatchPopupActivity : Activity() {
+class BatchPopupActivity : SimpleActivity() {
 
     private var mEnableUpdate = true
     private var mTotalPhoto = 0
@@ -117,7 +117,7 @@ class BatchPopupActivity : Activity() {
                 try {
                     var fileName = FilenameUtils.getName(imagePath) + ".origin"
                     var targetFile: File?
-                    if (CommonUtils.loadBooleanPreference(this@BatchPopupActivity, "enable_create_copy")) {
+                    if (config.enableCreateCopy) {
                         targetFile = File(Constant.WORKING_DIRECTORY + fileName)
                         if (!targetFile.exists()) {
                             FileUtils.copyFile(File(imagePath), targetFile)

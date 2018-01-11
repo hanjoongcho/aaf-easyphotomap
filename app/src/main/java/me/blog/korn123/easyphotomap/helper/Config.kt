@@ -44,8 +44,8 @@ class Config(context: Context) : BaseConfig(context) {
         get() = prefs.getInt(PHOTO_MARKER_SCALE, 1)
         set(photoMarkerScale) = prefs.edit().putInt(PHOTO_MARKER_SCALE, photoMarkerScale).apply()
     
-    var photoMarkerMinimumCluster: String
-        get() = legacyPrefs.getString(PHOTO_MARKER_MINIMUN_CLUSTER, "10")
-        set(photoMarkerMinimumCluster) = legacyPrefs.edit().putString(PHOTO_MARKER_MINIMUN_CLUSTER, photoMarkerMinimumCluster).apply()
+    var photoMarkerMinimumCluster: Int
+        get() = legacyPrefs.getInt(PHOTO_MARKER_MINIMUN_CLUSTER, CLUSTER_L4)
+        set(photoMarkerMinimumCluster) = legacyPrefs.edit().putInt(PHOTO_MARKER_MINIMUN_CLUSTER, photoMarkerMinimumCluster).apply()
     
 }

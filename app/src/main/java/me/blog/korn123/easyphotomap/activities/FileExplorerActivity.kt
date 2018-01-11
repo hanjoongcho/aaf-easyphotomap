@@ -23,6 +23,7 @@ import kotlinx.android.synthetic.main.activity_file_explorer.*
 import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.adapters.ExplorerItemAdapter
 import me.blog.korn123.easyphotomap.constants.Constant
+import me.blog.korn123.easyphotomap.extensions.config
 import me.blog.korn123.easyphotomap.helper.RegistrationThread
 import me.blog.korn123.easyphotomap.models.FileItem
 import me.blog.korn123.easyphotomap.utils.CommonUtils
@@ -220,7 +221,7 @@ class FileExplorerActivity : AppCompatActivity() {
                     }
                 }
 
-                if (CommonUtils.loadBooleanPreference(this@FileExplorerActivity, Constant.SETTING_REVERSE_ORDER)) {
+                if (config.enableReverseOrder) {
                     Collections.sort(mListDirectory, Collections.reverseOrder<Any>())
                     Collections.sort(mListFile, Collections.reverseOrder<Any>())
                 } else {

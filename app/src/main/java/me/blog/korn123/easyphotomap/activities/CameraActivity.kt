@@ -13,6 +13,7 @@ import com.drew.metadata.exif.ExifSubIFDDirectory
 import com.drew.metadata.exif.GpsDirectory
 import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.constants.Constant
+import me.blog.korn123.easyphotomap.extensions.config
 import me.blog.korn123.easyphotomap.helper.PhotoMapDbHelper
 import me.blog.korn123.easyphotomap.models.PhotoMapItem
 import me.blog.korn123.easyphotomap.utils.BitmapUtils
@@ -99,7 +100,7 @@ class CameraActivity : SimpleActivity() {
                     val fileName: String
                     try {
                         val targetFile: File
-                        if (CommonUtils.loadBooleanPreference(this@CameraActivity, "enable_create_copy")) {
+                        if (config.enableCreateCopy) {
                             fileName = FilenameUtils.getName(mCurrentFileName) + ".origin"
                             targetFile = File(Constant.WORKING_DIRECTORY + fileName)
                             if (!targetFile.exists()) {

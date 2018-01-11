@@ -39,6 +39,7 @@ class SettingsActivity : SimpleActivity() {
         super.onResume()
 
         // handle option click
+        setupPhotoMarkerCluster()
         setupPhotoMarkerScale()
         setupPhotoMarker()
         setupReversOrder()
@@ -49,9 +50,44 @@ class SettingsActivity : SimpleActivity() {
         setupFontSize()
     }
     
+    private fun setupPhotoMarkerCluster() {
+        minimum_cluster_label.setTextColor(linkColor)
+        minimum_cluster_label.text = "${getString(R.string.setting_activity_minimum_cluster_title)} (${getPhotoMarkerClusterText()})"
+        minimum_cluster_holder.setOnClickListener {
+            val items = arrayListOf(
+                    RadioItem(CLUSTER_L1, res.getString(R.string.photo_marker_cluster_level1)),
+                    RadioItem(CLUSTER_L2, res.getString(R.string.photo_marker_cluster_level2)),
+                    RadioItem(CLUSTER_L3, res.getString(R.string.photo_marker_cluster_level3)),
+                    RadioItem(CLUSTER_L4, res.getString(R.string.photo_marker_cluster_level4)),
+                    RadioItem(CLUSTER_L5, res.getString(R.string.photo_marker_cluster_level5)),
+                    RadioItem(CLUSTER_L6, res.getString(R.string.photo_marker_cluster_level6)),
+                    RadioItem(CLUSTER_L7, res.getString(R.string.photo_marker_cluster_level7)))
+            RadioGroupDialog(this@SettingsActivity, items, config.photoMarkerMinimumCluster) {
+                config.photoMarkerMinimumCluster = it as Int
+                minimum_cluster_label.text = "${getString(R.string.setting_activity_minimum_cluster_title)} (${getPhotoMarkerClusterText()})"
+//                updateWidget()
+            }
+        }
+    }
+    
     private fun setupPhotoMarkerScale() {
         photo_marker_scale_label.setTextColor(linkColor)
-        photo_marker_scale_holder.setOnClickListener {  }    
+        photo_marker_scale_label.text = "${getString(R.string.photo_size_setting)} (${getPhotoMarkerScaleText()})"
+        photo_marker_scale_holder.setOnClickListener {
+            val items = arrayListOf(
+                    RadioItem(SCALE_M4, res.getString(R.string.photo_marker_scale_m4)),
+                    RadioItem(SCALE_M3, res.getString(R.string.photo_marker_scale_m3)),
+                    RadioItem(SCALE_M2, res.getString(R.string.photo_marker_scale_m2)),
+                    RadioItem(SCALE_M1, res.getString(R.string.photo_marker_scale_m1)),
+                    RadioItem(SCALE_DEFAULT, res.getString(R.string.photo_marker_scale_default)),
+                    RadioItem(SCALE_P1, res.getString(R.string.photo_marker_scale_p1)),
+                    RadioItem(SCALE_P2, res.getString(R.string.photo_marker_scale_p2)))
+            RadioGroupDialog(this@SettingsActivity, items, config.photoMarkerScale) {
+                config.photoMarkerScale = it as Int
+                photo_marker_scale_label.text = "${getString(R.string.photo_size_setting)} (${getPhotoMarkerScaleText()})"
+//                updateWidget()
+            }
+        }    
     }
     
     private fun setupPhotoMarker() {
@@ -146,5 +182,25 @@ class SettingsActivity : SimpleActivity() {
         FLOWER -> R.string.photo_marker_flower
         CIRCLE -> R.string.photo_marker_circle
         else -> R.string.photo_marker_basic
+    })
+
+    private fun getPhotoMarkerScaleText() = getString(when (config.photoMarkerScale) {
+        SCALE_M4 -> R.string.photo_marker_scale_m4
+        SCALE_M3 -> R.string.photo_marker_scale_m3
+        SCALE_M2 -> R.string.photo_marker_scale_m2
+        SCALE_M1 -> R.string.photo_marker_scale_m1
+        SCALE_P1 -> R.string.photo_marker_scale_p1
+        SCALE_P2 -> R.string.photo_marker_scale_p2
+        else -> R.string.photo_marker_scale_default
+    })
+
+    private fun getPhotoMarkerClusterText() = getString(when (config.photoMarkerMinimumCluster) {
+        CLUSTER_L1 -> R.string.photo_marker_cluster_level1
+        CLUSTER_L2 -> R.string.photo_marker_cluster_level2
+        CLUSTER_L3 -> R.string.photo_marker_cluster_level3
+        CLUSTER_L5 -> R.string.photo_marker_cluster_level5
+        CLUSTER_L6 -> R.string.photo_marker_cluster_level6
+        CLUSTER_L7 -> R.string.photo_marker_cluster_level7
+        else -> R.string.photo_marker_cluster_level4
     })
 }

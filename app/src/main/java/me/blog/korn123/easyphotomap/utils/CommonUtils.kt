@@ -105,19 +105,19 @@ class CommonUtils {
             targetView.setOnTouchListener(onTouchListener)
         }
 
-        @JvmStatic
-        fun loadBooleanPreference(context: Context, key: String): Boolean {
-            val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-            return preferences.getBoolean(key, false)
-        }
-
-        @JvmStatic
-        fun saveBooleanPreference(context: Context, key: String, isEnable: Boolean) {
-            val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-            val edit = preferences.edit()
-            edit.putBoolean(key, isEnable)
-            edit.apply()
-        }
+//        @JvmStatic
+//        fun loadBooleanPreference(context: Context, key: String): Boolean {
+//            val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+//            return preferences.getBoolean(key, false)
+//        }
+//
+//        @JvmStatic
+//        fun saveBooleanPreference(context: Context, key: String, isEnable: Boolean) {
+//            val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+//            val edit = preferences.edit()
+//            edit.putBoolean(key, isEnable)
+//            edit.apply()
+//        }
 
 //        fun loadIntPreference(context: Context, key: String, defaultValue: Int): Int {
 //            val preferences = PreferenceManager.getDefaultSharedPreferences(context)
