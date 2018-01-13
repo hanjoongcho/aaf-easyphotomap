@@ -11,7 +11,6 @@ import io.github.hanjoongcho.commons.helpers.BaseConfig
  */
 
 class Config(context: Context) : BaseConfig(context) {
-    
     companion object {
         fun newInstance(context: Context) = Config(context)
     }
@@ -45,7 +44,6 @@ class Config(context: Context) : BaseConfig(context) {
         set(photoMarkerScale) = prefs.edit().putInt(PHOTO_MARKER_SCALE, photoMarkerScale).apply()
     
     var photoMarkerMinimumCluster: Int
-        get() = legacyPrefs.getInt(PHOTO_MARKER_MINIMUN_CLUSTER, CLUSTER_L4)
+        get() = legacyPrefs.getInt(PHOTO_MARKER_MINIMUN_CLUSTER, CLUSTER_L2)
         set(photoMarkerMinimumCluster) = legacyPrefs.edit().putInt(PHOTO_MARKER_MINIMUN_CLUSTER, photoMarkerMinimumCluster).apply()
-    
 }

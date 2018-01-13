@@ -117,12 +117,12 @@ class SettingsActivity2 : AppPreferenceActivity() {
 
                 false
             }
-            mOpenSourceLicensesInfo.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                val intent = Intent(mContext, WebViewActivity::class.java)
-                intent.putExtra(Constant.OPEN_URL_INFO, "https://github.com/hanjoongcho/aaf-easyphotomap/blob/master/LICENSE.md")
-                startActivity(intent)
-                false
-            }
+//            mOpenSourceLicensesInfo.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+//                val intent = Intent(mContext, WebViewActivity::class.java)
+//                intent.putExtra(Constant.OPEN_URL_INFO, "https://github.com/hanjoongcho/aaf-easyphotomap/blob/master/LICENSE.md")
+//                startActivity(intent)
+//                false
+//            }
         }
 
         override fun onCreate(savedInstanceState: Bundle?) {

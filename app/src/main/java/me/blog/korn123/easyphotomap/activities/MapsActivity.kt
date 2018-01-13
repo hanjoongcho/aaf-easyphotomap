@@ -74,7 +74,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
         floatingMenu.setOnMenuButtonClickListener { floatingMenu.toggle(true) }
         camera.setOnClickListener(mMenuClickListener)
         thumbnailViewer.setOnClickListener(mMenuClickListener)
-        folder.setOnClickListener(mMenuClickListener)
+        fileManager.setOnClickListener(mMenuClickListener)
         overlay.setOnClickListener(mMenuClickListener)
         find.setOnClickListener(mMenuClickListener)
         timeline.setOnClickListener(mMenuClickListener)
@@ -236,6 +236,22 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                     }
                 }
             }
+            R.id.fileManager -> {
+                handlePermission(PERMISSION_READ_STORAGE) {
+                    if (it) {
+                        handlePermission(PERMISSION_WRITE_STORAGE) {
+                            if (it) {
+                                val fileExplorerIntent = Intent(this@MapsActivity, FileExplorerActivity::class.java)
+                                startActivity(fileExplorerIntent)
+                            } else {
+                                toast(R.string.no_storage_permissions)
+                            }
+                        }
+                    } else {
+                        toast(R.string.no_storage_permissions)
+                    }
+                }
+            }
             R.id.overlay -> {
                 mEnableDateFilter = config.enableDateFilter
                 mMap?.clear()
@@ -329,10 +345,6 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                 val settingIntent = Intent(this, SettingsActivity::class.java)
                 startActivity(settingIntent)
             }
-            R.id.folder -> {
-                val fileExplorerIntent = Intent(this@MapsActivity, FileExplorerActivity::class.java)
-                startActivity(fileExplorerIntent)
-            }
             R.id.timeline -> {
                 mListPhotoMapItem?.let {
                     if (it.size == 0) {
@@ -379,6 +391,16 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
         SCALE_P2 -> 1.4
         else -> 1.0
     }
+
+    private fun getPhotoMarkerMinimumCluster(): Int = when (config.photoMarkerMinimumCluster) {
+        CLUSTER_L1 -> 5
+        CLUSTER_L3 -> 50
+        CLUSTER_L4 -> 100
+        CLUSTER_L5 -> 200
+        CLUSTER_L6 -> 500
+        CLUSTER_L7 -> 1000
+        else -> 10
+    } 
 
     inner class OverlayThread(private val keyword: String, private val applyFilter: Boolean) : Thread() {
 
@@ -528,7 +550,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
             return if (mapZoom > Constant.GOOGLE_MAP_MAX_ZOOM_IN_VALUE - 1) {
                 false
             } else {
-                cluster.size > Integer.valueOf(CommonUtils.loadStringPreference(this@MapsActivity, "photo_marker_enable_minimum_cluster", "10"))
+                cluster.size > getPhotoMarkerMinimumCluster()
             }
 
         }
@@ -607,5 +629,4 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
             return "$keyWord [$count$unit]"
         }
     }
-
 }

@@ -34,7 +34,7 @@
                 style="@style/FloatingButton"
                 fab:fab_label="@string/maps_activity_overlay" />
             <com.github.clans.fab.FloatingActionButton
-                android:id="@+id/folder"
+                android:id="@+id/fileManager"
                 android:src="@drawable/ic_folder_01"
                 style="@style/FloatingButton"
                 fab:fab_label="@string/maps_activity_folder" />

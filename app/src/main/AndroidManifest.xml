@@ -49,7 +49,7 @@
         <activity android:name=".activities.TimelineActivity" android:label="Timeline"
             android:theme="@style/AppTheme.NoActionBar"
             />
-        <activity android:name=".activities.WebViewActivity" android:label="Licenses" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name="io.github.hanjoongcho.commons.activities.WebViewActivity" android:label="Licenses" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.AboutActivity" android:theme="@style/AppTheme.NoActionBar" />
 
         <provider

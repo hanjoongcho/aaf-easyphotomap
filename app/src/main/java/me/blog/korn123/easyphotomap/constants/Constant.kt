@@ -7,11 +7,9 @@ import android.os.Environment
  */
 object Constant {
     val WORKING_DIRECTORY = Environment.getExternalStorageDirectory().absolutePath + "/AAFactory/photo/"
-    val LOG_DIRECTORY = Environment.getExternalStorageDirectory().absolutePath + "/AAFactory/log/"
 
     /* FileExplorerActivity */
     val CAMERA_DIRECTORY = Environment.getExternalStorageDirectory().absolutePath + "/DCIM"
-    val SETTING_REVERSE_ORDER = "enable_reverse_order"
 
     /* MapsActivity */
     val LEGACY_PHOTO_DATA_PATH = WORKING_DIRECTORY + "photodata.dat"
@@ -28,7 +26,4 @@ object Constant {
 
     /* IntroActivity */
     val START_MAIN_ACTIVITY = 0
-
-    /* WebViewActivity */
-    val OPEN_URL_INFO = "open_url_info"
 }
