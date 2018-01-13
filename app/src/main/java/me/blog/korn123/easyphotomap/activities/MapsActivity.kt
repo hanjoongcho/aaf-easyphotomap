@@ -33,9 +33,9 @@ import kotlinx.android.synthetic.main.activity_maps.*
 import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.constants.Constant
 import me.blog.korn123.easyphotomap.extensions.config
-import me.blog.korn123.easyphotomap.helper.PhotoMapDbHelper
-import me.blog.korn123.easyphotomap.models.PhotoMapItem
+import me.blog.korn123.easyphotomap.helper.*
 import me.blog.korn123.easyphotomap.utils.*
+import me.blog.korn123.easyphotomap.models.PhotoMapItem
 import org.apache.commons.io.FilenameUtils
 import org.apache.commons.lang.StringUtils
 import java.io.File
@@ -289,7 +289,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                             overlayIcons(recommendation.keyWord, mEnableDateFilter)
                         }
                         val point = CommonUtils.getDefaultDisplay(this)
-                        customView.findViewById<View>(R.id.viewWorld).setOnClickListener {
+                        customView.findViewById<TextView>(R.id.viewWorld).setOnClickListener {
                             mPopupWindow?.dismiss()
                             overlayIcons("", false)
                         }
@@ -370,6 +370,16 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
         mProgressDialog?.show()
     }
 
+    private fun getPhotoMarkerScale(): Double = when (config.photoMarkerScale) {
+        SCALE_M4 -> 0.2
+        SCALE_M3 -> 0.4
+        SCALE_M2 -> 0.6
+        SCALE_M1 -> 0.8
+        SCALE_P1 -> 1.2
+        SCALE_P2 -> 1.4
+        else -> 1.0
+    }
+
     inner class OverlayThread(private val keyword: String, private val applyFilter: Boolean) : Thread() {
 
         override fun run() {
@@ -401,34 +411,34 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                 options.position(latLng)
                 val fileName = FilenameUtils.getName(item.imagePath)
                 val bm: Bitmap = BitmapUtils.decodeFile(this@MapsActivity, Constant.WORKING_DIRECTORY + fileName + ".thumb")
-                val image = when (CommonUtils.loadStringPreference(this@MapsActivity, "photo_marker_setting", "basicFrame")) {
-                    "filmFrame" -> {
+                val image = when (config.photoMarkerIcon) {
+                    FILM -> {
                         val point = Point(bm.width, bm.height)
-                        val fixedWidthHeight = java.lang.Double.parseDouble(CommonUtils.loadStringPreference(this@MapsActivity, "photo_size_setting", "0.6"))
+                        val fixedWidthHeight = getPhotoMarkerScale()
                         val bm2 = BitmapUtils.createScaledBitmap(bm, point, fixedWidthHeight, fixedWidthHeight)
                         BitmapDescriptorFactory.fromBitmap(BitmapUtils.addFrame(this@MapsActivity, bm2, CommonUtils.dpToPixel(this@MapsActivity, 6f), R.drawable.frame_03))
                     }
-                    "basicFrame" -> {
+                    BASIC -> {
                         val point = Point(bm.width, bm.height)
-                        val fixedWidthHeight = java.lang.Double.parseDouble(CommonUtils.loadStringPreference(this@MapsActivity, "photo_size_setting", "0.6"))
+                        val fixedWidthHeight = getPhotoMarkerScale()
                         val bm2 = BitmapUtils.createScaledBitmap(bm, point, fixedWidthHeight, fixedWidthHeight)
                         BitmapDescriptorFactory.fromBitmap(BitmapUtils.border(this@MapsActivity, bm2, CommonUtils.dpToPixel(this@MapsActivity, 1.5f)))
                     }
-                    "flowerFrame" -> {
+                    FLOWER -> {
                         val point = Point(bm.width, bm.height)
-                        val fixedWidthHeight = java.lang.Double.parseDouble(CommonUtils.loadStringPreference(this@MapsActivity, "photo_size_setting", "0.6"))
+                        val fixedWidthHeight = getPhotoMarkerScale()
                         val bm2 = BitmapUtils.createScaledBitmap(bm, point, fixedWidthHeight, fixedWidthHeight)
                         BitmapDescriptorFactory.fromBitmap(BitmapUtils.addFrame(this@MapsActivity, bm2, CommonUtils.dpToPixel(this@MapsActivity, 6f), R.drawable.frame_02))
                     }
                     else -> {
                         var px = resources.getDimensionPixelSize(R.dimen.map_dot_marker_size)
-                        px = (px * java.lang.Double.parseDouble(CommonUtils.loadStringPreference(this@MapsActivity, "photo_size_setting", "0.6"))).toInt()
-                        val mDotMarkerBitmap = Bitmap.createBitmap(px, px, Bitmap.Config.ARGB_8888)
-                        val canvas = Canvas(mDotMarkerBitmap)
+                        px = (px * getPhotoMarkerScale()).toInt()
+                        val dotMarkerBitmap = Bitmap.createBitmap(px, px, Bitmap.Config.ARGB_8888)
+                        val canvas = Canvas(dotMarkerBitmap)
                         val shape = ContextCompat.getDrawable(this@MapsActivity, R.drawable.circle)
-                        shape?.setBounds(0, 0, mDotMarkerBitmap.width, mDotMarkerBitmap.height)
+                        shape?.setBounds(0, 0, dotMarkerBitmap.width, dotMarkerBitmap.height)
                         shape?.draw(canvas)
-                        BitmapDescriptorFactory.fromBitmap(mDotMarkerBitmap)
+                        BitmapDescriptorFactory.fromBitmap(dotMarkerBitmap)
                     }
                 }
                 options.icon(image)

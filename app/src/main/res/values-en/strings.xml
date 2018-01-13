@@ -125,6 +125,13 @@
 
     <string name="photo_size_setting">Photo marker size</string>
     <string name="photo_size_setting_summary">Change the size of the photo marker displayed on a map.</string>
+    <string name="photo_marker_scale_m4">x0.2</string>
+    <string name="photo_marker_scale_m3">x0.4</string>
+    <string name="photo_marker_scale_m2">x0.6</string>
+    <string name="photo_marker_scale_m1">x0.8</string>
+    <string name="photo_marker_scale_default">x1.0</string>
+    <string name="photo_marker_scale_p1">x1.2</string>
+    <string name="photo_marker_scale_p2">x1.4</string>
     <string-array name="photo_size_list_titles">
         <item>x0.2</item>
         <item>x0.4</item>
@@ -147,6 +154,11 @@
 
     <string name="photo_marker_setting">Photo marker type</string>
     <string name="photo_marker_setting_summary">Change the type of the photo marker displayed on a map</string>
+    
+    <string name="photo_marker_film">Film Frame</string>
+    <string name="photo_marker_flower">Flower Frame</string>
+    <string name="photo_marker_basic">Basic Frame</string>
+    <string name="photo_marker_circle">Red Circle</string>
     <string-array name="photo_marker_list_titles">
         <item>Film Frame</item>
         <item>Flower Frame</item>
@@ -161,6 +173,14 @@
     </string-array>
     <string name="photo_marker_default_value">basicFrame</string>
 
+    <string name="photo_marker_cluster_level1">more than 5</string>
+    <string name="photo_marker_cluster_level2">more than 10</string>
+    <string name="photo_marker_cluster_level3">more than 50</string>
+    <string name="photo_marker_cluster_level4">more than 100</string>
+    <string name="photo_marker_cluster_level5">more than 200</string>
+    <string name="photo_marker_cluster_level6">more than 500</string>
+    <string name="photo_marker_cluster_level7">more than 1000</string>
+    
     <string-array name="photo_marker_enable_minimum_cluster_list_titles">
         <item>more than 5</item>
         <item>more than 10</item>
