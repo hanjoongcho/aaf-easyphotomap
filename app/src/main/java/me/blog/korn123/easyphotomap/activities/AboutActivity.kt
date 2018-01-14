@@ -16,7 +16,6 @@ import io.github.hanjoongcho.commons.activities.WebViewActivity
 import io.github.hanjoongcho.commons.helpers.TransitionHelper
 import me.blog.korn123.easyphotomap.R
 import kotlinx.android.synthetic.main.activity_about.*
-import me.blog.korn123.easyphotomap.BuildConfig
 import java.util.*
 
 /**
@@ -157,8 +156,7 @@ class AboutActivity : SimpleActivity() {
 //    }
 //
     private fun setupCopyright() {
-//        val versionName = intent.getStringExtra(APP_VERSION_NAME) ?: ""
-        val versionName = BuildConfig.VERSION_NAME
+        val versionName = intent.getStringExtra(APP_VERSION_NAME) ?: ""
         val year = Calendar.getInstance().get(Calendar.YEAR)
         about_copyright.text = String.format(getString(R.string.aaf_copyright), versionName, year)
     }

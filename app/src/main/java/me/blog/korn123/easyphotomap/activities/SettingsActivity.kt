@@ -1,14 +1,18 @@
 package me.blog.korn123.easyphotomap.activities
 
+import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Color
 import android.os.Bundle
 import com.simplemobiletools.commons.dialogs.RadioGroupDialog
 import com.simplemobiletools.commons.extensions.baseConfig
 import com.simplemobiletools.commons.extensions.isBlackAndWhiteTheme
+import com.simplemobiletools.commons.helpers.APP_NAME
+import com.simplemobiletools.commons.helpers.APP_VERSION_NAME
 import com.simplemobiletools.commons.models.RadioItem
 import io.github.hanjoongcho.commons.helpers.TransitionHelper
 import kotlinx.android.synthetic.main.activity_settings.*
+import me.blog.korn123.easyphotomap.BuildConfig
 import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.extensions.config
 import me.blog.korn123.easyphotomap.extensions.initTextSize
@@ -147,7 +151,11 @@ class SettingsActivity : SimpleActivity() {
     private fun setupAbout() {
         about_label.setTextColor(linkColor)
         about_holder.setOnClickListener {
-            TransitionHelper.startActivityWithTransition(this@SettingsActivity, AboutActivity::class.java)
+            val aboutIntent = Intent(this@SettingsActivity, AboutActivity::class.java).apply { 
+                putExtra(APP_NAME, getString(R.string.app_name))
+                putExtra(APP_VERSION_NAME, BuildConfig.VERSION_NAME)
+            }
+            TransitionHelper.startActivityWithTransition(this@SettingsActivity, aboutIntent)
         }
     }
 
