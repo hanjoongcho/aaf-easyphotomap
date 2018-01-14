@@ -51,22 +51,6 @@
 
                 <LinearLayout
                     style="@style/SettingsItemHolder"
-                    android:orientation="vertical"
-                    android:id="@+id/settings_font_size_holder">
-                    <com.simplemobiletools.commons.views.MyTextView
-                        android:id="@+id/settings_font_size_label"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/font_size"/>
-
-                    <com.simplemobiletools.commons.views.MyTextView
-                        android:id="@+id/settings_font_size"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    style="@style/SettingsItemHolder"
                     android:orientation="horizontal"
                     android:id="@+id/date_filter_holder">
                     <LinearLayout

@@ -40,7 +40,7 @@ class Config(context: Context) : BaseConfig(context) {
         set(photoMarkerIcon) = prefs.edit().putInt(PHOTO_MARKER_ICON, photoMarkerIcon).apply()
 
     var photoMarkerScale: Int
-        get() = prefs.getInt(PHOTO_MARKER_SCALE, 1)
+        get() = prefs.getInt(PHOTO_MARKER_SCALE, SCALE_DEFAULT)
         set(photoMarkerScale) = prefs.edit().putInt(PHOTO_MARKER_SCALE, photoMarkerScale).apply()
     
     var photoMarkerMinimumCluster: Int

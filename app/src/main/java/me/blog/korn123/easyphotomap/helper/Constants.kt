@@ -13,9 +13,9 @@ val DATE_FILTER ="date_filter_setting"
 val DISABLE_INFO_POPUP = "disable_info_popup"
 val ENABLE_CREARE_COPY = "enable_create_copy"
 val ENABLE_REVERSE_ORDER = "enable_reverse_order"
-val PHOTO_MARKER_ICON = "photo_marker_setting"
-val PHOTO_MARKER_MINIMUN_CLUSTER = "photo_marker_enable_minimum_cluster"
-val PHOTO_MARKER_SCALE = "photo_size_setting"
+val PHOTO_MARKER_ICON = "photo_marker_icon"
+val PHOTO_MARKER_MINIMUN_CLUSTER = "photo_marker_minimum_cluster"
+val PHOTO_MARKER_SCALE = "photo_marker_scale"
 
 // photo marker cluster
 val CLUSTER_L1 = 1

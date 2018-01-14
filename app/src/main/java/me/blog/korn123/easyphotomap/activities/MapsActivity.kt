@@ -374,8 +374,8 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
         mProgressDialog = ProgressDialog(this@MapsActivity).apply {
             setProgressStyle(ProgressDialog.STYLE_HORIZONTAL)
             setMessage("find $keyword...")
-            max = when(applyFilter) {
-                true -> PhotoMapDbHelper.containsPhotoMapItemBy("dateWithoutTime", keyword).size
+            max = when (applyFilter) {
+                true -> PhotoMapDbHelper.containsPhotoMapItemBy("date", keyword).size
                 false -> PhotoMapDbHelper.containsPhotoMapItemBy("info", keyword).size
             }
         }
@@ -406,9 +406,10 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
 
         override fun run() {
             super.run()
-            val listTemp = when(applyFilter) {
+            val listTemp = when (applyFilter) {
                 true -> {
-                    PhotoMapDbHelper.containsPhotoMapItemBy("dateWithoutTime", keyword)
+                    PhotoMapDbHelper.containsPhotoMapItemBy("date", keyword)
+//                    PhotoMapDbHelper.containsPhotoMapItemBy("dateWithoutTime", keyword)
                 }
                 false -> {
                     PhotoMapDbHelper.containsPhotoMapItemBy("info", keyword)
@@ -473,7 +474,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                 setUpCluster()
                 val listForCluster = when(applyFilter) {
                     true -> {
-                        PhotoMapDbHelper.containsPhotoMapItemBy("dateWithoutTime", keyword)
+                        PhotoMapDbHelper.containsPhotoMapItemBy("date", keyword)
                     }
                     false -> {
                         PhotoMapDbHelper.containsPhotoMapItemBy("info", keyword)

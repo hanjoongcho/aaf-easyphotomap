@@ -51,7 +51,7 @@ class SettingsActivity : SimpleActivity() {
         setupCameraInfoPopup()
         setupDateFilter()
         setupAbout()
-        setupFontSize()
+//        setupFontSize()
     }
     
     private fun setupPhotoMarkerCluster() {
@@ -159,24 +159,24 @@ class SettingsActivity : SimpleActivity() {
         }
     }
 
-    private fun setupFontSize() {
-        settings_font_size.text = getFontSizeText()
-        settings_font_size_holder.setOnClickListener {
-            val items = arrayListOf(
-                    RadioItem(FONT_SIZE_SMALL, res.getString(R.string.small)),
-                    RadioItem(FONT_SIZE_MEDIUM, res.getString(R.string.medium)),
-                    RadioItem(FONT_SIZE_LARGE, res.getString(R.string.large)),
-                    RadioItem(FONT_SIZE_EXTRA_LARGE, res.getString(R.string.extra_large)))
-
-            RadioGroupDialog(this@SettingsActivity, items, config.fontSize) {
-                config.fontSize = it as Int
-                settings_font_size.text = getFontSizeText()
-//                updateWidget()
-                initTextSize(findViewById(android.R.id.content), this@SettingsActivity);
-            }
-        }
-        settings_font_size_label.setTextColor(linkColor)
-    }
+//    private fun setupFontSize() {
+//        settings_font_size.text = getFontSizeText()
+//        settings_font_size_holder.setOnClickListener {
+//            val items = arrayListOf(
+//                    RadioItem(FONT_SIZE_SMALL, res.getString(R.string.small)),
+//                    RadioItem(FONT_SIZE_MEDIUM, res.getString(R.string.medium)),
+//                    RadioItem(FONT_SIZE_LARGE, res.getString(R.string.large)),
+//                    RadioItem(FONT_SIZE_EXTRA_LARGE, res.getString(R.string.extra_large)))
+//
+//            RadioGroupDialog(this@SettingsActivity, items, config.fontSize) {
+//                config.fontSize = it as Int
+//                settings_font_size.text = getFontSizeText()
+////                updateWidget()
+//                initTextSize(findViewById(android.R.id.content), this@SettingsActivity);
+//            }
+//        }
+//        settings_font_size_label.setTextColor(linkColor)
+//    }
 
     private fun getFontSizeText() = getString(when (config.fontSize) {
         FONT_SIZE_SMALL -> R.string.small
