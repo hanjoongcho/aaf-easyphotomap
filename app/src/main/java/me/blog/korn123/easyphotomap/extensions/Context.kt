@@ -3,9 +3,13 @@ package me.blog.korn123.easyphotomap.extensions
 import android.content.Context
 import android.util.TypedValue
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.EditText
+import com.simplemobiletools.commons.views.MyTextView
 import me.blog.korn123.easyphotomap.R
-import me.blog.korn123.easyphotomap.helper.*
+import me.blog.korn123.easyphotomap.helper.Config
+import me.blog.korn123.easyphotomap.helper.FONT_SIZE_EXTRA_LARGE
+import me.blog.korn123.easyphotomap.helper.FONT_SIZE_LARGE
+import me.blog.korn123.easyphotomap.helper.FONT_SIZE_SMALL
 
 /**
  * Created by CHO HANJOONG on 2018-01-09.
@@ -34,13 +38,13 @@ fun Context.initTextSize(viewGroup: ViewGroup, context: Context) {
             .map { viewGroup.getChildAt(it) }
             .forEach {
                 when (it) {
-                    is TextView ->  {
+                    is MyTextView ->  {
                         when (it.id != R.id.about_copyright) {
-                            true -> it.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.getTextSize())
+                            true -> it.setTextSize(TypedValue.COMPLEX_UNIT_PX, getTextSize())
                             false -> {}
                         }
                     }
-//                        is EditText->  it.setTextSize(TypedValue.COMPLEX_UNIT_PX, getTextSize())
+                    is EditText ->  it.setTextSize(TypedValue.COMPLEX_UNIT_PX, getTextSize())
                     is ViewGroup -> initTextSize(it, context)
                 }
             }

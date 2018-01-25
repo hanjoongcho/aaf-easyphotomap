@@ -458,7 +458,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                         px = (px * getPhotoMarkerScale()).toInt()
                         val dotMarkerBitmap = Bitmap.createBitmap(px, px, Bitmap.Config.ARGB_8888)
                         val canvas = Canvas(dotMarkerBitmap)
-                        val shape = ContextCompat.getDrawable(this@MapsActivity, R.drawable.circle)
+                        val shape = ContextCompat.getDrawable(this@MapsActivity, R.drawable.circle_marker)
                         shape?.setBounds(0, 0, dotMarkerBitmap.width, dotMarkerBitmap.height)
                         shape?.draw(canvas)
                         BitmapDescriptorFactory.fromBitmap(dotMarkerBitmap)

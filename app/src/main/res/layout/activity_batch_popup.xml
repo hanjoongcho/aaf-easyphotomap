@@ -77,7 +77,7 @@
                 android:layout_weight="1"
                 android:layout_height="40dp"
                 android:text="STOP"
-                android:textColor="@color/white"
+                android:textColor="@android:color/white"
                 android:background="@drawable/dialog_bg_primary"
                 android:id="@+id/stop"
                 />
@@ -88,7 +88,7 @@
                 android:layout_weight="1"
                 android:layout_height="40dp"
                 android:text="CLOSE"
-                android:textColor="@color/white"
+                android:textColor="@android:color/white"
                 android:background="@drawable/dialog_bg_primary"
                 android:id="@+id/close"
                 />

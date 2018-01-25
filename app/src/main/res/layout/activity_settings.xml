@@ -23,6 +23,7 @@
         </android.support.design.widget.AppBarLayout>
 
         <ScrollView
+            android:id="@+id/main_holder"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -44,6 +45,7 @@
 
                     <com.simplemobiletools.commons.views.MyTextView
                         android:id="@+id/about_summary"
+                        android:alpha="0.5"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/aaf_about_summary"/>
@@ -64,6 +66,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/pref_title_social_recommendations"/>
                         <com.simplemobiletools.commons.views.MyTextView
+                            android:alpha="0.5"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/pref_description_social_recommendations"/>
@@ -92,6 +95,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/disable_info_popup"/>
                         <com.simplemobiletools.commons.views.MyTextView
+                            android:alpha="0.5"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/disable_info_popup_summary"/>
@@ -120,6 +124,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/enable_create_copy"/>
                         <com.simplemobiletools.commons.views.MyTextView
+                            android:alpha="0.5"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/enable_create_copy_summary"/>
@@ -148,6 +153,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/enable_reverse_order"/>
                         <com.simplemobiletools.commons.views.MyTextView
+                            android:alpha="0.5"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/enable_reverse_order_summary"/>
@@ -172,6 +178,7 @@
                         android:text="@string/photo_marker_setting"/>
 
                     <com.simplemobiletools.commons.views.MyTextView
+                        android:alpha="0.5"
                         android:id="@+id/photo_marker"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -189,6 +196,7 @@
                         android:text="@string/photo_size_setting"/>
 
                     <com.simplemobiletools.commons.views.MyTextView
+                        android:alpha="0.5"
                         android:id="@+id/photo_marker_scale"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -207,6 +215,7 @@
                         android:text="@string/setting_activity_minimum_cluster_title"/>
 
                     <com.simplemobiletools.commons.views.MyTextView
+                        android:alpha="0.5"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/setting_activity_minimum_cluster_summary"/>

@@ -14,6 +14,6 @@ open class SimpleActivity : BaseSimpleActivity() {
 
     override fun onResume() {
         super.onResume()
-//        initTextSize(findViewById(android.R.id.content), this@SimpleActivity);
+        initTextSize(findViewById(android.R.id.content), this@SimpleActivity);
     }
 }

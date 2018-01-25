@@ -10,6 +10,7 @@ import com.simplemobiletools.commons.extensions.isBlackAndWhiteTheme
 import com.simplemobiletools.commons.helpers.APP_NAME
 import com.simplemobiletools.commons.helpers.APP_VERSION_NAME
 import com.simplemobiletools.commons.models.RadioItem
+import io.github.hanjoongcho.commons.extensions.updateTextColors
 import io.github.hanjoongcho.commons.helpers.TransitionHelper
 import kotlinx.android.synthetic.main.activity_settings.*
 import me.blog.korn123.easyphotomap.BuildConfig
@@ -51,11 +52,11 @@ class SettingsActivity : SimpleActivity() {
         setupCameraInfoPopup()
         setupDateFilter()
         setupAbout()
-//        setupFontSize()
+        initTextSize(findViewById(android.R.id.content), this@SettingsActivity)
+        updateTextColors(main_holder)
     }
     
     private fun setupPhotoMarkerCluster() {
-        minimum_cluster_label.setTextColor(linkColor)
         minimum_cluster_label.text = "${getString(R.string.setting_activity_minimum_cluster_title)} (${getPhotoMarkerClusterText()})"
         minimum_cluster_holder.setOnClickListener {
             val items = arrayListOf(
@@ -75,7 +76,6 @@ class SettingsActivity : SimpleActivity() {
     }
     
     private fun setupPhotoMarkerScale() {
-        photo_marker_scale_label.setTextColor(linkColor)
         photo_marker_scale_label.text = "${getString(R.string.photo_size_setting)} (${getPhotoMarkerScaleText()})"
         photo_marker_scale_holder.setOnClickListener {
             val items = arrayListOf(
@@ -95,7 +95,6 @@ class SettingsActivity : SimpleActivity() {
     }
     
     private fun setupPhotoMarker() {
-        photo_marker_label.setTextColor(linkColor)
         photo_marker_label.text = "${getString(R.string.photo_marker_setting)} (${getPhotoMarkerText()})"
         photo_marker_holder.setOnClickListener {
             val items = arrayListOf(
@@ -113,7 +112,6 @@ class SettingsActivity : SimpleActivity() {
     }
     
     private fun setupReversOrder() {
-        enable_reverse_order_label.setTextColor(linkColor)
         enable_reverse_order_switcher.isChecked = config.enableReverseOrder
         enable_reverse_order_holder.setOnClickListener {
             enable_reverse_order_switcher.toggle()
@@ -122,7 +120,6 @@ class SettingsActivity : SimpleActivity() {
     }
     
     private fun setupPhotoCopy() {
-        enable_copy_label.setTextColor(linkColor)
         enable_copy_switcher.isChecked = config.enableCreateCopy
         enable_copy_holder.setOnClickListener {
             enable_copy_switcher.toggle()
@@ -131,7 +128,6 @@ class SettingsActivity : SimpleActivity() {
     }
 
     private fun setupCameraInfoPopup() {
-        disable_info_popup_label.setTextColor(linkColor)
         disable_info_popup_switcher.isChecked = config.disableCameraInformation
         disable_info_popup_holder.setOnClickListener {
             disable_info_popup_switcher.toggle()
@@ -140,7 +136,6 @@ class SettingsActivity : SimpleActivity() {
     }
     
     private fun setupDateFilter() {
-        date_filter_label.setTextColor(linkColor)
         date_filter_switcher.isChecked = config.enableDateFilter 
         date_filter_holder.setOnClickListener {
             date_filter_switcher.toggle()
@@ -149,7 +144,6 @@ class SettingsActivity : SimpleActivity() {
     }
     
     private fun setupAbout() {
-        about_label.setTextColor(linkColor)
         about_holder.setOnClickListener {
             val aboutIntent = Intent(this@SettingsActivity, AboutActivity::class.java).apply { 
                 putExtra(APP_NAME, getString(R.string.app_name))
@@ -158,32 +152,6 @@ class SettingsActivity : SimpleActivity() {
             TransitionHelper.startActivityWithTransition(this@SettingsActivity, aboutIntent)
         }
     }
-
-//    private fun setupFontSize() {
-//        settings_font_size.text = getFontSizeText()
-//        settings_font_size_holder.setOnClickListener {
-//            val items = arrayListOf(
-//                    RadioItem(FONT_SIZE_SMALL, res.getString(R.string.small)),
-//                    RadioItem(FONT_SIZE_MEDIUM, res.getString(R.string.medium)),
-//                    RadioItem(FONT_SIZE_LARGE, res.getString(R.string.large)),
-//                    RadioItem(FONT_SIZE_EXTRA_LARGE, res.getString(R.string.extra_large)))
-//
-//            RadioGroupDialog(this@SettingsActivity, items, config.fontSize) {
-//                config.fontSize = it as Int
-//                settings_font_size.text = getFontSizeText()
-////                updateWidget()
-//                initTextSize(findViewById(android.R.id.content), this@SettingsActivity);
-//            }
-//        }
-//        settings_font_size_label.setTextColor(linkColor)
-//    }
-
-    private fun getFontSizeText() = getString(when (config.fontSize) {
-        FONT_SIZE_SMALL -> R.string.small
-        FONT_SIZE_MEDIUM -> R.string.medium
-        FONT_SIZE_LARGE -> R.string.large
-        else -> R.string.extra_large
-    })
     
     private fun getPhotoMarkerText() = getString(when (config.photoMarkerIcon) {
         FILM -> R.string.photo_marker_film

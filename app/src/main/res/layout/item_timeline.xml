@@ -28,7 +28,7 @@
             android:layout_height="match_parent">
             <TextView
                 android:id="@+id/timelineDate"
-                android:textColor="@color/white"
+                android:textColor="@android:color/white"
                 android:gravity="center_vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
@@ -49,7 +49,7 @@
                 android:layout_height="match_parent" />
             <ImageView
                 android:layout_gravity="center"
-                android:src="@drawable/circle2"
+                android:src="@drawable/circle_timeline"
                 android:layout_width="10dp"
                 android:layout_height="10dp" />
         </FrameLayout>

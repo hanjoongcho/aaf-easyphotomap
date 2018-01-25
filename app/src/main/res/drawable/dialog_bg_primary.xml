@@ -6,7 +6,7 @@
         android:radius="5dp" />
     <stroke
         android:width="0dp"
-        android:color="@color/white"/>
+        android:color="@android:color/white"/>
     <padding
         android:left="10dp"
         android:top="10dp"

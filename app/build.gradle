@@ -18,7 +18,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 26
         versionCode 63
-        versionName "1.1.52"
+        versionName "1.1.52-test"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -63,7 +63,7 @@ dependencies {
     implementation "com.android.support:support-v4:$supportLibVersion"
     implementation 'com.android.support:multidex:1.0.0'
     // https://developers.google.com/android/guides/setup
-    implementation 'com.google.android.gms:play-services-maps:8.4.0'
+    implementation 'com.google.android.gms:play-services-maps:11.8.0'
     implementation 'com.google.maps.android:android-maps-utils:0.4'
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -87,11 +87,11 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
-    // https://github.com/SimpleMobileTools/Simple-Commons
-    implementation 'com.simplemobiletools:commons:3.5.4'
-//    implementation project(":commons")
+//     https://github.com/SimpleMobileTools/Simple-Commons
+//    implementation 'com.simplemobiletools:commons:3.5.4'
+    implementation project(":commons")
     
-    implementation 'io.github.hanjoongcho:commons-android:0.0.6'
-//    implementation project(":commons-android")
+//    implementation 'io.github.hanjoongcho:commons-android:0.0.6'
+    implementation project(":commons-android")
 }
 

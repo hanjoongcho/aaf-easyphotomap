@@ -51,7 +51,7 @@
             <Button
                 android:id="@+id/batchModeA"
                 android:textSize="12dp"
-                android:textColor="@color/white"
+                android:textColor="@android:color/white"
                 android:background="@drawable/dialog_bg_primary"
                 android:text="@string/registration_batch_a"
                 android:layout_weight="1"
@@ -61,7 +61,7 @@
                 android:textSize="12dp"
                 android:layout_marginLeft="5dp"
                 android:id="@+id/batchModeB"
-                android:textColor="@color/white"
+                android:textColor="@android:color/white"
                 android:background="@drawable/dialog_bg_primary"
                 android:text="@string/registration_batch_b"
                 android:layout_weight="1"
