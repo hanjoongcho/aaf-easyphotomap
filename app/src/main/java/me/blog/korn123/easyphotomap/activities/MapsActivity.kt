@@ -324,8 +324,9 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                                 return false
                             }
                         })
-                        val contentViewTop = window.findViewById<View>(Window.ID_ANDROID_CONTENT).top
-                        mPopupWindow = PopupWindow(customView, point.x, point.y - contentViewTop, true)
+                        
+                        val rootView = window.findViewById<View>(android.R.id.content)
+                        mPopupWindow = PopupWindow(customView, rootView.width, rootView.height, true)
                         mPopupWindow?.showAtLocation(view, Gravity.CENTER, 0, 0)
                     }
                 }
