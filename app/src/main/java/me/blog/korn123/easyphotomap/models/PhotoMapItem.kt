@@ -36,4 +36,7 @@ open class PhotoMapItem : RealmObject(), Comparable<PhotoMapItem> {
         return result
     }
 
+    fun getBubbleText(): String {
+        return info
+    }
 }

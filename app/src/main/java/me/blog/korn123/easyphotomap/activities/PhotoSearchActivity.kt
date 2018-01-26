@@ -3,14 +3,13 @@ package me.blog.korn123.easyphotomap.activities
 import android.app.AlertDialog
 import android.app.SearchManager
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.AdapterView
+import android.view.inputmethod.InputMethodManager
+import com.simplemobiletools.commons.extensions.onGlobalLayout
 import kotlinx.android.synthetic.main.activity_photo_search.*
 import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.adapters.SearchItemAdapter
@@ -60,6 +59,7 @@ class PhotoSearchActivity : AppCompatActivity() {
         if (searchItem != null) {
             mSearchView = searchItem.actionView as SearchView
         }
+
         mSearchView?.let { searchView ->
             searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
             mQueryTextListener = object : SearchView.OnQueryTextListener {
@@ -82,6 +82,16 @@ class PhotoSearchActivity : AppCompatActivity() {
         return true
     }
 
+    override fun onResume() {
+        super.onResume()
+//        val focusView = this.currentFocus
+//        if (focusView != null) {
+//            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+//            imm.hideSoftInputFromWindow(focusView.windowToken, 0)
+//        }
+        refreshList()
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_search ->
@@ -95,7 +105,6 @@ class PhotoSearchActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    @JvmOverloads
     fun refreshList(query: String? = "", position: Int = 0, top: Int = 0) {
         parseMetadata(query)
         if (mSearchItemAdapter == null) {
@@ -127,6 +136,14 @@ class PhotoSearchActivity : AppCompatActivity() {
             mSearchItemAdapter?.notifyDataSetChanged()
         }
 //        listView.setSelectionFromTop(position, top)
+
+        items_fastscroller.setViews(searchItems, null) {
+            val item = mListPhotoMapItem.getOrNull(it)
+            items_fastscroller.updateBubbleText(item?.getBubbleText() ?: "")
+        }
+        searchItems.onGlobalLayout {
+            items_fastscroller.setScrollTo(searchItems.computeVerticalScrollOffset())
+        }
     }
 
     private fun parseMetadata(query: String?) {

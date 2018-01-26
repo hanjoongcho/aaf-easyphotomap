@@ -88,10 +88,10 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
 //     https://github.com/SimpleMobileTools/Simple-Commons
-//    implementation 'com.simplemobiletools:commons:3.5.4'
-    implementation project(":commons")
-    
-//    implementation 'io.github.hanjoongcho:commons-android:0.0.6'
-    implementation project(":commons-android")
+    implementation 'com.simplemobiletools:commons:3.7.8'
+//    implementation project(":commons")
+
+    implementation 'io.github.hanjoongcho:commons-android:0.0.8'
+//    implementation project(":commons-android")
 }
 
