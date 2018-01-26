@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
@@ -25,8 +26,33 @@ class PhotoSearchActivity : AppCompatActivity() {
     private val mListPhotoMapItem = arrayListOf<PhotoMapItem>()
     private var mSearchView: SearchView? = null
     private var mQueryTextListener: SearchView.OnQueryTextListener? = null
-    private var mSearchItemAdapter: SearchItemAdapter? = null
     private var mCurrentQuery: String = ""
+    private val mSearchItemAdapter: SearchItemAdapter? by lazy {
+        SearchItemAdapter(
+                this,
+                this,
+                mListPhotoMapItem,
+                AdapterView.OnItemClickListener { _, _, position, _ ->
+                    mSearchItemAdapter?.getItem(position)?.let { item ->
+                        val intent = Intent(this@PhotoSearchActivity, MapsActivity::class.java).apply {
+                            putExtra("info", item.info)
+                            putExtra("imagePath", item.imagePath)
+                            putExtra("latitude", item.latitude)
+                            putExtra("longitude", item.longitude)
+                            putExtra("date", item.date)
+                        }
+                        startActivity(intent)
+                    }
+                },
+                AdapterView.OnItemLongClickListener { _, view, longClickPosition, _ ->
+                    mSearchItemAdapter?.getItem(longClickPosition)?.let { item ->
+                        PhotoMapDbHelper.deletePhotoMapItemBy(item.sequence)
+                        refreshList(mCurrentQuery, longClickPosition, view.top)
+                    }
+                    true
+                }
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +75,9 @@ class PhotoSearchActivity : AppCompatActivity() {
                 })
             }.show()
         })
+
+        search_items.adapter = mSearchItemAdapter
+        search_items.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         refreshList()
     }
 
@@ -85,11 +114,6 @@ class PhotoSearchActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-//        val focusView = this.currentFocus
-//        if (focusView != null) {
-//            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-//            imm.hideSoftInputFromWindow(focusView.windowToken, 0)
-//        }
         refreshList()
     }
 
@@ -108,52 +132,8 @@ class PhotoSearchActivity : AppCompatActivity() {
 
     fun refreshList(query: String? = "", position: Int = 0, top: Int = 0) {
         parseMetadata(query)
-        if (mSearchItemAdapter == null) {
-            mSearchItemAdapter = SearchItemAdapter(
-                    this,
-                    this,
-                    mListPhotoMapItem,
-                    AdapterView.OnItemClickListener { _, _, position, _ ->
-                        mSearchItemAdapter?.getItem(position)?.let { item ->
-                            val intent = Intent(this@PhotoSearchActivity, MapsActivity::class.java).apply {
-                                putExtra("info", item.info)
-                                putExtra("imagePath", item.imagePath)
-                                putExtra("latitude", item.latitude)
-                                putExtra("longitude", item.longitude)
-                                putExtra("date", item.date)
-                            }
-                            startActivity(intent)
-                        }
-                    }
-            )
-
-//            searchItems.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-            search_items.adapter = mSearchItemAdapter
-
-
-//            search_items.onItemClickListener = AdapterView.OnItemClickListener { parent, _, clickPosition, _ ->
-//                val item = parent.adapter.getItem(clickPosition) as PhotoMapItem
-//                val intent = Intent(context, MapsActivity::class.java).apply {
-//                    putExtra("info", item.info)
-//                    putExtra("imagePath", item.imagePath)
-//                    putExtra("latitude", item.latitude)
-//                    putExtra("longitude", item.longitude)
-//                    putExtra("date", item.date)
-//                }
-//                startActivity(intent)
-//            }
-//
-//            listView.onItemLongClickListener = AdapterView.OnItemLongClickListener { parent, view, longClickPosition, _ ->
-//                val item = parent.adapter.getItem(longClickPosition) as PhotoMapItem
-//                PhotoMapDbHelper.deletePhotoMapItemBy(item.sequence)
-//                refreshList(query, longClickPosition, view.top)
-//                true
-//            }
-        } else {
-            mSearchItemAdapter?.notifyDataSetChanged()
-        }
+        mSearchItemAdapter?.notifyDataSetChanged()
 //        listView.setSelectionFromTop(position, top)
-
         items_fastscroller.setViews(search_items, null) {
             val item = mListPhotoMapItem.getOrNull(it)
             items_fastscroller.updateBubbleText(item?.getBubbleText() ?: "")

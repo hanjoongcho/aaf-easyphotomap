@@ -21,7 +21,8 @@ import java.util.*
 class SearchItemAdapter(private val context: Context,
                         private val activity: Activity,
                         private val listPhotoMap: ArrayList<PhotoMapItem>,
-                        private val onItemClickListener: AdapterView.OnItemClickListener
+                        private val onItemClickListener: AdapterView.OnItemClickListener,
+                        private val onItemLongClickListener: AdapterView.OnItemLongClickListener
 ) : RecyclerView.Adapter<SearchItemAdapter.ViewHolder>() {
     private val layoutInflater = activity.layoutInflater
 
@@ -45,6 +46,9 @@ class SearchItemAdapter(private val context: Context,
         holder?.let {
             it.itemView.setOnClickListener { item ->
                 onItemClickListener.onItemClick(null, item, it.adapterPosition, it.itemId)
+            }
+            it.itemView.setOnLongClickListener { item ->
+                onItemLongClickListener.onItemLongClick(null, item, it.adapterPosition, it.itemId)
             }
         }
     }
