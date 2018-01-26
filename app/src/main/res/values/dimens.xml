@@ -17,6 +17,8 @@
     <dimen name="photo_map_info_text">13dp</dimen>
     <dimen name="photo_map_date_text">11dp</dimen>
 
+    <dimen name="item_timeline_text">13sp</dimen>
+    
     <!--Android-Bootstrap-->
     <dimen name="default_padding">16dp</dimen>
     <dimen name="micro_padding">4dp</dimen>
