@@ -1,7 +1,6 @@
 package me.blog.korn123.easyphotomap.adapters
 
 import android.app.Activity
-import android.content.Context
 import android.graphics.Bitmap
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
@@ -18,8 +17,7 @@ import java.util.*
 /**
  * Created by CHO HANJOONG on 2016-07-20.
  */
-class SearchItemAdapter(private val context: Context,
-                        private val activity: Activity,
+class SearchItemAdapter(private val activity: Activity,
                         private val listPhotoMap: ArrayList<PhotoMapItem>,
                         private val onItemClickListener: AdapterView.OnItemClickListener,
                         private val onItemLongClickListener: AdapterView.OnItemLongClickListener

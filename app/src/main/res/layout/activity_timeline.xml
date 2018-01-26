@@ -13,19 +13,27 @@
             android:background="?attr/colorPrimary" app:popupTheme="@style/AppTheme.PopupOverlay" />
     </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout
-        android:padding="10dp"
+    <RelativeLayout
+        android:id="@+id/items_wrapper"
+        android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <ListView
-            android:fastScrollEnabled="true"
-            android:fastScrollAlwaysVisible="false"
-            android:divider="@null"
-            android:dividerHeight="0dp"
-            android:id="@+id/listTimeline"
+        <com.simplemobiletools.commons.views.MyRecyclerView
+            android:id="@+id/timeline_items"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </ListView>
-    </LinearLayout>
-
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:scrollbars="none"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"/>
+        <com.simplemobiletools.commons.views.FastScroller
+            android:id="@+id/items_fastscroller"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:paddingLeft="@dimen/normal_margin"
+            android:paddingStart="@dimen/normal_margin">
+            <include layout="@layout/fastscroller_handle_vertical"/>
+        </com.simplemobiletools.commons.views.FastScroller>
+    </RelativeLayout>
 </LinearLayout>

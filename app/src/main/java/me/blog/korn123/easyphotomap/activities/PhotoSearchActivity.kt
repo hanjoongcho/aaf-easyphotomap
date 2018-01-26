@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.content.res.AppCompatResources
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.SearchView
 import android.view.Menu
@@ -29,7 +30,6 @@ class PhotoSearchActivity : AppCompatActivity() {
     private var mCurrentQuery: String = ""
     private val mSearchItemAdapter: SearchItemAdapter? by lazy {
         SearchItemAdapter(
-                this,
                 this,
                 mListPhotoMapItem,
                 AdapterView.OnItemClickListener { _, _, position, _ ->
@@ -76,8 +76,12 @@ class PhotoSearchActivity : AppCompatActivity() {
             }.show()
         })
 
-        search_items.adapter = mSearchItemAdapter
-        search_items.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+        val dividerItemDecoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
+        AppCompatResources.getDrawable(this, R.drawable.divider_simple)?.let {
+            dividerItemDecoration.setDrawable(it)
+            search_items.adapter = mSearchItemAdapter
+            search_items.addItemDecoration(dividerItemDecoration)
+        }
         refreshList()
     }
 
