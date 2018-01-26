@@ -197,8 +197,8 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                             startActivity(camera)
                         } else {
                             val infoView = layoutInflater.inflate(R.layout.popup_window_camera, null)
-                            val textView2 = infoView.findViewById(R.id.textView2) as TextView
-                            val textView3 = infoView.findViewById(R.id.textView3) as TextView
+                            val textView2 = infoView.findViewById<TextView>(R.id.textView2)
+                            val textView3 = infoView.findViewById<TextView>(R.id.textView3)
                             mPopupWindow = PopupWindow(infoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
                             CommonUtils.bindButtonEffect(textView2)
                             CommonUtils.bindButtonEffect(textView3)
@@ -262,7 +262,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                     } else {
                         val inflater = this.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
                         val customView = inflater.inflate(R.layout.popup_window_recommendation, null)
-                        mListView = customView.findViewById(R.id.listView) as ListView
+                        mListView = customView.findViewById<ListView>(R.id.listView)
                         FontUtils.setChildViewTypeface(customView as ViewGroup)
                         val listOfSortEntry: List<Map.Entry<String, Int>>?
                         if (mEnableDateFilter) {
@@ -311,7 +311,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                         }
                         customView.findViewById<View>(R.id.close).setOnClickListener { mPopupWindow?.dismiss() }
 
-                        val searchView = customView.findViewById(R.id.searchKey) as SearchView
+                        val searchView = customView.findViewById<SearchView>(R.id.searchKey)
                         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                             override fun onQueryTextSubmit(query: String): Boolean = false
 
@@ -425,7 +425,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                 Handler(Looper.getMainLooper()).post {
                     mProgressDialog?.progress = index + 1
                     mProgressDialog?.setMessage(info)
-                    val textView = mProgressDialog?.findViewById(android.R.id.message) as TextView?
+                    val textView = mProgressDialog?.findViewById<TextView>(android.R.id.message)
                     textView?.ellipsize = TextUtils.TruncateAt.MIDDLE
                     textView?.maxLines = 1
                 }
@@ -574,7 +574,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
             val cw = ContextThemeWrapper(applicationContext, R.style.Transparent)
             val inflater = cw.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             val view = inflater.inflate(R.layout.popup_window_photo_map_info, null)
-            val imageView = view.findViewById(R.id.info1) as ImageView
+            val imageView = view.findViewById<ImageView>(R.id.info1)
             //            imageView.setImageResource(imageId);
             val imgFile = File(imagePath)
 
@@ -619,8 +619,8 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
             }
             val lat = StringUtils.substring(latitude.toString(), 0, 6)
             val lon = StringUtils.substring(longitude.toString(), 0, 6)
-            (view.findViewById(R.id.info2) as TextView).text = "lat: $lat lon: $lon \n $info"
-            (view.findViewById(R.id.info3) as TextView).text = date
+            (view.findViewById<TextView>(R.id.info2)).text = "lat: $lat lon: $lon \n $info"
+            (view.findViewById<TextView>(R.id.info3)).text = date
             return view
         }
     }

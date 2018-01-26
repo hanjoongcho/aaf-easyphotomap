@@ -9,7 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
-
         <com.github.clans.fab.FloatingActionMenu
             android:id="@+id/floatingMenu"
             style="@style/FloatingMenu">
@@ -49,7 +48,6 @@
                 style="@style/FloatingButton"
                 fab:fab_label="@string/maps_activity_camera" />
         </com.github.clans.fab.FloatingActionMenu>
-
     </LinearLayout>
 
 </fragment>

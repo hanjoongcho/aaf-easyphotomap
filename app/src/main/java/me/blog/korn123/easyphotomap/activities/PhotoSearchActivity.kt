@@ -3,12 +3,13 @@ package me.blog.korn123.easyphotomap.activities
 import android.app.AlertDialog
 import android.app.SearchManager
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
-import android.view.inputmethod.InputMethodManager
+import android.widget.AdapterView
 import com.simplemobiletools.commons.extensions.onGlobalLayout
 import kotlinx.android.synthetic.main.activity_photo_search.*
 import me.blog.korn123.easyphotomap.R
@@ -108,13 +109,29 @@ class PhotoSearchActivity : AppCompatActivity() {
     fun refreshList(query: String? = "", position: Int = 0, top: Int = 0) {
         parseMetadata(query)
         if (mSearchItemAdapter == null) {
-            mSearchItemAdapter = SearchItemAdapter(this, this, mListPhotoMapItem)
+            mSearchItemAdapter = SearchItemAdapter(
+                    this,
+                    this,
+                    mListPhotoMapItem,
+                    AdapterView.OnItemClickListener { _, _, position, _ ->
+                        mSearchItemAdapter?.getItem(position)?.let { item ->
+                            val intent = Intent(this@PhotoSearchActivity, MapsActivity::class.java).apply {
+                                putExtra("info", item.info)
+                                putExtra("imagePath", item.imagePath)
+                                putExtra("latitude", item.latitude)
+                                putExtra("longitude", item.longitude)
+                                putExtra("date", item.date)
+                            }
+                            startActivity(intent)
+                        }
+                    }
+            )
 
 //            searchItems.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-            searchItems.adapter = mSearchItemAdapter
-            val context = this
+            search_items.adapter = mSearchItemAdapter
 
-//            listView.onItemClickListener = AdapterView.OnItemClickListener { parent, _, clickPosition, _ ->
+
+//            search_items.onItemClickListener = AdapterView.OnItemClickListener { parent, _, clickPosition, _ ->
 //                val item = parent.adapter.getItem(clickPosition) as PhotoMapItem
 //                val intent = Intent(context, MapsActivity::class.java).apply {
 //                    putExtra("info", item.info)
@@ -137,12 +154,12 @@ class PhotoSearchActivity : AppCompatActivity() {
         }
 //        listView.setSelectionFromTop(position, top)
 
-        items_fastscroller.setViews(searchItems, null) {
+        items_fastscroller.setViews(search_items, null) {
             val item = mListPhotoMapItem.getOrNull(it)
             items_fastscroller.updateBubbleText(item?.getBubbleText() ?: "")
         }
-        searchItems.onGlobalLayout {
-            items_fastscroller.setScrollTo(searchItems.computeVerticalScrollOffset())
+        search_items.onGlobalLayout {
+            items_fastscroller.setScrollTo(search_items.computeVerticalScrollOffset())
         }
     }
 
