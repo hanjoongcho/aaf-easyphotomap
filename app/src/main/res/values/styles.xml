@@ -68,7 +68,7 @@
 
     <style name="item_search_text">
         <item name="android:singleLine">true</item>
-        <item name="android:ellipsize">end</item>
+        <item name="android:ellipsize">middle</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/item_search_text</item>

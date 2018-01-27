@@ -2,6 +2,11 @@ package me.blog.korn123.easyphotomap.adapters
 
 import android.app.Activity
 import android.graphics.Bitmap
+import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.TransitionDrawable
+import android.os.AsyncTask
 import android.support.v4.graphics.ColorUtils
 import android.support.v7.content.res.AppCompatResources
 import android.support.v7.widget.RecyclerView
@@ -28,7 +33,7 @@ class TimelineItemAdapter(private val activity: Activity,
     private val layoutInflater = activity.layoutInflater
     val layoutParamsA: FrameLayout.LayoutParams by lazy {
         FrameLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT).apply {
-            setMargins(0, 0, 0, 0)    
+            setMargins(0, 0, 0, 0)
         }
     }
     val layoutParamsB: FrameLayout.LayoutParams by lazy {
@@ -36,31 +41,29 @@ class TimelineItemAdapter(private val activity: Activity,
             setMargins(120, 0, 0, 0)
         }
     }
-    
+
     private fun createViewHolder(layoutType: Int, parent: ViewGroup?): TimelineItemAdapter.ViewHolder {
         val view = layoutInflater.inflate(layoutType, parent, false)
         return TimelineItemAdapter.ViewHolder(view as ViewGroup)
     }
-    
+
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): TimelineItemAdapter.ViewHolder = createViewHolder(R.layout.item_timeline, parent)
 
     override fun onBindViewHolder(holder: TimelineItemAdapter.ViewHolder?, position: Int) {
         val photoMapItem: PhotoMapItem = listPhotoMapItem[position]
         holder?.run {
             text1?.text = photoMapItem.info
-            var bitmap: Bitmap?
             val fileName = FilenameUtils.getName(photoMapItem.imagePath)
-            bitmap = BitmapUtils.decodeFile(activity, Constant.WORKING_DIRECTORY + fileName + ".thumb")
-            image1?.setImageBitmap(bitmap)
+            TimelineItemAdapter.ThumbnailTask(activity, position, holder).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, Constant.WORKING_DIRECTORY + fileName + ".thumb")
             if (isDateChange(position)) {
                 image2?.visibility = View.VISIBLE
                 timelineHeader?.let {
                     it.layoutParams = layoutParamsA
                     it.setBackgroundColor(ColorUtils.setAlphaComponent(activity.resources.getColor(R.color.colorPrimary), 255))
-                } 
+                }
                 text2?.run {
                     setTextColor(activity.resources.getColor(android.R.color.white))
-                    text = photoMapItem.date   
+                    text = photoMapItem.date
                 }
             } else {
                 image2?.visibility = View.GONE
@@ -70,7 +73,7 @@ class TimelineItemAdapter(private val activity: Activity,
                 }
                 text2?.run {
                     setTextColor(activity.resources.getColor(R.color.default_text_color))
-                    text = photoMapItem.date   
+                    text = photoMapItem.date
                 }
             }
         }
@@ -85,7 +88,7 @@ class TimelineItemAdapter(private val activity: Activity,
     override fun getItemCount(): Int = listPhotoMapItem.size
 
     fun getItem(position: Int): PhotoMapItem = listPhotoMapItem[position]
-    
+
     class ViewHolder(val parent: ViewGroup?) : RecyclerView.ViewHolder(parent) {
         var timelineHeader: View? = null
         var text1: TextView? = null
@@ -94,7 +97,7 @@ class TimelineItemAdapter(private val activity: Activity,
         var image2: ImageView? = null
         init {
             parent?.let {
-                timelineHeader = parent.findViewById(R.id.timelineHeader) 
+                timelineHeader = parent.findViewById(R.id.timelineHeader)
                 text1 = parent.findViewById(R.id.address)
                 text2 = parent.findViewById(R.id.timelineDate)
                 image1 = parent.findViewById(R.id.thumbnail)
@@ -102,7 +105,31 @@ class TimelineItemAdapter(private val activity: Activity,
             }
         }
     }
-    
+
+    private class ThumbnailTask(val activity: Activity, val position: Int, val holder: TimelineItemAdapter.ViewHolder) : AsyncTask<String, Void, Bitmap>() {
+        override fun doInBackground(vararg params: String): Bitmap? {
+            val filePath = params[0]
+//            val widthHeight = CommonUtils.dpToPixel(activity, 45f)
+            var resized: Bitmap? = null
+            if (holder.position == position) {
+                var bitmap = BitmapUtils.decodeFile(activity, filePath)
+//                resized = Bitmap.createScaledBitmap(bitmap, widthHeight, widthHeight, true)
+                resized = bitmap
+            } else {
+                this.cancel(true)
+            }
+            return resized
+        }
+
+        override fun onPostExecute(bitmap: Bitmap) {
+            if (holder.position == position) {
+                val td = TransitionDrawable(arrayOf(ColorDrawable(Color.TRANSPARENT), BitmapDrawable(activity.resources, bitmap)))
+                holder.image1?.setImageDrawable(td)
+                td.startTransition(1000)
+            }
+        }
+    }
+
     private fun isDateChange(position: Int): Boolean {
         var isChange = false
         val previousDate: String

@@ -40,7 +40,7 @@
         <FrameLayout
             android:layout_marginLeft="10dp"
             android:layout_width="20dp"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
             <TextView
                 android:layout_gravity="center"
                 android:background="@color/timelineItemText"
@@ -52,22 +52,20 @@
                 android:layout_width="10dp"
                 android:layout_height="10dp" />
         </FrameLayout>
-        <LinearLayout
+        <TextView
+            android:id="@+id/address"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:textSize="@dimen/item_timeline_text"
+            android:gravity="center_vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <TextView
-                android:textSize="@dimen/item_timeline_text"
-                android:id="@+id/address"
-                android:gravity="center_vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_marginLeft="30dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="40dp">
         <FrameLayout
             android:layout_marginLeft="10dp"
             android:layout_width="20dp"
@@ -80,7 +78,7 @@
         </FrameLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
             <ImageView
                 android:id="@+id/thumbnail"
                 android:paddingBottom="10dp"
