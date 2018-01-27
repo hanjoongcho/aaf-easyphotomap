@@ -5,9 +5,11 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.*
 import android.support.v4.content.ContextCompat
+import android.util.Log
 import android.util.LruCache
 import me.blog.korn123.easyphotomap.R
 import org.apache.commons.io.IOUtils
+import org.apache.commons.lang.time.StopWatch
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -42,6 +44,8 @@ object BitmapUtils {
     fun getBitmapFromMemCache(key: String): Bitmap? = mMemoryCache?.get(key)
 
     fun createScaledBitmap(srcPath: String, destPath: String, fixedWidthHeight: Int): Boolean {
+        val stopWatch: StopWatch = StopWatch()
+        stopWatch.start()
         var result = true
         var outputStream: OutputStream? = null
         try {
@@ -66,6 +70,7 @@ object BitmapUtils {
             IOUtils.closeQuietly(outputStream)
         }
 
+        Log.i("stopwatch", "createScaledBitmap ${stopWatch.time} $srcPath")
         return result
     }
 

@@ -6,6 +6,7 @@ import android.content.DialogInterface
 import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import com.beardedhen.androidbootstrap.TypefaceProvider
 import com.drew.imaging.jpeg.JpegMetadataReader
 import com.drew.metadata.exif.ExifSubIFDDirectory
@@ -21,6 +22,7 @@ import me.blog.korn123.easyphotomap.utils.DialogUtils
 import me.blog.korn123.easyphotomap.extensions.config
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
+import org.apache.commons.lang.time.StopWatch
 import java.io.File
 import java.util.*
 
@@ -111,7 +113,9 @@ class BatchPopupActivity : SimpleActivity() {
     internal inner class RegisterThread(var context: Context, private var listImagePath: ArrayList<String>) : Thread() {
 
         override fun run() {
+            val stopWatch: StopWatch = StopWatch() 
             for (imagePath in listImagePath) {
+                
                 if (!mEnableUpdate) return
                 val message = progressHandler.obtainMessage()
                 try {
@@ -132,7 +136,10 @@ class BatchPopupActivity : SimpleActivity() {
                     if (PhotoMapDbHelper.selectPhotoMapItemBy("imagePath", targetFile.absolutePath).size > 0) {
                         mReduplicationCount++
                     } else {
+                        stopWatch.start()
                         val metadata = JpegMetadataReader.readMetadata(targetFile)
+                        Log.i("stopwatch", "readMetadata ${stopWatch.time} $targetFile")
+                        stopWatch.reset()
                         val item = PhotoMapItem()
                         item.imagePath = targetFile.absolutePath
                         val exifSubIFDDirectory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory::class.java)
@@ -146,7 +153,10 @@ class BatchPopupActivity : SimpleActivity() {
                         if (gpsDirectory != null && gpsDirectory.geoLocation != null) {
                             item.longitude = gpsDirectory.geoLocation.longitude
                             item.latitude = gpsDirectory.geoLocation.latitude
+                            stopWatch.start()
                             val listAddress = CommonUtils.getFromLocation(this@BatchPopupActivity, item.latitude, item.longitude, 1, 0)
+                            Log.i("stopwatch", "getFromLocation ${stopWatch.time} $targetFile")
+                            stopWatch.reset()
                             listAddress?.let {
                                 if (it.isNotEmpty()) item.info = CommonUtils.fullAddress(it[0])
                             }

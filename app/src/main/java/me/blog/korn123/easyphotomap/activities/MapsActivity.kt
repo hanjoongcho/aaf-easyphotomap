@@ -9,6 +9,9 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.support.v4.content.ContextCompat
+import android.support.v7.content.res.AppCompatResources
+import android.support.v7.widget.DividerItemDecoration
+import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
 import android.view.*
 import android.widget.*
@@ -23,14 +26,17 @@ import com.google.maps.android.clustering.ClusterItem
 import com.google.maps.android.clustering.ClusterManager
 import com.google.maps.android.clustering.view.DefaultClusterRenderer
 import com.google.maps.android.ui.IconGenerator
+import com.simplemobiletools.commons.extensions.onGlobalLayout
 import com.simplemobiletools.commons.extensions.toast
 import com.simplemobiletools.commons.helpers.PERMISSION_CAMERA
 import com.simplemobiletools.commons.helpers.PERMISSION_READ_STORAGE
 import com.simplemobiletools.commons.helpers.PERMISSION_WRITE_STORAGE
+import com.simplemobiletools.commons.views.FastScroller
 import io.github.hanjoongcho.commons.helpers.PERMISSION_ACCESS_COARSE_LOCATION
 import io.github.hanjoongcho.commons.helpers.PERMISSION_ACCESS_FINE_LOCATION
 import kotlinx.android.synthetic.main.activity_maps.*
 import me.blog.korn123.easyphotomap.R
+import me.blog.korn123.easyphotomap.adapters.RecommendationItemAdapter
 import me.blog.korn123.easyphotomap.constants.Constant
 import me.blog.korn123.easyphotomap.extensions.config
 import me.blog.korn123.easyphotomap.helper.*
@@ -56,8 +62,6 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
     private var mClusterManager: ClusterManager<MyItem>? = null
     private var mListPhotoMapItem: ArrayList<PhotoMapItem>? = null
     private var mEnableDateFilter: Boolean = false
-    private var mAdapter: ArrayAdapter<*>? = null
-    private var mListView: ListView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(null)
@@ -186,6 +190,16 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
         }
     }
 
+    val mRecommendationAdapter: RecommendationItemAdapter by lazy {
+        RecommendationItemAdapter(
+                this,
+                mListRecommendation,
+                AdapterView.OnItemClickListener { _, _, position, _ ->
+                    mPopupWindow?.dismiss()
+                    overlayIcons(mRecommendationAdapter.getItem(position).keyWord, mEnableDateFilter)
+                }
+        )
+    } 
     private var mMenuClickListener: View.OnClickListener = View.OnClickListener { view ->
         floatingMenu.close(false)
         when (view.id) {
@@ -253,6 +267,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                 }
             }
             R.id.overlay -> {
+                var recyclerView: RecyclerView? = null
                 mEnableDateFilter = config.enableDateFilter
                 mMap?.clear()
                 parseMetadata()
@@ -262,7 +277,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                     } else {
                         val inflater = this.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
                         val customView = inflater.inflate(R.layout.popup_window_recommendation, null)
-                        mListView = customView.findViewById<ListView>(R.id.listView)
+                        recyclerView = customView.findViewById<RecyclerView>(R.id.recommendation_items)
                         FontUtils.setChildViewTypeface(customView as ViewGroup)
                         val listOfSortEntry: List<Map.Entry<String, Int>>?
                         if (mEnableDateFilter) {
@@ -297,14 +312,22 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                         listOfSortEntry.map { mListRecommendationOrigin.add(Recommendation(it.key, it.value)) }
 
                         mListRecommendation.addAll(mListRecommendationOrigin)
-                        mAdapter = ArrayAdapter(this, R.layout.item_recommendation, mListRecommendation)
-                        mListView?.adapter = mAdapter
-                        mListView?.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
-                            val recommendation = parent.adapter.getItem(position) as Recommendation
-                            mPopupWindow?.dismiss()
-                            overlayIcons(recommendation.keyWord, mEnableDateFilter)
+                        
+                        val dividerItemDecoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
+                        AppCompatResources.getDrawable(this, R.drawable.divider_default)?.let {
+                            dividerItemDecoration.setDrawable(it)
+                            recyclerView?.adapter = mRecommendationAdapter
+                            recyclerView?.addItemDecoration(dividerItemDecoration)
                         }
-                        val point = CommonUtils.getDefaultDisplay(this)
+                        val fastScroller = customView.findViewById<FastScroller>(R.id.items_fastscroller)
+                        fastScroller.setViews(recyclerView!!, null) {
+                            val item = mListRecommendation.getOrNull(it)
+                            fastScroller.updateBubbleText(item?.getBubbleText() ?: "")
+                        }
+                        recyclerView!!.onGlobalLayout {
+                            fastScroller.setScrollTo(recyclerView!!.computeVerticalScrollOffset())
+                        }
+                        
                         customView.findViewById<TextView>(R.id.viewWorld).setOnClickListener {
                             mPopupWindow?.dismiss()
                             overlayIcons("", false)
@@ -320,7 +343,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                                 mListRecommendationOrigin.map{ it -> if (StringUtils.contains(it.keyWord, newText)) {
                                     mListRecommendation.add(it)
                                 }}
-                                mAdapter?.notifyDataSetChanged()
+                                mRecommendationAdapter?.notifyDataSetChanged()
                                 return false
                             }
                         })
@@ -625,10 +648,12 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
         }
     }
 
-    private inner class Recommendation(internal var keyWord: String, internal var count: Int) {
+    inner class Recommendation(internal var keyWord: String, internal var count: Int) {
         override fun toString(): String {
             val unit = getString(R.string.photo_map_item_count_unit)
             return "$keyWord [$count$unit]"
         }
+
+        fun getBubbleText() = keyWord
     }
 }

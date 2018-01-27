@@ -77,7 +77,7 @@ class PhotoSearchActivity : AppCompatActivity() {
         })
 
         val dividerItemDecoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
-        AppCompatResources.getDrawable(this, R.drawable.divider_simple)?.let {
+        AppCompatResources.getDrawable(this, R.drawable.divider_default)?.let {
             dividerItemDecoration.setDrawable(it)
             search_items.adapter = mSearchItemAdapter
             search_items.addItemDecoration(dividerItemDecoration)

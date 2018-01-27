@@ -18,7 +18,7 @@ import java.util.*
  * Created by CHO HANJOONG on 2016-07-20.
  */
 class SearchItemAdapter(private val activity: Activity,
-                        private val listPhotoMap: ArrayList<PhotoMapItem>,
+                        private val listPhotoMapItem: ArrayList<PhotoMapItem>,
                         private val onItemClickListener: AdapterView.OnItemClickListener,
                         private val onItemLongClickListener: AdapterView.OnItemLongClickListener
 ) : RecyclerView.Adapter<SearchItemAdapter.ViewHolder>() {
@@ -30,7 +30,7 @@ class SearchItemAdapter(private val activity: Activity,
     }
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-        val photoMapItem: PhotoMapItem = listPhotoMap[position]
+        val photoMapItem: PhotoMapItem = listPhotoMapItem[position]
         holder?.run {
             text1?.text = photoMapItem.info
             text2?.text = photoMapItem.date
@@ -51,11 +51,11 @@ class SearchItemAdapter(private val activity: Activity,
         }
     }
 
-    override fun getItemCount(): Int = listPhotoMap.size
+    override fun getItemCount(): Int = listPhotoMapItem.size
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder = createViewHolder(R.layout.item_search, parent)
 
-    fun getItem(position: Int): PhotoMapItem = listPhotoMap[position]
+    fun getItem(position: Int): PhotoMapItem = listPhotoMapItem[position]
 
     class ViewHolder(val parent: ViewGroup?) : RecyclerView.ViewHolder(parent) {
         var text1: TextView? = null
