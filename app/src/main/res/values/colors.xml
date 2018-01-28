@@ -1,16 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--common-->
-    <color name="defaultFont">#5a5959</color>
-    <color name="divider">#2785fce2</color>
     <color name="listSelector">#1a0275d8</color>
-    <color name="transparent">#00ffffff</color>
     <color name="appBackground">#ffd4d3d3</color>
-
-    <color name="colorAccent">@color/colorPrimary</color>
-    <color name="color_primary_dark">@color/colorPrimaryDark</color>
-    <color name="color_primary">@color/colorPrimary</color>
-    <color name="color_accent">@color/colorAccent</color>
+    <color name="popupWindowBackground">#90000000</color>
     
     <!--activity_popup_image.xml-->
     <color name="popupImageBackground">#90000000</color>
@@ -25,12 +17,6 @@
     <color name="photoMapInfoText">#5a5959</color>
     <color name="photoMapDateText">@color/colorPrimary</color>
 
-    <!--popup_window_camera.xml-->
-    <color name="popupWindowCameraBackground">#90000000</color>
-
-    <!--popup_window_camera.xml-->
-    <color name="popupWindowRecommendationBackground">#90000000</color>
-
     <!--item_timeline.xml-->
-    <color name="timelineItemText">#60000000</color>
+    <color name="timeline">#7c7c7c</color>
 </resources>

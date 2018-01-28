@@ -43,7 +43,7 @@
             android:layout_height="wrap_content">
             <TextView
                 android:layout_gravity="center"
-                android:background="@color/timelineItemText"
+                android:background="@color/timeline"
                 android:layout_width="3dp"
                 android:layout_height="match_parent" />
             <ImageView
@@ -72,7 +72,7 @@
             android:layout_height="match_parent">
             <TextView
                 android:layout_gravity="center"
-                android:background="@color/timelineItemText"
+                android:background="@color/timeline"
                 android:layout_width="3dp"
                 android:layout_height="match_parent" />
         </FrameLayout>

@@ -20,7 +20,7 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="PopupWindow" parent="AppTheme.NoActionBar">
-        <item name="colorAccent">@color/defaultFont</item>
+        <item name="colorAccent">@color/default_text_color</item>
     </style>
 
     <!--activity_maps.xml-->

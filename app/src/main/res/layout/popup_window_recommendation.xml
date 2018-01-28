@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:theme="@style/PopupWindow"
-    android:background="@color/popupWindowRecommendationBackground"
+    android:background="@color/popupWindowBackground"
     android:padding="5dp"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -12,7 +12,7 @@
     <TextView
         android:background="@drawable/bg_recommendation_card"
         android:padding="15dp"
-        android:textColor="@color/defaultFont"
+        android:textColor="@color/default_text_color"
         android:text="@string/info_message"
         android:textSize="15dp"
         android:layout_width="match_parent"

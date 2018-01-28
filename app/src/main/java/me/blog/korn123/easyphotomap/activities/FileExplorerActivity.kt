@@ -168,7 +168,7 @@ class FileExplorerActivity : AppCompatActivity() {
                 textView.setTextColor(ContextCompat.getColor(this@FileExplorerActivity, R.color.colorPrimary))
             } else {
                 textView.typeface = Typeface.DEFAULT
-                textView.setTextColor(ContextCompat.getColor(this@FileExplorerActivity, R.color.defaultFont))
+                textView.setTextColor(ContextCompat.getColor(this@FileExplorerActivity, R.color.default_text_color))
             }
             textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16f)
             textView.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT)

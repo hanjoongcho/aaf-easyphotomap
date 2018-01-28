@@ -16,7 +16,7 @@
             android:padding="5dp"
             android:gravity="left"
             android:textSize="@dimen/batch_popup_guide_message_text"
-            android:textColor="@color/defaultFont"
+            android:textColor="@color/default_text_color"
             android:lineSpacingExtra="@dimen/batch_popup_guide_message_line_space"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
