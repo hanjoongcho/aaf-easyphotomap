@@ -1,0 +1,25 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:foreground="?attr/selectableItemBackground"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:minHeight="80dp"
+        android:gravity="center_vertical"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:padding="10dp">
+        <TextView
+            android:id="@+id/text1"
+            android:textColor="@color/colorPrimary"
+            style="@style/item_search_text" />
+        <TextView
+            android:id="@+id/text2"
+            style="@style/item_search_text" />
+        <TextView
+            android:id="@+id/text3"
+            style="@style/item_search_text" />
+    </LinearLayout>
+
+</LinearLayout>

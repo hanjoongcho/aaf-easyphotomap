@@ -83,9 +83,9 @@ class AddressSearchActivity : AppCompatActivity() {
             try {
                 val listAddress = CommonUtils.getFromLocationName(this@AddressSearchActivity, it, maxResults, 0)
                 listAddress?.let {
-                    this.mListAddress.addAll(it)
+                    mListAddress.addAll(it)
                     if (mAddressAdapter == null) {
-                        mAddressAdapter = AddressItemAdapter(this, android.R.layout.simple_list_item_2, it)
+                        mAddressAdapter = AddressItemAdapter(this, R.layout.item_address, mListAddress)
                         listView.adapter = mAddressAdapter
                         listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, _ ->
                             val address = parent.adapter.getItem(position) as Address

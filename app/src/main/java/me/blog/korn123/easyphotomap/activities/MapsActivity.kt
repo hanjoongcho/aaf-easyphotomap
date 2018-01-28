@@ -214,8 +214,6 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                             val textView2 = infoView.findViewById<TextView>(R.id.textView2)
                             val textView3 = infoView.findViewById<TextView>(R.id.textView3)
                             mPopupWindow = PopupWindow(infoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-                            CommonUtils.bindButtonEffect(textView2)
-                            CommonUtils.bindButtonEffect(textView3)
                             textView2.setOnClickListener { v ->
                                 mPopupWindow?.dismiss()
                                 val camera = Intent(v.context, CameraActivity::class.java)

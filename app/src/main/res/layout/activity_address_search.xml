@@ -12,10 +12,8 @@
             android:background="?attr/colorPrimary" app:popupTheme="@style/AppTheme.PopupOverlay" />
     </android.support.design.widget.AppBarLayout>
     <ListView
-        android:fastScrollEnabled="true"
-        android:drawSelectorOnTop="true"
-        android:listSelector="@drawable/selector_listview"
         android:id="@+id/listView"
+        android:listSelector="@drawable/selector_listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </ListView>

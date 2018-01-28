@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import me.blog.korn123.easyphotomap.R
 
 /**
  * Created by CHO HANJOONG on 2016-07-20.
@@ -14,15 +15,15 @@ import android.widget.TextView
 class AddressItemAdapter(private val mContext: Context, private val mLayoutResourceId: Int, private val mListAddress: List<Address>) : ArrayAdapter<Address>(mContext, mLayoutResourceId, mListAddress) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
-
         var row = convertView
         val holder: ViewHolder
         if (row == null) {
             val inflater = (mContext as Activity).layoutInflater
             row = inflater.inflate(mLayoutResourceId, parent, false)
             holder = ViewHolder()
-            holder.textView1 = row.findViewById(android.R.id.text1) as TextView
-            holder.textView2 = row.findViewById(android.R.id.text2) as TextView
+            holder.textView1 = row.findViewById(R.id.text1) as TextView
+            holder.textView2 = row.findViewById(R.id.text2) as TextView
+            holder.textView3 = row.findViewById(R.id.text3) as TextView
             row.tag = holder
         } else {
             holder = row.tag as ViewHolder
@@ -36,16 +37,14 @@ class AddressItemAdapter(private val mContext: Context, private val mLayoutResou
         if (address.thoroughfare != null) addressBuilder.append(address.thoroughfare).append(" ")
         if (address.featureName != null) addressBuilder.append(address.featureName).append(" ")
         holder.textView1?.text = addressBuilder.toString()
-
-        val latLonBuilder = StringBuilder()
-        latLonBuilder.append("latitude: " + address.latitude)
-        latLonBuilder.append("longitude: " + address.longitude)
-        holder.textView2?.text = latLonBuilder.toString()
+        holder.textView2?.text = "latitude: ${address.latitude}" 
+        holder.textView3?.text = "longitude: ${address.longitude}"
         return row
     }
 
     internal class ViewHolder {
         var textView1: TextView? = null
         var textView2: TextView? = null
+        var textView3: TextView? = null
     }
 }

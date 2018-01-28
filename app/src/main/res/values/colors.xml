@@ -4,9 +4,6 @@
     <color name="appBackground">#ffd4d3d3</color>
     <color name="popupWindowBackground">#90000000</color>
     
-    <!--activity_popup_image.xml-->
-    <color name="popupImageBackground">#90000000</color>
-
     <!--activity_maps.xml-->
     <color name="floatingButtonNormal">@color/colorPrimary</color>
     <color name="floatingButtonPressed">@color/colorPrimary</color>
