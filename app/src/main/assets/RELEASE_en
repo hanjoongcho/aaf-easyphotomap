@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.1.53 (date: 2018/01/29)
+  * User Interface Optimization
+  
 # Changes in 1.1.52 (date: 2018/01/14)
   * Fixed an error that ended abnormally when using the shooting date filter
   
