@@ -22,10 +22,13 @@ import java.io.File
 /**
  * Created by CHO HANJOONG on 2016-08-02.
  */
-class ThumbnailItemAdapter(private val mActivity: Activity, private val mContext: Context, private val mLayoutResourceId: Int, private val mEntities: List<ThumbnailItem>) : ArrayAdapter<ThumbnailItem>(mContext, mLayoutResourceId, mEntities) {
+class ThumbnailItemAdapter(private val mActivity: Activity,
+                           private val mContext: Context,
+                           private val mLayoutResourceId: Int,
+                           private val mEntities: List<ThumbnailItem>
+) : ArrayAdapter<ThumbnailItem>(mContext, mLayoutResourceId, mEntities) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-
         var row = convertView
         val holder: ViewHolder
 
@@ -38,7 +41,7 @@ class ThumbnailItemAdapter(private val mActivity: Activity, private val mContext
         } else {
             holder = row.tag as ViewHolder
         }
-        val widthHeight = ((CommonUtils.getDefaultDisplay(mActivity).x - CommonUtils.dpToPixel(mActivity, 30f, 1)) / 3)
+        val widthHeight = ((CommonUtils.getDefaultDisplay(mActivity).x - CommonUtils.dpToPixel(mActivity, 14f, 1)) / 3)
         val entity = mEntities[position]
         val thumbnailPath = entity.thumbnailPath
         holder.position = position

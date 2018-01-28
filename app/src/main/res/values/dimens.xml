@@ -19,6 +19,7 @@
     <dimen name="photo_map_date_text">11dp</dimen>
 
     <dimen name="popup_window_camera_guide">17dp</dimen>
+    <dimen name="activity_thumbnail_spacing">1dp</dimen>
     
     <!--Android-Bootstrap-->
     <dimen name="default_padding">16dp</dimen>

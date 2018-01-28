@@ -17,8 +17,8 @@ android {
         applicationId "me.blog.korn123.easyphotomap"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 63
-        versionName "1.1.52-test"
+        versionCode 64
+        versionName "1.1.53"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -88,10 +88,10 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
 //     https://github.com/SimpleMobileTools/Simple-Commons
-//    implementation 'com.simplemobiletools:commons:3.7.8'
-    implementation project(":commons")
+    implementation 'com.simplemobiletools:commons:3.7.8'
+//    implementation project(":commons")
 
-//    implementation 'io.github.hanjoongcho:commons-android:0.0.8'
-    implementation project(":commons-android")
+    implementation 'io.github.hanjoongcho:commons-android:0.1.0'
+//    implementation project(":commons-android")
 }
 

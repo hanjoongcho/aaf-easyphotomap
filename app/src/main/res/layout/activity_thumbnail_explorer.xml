@@ -21,7 +21,6 @@
         android:background="@color/appBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
         <LinearLayout
             android:background="@drawable/bg_common"
             android:id="@+id/infoView"
@@ -91,13 +90,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent" />-->
         </LinearLayout>
-
         <GridView
             android:fastScrollEnabled="true"
-            android:verticalSpacing="5dp"
-            android:horizontalSpacing="5dp"
+            android:verticalSpacing="@dimen/activity_thumbnail_spacing"
+            android:horizontalSpacing="@dimen/activity_thumbnail_spacing"
             android:background="@drawable/bg_common"
-            android:padding="5dp"
+            android:padding="@dimen/activity_thumbnail_spacing"
             android:gravity="center"
             android:layout_gravity="center"
             android:drawSelectorOnTop="true"
@@ -107,7 +105,6 @@
             android:stretchMode="columnWidth"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-
     </LinearLayout>
 
 </LinearLayout>

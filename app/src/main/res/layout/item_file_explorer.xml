@@ -1,6 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
-    android:layout_height="@dimen/item_file_explorer_height"
+    android:minHeight="80dp"
+    android:layout_height="wrap_content"
     android:layout_width="match_parent"
     android:padding="5dp">
     <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -11,17 +12,21 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp" />
     <LinearLayout
+        android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
         android:orientation="vertical">
         <TextView
             android:id="@+id/text1"
-            style="@style/item_file_explorer_info" />
+            android:textColor="@color/colorPrimary"
+            style="@style/item_file_explorer_text" />
         <TextView
+            android:visibility="gone"
             android:id="@+id/text2"
-            style="@style/item_file_explorer_info" />
+            style="@style/item_file_explorer_text" />
         <TextView
             android:id="@+id/text3"
-            style="@style/item_file_explorer_info" />
+            style="@style/item_file_explorer_text" />
     </LinearLayout>
 </LinearLayout>

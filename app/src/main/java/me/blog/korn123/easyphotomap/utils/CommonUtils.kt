@@ -246,10 +246,10 @@ class CommonUtils {
 
         @JvmStatic
         fun dpToPixel(context: Context, dp: Float, policy: Int = 0): Int {
-            val px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.resources.displayMetrics)
+            val px: Float = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.resources.displayMetrics)
             return when (policy) {
-                0 -> px.toInt()
-                1 -> Math.round(px)
+                0 -> Math.floor(px.toDouble()).toInt()
+                1 -> Math.ceil(px.toDouble()).toInt()
                 else -> 0
             }
         }

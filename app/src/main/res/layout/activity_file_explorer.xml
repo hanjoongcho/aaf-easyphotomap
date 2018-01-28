@@ -50,6 +50,7 @@
             android:paddingBottom="5dp">
             <Button
                 android:id="@+id/batchModeA"
+                android:foreground="?attr/selectableItemBackground"
                 android:textSize="12dp"
                 android:textColor="@android:color/white"
                 android:background="@drawable/dialog_bg_primary"
@@ -58,9 +59,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content" />
             <Button
+                android:id="@+id/batchModeB"
+                android:foreground="?attr/selectableItemBackground"
                 android:textSize="12dp"
                 android:layout_marginLeft="5dp"
-                android:id="@+id/batchModeB"
                 android:textColor="@android:color/white"
                 android:background="@drawable/dialog_bg_primary"
                 android:text="@string/registration_batch_b"

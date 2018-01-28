@@ -16,7 +16,6 @@ import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.constants.Constant
 import me.blog.korn123.easyphotomap.models.PhotoMapItem
 import me.blog.korn123.easyphotomap.utils.BitmapUtils
-import me.blog.korn123.easyphotomap.utils.CommonUtils
 import org.apache.commons.io.FilenameUtils
 import java.util.*
 
