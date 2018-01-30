@@ -47,7 +47,6 @@ class SettingsActivity : SimpleActivity() {
         setupPhotoMarkerCluster()
         setupPhotoMarkerScale()
         setupPhotoMarker()
-        setupReversOrder()
         setupPhotoCopy()
         setupCameraInfoPopup()
         setupDateFilter()
@@ -108,14 +107,6 @@ class SettingsActivity : SimpleActivity() {
                 photo_marker_label.text = "${getString(R.string.photo_marker_setting)} (${getPhotoMarkerText()})"
 //                updateWidget()
             }
-        }
-    }
-    
-    private fun setupReversOrder() {
-        enable_reverse_order_switcher.isChecked = config.enableReverseOrder
-        enable_reverse_order_holder.setOnClickListener {
-            enable_reverse_order_switcher.toggle()
-            config.enableReverseOrder = enable_reverse_order_switcher.isChecked
         }
     }
     

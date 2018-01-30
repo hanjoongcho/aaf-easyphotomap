@@ -140,35 +140,6 @@
 
                 <LinearLayout
                     style="@style/SettingsItemHolder"
-                    android:orientation="horizontal"
-                    android:id="@+id/enable_reverse_order_holder">
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content">
-                        <com.simplemobiletools.commons.views.MyTextView
-                            android:id="@+id/enable_reverse_order_label"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/enable_reverse_order"/>
-                        <com.simplemobiletools.commons.views.MyTextView
-                            android:alpha="0.5"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/enable_reverse_order_summary"/>
-                    </LinearLayout>
-                    <android.support.v7.widget.SwitchCompat
-                        android:id="@+id/enable_reverse_order_switcher"
-                        android:clickable="false"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="20dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-
-                <LinearLayout
-                    style="@style/SettingsItemHolder"
                     android:orientation="vertical"
                     android:id="@+id/photo_marker_holder">
                     <com.simplemobiletools.commons.views.MyTextView
