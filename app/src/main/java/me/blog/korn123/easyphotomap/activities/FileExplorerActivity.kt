@@ -12,10 +12,7 @@ import android.os.Handler
 import android.os.Looper
 import android.support.v4.content.ContextCompat
 import android.util.TypedValue
-import android.view.Gravity
-import android.view.Menu
-import android.view.MenuItem
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ArrayAdapter
 import android.widget.HorizontalScrollView
 import android.widget.TextView
@@ -27,6 +24,7 @@ import me.blog.korn123.easyphotomap.dialogs.ChangeSortingDialog
 import me.blog.korn123.easyphotomap.extensions.config
 import me.blog.korn123.easyphotomap.helper.RegistrationThread
 import me.blog.korn123.easyphotomap.models.FileItem
+import me.blog.korn123.easyphotomap.utils.CommonUtils
 import me.blog.korn123.easyphotomap.utils.DialogUtils
 import org.apache.commons.io.FilenameUtils
 import org.apache.commons.lang.StringUtils
@@ -190,6 +188,7 @@ class FileExplorerActivity : SimpleActivity() {
             pathView.addView(textView)
             index++
         }
+        progressDialog.visibility = View.VISIBLE
         RefreshThread().start()
     }
 
@@ -205,45 +204,53 @@ class FileExplorerActivity : SimpleActivity() {
 
     inner class RefreshThread : Thread() {
         override fun run() {
-            Handler(Looper.getMainLooper()).post {
-                mListFile.clear()
-                mListDirectory.clear()
-                val current = File(this@FileExplorerActivity.mCurrent)
-                val files = current.list()
-                if (files != null) {
-                    for (i in files.indices) {
-                        val thumbnailEntity = FileItem()
-                        val path = this@FileExplorerActivity.mCurrent + "/" + files[i]
-                        val name: String
-                        val f = File(path)
-                        if (f.isDirectory) {
-                            name = "[" + files[i] + "]"
-                            thumbnailEntity.setImagePathAndFileName(name)
-                            thumbnailEntity.isDirectory = true
-                            mListDirectory.add(thumbnailEntity)
-                        } else {
-                            name = files[i]
-                            val extension = FilenameUtils.getExtension(name).toLowerCase()
-                            if (!extension.matches("jpg|jpeg".toRegex())) continue
-                            thumbnailEntity.setImagePathAndFileName(path)
-                            mListFile.add(thumbnailEntity)
+            mListFile.clear()
+            mListDirectory.clear()
+            val current = File(mCurrent)
+            val files = current.list()
+            if (files != null) {
+                for (i in files.indices) {
+                    val fileItem = FileItem()
+                    val path = "$mCurrent/${files[i]}"
+                    val name: String
+                    val f = File(path)
+                    if (f.isDirectory) {
+                        name = "[${files[i]}]"
+                        fileItem.setImagePathAndFileName(name)
+                        fileItem.isDirectory = true
+                        mListDirectory.add(fileItem)
+                    } else {
+                        name = files[i]
+                        val extension = FilenameUtils.getExtension(name).toLowerCase()
+                        if (!extension.matches("jpg|jpeg".toRegex())) continue
+                        fileItem.setImagePathAndFileName(path)
+                        try {
+                            fileItem.length = f.length()
+                            fileItem.takenDate = CommonUtils.getDateFromJpegMetaData(f)
+                        } catch (e: Exception){
+                            e.printStackTrace()
                         }
+
+                        mListFile.add(fileItem)
                     }
                 }
+            }
 
 //                if (config.enableReverseOrder) {
 //                    Collections.sort(mListDirectory, Collections.reverseOrder<Any>())
 //                    Collections.sort(mListFile, Collections.reverseOrder<Any>())
 //                } else {
-                    Collections.sort(mListDirectory)
-                    Collections.sort(mListFile)
+            Collections.sort(mListDirectory)
+            Collections.sort(mListFile)
 //                }
-                mListFile.addAll(0, mListDirectory)
+            mListFile.addAll(0, mListDirectory)
+            
+            Handler(Looper.getMainLooper()).post {
                 mAdapter?.notifyDataSetChanged()
                 fileList.setSelection(0)
                 scrollView.fullScroll(HorizontalScrollView.FOCUS_RIGHT)
+                progressDialog.visibility = View.GONE
             }
         }
     }
-
 }

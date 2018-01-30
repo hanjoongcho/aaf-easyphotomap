@@ -28,7 +28,12 @@ import java.util.*
  * Created by CHO HANJOONG on 2017-09-16.
  */
 
-class RegistrationThread(private val mContext: Context, private val mActivity: Activity, private val mProgressDialog: ProgressDialog, private var mFileName: String?, private val mPath: String) : Thread() {
+class RegistrationThread(private val mContext: Context,
+                         private val mActivity: Activity,
+                         private val mProgressDialog: ProgressDialog,
+                         private var mFileName: String?,
+                         private val mPath: String
+) : Thread() {
 
     private fun registerSingleFile() {
         var resultMessage: String? = null

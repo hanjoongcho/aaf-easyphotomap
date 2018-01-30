@@ -12,8 +12,11 @@ import android.view.MotionEvent
 import android.view.View
 import com.drew.imaging.jpeg.JpegMetadataReader
 import com.drew.imaging.jpeg.JpegProcessingException
+import com.drew.metadata.exif.ExifSubIFDDirectory
 import com.drew.metadata.exif.GpsDirectory
+import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.constants.Constant
+import me.blog.korn123.easyphotomap.models.PhotoMapItem
 import me.blog.korn123.easyphotomap.models.ThumbnailItem
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
@@ -29,7 +32,6 @@ import java.util.*
 class CommonUtils {
 
     companion object {
-
         @JvmStatic @Volatile private var mGeoCoder: Geocoder? = null
 
         @JvmStatic val dateTimePattern = SimpleDateFormat("yyyy-MM-dd(EEE) HH:mm", Locale.getDefault())
@@ -269,6 +271,20 @@ class CommonUtils {
             val size = Point()
             display.getSize(size)
             return size
+        }
+        
+        fun getDateFromJpegMetaData(targetFile: File): String {
+            val metadata = JpegMetadataReader.readMetadata(targetFile)
+            val exifSubIFDDirectory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory::class.java)
+            var date: Date? = null
+            try {
+                date = exifSubIFDDirectory.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL, TimeZone.getDefault())    
+            } catch (e: Exception) {}
+            
+            return when (date != null) {
+                true -> CommonUtils.dateTimePattern.format(date)
+                false -> ""
+            } 
         }
     }
 }

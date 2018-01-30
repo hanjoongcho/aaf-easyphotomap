@@ -10,42 +10,6 @@ import android.widget.TextView
 
 object FontUtils {
 
-//    private var sTypeface: Typeface? = null
-
-//    fun setTypefaceDefault(view: TextView) {
-//        view.typeface = Typeface.DEFAULT
-//    }
-
-//    private fun setTypeface(assetManager: AssetManager, view: TextView) {
-//        view.typeface = getTypeface(assetManager)
-//    }
-
-//    private fun getTypeface(assetManager: AssetManager): Typeface {
-//        if (sTypeface == null) {
-//            sTypeface = Typeface.createFromAsset(assetManager, "fonts/NanumPen.ttf")
-//        }
-//        return sTypeface!!
-//    }
-
-//    fun setToolbarTypeface(toolbar: Toolbar, assetManager: AssetManager) {
-//        repeat(toolbar.childCount) { i ->
-//            val view = toolbar.getChildAt(i)
-//            if (view is TextView) {
-//                FontUtils.setTypeface(assetManager, view)
-//                //                ((TextView) view).setTypeface(Typeface.DEFAULT);
-//            }
-//        }
-//    }
-
-//    fun setToolbarTypeface(toolbar: Toolbar, typeface: Typeface) {
-//        repeat(toolbar.childCount) { i ->
-//            val view = toolbar.getChildAt(i)
-//            if (view is TextView) {
-//                view.typeface = typeface
-//            }
-//        }
-//    }
-
     fun setChildViewTypeface(viewGroup: ViewGroup) {
         repeat(viewGroup.childCount) { i ->
             if (viewGroup.getChildAt(i) is ViewGroup) {
@@ -58,5 +22,4 @@ object FontUtils {
             }
         }
     }
-
 }

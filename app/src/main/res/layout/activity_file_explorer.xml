@@ -11,40 +11,50 @@
             android:background="?attr/colorPrimary" app:popupTheme="@style/AppTheme.PopupOverlay" />
     </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:padding="@dimen/activity_file_explorer_spacing"
-        android:background="@color/appBackground"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
-            android:background="@drawable/bg_common"
-            android:padding="10dp"
+            android:orientation="vertical"
+            android:padding="@dimen/activity_file_explorer_spacing"
+            android:background="@color/appBackground"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <HorizontalScrollView
-                android:id="@+id/scrollView"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:background="@drawable/bg_common"
+                android:padding="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <LinearLayout
-                    android:padding="0dp"
-                    android:orientation="horizontal"
-                    android:id="@+id/pathView"
+                android:layout_height="wrap_content">
+                <HorizontalScrollView
+                    android:id="@+id/scrollView"
                     android:layout_width="match_parent"
-                    android:layout_height="30dp">
-                </LinearLayout>
-            </HorizontalScrollView>
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:padding="0dp"
+                        android:orientation="horizontal"
+                        android:id="@+id/pathView"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp">
+                    </LinearLayout>
+                </HorizontalScrollView>
+            </LinearLayout>
+            <ListView
+                android:fastScrollEnabled="true"
+                android:layout_marginTop="@dimen/activity_file_explorer_spacing"
+                android:background="@drawable/bg_common"
+                android:drawSelectorOnTop="true"
+                android:listSelector="@drawable/selector_listview"
+                android:id="@+id/fileList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
         </LinearLayout>
-        <ListView
-            android:fastScrollEnabled="true"
-            android:layout_marginTop="@dimen/activity_file_explorer_spacing"
-            android:background="@drawable/bg_common"
-            android:drawSelectorOnTop="true"
-            android:listSelector="@drawable/selector_listview"
-            android:id="@+id/fileList"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </LinearLayout>
+        <ProgressBar
+            android:id="@+id/progressDialog"
+            android:layout_gravity="center"
+            android:layout_width="20dp"
+            android:layout_height="20dp" />
+    </FrameLayout>
+    
 
 </LinearLayout>

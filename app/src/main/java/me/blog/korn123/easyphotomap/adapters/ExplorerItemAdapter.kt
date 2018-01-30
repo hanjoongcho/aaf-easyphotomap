@@ -38,10 +38,12 @@ class ExplorerItemAdapter(private val mActivity: Activity, private val mContext:
             holder.textView1 = row.findViewById<TextView>(R.id.text1)
             holder.textView2 = row.findViewById<TextView>(R.id.text2)
             holder.textView3 = row.findViewById<TextView>(R.id.text3)
+            holder.textView4 = row.findViewById<TextView>(R.id.text4)
             holder.imageView1 = row.findViewById<ImageView>(R.id.image1)
             holder.textView1?.typeface = Typeface.DEFAULT
             holder.textView2?.typeface = Typeface.DEFAULT
             holder.textView3?.typeface = Typeface.DEFAULT
+            holder.textView4?.typeface = Typeface.DEFAULT
 
             // set tag
             row.tag = holder
@@ -60,6 +62,7 @@ class ExplorerItemAdapter(private val mActivity: Activity, private val mContext:
         holder.textView1?.text = entity.fileName
         holder.textView2?.text = ""
         holder.textView3?.text = ""
+        holder.textView4?.text = entity.takenDate
         holder.imageView1?.setImageBitmap(defaultImage())
 
         // init async process
@@ -68,10 +71,12 @@ class ExplorerItemAdapter(private val mActivity: Activity, private val mContext:
         if (entity.isDirectory) {
             holder.textView2?.visibility = View.GONE
             holder.textView3?.visibility = View.GONE
+            holder.textView4?.visibility = View.GONE
             ThumbnailTask(mActivity, position, holder).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, null, widthHeight.toString())
         } else {
             holder.textView2?.visibility = View.VISIBLE
             holder.textView3?.visibility = View.VISIBLE
+            holder.textView4?.visibility = View.VISIBLE
             ThumbnailTask(mActivity, position, holder).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, imagePath, widthHeight.toString())
         }
         return row
@@ -123,13 +128,9 @@ class ExplorerItemAdapter(private val mActivity: Activity, private val mContext:
                 if (isDirectory) {
                     mHolder.imageView1?.setImageBitmap(bitmap)
                 } else {
-                    if (geoLocation != null) {
-                        mHolder.textView2?.text = "위도: ${geoLocation?.latitude}"
-                        mHolder.textView3?.text = "경도: ${geoLocation?.longitude}"
-                    } else {
-                        mHolder.textView2?.text = "위도: 정보없음"
-                        mHolder.textView3?.text = "경도: 정보없음"
-                    }
+                    val message = "정보없음"
+                    mHolder.textView2?.text = "위도: ${geoLocation?.latitude ?: message}"
+                    mHolder.textView3?.text = "경도: ${geoLocation?.longitude ?: message}"
                     val td = TransitionDrawable(arrayOf(ColorDrawable(Color.TRANSPARENT), BitmapDrawable(mActivity.resources, bitmap)))
                     mHolder.imageView1?.setImageDrawable(td)
                     td.startTransition(1000)
@@ -150,8 +151,8 @@ class ExplorerItemAdapter(private val mActivity: Activity, private val mContext:
         internal var textView1: TextView? = null
         internal var textView2: TextView? = null
         internal var textView3: TextView? = null
+        internal var textView4: TextView? = null
         internal var imageView1: ImageView? = null
         var position: Int = 0
     }
-
 }

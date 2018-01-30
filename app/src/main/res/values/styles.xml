@@ -65,5 +65,7 @@
         <item name="android:textColor">@color/default_text_color</item>
     </style>
 
-    <style name="item_file_explorer_text" parent="item_search_text" />
+    <style name="item_file_explorer_text" parent="item_search_text">
+        <item name="android:textSize">@dimen/item_file_explorer_text_small</item>
+    </style>
 </resources>
