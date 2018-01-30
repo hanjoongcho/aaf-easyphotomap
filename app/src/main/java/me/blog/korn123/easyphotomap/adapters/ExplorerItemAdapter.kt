@@ -35,10 +35,10 @@ class ExplorerItemAdapter(private val mActivity: Activity, private val mContext:
             row = inflater.inflate(mLayoutResourceId, parent, false)
             holder = ViewHolder()
             // bind view
-            holder.textView1 = row.findViewById(R.id.text1) as TextView
-            holder.textView2 = row.findViewById(R.id.text2) as TextView
-            holder.textView3 = row.findViewById(R.id.text3) as TextView
-            holder.imageView1 = row.findViewById(R.id.image1) as ImageView
+            holder.textView1 = row.findViewById<TextView>(R.id.text1)
+            holder.textView2 = row.findViewById<TextView>(R.id.text2)
+            holder.textView3 = row.findViewById<TextView>(R.id.text3)
+            holder.imageView1 = row.findViewById<ImageView>(R.id.image1)
             holder.textView1?.typeface = Typeface.DEFAULT
             holder.textView2?.typeface = Typeface.DEFAULT
             holder.textView3?.typeface = Typeface.DEFAULT
@@ -94,7 +94,7 @@ class ExplorerItemAdapter(private val mActivity: Activity, private val mContext:
                     isDirectory = true
                     var bitmap = BitmapUtils.getBitmapFromMemCache("defaultBitmap")
                     if (bitmap == null) {
-                        bitmap = BitmapFactory.decodeResource(mActivity.resources, R.drawable.ic_menu_archive)
+                        bitmap = BitmapFactory.decodeResource(mActivity.resources, R.drawable.folder)
                         BitmapUtils.addBitmapToMemoryCache("defaultBitmap", bitmap)
                     }
                     resized = bitmap
