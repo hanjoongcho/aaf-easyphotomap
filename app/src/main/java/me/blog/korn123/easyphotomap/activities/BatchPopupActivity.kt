@@ -87,7 +87,7 @@ class BatchPopupActivity : SimpleActivity() {
 
     private val listFilePath: java.util.ArrayList<String> = arrayListOf()
     private fun determinePhotoFiles(directory: File) {
-        directory.listFiles().map { file ->
+        directory.listFiles()?.map { file ->
             when (file.isFile) {
                 true -> {
                     if (file.absoluteFile.extension.toLowerCase().matches("jpg|jpeg".toRegex())) {

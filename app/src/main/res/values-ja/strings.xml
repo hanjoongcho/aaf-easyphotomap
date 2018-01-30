@@ -140,11 +140,11 @@
     <string name="photo_marker_basic">基本フレーム</string>
     <string name="photo_marker_circle">赤い点</string>
 
-    <string name="photo_marker_cluster_level1">more than 5</string>
-    <string name="photo_marker_cluster_level2">more than 10</string>
-    <string name="photo_marker_cluster_level3">more than 50</string>
-    <string name="photo_marker_cluster_level4">more than 100</string>
-    <string name="photo_marker_cluster_level5">more than 200</string>
-    <string name="photo_marker_cluster_level6">more than 500</string>
-    <string name="photo_marker_cluster_level7">more than 1000</string>
+    <string name="photo_marker_cluster_level1">5つ以上の</string>
+    <string name="photo_marker_cluster_level2">10つ以上の</string>
+    <string name="photo_marker_cluster_level3">50つ以上の</string>
+    <string name="photo_marker_cluster_level4">100つ以上の</string>
+    <string name="photo_marker_cluster_level5">200つ以上の</string>
+    <string name="photo_marker_cluster_level6">500つ以上の</string>
+    <string name="photo_marker_cluster_level7">1000つ以上の</string>
 </resources>
