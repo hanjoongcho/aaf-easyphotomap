@@ -17,8 +17,8 @@ android {
         applicationId "me.blog.korn123.easyphotomap"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 65
-        versionName "1.1.54"
+        versionCode 66
+        versionName "1.1.55"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
