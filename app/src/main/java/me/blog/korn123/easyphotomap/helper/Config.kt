@@ -1,6 +1,8 @@
 package me.blog.korn123.easyphotomap.helper
 
 import android.content.Context
+import com.simplemobiletools.commons.helpers.SORT_BY_DATE_MODIFIED
+import com.simplemobiletools.commons.helpers.SORT_DESCENDING
 import io.github.hanjoongcho.commons.helpers.BaseConfig
 
 /**
@@ -46,4 +48,12 @@ class Config(context: Context) : BaseConfig(context) {
     var photoMarkerMinimumCluster: Int
         get() = legacyPrefs.getInt(PHOTO_MARKER_MINIMUN_CLUSTER, CLUSTER_L2)
         set(photoMarkerMinimumCluster) = legacyPrefs.edit().putInt(PHOTO_MARKER_MINIMUN_CLUSTER, photoMarkerMinimumCluster).apply()
+
+    var fileSorting: Int
+        get() = prefs.getInt(SORT_ORDER, SORT_BY_DATE_MODIFIED or SORT_DESCENDING)
+        set(order) = prefs.edit().putInt(SORT_ORDER, order).apply()
+    
+    var directorySorting: Int
+        get() = prefs.getInt(DIRECTORY_SORT_ORDER, SORT_BY_DATE_MODIFIED or SORT_DESCENDING)
+        set(order) = prefs.edit().putInt(DIRECTORY_SORT_ORDER, order).apply()
 }

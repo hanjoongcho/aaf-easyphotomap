@@ -8,6 +8,7 @@
 
     <!--activity_file_explorer.xml-->
     <dimen name="activity_file_explorer_spacing">3dp</dimen>
+    <dimen name="activity_thumbnail_explorer_spacing">3dp</dimen>
 
     <!--item_file_explorer.xml-->
     <dimen name="item_file_explorer_height">60dp</dimen>

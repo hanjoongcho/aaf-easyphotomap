@@ -8,6 +8,8 @@ package me.blog.korn123.easyphotomap.helper
  */
 
 // shared preferences
+val SORT_ORDER = "sort_order"
+val DIRECTORY_SORT_ORDER = "directory_sort_order"
 val FONT_SIZE = "font_size"
 val DATE_FILTER ="date_filter_setting"
 val DISABLE_INFO_POPUP = "disable_info_popup"

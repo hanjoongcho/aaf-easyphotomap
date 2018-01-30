@@ -14,10 +14,7 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
+        android:padding="@dimen/activity_thumbnail_explorer_spacing"
         android:background="@color/appBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -25,7 +22,7 @@
             android:background="@drawable/bg_common"
             android:id="@+id/infoView"
             android:visibility="gone"
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="@dimen/activity_thumbnail_explorer_spacing"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="65dp">

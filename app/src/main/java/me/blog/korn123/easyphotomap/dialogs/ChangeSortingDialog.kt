@@ -37,6 +37,7 @@ class ChangeSortingDialog(val activity: BaseSimpleActivity, val isDirectorySorti
         }
 
 //        currSorting = if (isDirectorySorting) config.directorySorting else config.getFileSorting(path)
+        currSorting = config.directorySorting 
         setupSortRadio()
         setupOrderRadio()
     }
@@ -79,13 +80,13 @@ class ChangeSortingDialog(val activity: BaseSimpleActivity, val isDirectorySorti
         }
 
         if (isDirectorySorting) {
-//            config.directorySorting = sorting
+            config.directorySorting = sorting
         } else {
             if (view.sorting_dialog_use_for_this_folder.isChecked) {
 //                config.saveFileSorting(path, sorting)
             } else {
 //                config.removeFileSorting(path)
-//                config.fileSorting = sorting
+                config.fileSorting = sorting
             }
         }
         callback()

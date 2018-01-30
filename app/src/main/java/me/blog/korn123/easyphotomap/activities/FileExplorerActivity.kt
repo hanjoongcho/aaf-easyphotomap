@@ -153,10 +153,12 @@ class FileExplorerActivity : SimpleActivity() {
 //            } else {
 //                gotDirectories(mDirs, true)
 //            }
+            refreshFiles()
         }
     }
 
     private fun refreshFiles() {
+        FileItem.sorting = config.directorySorting
         val arrayPath = StringUtils.split(mCurrent, "/")
         pathView.removeViews(0, pathView.childCount)
         var currentPath = ""
@@ -229,13 +231,13 @@ class FileExplorerActivity : SimpleActivity() {
                     }
                 }
 
-                if (config.enableReverseOrder) {
-                    Collections.sort(mListDirectory, Collections.reverseOrder<Any>())
-                    Collections.sort(mListFile, Collections.reverseOrder<Any>())
-                } else {
+//                if (config.enableReverseOrder) {
+//                    Collections.sort(mListDirectory, Collections.reverseOrder<Any>())
+//                    Collections.sort(mListFile, Collections.reverseOrder<Any>())
+//                } else {
                     Collections.sort(mListDirectory)
                     Collections.sort(mListFile)
-                }
+//                }
                 mListFile.addAll(0, mListDirectory)
                 mAdapter?.notifyDataSetChanged()
                 fileList.setSelection(0)
