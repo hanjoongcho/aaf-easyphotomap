@@ -22,8 +22,8 @@
 
     <!--FileExplorerActivity-->
     <string name="file_explorer_activity_title">탐색기</string>
-    <string name="registration_batch_a">일괄등록 A</string>
-    <string name="registration_batch_b">일괄등록 B</string>
+    <string name="registration_batch_a">현재폴더 등록</string>
+    <string name="registration_batch_b">현재폴더 및 하위폴더 등록</string>
 
     <!--SettingsActivity-->
     <string name="setting_activity_minimum_cluster_title">포토 마커 클러스터 설정</string>

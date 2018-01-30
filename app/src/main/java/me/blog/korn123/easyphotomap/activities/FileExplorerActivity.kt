@@ -11,9 +11,9 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
 import android.util.TypedValue
 import android.view.Gravity
+import android.view.Menu
 import android.view.MenuItem
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -23,10 +23,10 @@ import kotlinx.android.synthetic.main.activity_file_explorer.*
 import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.adapters.ExplorerItemAdapter
 import me.blog.korn123.easyphotomap.constants.Constant
+import me.blog.korn123.easyphotomap.dialogs.ChangeSortingDialog
 import me.blog.korn123.easyphotomap.extensions.config
 import me.blog.korn123.easyphotomap.helper.RegistrationThread
 import me.blog.korn123.easyphotomap.models.FileItem
-import me.blog.korn123.easyphotomap.utils.CommonUtils
 import me.blog.korn123.easyphotomap.utils.DialogUtils
 import org.apache.commons.io.FilenameUtils
 import org.apache.commons.lang.StringUtils
@@ -36,7 +36,7 @@ import java.util.*
 /**
  * Created by CHO HANJOONG on 2016-07-16.
  */
-class FileExplorerActivity : AppCompatActivity() {
+class FileExplorerActivity : SimpleActivity() {
 
     private val mListFile: ArrayList<FileItem> = arrayListOf()
     private val mListDirectory: ArrayList<FileItem> = arrayListOf()
@@ -55,48 +55,8 @@ class FileExplorerActivity : AppCompatActivity() {
         }
 
         mCurrent = Constant.CAMERA_DIRECTORY
-        batchModeA.typeface = Typeface.DEFAULT
-        batchModeB.typeface = Typeface.DEFAULT
-
         mAdapter = ExplorerItemAdapter(this, this, R.layout.item_file_explorer, this.mListFile)
         fileList.adapter = mAdapter
-
-        // binding listener
-        batchModeA.setOnClickListener({
-            val positiveListener = DialogInterface.OnClickListener { _, _ ->
-                val batchIntent = Intent(this@FileExplorerActivity, BatchPopupActivity::class.java)
-                val listImagePath = arrayListOf<String>()
-                File(mCurrent).listFiles().map { file ->
-                    if (file.absoluteFile.extension.toLowerCase().matches("jpg|jpeg".toRegex())) {
-                        listImagePath.add(file.absolutePath)
-                    }
-                }
-                batchIntent.putStringArrayListExtra("listImagePath", listImagePath)
-                startActivity(batchIntent)
-                return@OnClickListener
-            }
-
-            AlertDialog.Builder(this@FileExplorerActivity).apply {
-                setMessage(getString(R.string.file_explorer_message11))
-                setPositiveButton(getString(R.string.confirm), positiveListener)
-                setNegativeButton(getString(R.string.cancel), null)
-            }.create().show()
-        })
-
-        batchModeB.setOnClickListener({
-            val positiveListener = DialogInterface.OnClickListener { _, _ ->
-                val batchIntent = Intent(this@FileExplorerActivity, BatchPopupActivity::class.java)
-                batchIntent.putExtra("currentPath", mCurrent)
-                startActivity(batchIntent)
-                return@OnClickListener
-            }
-
-            AlertDialog.Builder(this@FileExplorerActivity).apply {
-                setMessage(getString(R.string.file_explorer_message13))
-                setPositiveButton(getString(R.string.confirm), positiveListener)
-                setNegativeButton(getString(R.string.cancel), null)
-            }.create().show()
-        })
 
         fileList.setOnItemClickListener { parent, _, position, _ ->
             val thumbnailEntity = parent.adapter.getItem(position) as FileItem
@@ -130,6 +90,53 @@ class FileExplorerActivity : AppCompatActivity() {
         refreshFiles()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.file_explorer, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> finish()
+            R.id.sort -> showSortingDialog()
+            R.id.batchModeA -> {
+                val positiveListener = DialogInterface.OnClickListener { _, _ ->
+                    val batchIntent = Intent(this@FileExplorerActivity, BatchPopupActivity::class.java)
+                    val listImagePath = arrayListOf<String>()
+                    File(mCurrent).listFiles().map { file ->
+                        if (file.absoluteFile.extension.toLowerCase().matches("jpg|jpeg".toRegex())) {
+                            listImagePath.add(file.absolutePath)
+                        }
+                    }
+                    batchIntent.putStringArrayListExtra("listImagePath", listImagePath)
+                    startActivity(batchIntent)
+                    return@OnClickListener
+                }
+
+                AlertDialog.Builder(this@FileExplorerActivity).apply {
+                    setMessage(getString(R.string.file_explorer_message11))
+                    setPositiveButton(getString(R.string.confirm), positiveListener)
+                    setNegativeButton(getString(R.string.cancel), null)
+                }.create().show()
+            }
+            R.id.batchModeB -> {
+                val positiveListener = DialogInterface.OnClickListener { _, _ ->
+                    val batchIntent = Intent(this@FileExplorerActivity, BatchPopupActivity::class.java)
+                    batchIntent.putExtra("currentPath", mCurrent)
+                    startActivity(batchIntent)
+                    return@OnClickListener
+                }
+
+                AlertDialog.Builder(this@FileExplorerActivity).apply {
+                    setMessage(getString(R.string.file_explorer_message13))
+                    setPositiveButton(getString(R.string.confirm), positiveListener)
+                    setNegativeButton(getString(R.string.cancel), null)
+                }.create().show()
+            }
+        }
+        return true
+    }
+
     override fun onBackPressed() {
         DialogUtils.showAlertDialog(
                 this@FileExplorerActivity,
@@ -139,13 +146,14 @@ class FileExplorerActivity : AppCompatActivity() {
         )
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            android.R.id.home -> finish()
-            else -> {
-            }
+    private fun showSortingDialog() {
+        ChangeSortingDialog(this, true, false) {
+//            if (config.directorySorting and SORT_BY_DATE_MODIFIED > 0 || config.directorySorting and SORT_BY_DATE_TAKEN > 0) {
+//                getDirectories()
+//            } else {
+//                gotDirectories(mDirs, true)
+//            }
         }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun refreshFiles() {

@@ -22,8 +22,8 @@
 
     <!--FileExplorerActivity-->
     <string name="file_explorer_activity_title">エクスプローラ</string>
-    <string name="registration_batch_a">一括登録 A</string>
-    <string name="registration_batch_b">一括登録 B</string>
+    <string name="registration_batch_a">現在のフォルダの登録</string>
+    <string name="registration_batch_b">現在のフォルダとサブフォルダ登録</string>
 
     <!--SettingsActivity-->
     <string name="setting_activity_minimum_cluster_title">フォトマーカークラスタの設定</string>

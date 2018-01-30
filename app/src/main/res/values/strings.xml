@@ -22,8 +22,8 @@
 
     <!--FileExplorerActivity-->
     <string name="file_explorer_activity_title">Register with explorer</string>
-    <string name="registration_batch_a">Batch Registration A</string>
-    <string name="registration_batch_b">Batch Registration B</string>
+    <string name="registration_batch_a">Register current folder</string>
+    <string name="registration_batch_b">Register current folder and sub</string>
 
     <!--SettingsActivity-->
     <string name="setting_activity_minimum_cluster_title">Photo marker minimum cluster</string>

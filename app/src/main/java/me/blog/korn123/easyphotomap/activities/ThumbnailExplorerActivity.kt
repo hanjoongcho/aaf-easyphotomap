@@ -121,7 +121,7 @@ class ThumbnailExplorerActivity : AppCompatActivity() {
             mCompleted = listThumbnail.size
 
             Handler(Looper.getMainLooper()).post {
-                val layout = findViewById(R.id.infoView) as LinearLayout
+                val layout = findViewById<LinearLayout>(R.id.infoView)
                 layout.visibility = View.VISIBLE
             }
 
@@ -132,8 +132,8 @@ class ThumbnailExplorerActivity : AppCompatActivity() {
                 }
                 MediaStore.Images.Thumbnails.getThumbnail(context.contentResolver, java.lang.Long.parseLong(entity.imageId), MediaStore.Images.Thumbnails.MINI_KIND, null)
                 Handler(Looper.getMainLooper()).post {
-                    (findViewById(R.id.progressView) as TextView).text = "Total: $mThumbnailTotal"
-                    (findViewById(R.id.progressView2) as TextView).text = "Completed: ${++mCompleted}"
+                    (findViewById<TextView>(R.id.progressView)).text = "Total: $mThumbnailTotal"
+                    (findViewById<TextView>(R.id.progressView2)).text = "Completed: ${++mCompleted}"
                 }
             }
 

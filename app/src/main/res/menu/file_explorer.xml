@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/sort"
+        android:icon="@drawable/ic_sort"
+        android:title="@string/sort_by"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/batchModeA"
+        android:title="@string/registration_batch_a"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/batchModeB"
+        android:title="@string/registration_batch_b"
+        app:showAsAction="never"/>
+</menu>
