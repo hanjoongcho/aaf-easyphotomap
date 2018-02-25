@@ -101,7 +101,7 @@ class FileExplorerActivity : SimpleActivity() {
                 val positiveListener = DialogInterface.OnClickListener { _, _ ->
                     val batchIntent = Intent(this@FileExplorerActivity, BatchPopupActivity::class.java)
                     val listImagePath = arrayListOf<String>()
-                    File(mCurrent).listFiles().map { file ->
+                    File(mCurrent).listFiles()?.map { file ->
                         if (file.absoluteFile.extension.toLowerCase().matches("jpg|jpeg".toRegex())) {
                             listImagePath.add(file.absolutePath)
                         }

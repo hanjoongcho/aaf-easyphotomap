@@ -4,7 +4,7 @@
 
 ---------------------------------------------------
 
-# Changes in 1.1.57 (date: 2018/02/25)
+# Changes in 1.1.58 (date: 2018/02/25)
   * Fixed an error that ended abnormally when using the camera shooting function when there is no device access right
   
 # Changes in 1.1.56 (date: 2018/01/31)
