@@ -14,14 +14,13 @@ import com.drew.metadata.exif.GpsDirectory
 import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.constants.Constant
 import me.blog.korn123.easyphotomap.extensions.config
+import me.blog.korn123.easyphotomap.extensions.showConfirmDialogWithFinish
 import me.blog.korn123.easyphotomap.helper.PhotoMapDbHelper
 import me.blog.korn123.easyphotomap.models.PhotoMapItem
 import me.blog.korn123.easyphotomap.utils.BitmapUtils
 import me.blog.korn123.easyphotomap.utils.CommonUtils
-import me.blog.korn123.easyphotomap.utils.DialogUtils
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
-import org.apache.commons.lang.StringUtils
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -30,8 +29,6 @@ import java.util.*
  * Created by CHO HANJOONG on 2016-08-20.
  */
 class CameraActivity : SimpleActivity() {
-
-
     private var mFileUri: Uri? = null
     private var mMediaStorageDir: File? = null
     private var mCurrentFileName: String? = null
@@ -40,18 +37,30 @@ class CameraActivity : SimpleActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
 
-        // create Intent to take a picture and return control to the calling application
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         mFileUri = getOutputMediaFileUri(Constant.MEDIA_TYPE_IMAGE) // create a file to save the image
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, mFileUri) // set the image file name
+        when (mFileUri != null) {
+            true -> {
+                // create Intent to take a picture and return control to the calling application
+                val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, mFileUri) // set the image file name
 
-        // start the image capture Intent
-        startActivityForResult(intent, Constant.CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE)
+                // start the image capture Intent
+                startActivityForResult(intent, Constant.CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE)
+            }
+            false -> showConfirmDialogWithFinish("Please try again later.")
+        }
     }
 
     /** Create a file Uri for saving an image or video  */
 //    private fun getOutputMediaFileUri(type: Int): Uri = Uri.fromFile(getOutputMediaFile(type))
-    private fun getOutputMediaFileUri(type: Int): Uri =  FileProvider.getUriForFile(this@CameraActivity,  "$packageName.provider", getOutputMediaFile(type)!!)
+    private fun getOutputMediaFileUri(type: Int): Uri? {
+        val targetFile = getOutputMediaFile(type)
+        var targetUri: Uri? = null
+        if (targetFile != null) {
+            targetUri = FileProvider.getUriForFile(this@CameraActivity,  "$packageName.provider", targetFile) 
+        }
+        return targetUri
+    } 
 
     /** Create a File for saving an image or video  */
     private fun getOutputMediaFile(type: Int): File? {
@@ -59,7 +68,7 @@ class CameraActivity : SimpleActivity() {
         // using Environment.getExternalStorageState() before doing this.
 
         mMediaStorageDir = File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), "MyCameraApp")
+                Environment.DIRECTORY_PICTURES), "aaf-easyphotomap")
         // This location works best if you want the created images to be shared
         // between applications and persist after your app has been uninstalled.
 
@@ -78,13 +87,13 @@ class CameraActivity : SimpleActivity() {
 
         return when(type) {
             Constant.MEDIA_TYPE_IMAGE -> {
-                mCurrentFileName = mMediaStorageDir!!.path + File.separator + "IMG_" + timeStamp + ".jpg"
+                mCurrentFileName = mMediaStorageDir?.path + File.separator + "IMG_" + timeStamp + ".jpg"
                 File(mCurrentFileName)
             }
             Constant.MEDIA_TYPE_VIDEO -> {
-                File(mMediaStorageDir!!.path + File.separator + "VID_" + timeStamp + ".mp4")
+                File(mMediaStorageDir?.path + File.separator + "VID_" + timeStamp + ".mp4")
             }
-            else -> {null}
+            else -> { null }
         }
     }
 
@@ -143,18 +152,17 @@ class CameraActivity : SimpleActivity() {
                             intent.putExtra("longitude", entity.longitude)
                             intent.putExtra("date", entity.date)
                             startActivity(intent)
+                            finish()
                         } else {
-                            DialogUtils.makeToast(this, getString(R.string.camera_activity_message1))
+                            showConfirmDialogWithFinish(getString(R.string.camera_activity_message1))
                         }
                     } catch (e: Exception) {
-                        e.printStackTrace()
+                        showConfirmDialogWithFinish(e.message ?: "Please try again later.")
                     }
                 }
                 Activity.RESULT_CANCELED -> {}
                 else -> {}
             }
-            finish()
         }
     }
-
 }

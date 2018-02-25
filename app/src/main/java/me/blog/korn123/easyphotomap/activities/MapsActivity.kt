@@ -204,31 +204,43 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
         floatingMenu.close(false)
         when (view.id) {
             R.id.camera -> {
-                handlePermission(PERMISSION_CAMERA) {
+                handlePermission(PERMISSION_READ_STORAGE) {
                     if (it) {
-                        if (config.disableCameraInformation) {
-                            val camera = Intent(view.context, CameraActivity::class.java)
-                            startActivity(camera)
-                        } else {
-                            val infoView = layoutInflater.inflate(R.layout.popup_window_camera, null)
-                            val textView2 = infoView.findViewById<TextView>(R.id.textView2)
-                            val textView3 = infoView.findViewById<TextView>(R.id.textView3)
-                            mPopupWindow = PopupWindow(infoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-                            textView2.setOnClickListener { v ->
-                                mPopupWindow?.dismiss()
-                                val camera = Intent(v.context, CameraActivity::class.java)
-                                startActivity(camera)
+                        handlePermission(PERMISSION_WRITE_STORAGE) {
+                            if (it) {
+                                handlePermission(PERMISSION_CAMERA) {
+                                    if (it) {
+                                        if (config.disableCameraInformation) {
+                                            val camera = Intent(view.context, CameraActivity::class.java)
+                                            startActivity(camera)
+                                        } else {
+                                            val infoView = layoutInflater.inflate(R.layout.popup_window_camera, null)
+                                            val textView2 = infoView.findViewById<TextView>(R.id.textView2)
+                                            val textView3 = infoView.findViewById<TextView>(R.id.textView3)
+                                            mPopupWindow = PopupWindow(infoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+                                            textView2.setOnClickListener { v ->
+                                                mPopupWindow?.dismiss()
+                                                val camera = Intent(v.context, CameraActivity::class.java)
+                                                startActivity(camera)
+                                            }
+                                            textView3.setOnClickListener { v ->
+                                                config.disableCameraInformation = true
+                                                mPopupWindow?.dismiss()
+                                                val camera = Intent(v.context, CameraActivity::class.java)
+                                                startActivity(camera)
+                                            }
+                                            mPopupWindow?.showAtLocation(view, Gravity.CENTER, 0, 0)
+                                        }
+                                    } else {
+                                        toast(R.string.no_camera_permissions)
+                                    }
+                                }
+                            } else {
+                                toast(R.string.no_storage_permissions)
                             }
-                            textView3.setOnClickListener { v ->
-                                config.disableCameraInformation = true
-                                mPopupWindow?.dismiss()
-                                val camera = Intent(v.context, CameraActivity::class.java)
-                                startActivity(camera)
-                            }
-                            mPopupWindow?.showAtLocation(view, Gravity.CENTER, 0, 0)
                         }
                     } else {
-                        toast(R.string.no_camera_permissions)
+                        toast(R.string.no_storage_permissions)
                     }
                 }
             } 
