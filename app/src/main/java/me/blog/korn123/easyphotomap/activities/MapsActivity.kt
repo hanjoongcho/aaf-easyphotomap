@@ -213,6 +213,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                                         if (config.disableCameraInformation) {
                                             val camera = Intent(view.context, CameraActivity::class.java)
                                             startActivity(camera)
+                                            finish()
                                         } else {
                                             val infoView = layoutInflater.inflate(R.layout.popup_window_camera, null)
                                             val textView2 = infoView.findViewById<TextView>(R.id.textView2)
