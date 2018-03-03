@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--activity_batch_popup.xml-->
-    <dimen name="batch_popup_guide_message_text">15dp</dimen>
     <dimen name="batch_popup_guide_message_line_space">5dp</dimen>
-    <dimen name="batch_popup_info_text">15dp</dimen>
     <dimen name="batch_popup_info_height">35dp</dimen>
 
     <!--activity_file_explorer.xml-->
@@ -14,31 +12,16 @@
     <dimen name="item_file_explorer_height">60dp</dimen>
     <dimen name="item_file_explorer_text_medium">13sp</dimen>
     <dimen name="item_file_explorer_text_small">11sp</dimen>
-    
-    <!--popup_window_recommendation.xml-->
-    <dimen name="item_recommendation_height">60dp</dimen>
 
     <!--item_search.xml-->
     <dimen name="item_search_text">13sp</dimen>
     <dimen name="item_timeline_text">13sp</dimen>
-    
-    <dimen name="photo_map_info_text">13dp</dimen>
-    <dimen name="photo_map_date_text">11dp</dimen>
 
     <dimen name="popup_window_camera_guide">17dp</dimen>
     <dimen name="activity_thumbnail_spacing">1dp</dimen>
-    
-    <!--Android-Bootstrap-->
-    <dimen name="default_padding">16dp</dimen>
-    <dimen name="micro_padding">4dp</dimen>
-    <dimen name="default_circle_size">250dp</dimen>
-
     <dimen name="map_dot_marker_size">12dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 
     <!--https://github.com/SimpleMobileTools/Simple-Commons-->
-    <dimen name="smaller_text_size">14sp</dimen>
     <dimen name="bigger_text_size">15sp</dimen>
-    <dimen name="big_text_size">16sp</dimen>
-    <dimen name="extra_big_text_size">17sp</dimen>
 </resources>

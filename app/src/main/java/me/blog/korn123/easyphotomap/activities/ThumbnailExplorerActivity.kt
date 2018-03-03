@@ -15,7 +15,6 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.beardedhen.androidbootstrap.TypefaceProvider
 import kotlinx.android.synthetic.main.activity_thumbnail_explorer.*
 import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.adapters.ThumbnailItemAdapter
@@ -38,7 +37,6 @@ class ThumbnailExplorerActivity : AppCompatActivity() {
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        TypefaceProvider.registerDefaultIconSets()
         setContentView(R.layout.activity_thumbnail_explorer)
         setSupportActionBar(toolbar)
         supportActionBar?.run {

@@ -146,6 +146,7 @@ class CameraActivity : SimpleActivity() {
                             PhotoMapDbHelper.insertPhotoMapItem(entity)
                             BitmapUtils.createScaledBitmap(targetFile.absolutePath, Constant.WORKING_DIRECTORY + fileName + ".thumb", 200)
                             val intent = Intent(this@CameraActivity, MapsActivity::class.java)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                             intent.putExtra("info", entity.info)
                             intent.putExtra("imagePath", entity.imagePath)
                             intent.putExtra("latitude", entity.latitude)
@@ -160,7 +161,9 @@ class CameraActivity : SimpleActivity() {
                         showConfirmDialogWithFinish(e.message ?: "Please try again later.")
                     }
                 }
-                Activity.RESULT_CANCELED -> {}
+                Activity.RESULT_CANCELED -> {
+                    finish()
+                }
                 else -> {}
             }
         }

@@ -7,7 +7,6 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import com.beardedhen.androidbootstrap.TypefaceProvider
 import com.drew.imaging.jpeg.JpegMetadataReader
 import com.drew.metadata.exif.ExifSubIFDDirectory
 import com.drew.metadata.exif.GpsDirectory
@@ -41,7 +40,6 @@ class BatchPopupActivity : SimpleActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        TypefaceProvider.registerDefaultIconSets()
         setContentView(R.layout.activity_batch_popup)
         infoText.typeface = Typeface.DEFAULT
         infoText2.typeface = Typeface.DEFAULT

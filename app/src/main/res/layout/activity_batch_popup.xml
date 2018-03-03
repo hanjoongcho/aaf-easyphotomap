@@ -15,7 +15,6 @@
             android:id="@+id/infoText6"
             android:padding="5dp"
             android:gravity="left"
-            android:textSize="@dimen/batch_popup_guide_message_text"
             android:textColor="@color/default_text_color"
             android:lineSpacingExtra="@dimen/batch_popup_guide_message_line_space"
             android:layout_width="match_parent"
@@ -33,7 +32,6 @@
             android:id="@+id/infoText"
             android:gravity="center"
             android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/batch_popup_info_text"
             android:layout_height="@dimen/batch_popup_info_height"
             android:layout_width="match_parent"
             />
@@ -41,28 +39,24 @@
             android:id="@+id/infoText2"
             android:textColor="@color/colorPrimary"
             android:layout_width="match_parent"
-            android:textSize="@dimen/batch_popup_info_text"
             android:layout_height="@dimen/batch_popup_info_height"
             />
         <TextView
             android:id="@+id/infoText3"
             android:textColor="@color/colorPrimary"
             android:layout_width="match_parent"
-            android:textSize="@dimen/batch_popup_info_text"
             android:layout_height="@dimen/batch_popup_info_height"
             />
         <TextView
             android:id="@+id/infoText4"
             android:textColor="@color/colorPrimary"
             android:layout_width="match_parent"
-            android:textSize="@dimen/batch_popup_info_text"
             android:layout_height="@dimen/batch_popup_info_height"
             />
         <TextView
             android:id="@+id/infoText5"
             android:textColor="@color/colorPrimary"
             android:layout_width="match_parent"
-            android:textSize="@dimen/batch_popup_info_text"
             android:layout_height="@dimen/batch_popup_info_height"
             />
         <LinearLayout
@@ -78,7 +72,7 @@
                 android:layout_height="40dp"
                 android:text="STOP"
                 android:textColor="@android:color/white"
-                android:background="@drawable/dialog_bg_primary"
+                android:background="@drawable/bg_button"
                 android:id="@+id/stop"
                 />
             <TextView
@@ -89,7 +83,7 @@
                 android:layout_height="40dp"
                 android:text="CLOSE"
                 android:textColor="@android:color/white"
-                android:background="@drawable/dialog_bg_primary"
+                android:background="@drawable/bg_button"
                 android:id="@+id/close"
                 />
         </LinearLayout>

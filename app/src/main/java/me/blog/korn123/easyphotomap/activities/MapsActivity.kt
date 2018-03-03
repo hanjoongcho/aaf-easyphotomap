@@ -15,7 +15,6 @@ import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
 import android.view.*
 import android.widget.*
-import com.beardedhen.androidbootstrap.TypefaceProvider
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -40,8 +39,8 @@ import me.blog.korn123.easyphotomap.adapters.RecommendationItemAdapter
 import me.blog.korn123.easyphotomap.constants.Constant
 import me.blog.korn123.easyphotomap.extensions.config
 import me.blog.korn123.easyphotomap.helper.*
-import me.blog.korn123.easyphotomap.utils.*
 import me.blog.korn123.easyphotomap.models.PhotoMapItem
+import me.blog.korn123.easyphotomap.utils.*
 import org.apache.commons.io.FilenameUtils
 import org.apache.commons.lang.StringUtils
 import java.io.File
@@ -49,14 +48,13 @@ import java.util.*
 import java.util.regex.Pattern
 
 class MapsActivity : SimpleActivity(), OnMapReadyCallback {
-
+    private lateinit var mMap: GoogleMap
     private val mListLatLng = arrayListOf<LatLng>()
     private val mListPhotoEntity = arrayListOf<PhotoMapItem>()
     private val mListRecommendationOrigin = arrayListOf<Recommendation>()
     private val mListRecommendation = arrayListOf<Recommendation>()
     private val mListMarkerOptions = arrayListOf<MarkerOptions>()
     private val mRecommendMap: HashMap<String, Int> = hashMapOf()
-    private var mMap: GoogleMap? = null
     private var mProgressDialog: ProgressDialog? = null
     private var mPopupWindow: PopupWindow? = null
     private var mClusterManager: ClusterManager<MyItem>? = null
@@ -65,7 +63,6 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(null)
-        TypefaceProvider.registerDefaultIconSets()
         setContentView(R.layout.activity_maps)
         CommonUtils.initWorkingDirectory()
 
@@ -96,7 +93,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
      */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        mMap?.let { it ->
+        mMap.let { it ->
             it.setOnCameraChangeListener { cameraPosition ->
                 if (cameraPosition.zoom > Constant.GOOGLE_MAP_MAX_ZOOM_IN_VALUE) {
                     it.animateCamera(CameraUpdateFactory.zoomTo(Constant.GOOGLE_MAP_MAX_ZOOM_IN_VALUE))
@@ -105,7 +102,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
         }
 
         if (intent.hasExtra("info")) {
-            mMap?.let { map ->
+            mMap.let { map ->
                 val info = intent.getStringExtra("info")
                 val imagePath = intent.getStringExtra("imagePath")
                 val latitude = intent.getDoubleExtra("latitude", 0.0)
@@ -137,7 +134,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                         if (it) {
                             val location = GPSUtils.getLocationWithGPSProvider(this)
                             location?.let {
-                                mMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), Constant.GOOGLE_MAP_DEFAULT_ZOOM_VALUE))
+                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), Constant.GOOGLE_MAP_DEFAULT_ZOOM_VALUE))
                             }
                         } else {
                             animateDefaultCamera()
@@ -153,7 +150,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
     }
 
     private fun animateDefaultCamera() {
-        mMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                 LatLng(Constant.GOOGLE_MAP_DEFAULT_LATITUDE, Constant.GOOGLE_MAP_DEFAULT_LONGITUDE), Constant.GOOGLE_MAP_DEFAULT_ZOOM_VALUE))
     }
 
@@ -213,7 +210,6 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                                         if (config.disableCameraInformation) {
                                             val camera = Intent(view.context, CameraActivity::class.java)
                                             startActivity(camera)
-                                            finish()
                                         } else {
                                             val infoView = layoutInflater.inflate(R.layout.popup_window_camera, null)
                                             val textView2 = infoView.findViewById<TextView>(R.id.textView2)
@@ -280,7 +276,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
             R.id.overlay -> {
                 var recyclerView: RecyclerView? = null
                 mEnableDateFilter = config.enableDateFilter
-                mMap?.clear()
+                mMap.clear()
                 parseMetadata()
                 mListPhotoMapItem?.let { listPhotoMapItem ->
                     if (listPhotoMapItem.size == 0) {
@@ -521,7 +517,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                     mListLatLng.add(mListMarkerOptions[i].position)
                 }
 
-                mMap?.let { map ->
+                mMap.let { map ->
                     mClusterManager?.let { clusterManager ->
                         map.setOnMarkerClickListener(clusterManager)
                         map.setOnCameraChangeListener(clusterManager)
@@ -593,7 +589,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
 
         override fun onCameraChange(cameraPosition: CameraPosition) {
             if (cameraPosition.zoom > Constant.GOOGLE_MAP_MAX_ZOOM_IN_VALUE) {
-                mMap?.animateCamera(CameraUpdateFactory.zoomTo(Constant.GOOGLE_MAP_MAX_ZOOM_IN_VALUE))
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(Constant.GOOGLE_MAP_MAX_ZOOM_IN_VALUE))
             }
             mapZoom = cameraPosition.zoom
         }

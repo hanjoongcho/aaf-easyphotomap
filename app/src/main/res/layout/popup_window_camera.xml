@@ -17,28 +17,30 @@
         android:padding="0dp" />
 
     <LinearLayout
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="30dp"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
-            android:background="?attr/selectableItemBackgroundBorderless"
+            android:background="@drawable/bg_button"
             android:gravity="center"
             android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/camera_info_message2"
-            android:textSize="@dimen/popup_window_camera_guide"
+            android:textSize="@dimen/bigger_text_size"
             android:textColor="@android:color/white"
             android:id="@+id/textView2" />
+        
         <TextView
-            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_button"
             android:gravity="center"
             android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/camera_info_message3"
-            android:textSize="@dimen/popup_window_camera_guide"
+            android:textSize="@dimen/bigger_text_size"
             android:textColor="@android:color/white"
             android:id="@+id/textView3" />
     </LinearLayout>
