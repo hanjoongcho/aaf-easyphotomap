@@ -7,6 +7,7 @@ import android.location.Address
 import android.location.Geocoder
 import android.preference.PreferenceManager
 import android.provider.MediaStore
+import android.util.Log
 import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
@@ -14,9 +15,7 @@ import com.drew.imaging.jpeg.JpegMetadataReader
 import com.drew.imaging.jpeg.JpegProcessingException
 import com.drew.metadata.exif.ExifSubIFDDirectory
 import com.drew.metadata.exif.GpsDirectory
-import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.constants.Constant
-import me.blog.korn123.easyphotomap.models.PhotoMapItem
 import me.blog.korn123.easyphotomap.models.ThumbnailItem
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
@@ -30,7 +29,6 @@ import java.util.*
  * Created by CHO HANJOONG on 2016-07-21.
  */
 class CommonUtils {
-
     companion object {
         @JvmStatic @Volatile private var mGeoCoder: Geocoder? = null
 
@@ -120,7 +118,7 @@ class CommonUtils {
             val imageCursor = context.contentResolver.query(
                     MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI, // 이미지 컨텐트 테이블
                     projection, null, null,
-                    MediaStore.Images.Thumbnails.DATA + " desc")
+                    MediaStore.Images.Thumbnails.IMAGE_ID + " desc")
             val result = ArrayList<ThumbnailItem>()
 
             when (imageCursor.moveToFirst()) {
@@ -130,7 +128,6 @@ class CommonUtils {
                     do {
                         val filePath = imageCursor.getString(dataColumnIndex)
                         val imageId = imageCursor.getString(idColumnIndex)
-
                         //                Uri thumbnailUri = uriToThumbnail(context, imageId);
                         //                Uri imageUri = Uri.parse(filePath);
                         //                Log.i("fetchAllImages", imageUri.toString());

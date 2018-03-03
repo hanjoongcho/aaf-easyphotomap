@@ -30,7 +30,6 @@ import java.util.*
  * Created by CHO HANJOONG on 2016-08-02.
  */
 class ThumbnailExplorerActivity : AppCompatActivity() {
-
     private var mThumbnailEntityAdapter: ThumbnailItemAdapter? = null
     private var mEnableUpdate = false
     private var mProgressDialog: ProgressDialog? = null
@@ -101,7 +100,6 @@ class ThumbnailExplorerActivity : AppCompatActivity() {
     }
 
     inner class PositiveListener internal constructor(internal var context: Context, internal var activity: Activity, internal var fileName: String?, private var path: String?) {
-
         fun register() {
             if (fileName != null && path != null) {
                 mProgressDialog = ProgressDialog.show(this@ThumbnailExplorerActivity, getString(R.string.file_explorer_message5), getString(R.string.file_explorer_message6))
@@ -111,8 +109,7 @@ class ThumbnailExplorerActivity : AppCompatActivity() {
         }
     }
 
-    internal inner class ThumbnailCreatorThread(var context: Context) : Thread() {
-
+    inner class ThumbnailCreatorThread(var context: Context) : Thread() {
         override fun run() {
             val listOriginImage = CommonUtils.fetchAllImages(context)
             val listThumbnail = CommonUtils.fetchAllThumbnail(context)
@@ -146,5 +143,4 @@ class ThumbnailExplorerActivity : AppCompatActivity() {
             }
         }
     }
-
 }
