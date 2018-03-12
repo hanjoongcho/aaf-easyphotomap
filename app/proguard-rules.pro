@@ -15,6 +15,10 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
--dontobfuscate
--keepattributes InnerClasses
--dontoptimize
+#-dontobfuscate
+#-keepattributes InnerClasses
+#-dontoptimize
+-keep class com.simplemobiletools.** { *; }
+-keep class kotlin.reflect.jvm.internal.** { *; }
+-dontwarn com.simplemobiletools.**
+-dontwarn kotlin.reflect.jvm.internal.**
