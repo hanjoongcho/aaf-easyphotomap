@@ -63,6 +63,224 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
     private var mListPhotoMapItem: ArrayList<PhotoMapItem>? = null
     private var mEnableDateFilter: Boolean = false
 
+    private val mRecommendationAdapter: RecommendationItemAdapter by lazy {
+        RecommendationItemAdapter(
+                this,
+                mListRecommendation,
+                AdapterView.OnItemClickListener { _, _, position, _ ->
+                    mPopupWindow?.dismiss()
+                    overlayIcons(mRecommendationAdapter.getItem(position).keyWord, mEnableDateFilter)
+                }
+        )
+    }
+    
+    private var mMenuClickListener: View.OnClickListener = View.OnClickListener { view ->
+        floatingMenu.close(false)
+        when (view.id) {
+            R.id.camera -> {
+                handlePermission(PERMISSION_READ_STORAGE) {
+                    if (it) {
+                        handlePermission(PERMISSION_WRITE_STORAGE) {
+                            if (it) {
+                                handlePermission(PERMISSION_CAMERA) {
+                                    if (it) {
+                                        if (config.disableCameraInformation) {
+                                            val camera = Intent(view.context, CameraActivity::class.java)
+                                            startActivity(camera)
+                                        } else {
+                                            val infoView = layoutInflater.inflate(R.layout.popup_window_camera, null)
+                                            val textView2 = infoView.findViewById<TextView>(R.id.textView2)
+                                            val textView3 = infoView.findViewById<TextView>(R.id.textView3)
+                                            mPopupWindow = PopupWindow(infoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+                                            textView2.setOnClickListener { v ->
+                                                mPopupWindow?.dismiss()
+                                                val camera = Intent(v.context, CameraActivity::class.java)
+                                                startActivity(camera)
+                                            }
+                                            textView3.setOnClickListener { v ->
+                                                config.disableCameraInformation = true
+                                                mPopupWindow?.dismiss()
+                                                val camera = Intent(v.context, CameraActivity::class.java)
+                                                startActivity(camera)
+                                            }
+                                            mPopupWindow?.showAtLocation(view, Gravity.CENTER, 0, 0)
+                                        }
+                                    } else {
+                                        toast(R.string.no_camera_permissions)
+                                    }
+                                }
+                            } else {
+                                toast(R.string.no_storage_permissions)
+                            }
+                        }
+                    } else {
+                        toast(R.string.no_storage_permissions)
+                    }
+                }
+            }
+            R.id.thumbnailViewer -> {
+                handlePermission(PERMISSION_READ_STORAGE) {
+                    if (it) {
+                        handlePermission(PERMISSION_WRITE_STORAGE) {
+                            if (it) {
+                                val intent = Intent(view.context, ThumbnailExplorerActivity::class.java)
+                                startActivity(intent)
+                            } else {
+                                toast(R.string.no_storage_permissions)
+                            }
+                        }
+                    } else {
+                        toast(R.string.no_storage_permissions)
+                    }
+                }
+            }
+            R.id.fileManager -> {
+                handlePermission(PERMISSION_READ_STORAGE) {
+                    if (it) {
+                        handlePermission(PERMISSION_WRITE_STORAGE) {
+                            if (it) {
+                                val fileExplorerIntent = Intent(this@MapsActivity, FileExplorerActivity::class.java)
+                                startActivity(fileExplorerIntent)
+                            } else {
+                                toast(R.string.no_storage_permissions)
+                            }
+                        }
+                    } else {
+                        toast(R.string.no_storage_permissions)
+                    }
+                }
+            }
+            R.id.overlay -> {
+                var recyclerView: RecyclerView? = null
+                mEnableDateFilter = config.enableDateFilter
+                mMap.clear()
+                parseMetadata()
+                mListPhotoMapItem?.let { listPhotoMapItem ->
+                    if (listPhotoMapItem.size == 0) {
+                        DialogUtils.showAlertDialog(this, getString(R.string.maps_activity_message2))
+                    } else {
+                        val inflater = this.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                        val customView = inflater.inflate(R.layout.popup_window_recommendation, null)
+                        recyclerView = customView.findViewById<RecyclerView>(R.id.recommendation_items)
+                        FontUtils.setChildViewTypeface(customView as ViewGroup)
+                        val listOfSortEntry: List<Map.Entry<String, Int>>?
+                        if (mEnableDateFilter) {
+                            listPhotoMapItem.map { item ->
+                                val date: String? = when (item.date.contains("(")) {
+                                    true -> item.date.substring(0, item.date.lastIndexOf("("))
+                                    false -> item.date
+                                }
+
+                                date?.let {
+                                    val count = mRecommendMap[it]?.plus(1) ?: 1
+                                    mRecommendMap.put(it, count)
+                                }
+                            }
+                            listOfSortEntry = CommonUtils.entriesSortedByKeys(mRecommendMap)
+                        } else {
+                            listPhotoMapItem.map { it ->
+                                val pattern = "[0-9]{1,9}"
+                                val regexString = "^($pattern-$pattern)|$pattern$"
+                                StringUtils.split(it.info, " ")?.map { str ->
+                                    if (!Pattern.matches(regexString, str) && str.length > 1) {
+                                        val count = mRecommendMap[str]?.plus(1) ?: 1
+                                        mRecommendMap.put(str, count)
+                                    }
+                                }
+                            }
+                            listOfSortEntry = CommonUtils.entriesSortedByValues(mRecommendMap)
+                        }
+
+                        mListRecommendationOrigin.clear()
+                        mListRecommendation.clear()
+                        listOfSortEntry.map { mListRecommendationOrigin.add(Recommendation(it.key, it.value)) }
+
+                        mListRecommendation.addAll(mListRecommendationOrigin)
+
+                        val dividerItemDecoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
+                        AppCompatResources.getDrawable(this, R.drawable.divider_default)?.let {
+                            dividerItemDecoration.setDrawable(it)
+                            recyclerView?.adapter = mRecommendationAdapter
+                            recyclerView?.addItemDecoration(dividerItemDecoration)
+                        }
+                        val fastScroller = customView.findViewById<FastScroller>(R.id.items_fastscroller)
+                        fastScroller.setViews(recyclerView!!, null) {
+                            val item = mListRecommendation.getOrNull(it)
+                            fastScroller.updateBubbleText(item?.getBubbleText() ?: "")
+                        }
+                        recyclerView!!.onGlobalLayout {
+                            fastScroller.setScrollTo(recyclerView!!.computeVerticalScrollOffset())
+                        }
+
+                        customView.findViewById<TextView>(R.id.viewWorld).setOnClickListener {
+                            mPopupWindow?.dismiss()
+                            overlayIcons("", false)
+                        }
+                        customView.findViewById<View>(R.id.close).setOnClickListener { mPopupWindow?.dismiss() }
+
+                        val searchView = customView.findViewById<EditText>(R.id.searchKey)
+                        searchView.addTextChangedListener(object : TextWatcher {
+                            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+
+                            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
+                                mListRecommendation.clear()
+                                mListRecommendationOrigin.map{ it -> if (StringUtils.contains(it.keyWord, charSequence.toString())) {
+                                    mListRecommendation.add(it)
+                                }}
+                                mRecommendationAdapter.notifyDataSetChanged()
+                            }
+
+                            override fun afterTextChanged(editable: Editable) {}
+                        })
+//                        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+//                            override fun onQueryTextSubmit(query: String): Boolean = false
+//
+//                            override fun onQueryTextChange(newText: String): Boolean {
+//                                mListRecommendation.clear()
+//                                mListRecommendationOrigin.map{ it -> if (StringUtils.contains(it.keyWord, newText)) {
+//                                    mListRecommendation.add(it)
+//                                }}
+//                                mRecommendationAdapter?.notifyDataSetChanged()
+//                                return false
+//                            }
+//                        })
+
+                        val rootView = window.findViewById<View>(android.R.id.content)
+                        mPopupWindow = PopupWindow(customView, rootView.width, rootView.height, true)
+                        mPopupWindow?.showAtLocation(view, Gravity.CENTER, 0, 0)
+                    }
+                }
+            }
+            R.id.find -> {
+                mListPhotoMapItem?.let { listPhotoMapItem ->
+                    if (listPhotoMapItem.size == 0) {
+                        DialogUtils.showAlertDialog(this, getString(R.string.maps_activity_message2))
+                    } else {
+                        val photoSearchIntent = Intent(this, PhotoSearchActivity::class.java)
+                        startActivity(photoSearchIntent)
+                    }
+                }
+
+            }
+            R.id.settings -> {
+                val settingIntent = Intent(this, SettingsActivity::class.java)
+                startActivity(settingIntent)
+            }
+            R.id.timeline -> {
+                mListPhotoMapItem?.let {
+                    if (it.size == 0) {
+                        DialogUtils.showAlertDialog(this, getString(R.string.maps_activity_message2))
+                    } else {
+                        val timelineIntent = Intent(this@MapsActivity, TimelineActivity::class.java)
+                        startActivity(timelineIntent)
+                    }
+                }
+            }
+            else -> {
+            }
+        }
+    }
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(null)
         setContentView(R.layout.activity_maps)
@@ -151,14 +369,14 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
         migrateLegacyData()
     }
 
-    private fun animateDefaultCamera() {
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                LatLng(Constant.GOOGLE_MAP_DEFAULT_LATITUDE, Constant.GOOGLE_MAP_DEFAULT_LONGITUDE), Constant.GOOGLE_MAP_DEFAULT_ZOOM_VALUE))
-    }
-
     override fun onResume() {
         super.onResume()
         parseMetadata()
+    }
+    
+    private fun animateDefaultCamera() {
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                LatLng(Constant.GOOGLE_MAP_DEFAULT_LATITUDE, Constant.GOOGLE_MAP_DEFAULT_LONGITUDE), Constant.GOOGLE_MAP_DEFAULT_ZOOM_VALUE))
     }
 
     private fun migrateLegacyData() {
@@ -186,223 +404,6 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
         mListPhotoMapItem = PhotoMapDbHelper.selectPhotoMapItemAll()
         mListPhotoMapItem?.let {
             Collections.sort(it)
-        }
-    }
-
-    val mRecommendationAdapter: RecommendationItemAdapter by lazy {
-        RecommendationItemAdapter(
-                this,
-                mListRecommendation,
-                AdapterView.OnItemClickListener { _, _, position, _ ->
-                    mPopupWindow?.dismiss()
-                    overlayIcons(mRecommendationAdapter.getItem(position).keyWord, mEnableDateFilter)
-                }
-        )
-    } 
-    private var mMenuClickListener: View.OnClickListener = View.OnClickListener { view ->
-        floatingMenu.close(false)
-        when (view.id) {
-            R.id.camera -> {
-                handlePermission(PERMISSION_READ_STORAGE) {
-                    if (it) {
-                        handlePermission(PERMISSION_WRITE_STORAGE) {
-                            if (it) {
-                                handlePermission(PERMISSION_CAMERA) {
-                                    if (it) {
-                                        if (config.disableCameraInformation) {
-                                            val camera = Intent(view.context, CameraActivity::class.java)
-                                            startActivity(camera)
-                                        } else {
-                                            val infoView = layoutInflater.inflate(R.layout.popup_window_camera, null)
-                                            val textView2 = infoView.findViewById<TextView>(R.id.textView2)
-                                            val textView3 = infoView.findViewById<TextView>(R.id.textView3)
-                                            mPopupWindow = PopupWindow(infoView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-                                            textView2.setOnClickListener { v ->
-                                                mPopupWindow?.dismiss()
-                                                val camera = Intent(v.context, CameraActivity::class.java)
-                                                startActivity(camera)
-                                            }
-                                            textView3.setOnClickListener { v ->
-                                                config.disableCameraInformation = true
-                                                mPopupWindow?.dismiss()
-                                                val camera = Intent(v.context, CameraActivity::class.java)
-                                                startActivity(camera)
-                                            }
-                                            mPopupWindow?.showAtLocation(view, Gravity.CENTER, 0, 0)
-                                        }
-                                    } else {
-                                        toast(R.string.no_camera_permissions)
-                                    }
-                                }
-                            } else {
-                                toast(R.string.no_storage_permissions)
-                            }
-                        }
-                    } else {
-                        toast(R.string.no_storage_permissions)
-                    }
-                }
-            } 
-            R.id.thumbnailViewer -> {
-                handlePermission(PERMISSION_READ_STORAGE) {
-                    if (it) {
-                        handlePermission(PERMISSION_WRITE_STORAGE) {
-                            if (it) {
-                                val intent = Intent(view.context, ThumbnailExplorerActivity::class.java)
-                                startActivity(intent)
-                            } else {
-                                toast(R.string.no_storage_permissions)
-                            }
-                        }
-                    } else {
-                        toast(R.string.no_storage_permissions)
-                    }
-                }
-            }
-            R.id.fileManager -> {
-                handlePermission(PERMISSION_READ_STORAGE) {
-                    if (it) {
-                        handlePermission(PERMISSION_WRITE_STORAGE) {
-                            if (it) {
-                                val fileExplorerIntent = Intent(this@MapsActivity, FileExplorerActivity::class.java)
-                                startActivity(fileExplorerIntent)
-                            } else {
-                                toast(R.string.no_storage_permissions)
-                            }
-                        }
-                    } else {
-                        toast(R.string.no_storage_permissions)
-                    }
-                }
-            }
-            R.id.overlay -> {
-                var recyclerView: RecyclerView? = null
-                mEnableDateFilter = config.enableDateFilter
-                mMap.clear()
-                parseMetadata()
-                mListPhotoMapItem?.let { listPhotoMapItem ->
-                    if (listPhotoMapItem.size == 0) {
-                        DialogUtils.showAlertDialog(this, getString(R.string.maps_activity_message2))
-                    } else {
-                        val inflater = this.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-                        val customView = inflater.inflate(R.layout.popup_window_recommendation, null)
-                        recyclerView = customView.findViewById<RecyclerView>(R.id.recommendation_items)
-                        FontUtils.setChildViewTypeface(customView as ViewGroup)
-                        val listOfSortEntry: List<Map.Entry<String, Int>>?
-                        if (mEnableDateFilter) {
-                            listPhotoMapItem.map { item ->
-                                val date: String? = when (item.date.contains("(")) {
-                                    true -> item.date.substring(0, item.date.lastIndexOf("("))
-                                    false -> item.date
-                                }
-
-                                date?.let {
-                                    val count = mRecommendMap[it]?.plus(1) ?: 1
-                                    mRecommendMap.put(it, count)
-                                }
-                            }
-                            listOfSortEntry = CommonUtils.entriesSortedByKeys(mRecommendMap)
-                        } else {
-                            listPhotoMapItem.map { it ->
-                                val pattern = "[0-9]{1,9}"
-                                val regexString = "^($pattern-$pattern)|$pattern$"
-                                StringUtils.split(it.info, " ")?.map { str ->
-                                    if (!Pattern.matches(regexString, str) && str.length > 1) {
-                                        val count = mRecommendMap[str]?.plus(1) ?: 1
-                                        mRecommendMap.put(str, count)
-                                    }
-                                }
-                            }
-                            listOfSortEntry = CommonUtils.entriesSortedByValues(mRecommendMap)
-                        }
-
-                        mListRecommendationOrigin.clear()
-                        mListRecommendation.clear()
-                        listOfSortEntry.map { mListRecommendationOrigin.add(Recommendation(it.key, it.value)) }
-
-                        mListRecommendation.addAll(mListRecommendationOrigin)
-                        
-                        val dividerItemDecoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
-                        AppCompatResources.getDrawable(this, R.drawable.divider_default)?.let {
-                            dividerItemDecoration.setDrawable(it)
-                            recyclerView?.adapter = mRecommendationAdapter
-                            recyclerView?.addItemDecoration(dividerItemDecoration)
-                        }
-                        val fastScroller = customView.findViewById<FastScroller>(R.id.items_fastscroller)
-                        fastScroller.setViews(recyclerView!!, null) {
-                            val item = mListRecommendation.getOrNull(it)
-                            fastScroller.updateBubbleText(item?.getBubbleText() ?: "")
-                        }
-                        recyclerView!!.onGlobalLayout {
-                            fastScroller.setScrollTo(recyclerView!!.computeVerticalScrollOffset())
-                        }
-                        
-                        customView.findViewById<TextView>(R.id.viewWorld).setOnClickListener {
-                            mPopupWindow?.dismiss()
-                            overlayIcons("", false)
-                        }
-                        customView.findViewById<View>(R.id.close).setOnClickListener { mPopupWindow?.dismiss() }
-
-                        val searchView = customView.findViewById<EditText>(R.id.searchKey)
-                        searchView.addTextChangedListener(object : TextWatcher {
-                            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
-
-                            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
-                                mListRecommendation.clear()
-                                mListRecommendationOrigin.map{ it -> if (StringUtils.contains(it.keyWord, charSequence.toString())) {
-                                    mListRecommendation.add(it)
-                                }}
-                                mRecommendationAdapter.notifyDataSetChanged()
-                            }
-
-                            override fun afterTextChanged(editable: Editable) {}
-                        })
-//                        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-//                            override fun onQueryTextSubmit(query: String): Boolean = false
-//
-//                            override fun onQueryTextChange(newText: String): Boolean {
-//                                mListRecommendation.clear()
-//                                mListRecommendationOrigin.map{ it -> if (StringUtils.contains(it.keyWord, newText)) {
-//                                    mListRecommendation.add(it)
-//                                }}
-//                                mRecommendationAdapter?.notifyDataSetChanged()
-//                                return false
-//                            }
-//                        })
-                        
-                        val rootView = window.findViewById<View>(android.R.id.content)
-                        mPopupWindow = PopupWindow(customView, rootView.width, rootView.height, true)
-                        mPopupWindow?.showAtLocation(view, Gravity.CENTER, 0, 0)
-                    }
-                }
-            }
-            R.id.find -> {
-                mListPhotoMapItem?.let { listPhotoMapItem ->
-                    if (listPhotoMapItem.size == 0) {
-                        DialogUtils.showAlertDialog(this, getString(R.string.maps_activity_message2))
-                    } else {
-                        val photoSearchIntent = Intent(this, PhotoSearchActivity::class.java)
-                        startActivity(photoSearchIntent)
-                    }
-                }
-
-            }
-            R.id.settings -> {
-                val settingIntent = Intent(this, SettingsActivity::class.java)
-                startActivity(settingIntent)
-            }
-            R.id.timeline -> {
-                mListPhotoMapItem?.let {
-                    if (it.size == 0) {
-                        DialogUtils.showAlertDialog(this, getString(R.string.maps_activity_message2))
-                    } else {
-                        val timelineIntent = Intent(this@MapsActivity, TimelineActivity::class.java)
-                        startActivity(timelineIntent)
-                    }
-                }
-            }
-            else -> {
-            }
         }
     }
 
@@ -484,8 +485,9 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                     FILM -> {
                         val point = Point(bm.width, bm.height)
                         val fixedWidthHeight = getPhotoMarkerScale()
-                        val bm2 = BitmapUtils.createScaledBitmap(bm, point, fixedWidthHeight, fixedWidthHeight)
-                        BitmapDescriptorFactory.fromBitmap(BitmapUtils.addFrame(this@MapsActivity, bm2, CommonUtils.dpToPixel(this@MapsActivity, 6f), R.drawable.frame_03))
+//                        val bm2 = BitmapUtils.createScaledBitmap(bm, point, fixedWidthHeight, fixedWidthHeight)
+                        val bm2 = BitmapUtils.createScaledBitmap(bm, CommonUtils.dpToPixel(this@MapsActivity, 35F), getPhotoMarkerScale())
+                        BitmapDescriptorFactory.fromBitmap(BitmapUtils.addFrame(this@MapsActivity, bm2, R.drawable.frame_03))
                     }
                     BASIC -> {
                         val point = Point(bm.width, bm.height)
@@ -497,7 +499,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                         val point = Point(bm.width, bm.height)
                         val fixedWidthHeight = getPhotoMarkerScale()
                         val bm2 = BitmapUtils.createScaledBitmap(bm, point, fixedWidthHeight, fixedWidthHeight)
-                        BitmapDescriptorFactory.fromBitmap(BitmapUtils.addFrame(this@MapsActivity, bm2, CommonUtils.dpToPixel(this@MapsActivity, 6f), R.drawable.frame_02))
+                        BitmapDescriptorFactory.fromBitmap(BitmapUtils.addFrame(this@MapsActivity, bm2, R.drawable.frame_02))
                     }
                     else -> {
                         var px = resources.getDimensionPixelSize(R.dimen.map_dot_marker_size)

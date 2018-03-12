@@ -94,7 +94,11 @@ object BitmapUtils {
         return thumbNail
     }
 
-    @JvmOverloads
+    fun createScaledBitmap(bitmap: Bitmap, fixedWidthHeight: Int, scaleFactor: Double): Bitmap {
+        val downSampleWidthHeight = fixedWidthHeight * scaleFactor
+        return Bitmap.createScaledBitmap(bitmap, downSampleWidthHeight.toInt(), downSampleWidthHeight.toInt(), false)
+    }
+    
     fun createScaledBitmap(bitmap: Bitmap, point: Point, scaleFactorX: Double = 0.8, scaleFactorY: Double = 0.5): Bitmap {
         val fixedWidth = point.x * scaleFactorX
         val fixedHeight = point.y * scaleFactorY
@@ -130,13 +134,15 @@ object BitmapUtils {
         return bmpWithBorder
     }
 
-    fun addFrame(activity: Activity, bmp: Bitmap, borderSize: Int, id: Int): Bitmap {
-        val bmpWithFrame = Bitmap.createBitmap(bmp.width + borderSize, bmp.height + borderSize * 2, bmp.config)
-        val canvas = Canvas(bmpWithFrame)
+    fun addFrame(activity: Activity, bmp: Bitmap, id: Int): Bitmap {
         val temp = BitmapFactory.decodeResource(activity.resources, id)
-        val frame = Bitmap.createScaledBitmap(temp, bmp.width + borderSize, bmp.height + borderSize * 2, false)
+        val borderWidth = (bmp.width * 0.15).toInt()
+        val borderHeight = (bmp.height * 0.3).toInt()
+        val bmpWithFrame = Bitmap.createBitmap(bmp.width + borderWidth, bmp.height + borderHeight, bmp.config)
+        val canvas = Canvas(bmpWithFrame)
+        val frame = Bitmap.createScaledBitmap(temp, bmp.width + borderWidth, bmp.height + borderHeight, false)
         canvas.drawBitmap(frame, 0f, 0f, null)
-        canvas.drawBitmap(bmp, (borderSize / 2).toFloat(), borderSize.toFloat(), null)
+        canvas.drawBitmap(bmp, (borderWidth / 2).toFloat(), (borderHeight / 2).toFloat(), null)
         return bmpWithFrame
     }
 
