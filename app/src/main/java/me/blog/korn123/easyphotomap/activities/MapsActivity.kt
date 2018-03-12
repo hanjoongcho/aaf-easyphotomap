@@ -323,7 +323,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                         mListRecommendation.addAll(mListRecommendationOrigin)
                         
                         val dividerItemDecoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
-                        AppCompatResources.getDrawable(this, R.drawable.divider_card)?.let {
+                        AppCompatResources.getDrawable(this, R.drawable.divider_default)?.let {
                             dividerItemDecoration.setDrawable(it)
                             recyclerView?.adapter = mRecommendationAdapter
                             recyclerView?.addItemDecoration(dividerItemDecoration)

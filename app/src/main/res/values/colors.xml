@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="listSelector">#1A0275D8</color>
-    <color name="appBackground">#FFD4D3D3</color>
+    <color name="appBackground">#3007ABB3</color>
     <color name="popupWindowBackground">#90000000</color>
     
     <!--activity_maps.xml-->
     <color name="floatingButtonNormal">@color/colorPrimary</color>
     <color name="floatingButtonPressed">@color/colorPrimary</color>
     <color name="floatingButtonRipple">@color/colorPrimaryDark</color>
-    <color name="floatingButtonBackground">#461544F4</color>
+    <color name="floatingButtonBackground">@color/appBackground</color>
 
     <!--item_search.xml-->
     <color name="photoMapInfoText">#5A5959</color>
