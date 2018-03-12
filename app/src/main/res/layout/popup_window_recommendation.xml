@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:theme="@style/PopupWindow"
     android:background="@color/popupWindowBackground"
     android:padding="5dp"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <TextView
         android:background="@drawable/bg_recommendation_card"
         android:padding="15dp"
@@ -26,7 +24,6 @@
         android:gravity="right"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
         <TextView
             android:background="@drawable/bg_button"
             android:textColor="#ffffff"
@@ -35,6 +32,7 @@
             android:text="@string/view_world"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+        
         <TextView
             android:background="@drawable/bg_button"
             android:textColor="#ffffff"
@@ -45,16 +43,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
-
-    <SearchView
-        android:background="@drawable/bg_recommendation_card"
-        android:id="@+id/searchKey"
-        android:layout_marginBottom="5dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        
+    <android.support.v7.widget.CardView
+        style="@style/SimpleCard"
+        android:layout_marginBottom="5dp">
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/searchKey"
+            android:textSize="@dimen/middle_text_size"
+            android:background="@android:color/transparent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />    
+    </android.support.v7.widget.CardView>
 
     <RelativeLayout
-        android:background="@drawable/bg_recommendation_card"
         android:id="@+id/items_wrapper"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -65,6 +66,7 @@
             android:clipToPadding="false"
             android:scrollbars="none"
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"/>
+        
         <com.simplemobiletools.commons.views.FastScroller
             android:id="@+id/items_fastscroller"
             android:layout_width="wrap_content"
@@ -75,5 +77,5 @@
             android:paddingStart="@dimen/normal_margin">
             <include layout="@layout/fastscroller_handle_vertical"/>
         </com.simplemobiletools.commons.views.FastScroller>
-    </RelativeLayout>
+    </RelativeLayout>    
 </LinearLayout>

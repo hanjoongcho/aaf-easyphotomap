@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:foreground="?attr/selectableItemBackground"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+<android.support.v7.widget.CardView
+    style="@style/SimpleCard">
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@id/text1"
+        android:foreground="?attr/selectableItemBackground"
         android:gravity="center_vertical"
-        android:padding="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minHeight="50dp"
         android:textSize="15dp"
         android:textColor="@color/default_text_color" />
-</LinearLayout>
+</android.support.v7.widget.CardView>
+
 
 

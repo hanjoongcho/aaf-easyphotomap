@@ -1,5 +1,6 @@
 package me.blog.korn123.easyphotomap.activities
 
+import android.content.Intent
 import com.simplemobiletools.commons.helpers.APP_VERSION_NAME
 import com.simplemobiletools.commons.views.MyTextView
 import io.github.hanjoongcho.commons.activities.BaseAboutActivity
@@ -38,13 +39,11 @@ class AboutActivity : BaseAboutActivity() {
     override fun setupLicense() {
         val aboutLicense: MyTextView = findViewById<MyTextView>(io.github.hanjoongcho.commons.R.id.about_license)
         aboutLicense.setOnClickListener {
-            //            Intent(applicationContext, LicenseActivity::class.java).apply {
-//                putExtra(APP_LICENSES, intent.getIntExtra(APP_LICENSES, 0))
-//                startActivity(this)
-//            }
+            val licenseIntent = Intent(this, BaseWebViewActivity::class.java)
+            licenseIntent.putExtra(BaseWebViewActivity.OPEN_URL_INFO, getString(R.string.aaf_license_url))
             TransitionHelper.startActivityWithTransition(
                     this@AboutActivity,
-                    BaseWebViewActivity.getStartIntent(this@AboutActivity, getString(R.string.aaf_license_url))
+                    licenseIntent
             )
         }
         aboutLicense.setTextColor(linkColor)

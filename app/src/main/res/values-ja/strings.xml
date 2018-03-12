@@ -41,8 +41,7 @@
     <string name="action_settings">action_settings</string>
     <string name="address">add</string>
     <string name="info_message">おすすめキーワードをクリックしてください。\n近くで撮影された写真を見ることができます。</string>
-    <string name="view_korea">전체보기(KOREA)</string>
-    <string name="view_world">一覧（WORLD）</string>
+    <string name="view_world">すべて表示</string>
     <string name="close">閉じる</string>
     <string name="open_explorer">エクスプローラで登録</string>
     <string name="update_thumbnail">サムネイルを更新</string>

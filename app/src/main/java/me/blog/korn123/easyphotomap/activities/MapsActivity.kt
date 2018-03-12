@@ -12,7 +12,9 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.content.res.AppCompatResources
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.RecyclerView
+import android.text.Editable
 import android.text.TextUtils
+import android.text.TextWatcher
 import android.view.*
 import android.widget.*
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -321,7 +323,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                         mListRecommendation.addAll(mListRecommendationOrigin)
                         
                         val dividerItemDecoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
-                        AppCompatResources.getDrawable(this, R.drawable.divider_default)?.let {
+                        AppCompatResources.getDrawable(this, R.drawable.divider_card)?.let {
                             dividerItemDecoration.setDrawable(it)
                             recyclerView?.adapter = mRecommendationAdapter
                             recyclerView?.addItemDecoration(dividerItemDecoration)
@@ -341,19 +343,32 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                         }
                         customView.findViewById<View>(R.id.close).setOnClickListener { mPopupWindow?.dismiss() }
 
-                        val searchView = customView.findViewById<SearchView>(R.id.searchKey)
-                        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                            override fun onQueryTextSubmit(query: String): Boolean = false
+                        val searchView = customView.findViewById<EditText>(R.id.searchKey)
+                        searchView.addTextChangedListener(object : TextWatcher {
+                            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
 
-                            override fun onQueryTextChange(newText: String): Boolean {
+                            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
                                 mListRecommendation.clear()
-                                mListRecommendationOrigin.map{ it -> if (StringUtils.contains(it.keyWord, newText)) {
+                                mListRecommendationOrigin.map{ it -> if (StringUtils.contains(it.keyWord, charSequence.toString())) {
                                     mListRecommendation.add(it)
                                 }}
-                                mRecommendationAdapter?.notifyDataSetChanged()
-                                return false
+                                mRecommendationAdapter.notifyDataSetChanged()
                             }
+
+                            override fun afterTextChanged(editable: Editable) {}
                         })
+//                        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+//                            override fun onQueryTextSubmit(query: String): Boolean = false
+//
+//                            override fun onQueryTextChange(newText: String): Boolean {
+//                                mListRecommendation.clear()
+//                                mListRecommendationOrigin.map{ it -> if (StringUtils.contains(it.keyWord, newText)) {
+//                                    mListRecommendation.add(it)
+//                                }}
+//                                mRecommendationAdapter?.notifyDataSetChanged()
+//                                return false
+//                            }
+//                        })
                         
                         val rootView = window.findViewById<View>(android.R.id.content)
                         mPopupWindow = PopupWindow(customView, rootView.width, rootView.height, true)

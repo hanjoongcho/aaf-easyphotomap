@@ -41,8 +41,7 @@
     <string name="action_settings">action_settings</string>
     <string name="address">add</string>
     <string name="info_message">Click on the keyword, you can view the photos taken nearby.</string>
-    <string name="view_korea">view(KOREA)</string>
-    <string name="view_world">View(WORLD)</string>
+    <string name="view_world">View All</string>
     <string name="close">Close</string>
     <string name="open_explorer">Registered in Explorer</string>
     <string name="update_thumbnail">Updating thumbnails</string>

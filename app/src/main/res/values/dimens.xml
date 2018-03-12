@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="card_radius">3dp</dimen>
+    <dimen name="card_layout_padding">3dp</dimen>
+    <dimen name="card_layout_margin">3dp</dimen>
+    <dimen name="card_contents_padding">10dp</dimen>
+    
     <!--activity_batch_popup.xml-->
     <dimen name="batch_popup_guide_message_line_space">5dp</dimen>
     <dimen name="batch_popup_info_height">35dp</dimen>

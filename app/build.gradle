@@ -58,17 +58,19 @@ repositories {
 }
 
 dependencies {
-    implementation "com.android.support:appcompat-v7:$supportLibVersion"
-    implementation "com.android.support:design:$supportLibVersion"
-    implementation "com.android.support:support-v4:$supportLibVersion"
-    implementation 'com.android.support:multidex:1.0.0'
-    // https://developers.google.com/android/guides/setup
-    implementation 'com.google.android.gms:play-services-maps:11.8.0'
-    implementation 'com.google.maps.android:android-maps-utils:0.4'
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     testImplementation "junit:junit:${junitVersion}"
+    
+    // google
+    implementation "com.android.support:appcompat-v7:$supportLibVersion"
+    implementation "com.android.support:cardview-v7:$supportLibVersion"
+    implementation "com.android.support:design:$supportLibVersion"
+    implementation "com.android.support:support-v4:$supportLibVersion"
+    implementation 'com.android.support:multidex:1.0.0'
+    implementation 'com.google.android.gms:play-services-maps:11.8.0'
+    implementation 'com.google.maps.android:android-maps-utils:0.4'
 
     // apache commons
     implementation group: 'commons-io', name: 'commons-io', version: '2.4'
@@ -88,7 +90,7 @@ dependencies {
     implementation 'com.simplemobiletools:commons:3.7.8'
 //    implementation project(":commons")
 
-    implementation 'io.github.hanjoongcho:commons-android:0.1.0'
+    implementation 'io.github.hanjoongcho:commons-android:0.1.5'
 //    implementation project(":commons-android")
 }
 
