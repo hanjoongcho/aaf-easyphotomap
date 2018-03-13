@@ -136,14 +136,22 @@ object BitmapUtils {
 
     fun addFrame(activity: Activity, bmp: Bitmap, id: Int): Bitmap {
         val temp = BitmapFactory.decodeResource(activity.resources, id)
-        val borderWidth = (bmp.width * 0.15).toInt()
-        val borderHeight = (bmp.height * 0.3).toInt()
-        val bmpWithFrame = Bitmap.createBitmap(bmp.width + borderWidth, bmp.height + borderHeight, bmp.config)
+        val frameInnerWidth = 122
+        val frameInnerHeight = 77
+        var fitWidth = bmp.width
+        var fitHeight = bmp.height
+        
+        while (fitHeight > frameInnerHeight) {
+            fitHeight = (fitHeight * 0.9f).toInt()
+            fitWidth= (fitWidth * 0.9f).toInt()
+        }
+        
+        val bmpWithFrame = Bitmap.createBitmap(137, 117, temp.config)
         val canvas = Canvas(bmpWithFrame)
-        val frame = Bitmap.createScaledBitmap(temp, bmp.width + borderWidth, bmp.height + borderHeight, false)
+        val frame = Bitmap.createScaledBitmap(temp, 137, 117, false)
+        val samplingPhoto = Bitmap.createScaledBitmap(bmp, frameInnerWidth, frameInnerHeight, false)
         canvas.drawBitmap(frame, 0f, 0f, null)
-        canvas.drawBitmap(bmp, (borderWidth / 2).toFloat(), (borderHeight / 2).toFloat(), null)
+        canvas.drawBitmap(samplingPhoto, ((137 - frameInnerWidth) / 2).toFloat(), ((117 - frameInnerHeight) / 2).toFloat(), null)
         return bmpWithFrame
     }
-
 }
