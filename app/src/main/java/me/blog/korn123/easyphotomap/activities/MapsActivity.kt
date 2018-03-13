@@ -493,13 +493,13 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                         val point = Point(bm.width, bm.height)
                         val fixedWidthHeight = getPhotoMarkerScale()
                         val bm2 = BitmapUtils.createScaledBitmap(bm, point, fixedWidthHeight, fixedWidthHeight)
-                        BitmapDescriptorFactory.fromBitmap(BitmapUtils.border(this@MapsActivity, bm2, CommonUtils.dpToPixel(this@MapsActivity, 1.5f)))
+                        BitmapDescriptorFactory.fromBitmap(BitmapUtils.border(this@MapsActivity, bm2, CommonUtils.dpToPixel(this@MapsActivity, 1.5F)))
                     }
                     FLOWER -> {
                         val point = Point(bm.width, bm.height)
                         val fixedWidthHeight = getPhotoMarkerScale()
                         val bm2 = BitmapUtils.createScaledBitmap(bm, point, fixedWidthHeight, fixedWidthHeight)
-                        BitmapDescriptorFactory.fromBitmap(BitmapUtils.addFrame(this@MapsActivity, bm2, R.drawable.frame_02))
+                        BitmapDescriptorFactory.fromBitmap(BitmapUtils.addFrame(this@MapsActivity, bm2, CommonUtils.dpToPixel(this@MapsActivity, 3F), R.drawable.frame_02))
                     }
                     else -> {
                         var px = resources.getDimensionPixelSize(R.dimen.map_dot_marker_size)

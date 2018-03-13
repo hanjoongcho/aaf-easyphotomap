@@ -154,4 +154,14 @@ object BitmapUtils {
         canvas.drawBitmap(samplingPhoto, ((137 - frameInnerWidth) / 2).toFloat(), ((117 - frameInnerHeight) / 2).toFloat(), null)
         return bmpWithFrame
     }
+
+    fun addFrame(activity: Activity, bmp: Bitmap, borderSize: Int, id: Int): Bitmap {
+        val bmpWithFrame = Bitmap.createBitmap(bmp.width + borderSize, bmp.height + borderSize * 2, bmp.config)
+        val canvas = Canvas(bmpWithFrame)
+        val temp = BitmapFactory.decodeResource(activity.resources, id)
+        val frame = Bitmap.createScaledBitmap(temp, bmp.width + borderSize, bmp.height + borderSize * 2, false)
+        canvas.drawBitmap(frame, 0f, 0f, null)
+        canvas.drawBitmap(bmp, (borderSize / 2).toFloat(), borderSize.toFloat(), null)
+        return bmpWithFrame
+    }
 }
