@@ -483,7 +483,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                 val bm: Bitmap = BitmapUtils.decodeFile(this@MapsActivity, Constant.WORKING_DIRECTORY + fileName + ".thumb")
                 val image = when (config.photoMarkerIcon) {
                     FILM -> {
-                        BitmapDescriptorFactory.fromBitmap(BitmapUtils.addFilmFrame(this@MapsActivity, bm, getPhotoMarkerScale()))
+                        BitmapDescriptorFactory.fromBitmap(BitmapUtils.addFilmFrame(this@MapsActivity, bm, getPhotoMarkerScale(), R.drawable.frame_03))
                     }
                     BASIC -> {
                         val point = Point(bm.width, bm.height)
@@ -492,10 +492,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                         BitmapDescriptorFactory.fromBitmap(BitmapUtils.border(this@MapsActivity, bm2, CommonUtils.dpToPixel(this@MapsActivity, 1.5F)))
                     }
                     FLOWER -> {
-                        val point = Point(bm.width, bm.height)
-                        val fixedWidthHeight = getPhotoMarkerScale()
-                        val bm2 = BitmapUtils.createScaledBitmap(bm, point, fixedWidthHeight, fixedWidthHeight)
-                        BitmapDescriptorFactory.fromBitmap(BitmapUtils.addFilmFrame(this@MapsActivity, bm2, CommonUtils.dpToPixel(this@MapsActivity, 3F), R.drawable.frame_02))
+                        BitmapDescriptorFactory.fromBitmap(BitmapUtils.addFilmFrame(this@MapsActivity, bm, getPhotoMarkerScale(), R.drawable.frame_02))
                     }
                     else -> {
                         var px = resources.getDimensionPixelSize(R.dimen.map_dot_marker_size)

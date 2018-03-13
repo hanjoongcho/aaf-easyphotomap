@@ -2,7 +2,6 @@ package me.blog.korn123.easyphotomap.utils
 
 import android.app.Activity
 import android.content.Context
-import android.content.res.Resources
 import android.graphics.*
 import android.support.v4.content.ContextCompat
 import android.util.Log
@@ -134,25 +133,25 @@ object BitmapUtils {
         return bmpWithBorder
     }
 
-    fun addFilmFrame(activity: Activity, bmp: Bitmap, scale: Double): Bitmap {
+    fun addFilmFrame(activity: Activity, bmp: Bitmap, scaleFactor: Double, resourceId: Int): Bitmap {
         val frameWidth = 137
         val frameHeight = 117
         val frameInnerWidth = 122F
         val frameInnerHeight = 77F
         
         // 01. calculate ratio
-        val ratioX: Float = frameInnerWidth / (bmp.width * scale).toInt()
-        val ratioY: Float = frameInnerHeight / (bmp.height * scale).toInt()
+        val ratioX: Float = frameInnerWidth / (bmp.width * scaleFactor).toInt()
+        val ratioY: Float = frameInnerHeight / (bmp.height * scaleFactor).toInt()
         
         // 02. setting the target photo size 
-        val targetPhotoWidth: Int = (bmp.width * scale).toInt()
-        val targetPhotoHeight: Int = (bmp.height * scale).toInt()
+        val targetPhotoWidth: Int = (bmp.width * scaleFactor).toInt()
+        val targetPhotoHeight: Int = (bmp.height * scaleFactor).toInt()
 
         // 03. calculate frame width and height
         val targetFlameWidth: Int = (frameWidth / ratioX).toInt()
         val targetFlameHeight: Int = (frameHeight / ratioY).toInt()
 
-        val temp = BitmapFactory.decodeResource(activity.resources, R.drawable.frame_03)
+        val temp = BitmapFactory.decodeResource(activity.resources, resourceId)
         val bmpWithFrame = Bitmap.createBitmap(targetFlameWidth, targetFlameHeight, temp.config)
         val canvas = Canvas(bmpWithFrame)
         val frame = Bitmap.createScaledBitmap(temp, targetFlameWidth, targetFlameHeight, false)
@@ -162,13 +161,13 @@ object BitmapUtils {
         return bmpWithFrame
     }
 
-    fun addFilmFrame(activity: Activity, bmp: Bitmap, borderSize: Int, id: Int): Bitmap {
-        val bmpWithFrame = Bitmap.createBitmap(bmp.width + borderSize, bmp.height + borderSize * 2, bmp.config)
-        val canvas = Canvas(bmpWithFrame)
-        val temp = BitmapFactory.decodeResource(activity.resources, id)
-        val frame = Bitmap.createScaledBitmap(temp, bmp.width + borderSize, bmp.height + borderSize * 2, false)
-        canvas.drawBitmap(frame, 0f, 0f, null)
-        canvas.drawBitmap(bmp, (borderSize / 2).toFloat(), borderSize.toFloat(), null)
-        return bmpWithFrame
-    }
+//    fun addFilmFrame(activity: Activity, bmp: Bitmap, borderSize: Int, id: Int): Bitmap {
+//        val bmpWithFrame = Bitmap.createBitmap(bmp.width + borderSize, bmp.height + borderSize * 2, bmp.config)
+//        val canvas = Canvas(bmpWithFrame)
+//        val temp = BitmapFactory.decodeResource(activity.resources, id)
+//        val frame = Bitmap.createScaledBitmap(temp, bmp.width + borderSize, bmp.height + borderSize * 2, false)
+//        canvas.drawBitmap(frame, 0f, 0f, null)
+//        canvas.drawBitmap(bmp, (borderSize / 2).toFloat(), borderSize.toFloat(), null)
+//        return bmpWithFrame
+//    }
 }
