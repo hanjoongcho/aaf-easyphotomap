@@ -134,10 +134,10 @@ object BitmapUtils {
     }
 
     fun addFilmFrame(activity: Activity, bmp: Bitmap, scaleFactor: Double, resourceId: Int): Bitmap {
-        val frameWidth = 137
-        val frameHeight = 117
-        val frameInnerWidth = 122F
-        val frameInnerHeight = 77F
+        val frameWidth = if (resourceId == R.drawable.frame_03) 137 else 140 
+        val frameHeight = if (resourceId == R.drawable.frame_03) 117 else 99
+        val frameInnerWidth = if (resourceId == R.drawable.frame_03) 122F else 105F
+        val frameInnerHeight = if (resourceId == R.drawable.frame_03) 77F else 63F
         
         // 01. calculate ratio
         val ratioX: Float = frameInnerWidth / (bmp.width * scaleFactor).toInt()
