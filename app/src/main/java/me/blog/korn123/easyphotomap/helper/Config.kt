@@ -39,11 +39,11 @@ class Config(context: Context) : BaseConfig(context) {
         set(photoMarkerIcon) = prefs.edit().putInt(PHOTO_MARKER_ICON, photoMarkerIcon).apply()
 
     var photoMarkerScale: Int
-        get() = prefs.getInt(PHOTO_MARKER_SCALE, SCALE_DEFAULT)
+        get() = prefs.getInt(PHOTO_MARKER_SCALE, SCALE_M1)
         set(photoMarkerScale) = prefs.edit().putInt(PHOTO_MARKER_SCALE, photoMarkerScale).apply()
     
     var photoMarkerMinimumCluster: Int
-        get() = legacyPrefs.getInt(PHOTO_MARKER_MINIMUN_CLUSTER, CLUSTER_L2)
+        get() = legacyPrefs.getInt(PHOTO_MARKER_MINIMUN_CLUSTER, CLUSTER_L4)
         set(photoMarkerMinimumCluster) = legacyPrefs.edit().putInt(PHOTO_MARKER_MINIMUN_CLUSTER, photoMarkerMinimumCluster).apply()
 
     var fileSorting: Int
