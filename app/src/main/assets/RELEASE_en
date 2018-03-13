@@ -4,6 +4,9 @@
 
 ---------------------------------------------------
 
+# Changes in 1.1.60 (date: 2018/03/14)
+  * Improved photo map overlay performance
+  
 # Changes in 1.1.58 (date: 2018/02/25)
   * Fixed an error that ended abnormally when using the camera shooting function when there is no device access right
   
