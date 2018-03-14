@@ -425,6 +425,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                 true -> PhotoMapDbHelper.containsPhotoMapItemBy("date", keyword).size
                 false -> PhotoMapDbHelper.containsPhotoMapItemBy("info", keyword).size
             }
+            setCanceledOnTouchOutside(false)
         }
         mProgressDialog?.show()
     }

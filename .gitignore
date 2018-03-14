@@ -17,7 +17,7 @@
 .gradle
 build
 app/build
-app/release/*.apk
+app/release/*
 app/*.iml
 .idea/misc.xml
 .idea/runConfigurations.xml

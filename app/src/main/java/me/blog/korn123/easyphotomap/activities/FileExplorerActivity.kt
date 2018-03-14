@@ -35,17 +35,15 @@ import java.util.*
  * Created by CHO HANJOONG on 2016-07-16.
  */
 class FileExplorerActivity : SimpleActivity() {
-
+    private lateinit var mAdapter: ArrayAdapter<FileItem>
     private val mListFile: ArrayList<FileItem> = arrayListOf()
     private val mListDirectory: ArrayList<FileItem> = arrayListOf()
     private var mCurrent: String? = null
     private var mProgressDialog: ProgressDialog? = null
-    private var mAdapter: ArrayAdapter<FileItem>? = null
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_file_explorer)
-
         setSupportActionBar(toolbar)
         supportActionBar?.run {
             title = getString(R.string.file_explorer_activity_title)
@@ -55,7 +53,6 @@ class FileExplorerActivity : SimpleActivity() {
         mCurrent = Constant.CAMERA_DIRECTORY
         mAdapter = ExplorerItemAdapter(this, this, R.layout.item_file_explorer, this.mListFile)
         fileList.adapter = mAdapter
-
         fileList.setOnItemClickListener { parent, _, position, _ ->
             val thumbnailEntity = parent.adapter.getItem(position) as FileItem
             var fileName = thumbnailEntity.fileName
@@ -146,11 +143,6 @@ class FileExplorerActivity : SimpleActivity() {
 
     private fun showSortingDialog() {
         ChangeSortingDialog(this, true, false) {
-//            if (config.directorySorting and SORT_BY_DATE_MODIFIED > 0 || config.directorySorting and SORT_BY_DATE_TAKEN > 0) {
-//                getDirectories()
-//            } else {
-//                gotDirectories(mDirs, true)
-//            }
             refreshFiles()
         }
     }
@@ -236,17 +228,11 @@ class FileExplorerActivity : SimpleActivity() {
                 }
             }
 
-//                if (config.enableReverseOrder) {
-//                    Collections.sort(mListDirectory, Collections.reverseOrder<Any>())
-//                    Collections.sort(mListFile, Collections.reverseOrder<Any>())
-//                } else {
             Collections.sort(mListDirectory)
             Collections.sort(mListFile)
-//                }
             mListFile.addAll(0, mListDirectory)
-            
-            Handler(Looper.getMainLooper()).post {
-                mAdapter?.notifyDataSetChanged()
+            runOnUiThread {
+                mAdapter.notifyDataSetChanged()
                 fileList.setSelection(0)
                 scrollView.fullScroll(HorizontalScrollView.FOCUS_RIGHT)
                 progressDialog.visibility = View.GONE

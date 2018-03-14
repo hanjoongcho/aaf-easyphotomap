@@ -38,42 +38,21 @@ object DialogUtils {
         alert.show()
     }
 
-//    fun showAlertDialog(context: Context, message: String, activity: Activity, imagePath: String) {
-//        val builder = AlertDialog.Builder(context)
-//        val positiveListener = DialogInterface.OnClickListener { dialog, which -> return@OnClickListener }
-//        builder.setMessage(message)
-//        builder.setCancelable(true)
-//        builder.setPositiveButton(context.getString(R.string.confirm), positiveListener)
-//
-//        val options = BitmapFactory.Options()
-//        options.inJustDecodeBounds = false
-//        options.inSampleSize = 5
-//        val originBitmap = BitmapUtils.decodeFile(activity, imagePath, options)
-//        val scaledBitmap = BitmapUtils.createScaledBitmap(originBitmap, CommonUtils.getDefaultDisplay(activity))
-//        val thumbView = ImageView(activity)
-//        thumbView.setImageBitmap(scaledBitmap)
-//        val layout = LinearLayout(activity)
-//        layout.orientation = LinearLayout.VERTICAL
-//        layout.addView(thumbView)
-//        builder.setView(layout)
-//        val alert = builder.create()
-//        alert.show()
-//    }
-
     fun showAlertDialog(context: Context, message: String, activity: Activity, imagePath: String, listener: ThumbnailExplorerActivity.PositiveListener) {
         val builder = AlertDialog.Builder(context)
         val positiveListener = DialogInterface.OnClickListener { _, _ ->
             listener.register()
             return@OnClickListener
         }
-        val NegativeListener = DialogInterface.OnClickListener { _, _ -> return@OnClickListener }
+        val negativeListener = DialogInterface.OnClickListener { _, _ -> return@OnClickListener }
         builder.setMessage(message)
         builder.setCancelable(true)
         builder.setPositiveButton(context.getString(R.string.confirm), positiveListener)
-        builder.setNegativeButton(context.getString(R.string.cancel), NegativeListener)
+        builder.setNegativeButton(context.getString(R.string.cancel), negativeListener)
         val options = BitmapFactory.Options()
+        options.inJustDecodeBounds = true
+        options.inSampleSize = BitmapUtils.getSampleSize(options, imagePath, 2000000)
         options.inJustDecodeBounds = false
-        options.inSampleSize = 5
         val originBitmap = BitmapUtils.decodeFile(activity, imagePath, options)
         val scaledBitmap = BitmapUtils.createScaledBitmap(originBitmap, CommonUtils.getDefaultDisplay(activity))
         val thumbView = ImageView(activity)
@@ -86,36 +65,21 @@ object DialogUtils {
         alert.show()
     }
 
-//    fun showAlertDialog(context: Context, message: String, activity: Activity, listener: FileExplorerActivity.PositiveListener) {
-//        val start = System.currentTimeMillis()
-//        val builder = AlertDialog.Builder(context)
-//        val positiveListener = DialogInterface.OnClickListener { dialog, which ->
-//            listener.register()
-//            return@OnClickListener
-//        }
-//        val NegativeListener = DialogInterface.OnClickListener { dialog, which -> return@OnClickListener }
-//        builder.setMessage(message)
-//        builder.setCancelable(true)
-//        builder.setPositiveButton(context.getString(R.string.confirm), positiveListener)
-//        builder.setNegativeButton(context.getString(R.string.cancel), NegativeListener)
-//        val alert = builder.create()
-//        alert.show()
-//    }
-
     fun showAlertDialog(context: Context, message: String, activity: Activity, imagePath: String, listener: FileExplorerActivity.PositiveListener) {
         val builder = AlertDialog.Builder(context)
         val positiveListener = DialogInterface.OnClickListener { _, _ ->
             listener.register()
             return@OnClickListener
         }
-        val NegativeListener = DialogInterface.OnClickListener { _, _ -> return@OnClickListener }
+        val negativeListener = DialogInterface.OnClickListener { _, _ -> return@OnClickListener }
         builder.setMessage(message)
         builder.setCancelable(true)
         builder.setPositiveButton(context.getString(R.string.confirm), positiveListener)
-        builder.setNegativeButton(context.getString(R.string.cancel), NegativeListener)
+        builder.setNegativeButton(context.getString(R.string.cancel), negativeListener)
         val options = BitmapFactory.Options()
+        options.inJustDecodeBounds = true
+        options.inSampleSize = BitmapUtils.getSampleSize(options, imagePath, 2000000)
         options.inJustDecodeBounds = false
-        options.inSampleSize = 5
         val originBitmap = BitmapUtils.decodeFile(activity, imagePath, options)
         val scaledBitmap = BitmapUtils.createScaledBitmap(originBitmap, CommonUtils.getDefaultDisplay(activity))
         val thumbView = ImageView(activity)
@@ -140,30 +104,4 @@ object DialogUtils {
         val alert = builder.create()
         alert.show()
     }
-
-//    fun showAlertDialog(context: Context,
-//                        message: String,
-//                        positiveListener: DialogInterface.OnClickListener) {
-//        val builder = AlertDialog.Builder(context)
-//        builder.setMessage(message)
-//        builder.setCancelable(true)
-//        builder.setPositiveButton("확인", positiveListener)
-//        val alert = builder.create()
-//        alert.show()
-//    }
-
-//    fun showAlertDialog(context: Context,
-//                        title: String,
-//                        message: String,
-//                        positiveListener: DialogInterface.OnClickListener) {
-//        val builder = AlertDialog.Builder(context)
-//        builder.setTitle(title)
-//        //        builder.setIcon(R.drawable.book);
-//        builder.setMessage(message)
-//        builder.setCancelable(true)
-//        builder.setPositiveButton("확인", positiveListener)
-//        val alert = builder.create()
-//        alert.show()
-//    }
-
 }

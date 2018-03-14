@@ -24,7 +24,10 @@ import me.blog.korn123.easyphotomap.utils.CommonUtils
 /**
  * Created by CHO HANJOONG on 2016-07-30.
  */
-class ExplorerItemAdapter(private val mActivity: Activity, private val mContext: Context, private val mLayoutResourceId: Int, private val mEntities: List<FileItem>) : ArrayAdapter<FileItem>(mContext, mLayoutResourceId, mEntities) {
+class ExplorerItemAdapter(
+        private val mActivity: Activity, private val mContext: Context,
+        private val mLayoutResourceId: Int, private val mEntities: List<FileItem>
+) : ArrayAdapter<FileItem>(mContext, mLayoutResourceId, mEntities) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
         var row = convertView
@@ -88,10 +91,11 @@ class ExplorerItemAdapter(private val mActivity: Activity, private val mContext:
 
         override fun doInBackground(vararg params: String): Bitmap? {
             val filePath = params[0]
-            val widthHeight = CommonUtils.dpToPixel(mActivity, 45f)
+            val widthHeight = CommonUtils.dpToPixel(mActivity, 45F)
             val options = BitmapFactory.Options()
+            options.inJustDecodeBounds = true
+            options.inSampleSize = BitmapUtils.getSampleSize(options, filePath)
             options.inJustDecodeBounds = false
-            options.inSampleSize = 20
             var resized: Bitmap? = null
             //            Log.i("doInBack", String.format("%s, %s", mHolder.position, mPosition));
             if (mHolder.position == mPosition) {
@@ -117,12 +121,11 @@ class ExplorerItemAdapter(private val mActivity: Activity, private val mContext:
                     }
                 }
             } else {
-                // mListView holder가 재활용되면 task cancel 되도록 수정 2016.11.07 Hanjoong Cho
                 this.cancel(true)
             }
             return resized
         }
-
+        
         override fun onPostExecute(bitmap: Bitmap) {
             if (mHolder.position == mPosition) {
                 if (isDirectory) {
@@ -148,11 +151,11 @@ class ExplorerItemAdapter(private val mActivity: Activity, private val mContext:
     }
 
     private class ViewHolder {
-        internal var textView1: TextView? = null
-        internal var textView2: TextView? = null
-        internal var textView3: TextView? = null
-        internal var textView4: TextView? = null
-        internal var imageView1: ImageView? = null
+        var textView1: TextView? = null
+        var textView2: TextView? = null
+        var textView3: TextView? = null
+        var textView4: TextView? = null
+        var imageView1: ImageView? = null
         var position: Int = 0
     }
 }
