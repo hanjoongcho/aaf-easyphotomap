@@ -11,11 +11,33 @@
             android:scaleType="centerCrop"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
+        <ImageView
+            android:id="@+id/rotateLeft"
+            android:src="@drawable/undo_2"
+            android:padding="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_selector"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/rotateRight"/>
         
+        <ImageView
+            android:id="@+id/rotateRight"
+            android:src="@drawable/redo_2"
+            android:padding="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_selector"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@+id/finish"/>
+
         <ImageView
             android:id="@+id/finish"
             android:src="@drawable/ic_cross"
-            android:padding="3dp"
+            android:padding="5dp"
             android:background="@drawable/ic_selector"
             android:layout_marginTop="20dp"
             android:layout_marginRight="20dp"
