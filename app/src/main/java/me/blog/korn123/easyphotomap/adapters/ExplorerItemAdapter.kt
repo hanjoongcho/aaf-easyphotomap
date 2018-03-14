@@ -10,7 +10,6 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.TransitionDrawable
 import android.os.AsyncTask
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -122,7 +121,6 @@ class ExplorerItemAdapter(
                     }
                 }
             } else {
-                // mListView holder가 재활용되면 task cancel 되도록 수정 2016.11.07 Hanjoong Cho
                 this.cancel(true)
             }
             return resized
@@ -153,11 +151,11 @@ class ExplorerItemAdapter(
     }
 
     private class ViewHolder {
-        internal var textView1: TextView? = null
-        internal var textView2: TextView? = null
-        internal var textView3: TextView? = null
-        internal var textView4: TextView? = null
-        internal var imageView1: ImageView? = null
+        var textView1: TextView? = null
+        var textView2: TextView? = null
+        var textView3: TextView? = null
+        var textView4: TextView? = null
+        var imageView1: ImageView? = null
         var position: Int = 0
     }
 }
