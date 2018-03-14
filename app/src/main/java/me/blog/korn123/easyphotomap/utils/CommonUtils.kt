@@ -243,7 +243,6 @@ class CommonUtils {
             return listData
         }
 
-        @JvmStatic
         fun dpToPixel(context: Context, dp: Float, policy: Int = 0): Int {
             val px: Float = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.resources.displayMetrics)
             return when (policy) {

@@ -41,7 +41,7 @@ class ThumbnailItemAdapter(private val mActivity: Activity,
         } else {
             holder = row.tag as ViewHolder
         }
-        val widthHeight = ((CommonUtils.getDefaultDisplay(mActivity).x - CommonUtils.dpToPixel(mActivity, 14f, 1)) / 3)
+        val widthHeight = ((CommonUtils.getDefaultDisplay(mActivity).x - CommonUtils.dpToPixel(mActivity, 10F, 1)) / 3)
         val entity = mEntities[position]
         val thumbnailPath = entity.thumbnailPath
         holder.position = position
