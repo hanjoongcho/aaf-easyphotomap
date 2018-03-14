@@ -7,6 +7,7 @@ import android.graphics.Matrix
 import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.ImageView
+import com.github.chrisbanes.photoview.PhotoView
 import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.utils.BitmapUtils
 import me.blog.korn123.easyphotomap.utils.CommonUtils
@@ -20,11 +21,11 @@ class PopupImageActivity : Activity() {
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_popup_image)
-        val imageView = findViewById(R.id.imageView) as ImageView
+        val imageView = findViewById<PhotoView>(R.id.imageView)
 
         val options = BitmapFactory.Options()
         options.inJustDecodeBounds = true
-        options.inSampleSize = 5
+        options.inSampleSize = 2
         val imagePath = intent.getStringExtra("imagePath")
         val bitmap: Bitmap?
         val targetBitmap: Bitmap?
@@ -48,9 +49,8 @@ class PopupImageActivity : Activity() {
         }
 
         imageView.setImageBitmap(targetBitmap)
-
-        val finish = findViewById(R.id.finish) as ImageButton
-        finish.setOnClickListener { finish() }
+        findViewById<ImageView>(R.id.finish).run {
+            setOnClickListener { finish() }
+        }
     }
-
 }
