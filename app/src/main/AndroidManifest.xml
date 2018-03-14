@@ -44,7 +44,7 @@
             />
         <activity android:name=".activities.SettingsActivity" android:label="SettingsActivity" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.CameraActivity" android:label="CameraActivity" android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activities.PopupImageActivity" android:label="PopupImageActivity" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.PopupImageActivity" android:label="PopupImageActivity" android:theme="@style/AppTheme.NoActionBar" android:hardwareAccelerated="false" />
         <activity android:name=".activities.BatchPopupActivity" android:label="BatchPopupActivity" android:screenOrientation="portrait" android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.TimelineActivity" android:label="Timeline"
             android:theme="@style/AppTheme.NoActionBar"
