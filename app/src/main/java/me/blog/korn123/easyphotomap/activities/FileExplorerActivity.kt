@@ -35,7 +35,6 @@ import java.util.*
  * Created by CHO HANJOONG on 2016-07-16.
  */
 class FileExplorerActivity : SimpleActivity() {
-
     private val mListFile: ArrayList<FileItem> = arrayListOf()
     private val mListDirectory: ArrayList<FileItem> = arrayListOf()
     private var mCurrent: String? = null

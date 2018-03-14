@@ -10,6 +10,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.TransitionDrawable
 import android.os.AsyncTask
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -24,7 +25,10 @@ import me.blog.korn123.easyphotomap.utils.CommonUtils
 /**
  * Created by CHO HANJOONG on 2016-07-30.
  */
-class ExplorerItemAdapter(private val mActivity: Activity, private val mContext: Context, private val mLayoutResourceId: Int, private val mEntities: List<FileItem>) : ArrayAdapter<FileItem>(mContext, mLayoutResourceId, mEntities) {
+class ExplorerItemAdapter(
+        private val mActivity: Activity, private val mContext: Context,
+        private val mLayoutResourceId: Int, private val mEntities: List<FileItem>
+) : ArrayAdapter<FileItem>(mContext, mLayoutResourceId, mEntities) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
         var row = convertView
@@ -88,10 +92,11 @@ class ExplorerItemAdapter(private val mActivity: Activity, private val mContext:
 
         override fun doInBackground(vararg params: String): Bitmap? {
             val filePath = params[0]
-            val widthHeight = CommonUtils.dpToPixel(mActivity, 45f)
+            val widthHeight = CommonUtils.dpToPixel(mActivity, 45F)
             val options = BitmapFactory.Options()
+            options.inJustDecodeBounds = true
+            options.inSampleSize = BitmapUtils.getSampleSize(options, filePath)
             options.inJustDecodeBounds = false
-            options.inSampleSize = 20
             var resized: Bitmap? = null
             //            Log.i("doInBack", String.format("%s, %s", mHolder.position, mPosition));
             if (mHolder.position == mPosition) {
@@ -122,7 +127,7 @@ class ExplorerItemAdapter(private val mActivity: Activity, private val mContext:
             }
             return resized
         }
-
+        
         override fun onPostExecute(bitmap: Bitmap) {
             if (mHolder.position == mPosition) {
                 if (isDirectory) {

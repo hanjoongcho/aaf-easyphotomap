@@ -34,6 +34,16 @@ object BitmapUtils {
         }
     }
 
+    fun getSampleSize(option: BitmapFactory.Options, filePath: String?, samplingFactor: Int = 200000): Int {
+        var inSampleSize = 0
+        filePath?.let {
+            BitmapFactory.decodeFile(filePath, option)
+            inSampleSize = (option.outWidth * option.outHeight) / samplingFactor
+            Log.i("option", String.format("%d x %d %d", option.outWidth, option.outHeight, inSampleSize))
+        }
+        return if (inSampleSize > 0) inSampleSize else 1
+    }
+
     fun addBitmapToMemoryCache(key: String, bitmap: Bitmap) {
         if (getBitmapFromMemCache(key) == null) {
             mMemoryCache!!.put(key, bitmap)
