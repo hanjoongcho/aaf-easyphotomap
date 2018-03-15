@@ -13,13 +13,15 @@ Latest version can be download from the link below.
 
 # Screen Shot
 <img src="screenshots/1.png" width="288" height="512">&nbsp;
-<img src="screenshots/8.gif" width="288" height="512">   
 <img src="screenshots/2.png" width="288" height="512">&nbsp;
 <img src="screenshots/3.png" width="288" height="512">&nbsp;
 <img src="screenshots/4.png" width="288" height="512">&nbsp;
 <img src="screenshots/5.png" width="288" height="512">&nbsp;
 <img src="screenshots/6.png" width="288" height="512">&nbsp;
-<img src="screenshots/7.png" width="288" height="512">&nbsp;
+<img src="screenshots/7.png" width="288" height="512"><br />
+<img src="screenshots/01.gif" width="288" height="512">&nbsp;
+<img src="screenshots/02.gif" width="288" height="512">&nbsp;
+<img src="screenshots/03.gif" width="288" height="512">&nbsp;
 
 # How to build
 ```
@@ -39,6 +41,7 @@ Step5. Build 'aaf-easyphotomap' project with android studio.
 │          └─korn123
 │              └─easyphotomap
 │                  ├─activities
+│                  │      AboutActivity.kt
 │                  │      AddressSearchActivity.kt
 │                  │      AppPreferenceActivity.kt
 │                  │      BatchPopupActivity.kt
@@ -49,35 +52,45 @@ Step5. Build 'aaf-easyphotomap' project with android studio.
 │                  │      PhotoSearchActivity.kt
 │                  │      PopupImageActivity.kt
 │                  │      SettingsActivity.kt
+│                  │      SimpleActivity.kt
 │                  │      ThumbnailExplorerActivity.kt
 │                  │      TimelineActivity.kt
-│                  │      WebViewActivity.kt
-│                  │
+│                  │      
 │                  ├─adapters
 │                  │      AddressItemAdapter.kt
 │                  │      ExplorerItemAdapter.kt
+│                  │      RecommendationItemAdapter.kt
 │                  │      SearchItemAdapter.kt
 │                  │      ThumbnailItemAdapter.kt
 │                  │      TimelineItemAdapter.kt
-│                  │
+│                  │      
 │                  ├─constants
 │                  │      Constant.kt
-│                  │
+│                  │      
+│                  ├─dialogs
+│                  │      ChangeSortingDialog.kt
+│                  │      
+│                  ├─extensions
+│                  │      Activity.kt
+│                  │      Context.kt
+│                  │      
 │                  ├─helper
+│                  │      Config.kt
+│                  │      Constants.kt
 │                  │      EasyPhotoMapApplication.kt
 │                  │      PhotoMapDbHelper.kt
 │                  │      PhotoMapMigration.kt
 │                  │      RegistrationThread.kt
-│                  │
+│                  │      
 │                  ├─models
 │                  │      FileItem.kt
 │                  │      PhotoMapItem.kt
 │                  │      ThumbnailItem.kt
-│                  │
+│                  │      
 │                  ├─thumbnail
 │                  │      AsyncDrawable.kt
 │                  │      BitmapWorkerTask.kt
-│                  │
+│                  │      
 │                  └─utils
 │                          AsyncUtils.kt
 │                          BitmapUtils.kt
@@ -85,105 +98,95 @@ Step5. Build 'aaf-easyphotomap' project with android studio.
 │                          DialogUtils.kt
 │                          FontUtils.kt
 │                          GPSUtils.kt
-│
+│                          
 └─res
     ├─drawable
-    │      bg_activitity_timeline.xml
+    │      bg_button.xml
     │      bg_recommendation_card.xml
-    │      camera_info.png
-    │      cell_shape.xml
-    │      circle.xml
-    │      circle2.xml
-    │      circle3.xml
-    │      dialog_bg.xml
-    │      dialog_bg2.xml
-    │      dialog_bg_primary.xml
-    │      dialog_bg_primary_without_padding.xml
+    │      circle_marker.xml
+    │      circle_timeline.xml
+    │      divider_card.xml
     │      frame_02.jpg
     │      frame_03.jpg
     │      ic_fast_scroll.xml
     │      ic_fast_scroll_default.xml
     │      ic_fast_scroll_press.xml
+    │      ic_selector.xml
+    │      ic_selector_default.xml
+    │      ic_selector_press.xml
     │      intro.png
     │      selector_listview.xml
-    │
+    │      
     ├─drawable-hdpi
-    │      bg_map_info.xml
+    │      delete.png
+    │      folder.png
     │      ic_camera.png
-    │      ic_close.png
-    │      ic_day_view.png
     │      ic_edit.png
-    │      ic_folder.png
+    │      ic_folder_01.png
     │      ic_image.png
     │      ic_map_marker.png
     │      ic_marker.png
-    │      ic_menu.png
-    │      ic_menu_archive.png
     │      ic_menu_gallery.png
     │      ic_photos.png
-    │      ic_progress.png
     │      ic_search.png
     │      ic_settings.png
     │      ic_timeline.png
-    │      logout_w.png
-    │
+    │      redo_2.png
+    │      undo_2.png
+    │      
     ├─drawable-mdpi
+    │      delete.png
+    │      folder.png
     │      ic_camera.png
-    │      ic_close.png
-    │      ic_day_view.png
     │      ic_edit.png
-    │      ic_folder.png
+    │      ic_folder_01.png
     │      ic_image.png
     │      ic_map_marker.png
     │      ic_marker.png
-    │      ic_menu.png
-    │      ic_menu_archive.png
     │      ic_menu_gallery.png
     │      ic_photos.png
-    │      ic_progress.png
     │      ic_search.png
     │      ic_settings.png
     │      ic_timeline.png
-    │
+    │      
+    ├─drawable-v21
+    │      ic_selector.xml
+    │      
     ├─drawable-xhdpi
     │      bg_common.xml
+    │      delete.png
+    │      folder.png
     │      ic_camera.png
-    │      ic_close.png
-    │      ic_day_view.png
     │      ic_edit.png
-    │      ic_folder.png
+    │      ic_folder_01.png
     │      ic_image.png
     │      ic_map_marker.png
     │      ic_marker.png
-    │      ic_menu.png
-    │      ic_menu_archive.png
     │      ic_menu_gallery.png
     │      ic_photos.png
-    │      ic_progress.png
     │      ic_search.png
     │      ic_settings.png
     │      ic_timeline.png
-    │      logout_w.png
-    │
+    │      redo_2.png
+    │      undo_2.png
+    │      
     ├─drawable-xxhdpi
+    │      delete.png
+    │      folder.png
     │      ic_camera.png
-    │      ic_close.png
-    │      ic_day_view.png
     │      ic_edit.png
-    │      ic_folder.png
+    │      ic_folder_01.png
     │      ic_image.png
     │      ic_map_marker.png
     │      ic_marker.png
-    │      ic_menu.png
-    │      ic_menu_archive.png
     │      ic_menu_gallery.png
     │      ic_photos.png
-    │      ic_progress.png
     │      ic_search.png
     │      ic_settings.png
     │      ic_timeline.png
-    │      logout_w.png
-    │
+    │      redo_2.png
+    │      undo_2.png
+    │      
     ├─layout
     │      activity_address_search.xml
     │      activity_batch_popup.xml
@@ -193,9 +196,11 @@ Step5. Build 'aaf-easyphotomap' project with android studio.
     │      activity_maps.xml
     │      activity_photo_search.xml
     │      activity_popup_image.xml
+    │      activity_settings.xml
     │      activity_thumbnail_explorer.xml
     │      activity_timeline.xml
-    │      activity_web_view.xml
+    │      dialog_change_sorting.xml
+    │      item_address.xml
     │      item_file_explorer.xml
     │      item_recommendation.xml
     │      item_search.xml
@@ -204,45 +209,60 @@ Step5. Build 'aaf-easyphotomap' project with android studio.
     │      popup_window_camera.xml
     │      popup_window_photo_map_info.xml
     │      popup_window_recommendation.xml
-    │      preference_category.xml
-    │
+    │      
     ├─menu
+    │      file_explorer.xml
     │      menu.xml
     │      setting_menu.xml
     │      thumbnail_explorer_menu.xml
-    │
+    │      
+    ├─mipmap-anydpi-v26
+    │      ic_launcher.xml
+    │      ic_launcher_round.xml
+    │      
     ├─mipmap-hdpi
     │      ic_launcher.png
-    │
+    │      ic_launcher_foreground.png
+    │      ic_launcher_round.png
+    │      
     ├─mipmap-mdpi
     │      ic_launcher.png
-    │
+    │      ic_launcher_foreground.png
+    │      ic_launcher_round.png
+    │      
     ├─mipmap-xhdpi
     │      ic_launcher.png
-    │
+    │      ic_launcher_foreground.png
+    │      ic_launcher_round.png
+    │      
     ├─mipmap-xxhdpi
     │      ic_launcher.png
-    │
+    │      ic_launcher_foreground.png
+    │      ic_launcher_round.png
+    │      
     ├─mipmap-xxxhdpi
     │      ic_launcher.png
-    │
+    │      ic_launcher_foreground.png
+    │      ic_launcher_round.png
+    │      
     ├─values
     │      colors.xml
     │      dimens.xml
+    │      ic_launcher_background.xml
     │      strings.xml
     │      styles.xml
-    │
+    │      
     ├─values-en
     │      strings.xml
-    │
+    │      
     ├─values-ja
     │      strings.xml
-    │
+    │      
     ├─values-ko
     │      strings.xml
-    │
+    │      
     └─xml
-            pref_general.xml
+            provider_paths.xml
 ```
 
 # License
