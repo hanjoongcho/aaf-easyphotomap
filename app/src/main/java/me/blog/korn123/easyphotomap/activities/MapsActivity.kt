@@ -487,10 +487,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                         BitmapDescriptorFactory.fromBitmap(BitmapUtils.addFilmFrame(this@MapsActivity, bm, getPhotoMarkerScale(), R.drawable.frame_03))
                     }
                     BASIC -> {
-                        val point = Point(bm.width, bm.height)
-                        val fixedWidthHeight = getPhotoMarkerScale()
-                        val bm2 = BitmapUtils.createScaledBitmap(bm, point, fixedWidthHeight, fixedWidthHeight)
-                        BitmapDescriptorFactory.fromBitmap(BitmapUtils.border(this@MapsActivity, bm2, CommonUtils.dpToPixel(this@MapsActivity, 1.5F)))
+                        BitmapDescriptorFactory.fromBitmap(BitmapUtils.addBorder(this@MapsActivity, bm, getPhotoMarkerScale()))
                     }
                     FLOWER -> {
                         BitmapDescriptorFactory.fromBitmap(BitmapUtils.addFilmFrame(this@MapsActivity, bm, getPhotoMarkerScale(), R.drawable.frame_02))
