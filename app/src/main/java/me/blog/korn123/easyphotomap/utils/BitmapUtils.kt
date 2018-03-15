@@ -134,12 +134,18 @@ object BitmapUtils {
             BitmapFactory.decodeResource(activity.resources, android.R.drawable.ic_menu_gallery)
         }
     }
-
-    fun border(context: Context, bmp: Bitmap, borderSize: Int): Bitmap {
-        val bmpWithBorder = Bitmap.createBitmap(bmp.width + borderSize * 2, bmp.height + borderSize * 2, bmp.config)
+    
+    fun addBorder(context: Context, bmp: Bitmap, scaleFactor: Double): Bitmap {
+        val borderSize = CommonUtils.dpToPixel(context, 1.5F)
+        val targetFlameWidth: Int = (bmp.width * scaleFactor).toInt() + (borderSize * 2) 
+        val targetFlameHeight: Int = (bmp.height * scaleFactor).toInt() + (borderSize * 2)
+        val targetPhotoWidth: Int = (bmp.width * scaleFactor).toInt()
+        val targetPhotoHeight: Int = (bmp.height * scaleFactor).toInt()
+        val bmpWithBorder = Bitmap.createBitmap(targetFlameWidth, targetFlameHeight, bmp.config)
+        val samplingPhoto = Bitmap.createScaledBitmap(bmp, targetPhotoWidth, targetPhotoHeight, false)
         val canvas = Canvas(bmpWithBorder)
         canvas.drawColor(ContextCompat.getColor(context, R.color.colorPrimary))
-        canvas.drawBitmap(bmp, borderSize.toFloat(), borderSize.toFloat(), null)
+        canvas.drawBitmap(samplingPhoto, borderSize.toFloat(), borderSize.toFloat(), null)
         return bmpWithBorder
     }
 
