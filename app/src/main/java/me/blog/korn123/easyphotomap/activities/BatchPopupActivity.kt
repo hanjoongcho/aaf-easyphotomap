@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import com.drew.imaging.jpeg.JpegMetadataReader
+import com.drew.metadata.exif.ExifIFD0Directory
 import com.drew.metadata.exif.ExifSubIFDDirectory
 import com.drew.metadata.exif.GpsDirectory
 import kotlinx.android.synthetic.main.activity_batch_popup.*
@@ -141,6 +142,8 @@ class BatchPopupActivity : SimpleActivity() {
                         val item = PhotoMapItem()
                         item.imagePath = targetFile.absolutePath
                         val exifSubIFDDirectory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory::class.java)
+                        val exifIFD0Directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory::class.java)
+                        val orientation = exifIFD0Directory.getInt(ExifIFD0Directory.TAG_ORIENTATION)
                         val date = exifSubIFDDirectory.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL, TimeZone.getDefault())
                         if (date != null) {
                             item.date = CommonUtils.dateTimePattern.format(date)
@@ -161,7 +164,7 @@ class BatchPopupActivity : SimpleActivity() {
                             PhotoMapDbHelper.insertPhotoMapItem(item)
                             val srcPath = targetFile.absolutePath
                             Thread(Runnable {
-                                BitmapUtils.createScaledBitmap(srcPath, Constant.WORKING_DIRECTORY + fileName + ".thumb", 200)
+                                BitmapUtils.createScaledBitmap(srcPath, Constant.WORKING_DIRECTORY + fileName + ".thumb", 200, orientation)
                             }).start()
                             mSuccessCount++
                         } else {

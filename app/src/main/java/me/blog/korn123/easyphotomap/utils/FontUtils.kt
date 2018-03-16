@@ -9,7 +9,6 @@ import android.widget.TextView
  */
 
 object FontUtils {
-
     fun setChildViewTypeface(viewGroup: ViewGroup) {
         repeat(viewGroup.childCount) { i ->
             if (viewGroup.getChildAt(i) is ViewGroup) {
