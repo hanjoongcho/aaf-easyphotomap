@@ -196,7 +196,10 @@ class FileExplorerActivity : SimpleActivity() {
 
     inner class RefreshThread : Thread() {
         override fun run() {
-            mListFile.clear()
+            runOnUiThread {
+                mListFile.clear()
+            }
+            
             mListDirectory.clear()
             val current = File(mCurrent)
             val files = current.list()
@@ -222,16 +225,17 @@ class FileExplorerActivity : SimpleActivity() {
                         } catch (e: Exception){
                             e.printStackTrace()
                         }
-
-                        mListFile.add(fileItem)
+                        runOnUiThread {
+                            mListFile.add(fileItem)
+                        }
                     }
                 }
             }
-
-            Collections.sort(mListDirectory)
-            Collections.sort(mListFile)
-            mListFile.addAll(0, mListDirectory)
+            
             runOnUiThread {
+                Collections.sort(mListDirectory)
+                Collections.sort(mListFile)
+                mListFile.addAll(0, mListDirectory)
                 mAdapter.notifyDataSetChanged()
                 fileList.setSelection(0)
                 scrollView.fullScroll(HorizontalScrollView.FOCUS_RIGHT)
