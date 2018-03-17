@@ -16,6 +16,7 @@ import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.constants.Constant
 import me.blog.korn123.easyphotomap.models.PhotoMapItem
 import me.blog.korn123.easyphotomap.utils.BitmapUtils
+import me.blog.korn123.easyphotomap.utils.CommonUtils
 import org.apache.commons.io.FilenameUtils
 import org.apache.commons.lang.StringUtils
 import java.util.*
@@ -30,13 +31,13 @@ class TimelineItemAdapter(private val activity: Activity,
 ) : RecyclerView.Adapter<TimelineItemAdapter.ViewHolder>() {
     private val layoutInflater = activity.layoutInflater
     private val layoutParamsA: FrameLayout.LayoutParams by lazy {
-        FrameLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT).apply {
+        FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT).apply {
             setMargins(0, 0, 0, 0)
         }
     }
     private val layoutParamsB: FrameLayout.LayoutParams by lazy {
-        FrameLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT).apply {
-            setMargins(120, 0, 0, 0)
+        FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT).apply {
+            setMargins(CommonUtils.dpToPixel(activity, 45F), 0, 0, 0)
         }
     }
 
@@ -67,7 +68,7 @@ class TimelineItemAdapter(private val activity: Activity,
     fun getItem(position: Int): PhotoMapItem = listPhotoMapItem[position]
 
     class ViewHolder(val parent: ViewGroup?) : RecyclerView.ViewHolder(parent) {
-        var timelineHeader: View? = null
+        var timelineHeader: LinearLayout? = null
         var text1: TextView? = null
         var text2: TextView? = null
         var image1: ImageView? = null

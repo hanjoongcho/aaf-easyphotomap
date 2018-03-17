@@ -28,7 +28,7 @@ class ThumbnailItemAdapter(private val mActivity: Activity,
                            private val mEntities: List<ThumbnailItem>
 ) : ArrayAdapter<ThumbnailItem>(mContext, mLayoutResourceId, mEntities) {
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
         var row = convertView
         val holder: ViewHolder
 
@@ -36,7 +36,7 @@ class ThumbnailItemAdapter(private val mActivity: Activity,
             val inflater = (mContext as Activity).layoutInflater
             row = inflater.inflate(mLayoutResourceId, parent, false)
             holder = ViewHolder()
-            holder.imageView1 = row!!.findViewById(R.id.image1) as ImageView
+            holder.imageView1 = row.findViewById<ImageView>(R.id.image1)
             row.tag = holder
         } else {
             holder = row.tag as ViewHolder
@@ -69,7 +69,6 @@ class ThumbnailItemAdapter(private val mActivity: Activity,
                     e.printStackTrace()
                 }
             } else {
-                // listView holder가 재활용되면 task cancel 되도록 수정 2016.11.07 Hanjoong Cho
                 this.cancel(true)
             }
             return resized

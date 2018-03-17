@@ -40,6 +40,7 @@ import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.adapters.RecommendationItemAdapter
 import me.blog.korn123.easyphotomap.constants.Constant
 import me.blog.korn123.easyphotomap.extensions.config
+import me.blog.korn123.easyphotomap.extensions.getLocationWithGPSProvider
 import me.blog.korn123.easyphotomap.helper.*
 import me.blog.korn123.easyphotomap.models.PhotoMapItem
 import me.blog.korn123.easyphotomap.utils.*
@@ -352,7 +353,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                 if (it) {
                     handlePermission(PERMISSION_ACCESS_FINE_LOCATION) {
                         if (it) {
-                            val location = GPSUtils.getLocationWithGPSProvider(this)
+                            val location = getLocationWithGPSProvider()
                             location?.let {
                                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), Constant.GOOGLE_MAP_DEFAULT_ZOOM_VALUE))
                             }
@@ -481,7 +482,8 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                 val latLng = LatLng(item.latitude, item.longitude)
                 options.position(latLng)
                 val fileName = FilenameUtils.getName(item.imagePath)
-                val bm: Bitmap = BitmapUtils.decodeFile(this@MapsActivity, Constant.WORKING_DIRECTORY + fileName + ".thumb")
+                val tempBitmap: Bitmap = BitmapUtils.decodeFile(this@MapsActivity, Constant.WORKING_DIRECTORY + fileName + ".thumb")
+                val bm = BitmapUtils.cropCenterBitmap(tempBitmap)
                 val image = when (config.photoMarkerIcon) {
                     FILM -> {
                         BitmapDescriptorFactory.fromBitmap(BitmapUtils.addFilmFrame(this@MapsActivity, bm, getPhotoMarkerScale(), R.drawable.frame_03))

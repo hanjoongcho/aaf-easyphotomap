@@ -8,15 +8,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
+            android:gravity="center"
+            android:layout_marginLeft="40dp"
+            android:layout_width="20dp"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_width="3dp"
+                android:background="@color/timeline"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+        
+        <LinearLayout
             android:id="@+id/timelineHeader"
-            android:background="@color/colorPrimary"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
+            android:background="@color/colorPrimary"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <ImageView
-                android:id="@+id/headerIcon"  
+                android:id="@+id/headerIcon"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_photos"
                 android:layout_marginLeft="10dp"
@@ -24,8 +35,8 @@
                 android:layout_height="20dp" />
             <TextView
                 android:id="@+id/timelineDate"
-                android:textSize="@dimen/item_timeline_text"
                 android:layout_marginLeft="10dp"
+                android:textSize="@dimen/item_timeline_text"
                 android:textColor="@android:color/white"
                 android:gravity="center_vertical"
                 android:layout_width="match_parent"
@@ -34,38 +45,10 @@
     </FrameLayout>
 
     <LinearLayout
-        android:layout_marginLeft="30dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <FrameLayout
-            android:layout_marginLeft="10dp"
-            android:layout_width="20dp"
-            android:layout_height="wrap_content">
-            <TextView
-                android:layout_gravity="center"
-                android:background="@color/timeline"
-                android:layout_width="3dp"
-                android:layout_height="match_parent" />
-            <ImageView
-                android:layout_gravity="center"
-                android:src="@drawable/circle_timeline"
-                android:layout_width="10dp"
-                android:layout_height="10dp" />
-        </FrameLayout>
-        <TextView
-            android:id="@+id/address"
-            android:ellipsize="middle"
-            android:singleLine="true"
-            android:textSize="@dimen/item_timeline_text"
-            android:gravity="center_vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_marginLeft="30dp"
-        android:layout_width="match_parent"
-        android:layout_height="40dp">
+        android:layout_height="60dp">
         <FrameLayout
             android:layout_marginLeft="10dp"
             android:layout_width="20dp"
@@ -75,16 +58,30 @@
                 android:background="@color/timeline"
                 android:layout_width="3dp"
                 android:layout_height="match_parent" />
+
+            <ImageView
+                android:src="@drawable/circle_timeline"
+                android:layout_marginTop="5dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="12dp"
+                android:layout_height="12dp" />
         </FrameLayout>
         <LinearLayout
+            android:paddingTop="5dp"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <ImageView
                 android:id="@+id/thumbnail"
                 android:paddingBottom="10dp"
-                android:gravity="left"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/address"
+                android:layout_marginLeft="5dp"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

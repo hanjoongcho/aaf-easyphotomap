@@ -52,7 +52,7 @@ object BitmapUtils {
 
     fun getBitmapFromMemCache(key: String): Bitmap? = mMemoryCache?.get(key)
 
-    fun createScaledBitmap(srcPath: String, destPath: String, fixedWidthHeight: Int): Boolean {
+    fun createScaledBitmap(srcPath: String, destPath: String, fixedWidthHeight: Int, orientation: Int = 1): Boolean {
         val stopWatch: StopWatch = StopWatch()
         stopWatch.start()
         var result = true
@@ -62,16 +62,24 @@ object BitmapUtils {
             options.inJustDecodeBounds = false
             options.inSampleSize = 20
             val bitmap = BitmapFactory.decodeFile(srcPath, options)
-            val height = bitmap.height
-            val width = bitmap.width
+            val matrix = Matrix()
+            when (orientation) {
+                6 -> matrix.postRotate(90f)
+                3 -> matrix.postRotate(180f)
+                8 -> matrix.postRotate(270f)
+            }
+            val rotateBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+            
+            val height = rotateBitmap.height
+            val width = rotateBitmap.width
             val downSampleHeight = height / width.toFloat() * fixedWidthHeight
             val downSampleWidth = width / height.toFloat() * fixedWidthHeight
             val thumbNail = when (width > height) {
-                true -> Bitmap.createScaledBitmap(bitmap, fixedWidthHeight, downSampleHeight.toInt(), false)
-                false -> Bitmap.createScaledBitmap(bitmap, downSampleWidth.toInt(), fixedWidthHeight, false)
+                true -> Bitmap.createScaledBitmap(rotateBitmap, fixedWidthHeight, downSampleHeight.toInt(), false)
+                false -> Bitmap.createScaledBitmap(rotateBitmap, downSampleWidth.toInt(), fixedWidthHeight, false)
             }
             outputStream = FileOutputStream(destPath)
-            thumbNail!!.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+            thumbNail.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
         } catch (e: Exception) {
             e.printStackTrace()
             result = false
@@ -175,6 +183,31 @@ object BitmapUtils {
         canvas.drawBitmap(frame, 0f, 0f, null)
         canvas.drawBitmap(samplingPhoto, (targetFlameWidth - targetPhotoWidth) / 2F, (targetFlameHeight - targetPhotoHeight) / 2F, null)
         return bmpWithFrame
+    }
+
+    fun cropCenterBitmap(srcBmp: Bitmap): Bitmap {
+        val dstBmp: Bitmap
+        if (srcBmp.width >= srcBmp.height){
+
+            dstBmp = Bitmap.createBitmap(
+                    srcBmp,
+                    srcBmp.width / 2 - srcBmp.height / 2,
+                    0,
+                    srcBmp.height,
+                    srcBmp.height
+            );
+
+        }else{
+
+            dstBmp = Bitmap.createBitmap(
+                    srcBmp,
+                    0,
+                    srcBmp.height / 2 - srcBmp.width / 2,
+                    srcBmp.width,
+                    srcBmp.width
+            )
+        }
+        return dstBmp
     }
 
 //    fun addFilmFrame(activity: Activity, bmp: Bitmap, borderSize: Int, id: Int): Bitmap {

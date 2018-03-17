@@ -8,7 +8,9 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import com.drew.imaging.jpeg.JpegMetadataReader
+import com.drew.metadata.exif.ExifIFD0Directory
 import com.drew.metadata.exif.ExifSubIFDDirectory
 import com.drew.metadata.exif.GpsDirectory
 import me.blog.korn123.easyphotomap.R
@@ -55,7 +57,10 @@ class RegistrationThread(private val mContext: Context,
             val item = PhotoMapItem()
             item.imagePath = targetFile.absolutePath
             val exifSubIFDDirectory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory::class.java)
+            val exifIFD0Directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory::class.java)
             val date = exifSubIFDDirectory.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL, TimeZone.getDefault())
+            val orientation = exifIFD0Directory.getInt(ExifIFD0Directory.TAG_ORIENTATION) 
+            Log.i("orientation", "$orientation")
             if (date != null) {
                 item.date = CommonUtils.dateTimePattern.format(date)
             } else {
@@ -76,7 +81,7 @@ class RegistrationThread(private val mContext: Context,
                     true -> mContext.getString(R.string.file_explorer_message3)
                     false -> {
                         PhotoMapDbHelper.insertPhotoMapItem(item)
-                        BitmapUtils.createScaledBitmap(targetFile.absolutePath, Constant.WORKING_DIRECTORY + mFileName + ".thumb", 200)
+                        BitmapUtils.createScaledBitmap(targetFile.absolutePath, Constant.WORKING_DIRECTORY + mFileName + ".thumb", 200, orientation)
                         mContext.getString(R.string.file_explorer_message4)
                     }
                 }
@@ -114,5 +119,4 @@ class RegistrationThread(private val mContext: Context,
     override fun run() {
         registerSingleFile()
     }
-
 }
