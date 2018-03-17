@@ -482,7 +482,8 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                 val latLng = LatLng(item.latitude, item.longitude)
                 options.position(latLng)
                 val fileName = FilenameUtils.getName(item.imagePath)
-                val bm: Bitmap = BitmapUtils.decodeFile(this@MapsActivity, Constant.WORKING_DIRECTORY + fileName + ".thumb")
+                val tempBitmap: Bitmap = BitmapUtils.decodeFile(this@MapsActivity, Constant.WORKING_DIRECTORY + fileName + ".thumb")
+                val bm = BitmapUtils.cropCenterBitmap(tempBitmap)
                 val image = when (config.photoMarkerIcon) {
                     FILM -> {
                         BitmapDescriptorFactory.fromBitmap(BitmapUtils.addFilmFrame(this@MapsActivity, bm, getPhotoMarkerScale(), R.drawable.frame_03))

@@ -185,6 +185,31 @@ object BitmapUtils {
         return bmpWithFrame
     }
 
+    fun cropCenterBitmap(srcBmp: Bitmap): Bitmap {
+        val dstBmp: Bitmap
+        if (srcBmp.width >= srcBmp.height){
+
+            dstBmp = Bitmap.createBitmap(
+                    srcBmp,
+                    srcBmp.width / 2 - srcBmp.height / 2,
+                    0,
+                    srcBmp.height,
+                    srcBmp.height
+            );
+
+        }else{
+
+            dstBmp = Bitmap.createBitmap(
+                    srcBmp,
+                    0,
+                    srcBmp.height / 2 - srcBmp.width / 2,
+                    srcBmp.width,
+                    srcBmp.width
+            )
+        }
+        return dstBmp
+    }
+
 //    fun addFilmFrame(activity: Activity, bmp: Bitmap, borderSize: Int, id: Int): Bitmap {
 //        val bmpWithFrame = Bitmap.createBitmap(bmp.width + borderSize, bmp.height + borderSize * 2, bmp.config)
 //        val canvas = Canvas(bmpWithFrame)
