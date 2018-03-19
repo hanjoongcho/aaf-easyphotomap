@@ -48,7 +48,7 @@ object PhotoMapDbHelper {
     }
 
     fun selectTimeLineItemAll(excludeDate: String): ArrayList<PhotoMapItem> {
-        val realmResults = realmInstance.where(PhotoMapItem::class.java).notEqualTo("date", excludeDate).findAllSorted("date", Sort.ASCENDING)
+        val realmResults = realmInstance.where(PhotoMapItem::class.java).notEqualTo(COLUMN_DATE, excludeDate).findAllSorted(COLUMN_DATE, Sort.ASCENDING)
         val list = ArrayList<PhotoMapItem>()
         list.addAll(realmResults.subList(0, realmResults.size))
         realmInstance.beginTransaction()
@@ -88,7 +88,7 @@ object PhotoMapDbHelper {
     }
 
     fun deletePhotoMapItemBy(query: String) {
-        val realmResults = realmInstance.where(PhotoMapItem::class.java).contains("info", query).findAll()
+        val realmResults = realmInstance.where(PhotoMapItem::class.java).contains(COLUMN_INFO, query).findAll()
         realmResults?.let {
             realmInstance.beginTransaction()
             realmResults.deleteAllFromRealm()

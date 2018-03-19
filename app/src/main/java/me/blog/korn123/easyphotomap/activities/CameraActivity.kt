@@ -8,14 +8,10 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.support.v4.content.FileProvider
 import android.util.Log
-import com.drew.imaging.jpeg.JpegMetadataReader
-import com.drew.metadata.exif.ExifSubIFDDirectory
-import com.drew.metadata.exif.GpsDirectory
 import me.blog.korn123.easyphotomap.R
-import me.blog.korn123.easyphotomap.constants.Constant
 import me.blog.korn123.easyphotomap.extensions.config
 import me.blog.korn123.easyphotomap.extensions.showConfirmDialogWithFinish
-import me.blog.korn123.easyphotomap.helper.PhotoMapDbHelper
+import me.blog.korn123.easyphotomap.helper.*
 import me.blog.korn123.easyphotomap.models.PhotoMapItem
 import me.blog.korn123.easyphotomap.utils.BitmapUtils
 import me.blog.korn123.easyphotomap.utils.CommonUtils
@@ -37,7 +33,7 @@ class CameraActivity : SimpleActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
 
-        mFileUri = getOutputMediaFileUri(Constant.MEDIA_TYPE_IMAGE) // create a file to save the image
+        mFileUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE) // create a file to save the image
         when (mFileUri != null) {
             true -> {
                 // create Intent to take a picture and return control to the calling application
@@ -45,7 +41,7 @@ class CameraActivity : SimpleActivity() {
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, mFileUri) // set the image file name
 
                 // start the image capture Intent
-                startActivityForResult(intent, Constant.CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE)
+                startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE)
             }
             false -> showConfirmDialogWithFinish("Please try again later.")
         }
@@ -86,11 +82,11 @@ class CameraActivity : SimpleActivity() {
         val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
 
         return when(type) {
-            Constant.MEDIA_TYPE_IMAGE -> {
+            MEDIA_TYPE_IMAGE -> {
                 mCurrentFileName = mMediaStorageDir?.path + File.separator + "IMG_" + timeStamp + ".jpg"
                 File(mCurrentFileName)
             }
-            Constant.MEDIA_TYPE_VIDEO -> {
+            MEDIA_TYPE_VIDEO -> {
                 File(mMediaStorageDir?.path + File.separator + "VID_" + timeStamp + ".mp4")
             }
             else -> { null }
@@ -99,7 +95,7 @@ class CameraActivity : SimpleActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == Constant.CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
+        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             when (resultCode) {
                 Activity.RESULT_OK -> {
                     // Image captured and saved to mFileUri specified in the Intent
@@ -111,7 +107,7 @@ class CameraActivity : SimpleActivity() {
                         val targetFile: File
                         if (config.enableCreateCopy) {
                             fileName = FilenameUtils.getName(mCurrentFileName) + ".origin"
-                            targetFile = File(Constant.WORKING_DIRECTORY + fileName)
+                            targetFile = File(WORKING_DIRECTORY + fileName)
                             if (!targetFile.exists()) {
                                 FileUtils.copyFile(File(mCurrentFileName), targetFile)
                             }
@@ -119,44 +115,35 @@ class CameraActivity : SimpleActivity() {
                             targetFile = File(mCurrentFileName)
                             fileName = FilenameUtils.getName(mCurrentFileName)
                         }
-                        val metadata = JpegMetadataReader.readMetadata(targetFile)
-                        val entity = PhotoMapItem()
-                        entity.imagePath = targetFile.absolutePath
-                        val exifSubIFDDirectory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory::class.java)
-                        if (exifSubIFDDirectory != null) {
-                            val date = exifSubIFDDirectory.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL, TimeZone.getDefault())
-                            if (date != null) {
-                                entity.date = CommonUtils.dateTimePattern.format(date)
-                            } else {
-                                entity.date = getString(R.string.file_explorer_message2)
-                            }
+                        val exifInfo = CommonUtils.parseExifDescription(targetFile.absolutePath)
+                        val item = PhotoMapItem()
+                        item.imagePath = targetFile.absolutePath
+                        if (exifInfo.date != null) {
+                            item.date = CommonUtils.dateTimePattern.format(exifInfo.date)
                         } else {
-                            entity.date = getString(R.string.file_explorer_message2)
+                            item.date = getString(R.string.file_explorer_message2)
                         }
 
-                        val gpsDirectory = metadata.getFirstDirectoryOfType(GpsDirectory::class.java)
-                        if (gpsDirectory != null && gpsDirectory.geoLocation != null) {
-                            entity.longitude = gpsDirectory.geoLocation.longitude
-                            entity.latitude = gpsDirectory.geoLocation.latitude
-                            val listAddress = CommonUtils.getFromLocation(this@CameraActivity, entity.latitude, entity.longitude, 1, 0)
+                        exifInfo.geoLocation?.let {
+                            item.longitude = it.longitude
+                            item.latitude = it.latitude
+                            val listAddress = CommonUtils.getFromLocation(this@CameraActivity, item.latitude, item.longitude, 1, 0)
                             listAddress?.let { it ->
-                                entity.info = CommonUtils.fullAddress(it[0])
+                                item.info = CommonUtils.fullAddress(it[0])
                             }
 
-                            PhotoMapDbHelper.insertPhotoMapItem(entity)
-                            BitmapUtils.createScaledBitmap(targetFile.absolutePath, Constant.WORKING_DIRECTORY + fileName + ".thumb", 200)
+                            PhotoMapDbHelper.insertPhotoMapItem(item)
+                            BitmapUtils.createScaledBitmap(targetFile.absolutePath, WORKING_DIRECTORY + fileName + ".thumb",PHOTO_MAP_THUMBNAIL_FIXED_WIDTH_HEIGHT, exifInfo.tagOrientation)
                             val intent = Intent(this@CameraActivity, MapsActivity::class.java)
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-                            intent.putExtra("info", entity.info)
-                            intent.putExtra("imagePath", entity.imagePath)
-                            intent.putExtra("latitude", entity.latitude)
-                            intent.putExtra("longitude", entity.longitude)
-                            intent.putExtra("date", entity.date)
+                            intent.putExtra(COLUMN_INFO, item.info)
+                            intent.putExtra(COLUMN_IMAGE_PATH, item.imagePath)
+                            intent.putExtra(COLUMN_LATITUDE, item.latitude)
+                            intent.putExtra(COLUMN_LONGITUDE, item.longitude)
+                            intent.putExtra(COLUMN_DATE, item.date)
                             startActivity(intent)
                             finish()
-                        } else {
-                            showConfirmDialogWithFinish(getString(R.string.camera_activity_message1))
-                        }
+                        } ?: showConfirmDialogWithFinish(getString(R.string.camera_activity_message1))
                     } catch (e: Exception) {
                         showConfirmDialogWithFinish(e.message ?: "Please try again later.")
                     }

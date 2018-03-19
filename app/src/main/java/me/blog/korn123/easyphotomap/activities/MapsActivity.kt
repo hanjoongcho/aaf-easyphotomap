@@ -3,7 +3,10 @@ package me.blog.korn123.easyphotomap.activities
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Matrix
 import android.media.ExifInterface
 import android.os.Bundle
 import android.os.Handler
@@ -38,13 +41,13 @@ import io.github.hanjoongcho.commons.helpers.PERMISSION_ACCESS_FINE_LOCATION
 import kotlinx.android.synthetic.main.activity_maps.*
 import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.adapters.RecommendationItemAdapter
-import me.blog.korn123.easyphotomap.constants.Constant
 import me.blog.korn123.easyphotomap.extensions.config
 import me.blog.korn123.easyphotomap.extensions.getLocationWithGPSProvider
 import me.blog.korn123.easyphotomap.extensions.showAlertDialog
 import me.blog.korn123.easyphotomap.helper.*
 import me.blog.korn123.easyphotomap.models.PhotoMapItem
-import me.blog.korn123.easyphotomap.utils.*
+import me.blog.korn123.easyphotomap.utils.BitmapUtils
+import me.blog.korn123.easyphotomap.utils.CommonUtils
 import org.apache.commons.io.FilenameUtils
 import org.apache.commons.lang.StringUtils
 import java.io.File
@@ -317,19 +320,19 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
         mMap = googleMap
         mMap.let { it ->
             it.setOnCameraChangeListener { cameraPosition ->
-                if (cameraPosition.zoom > Constant.GOOGLE_MAP_MAX_ZOOM_IN_VALUE) {
-                    it.animateCamera(CameraUpdateFactory.zoomTo(Constant.GOOGLE_MAP_MAX_ZOOM_IN_VALUE))
+                if (cameraPosition.zoom > GOOGLE_MAP_MAX_ZOOM_IN_VALUE) {
+                    it.animateCamera(CameraUpdateFactory.zoomTo(GOOGLE_MAP_MAX_ZOOM_IN_VALUE))
                 }
             }
         }
 
-        if (intent.hasExtra("info")) {
+        if (intent.hasExtra(COLUMN_INFO)) {
             mMap.let { map ->
-                val info = intent.getStringExtra("info")
-                val imagePath = intent.getStringExtra("imagePath")
-                val latitude = intent.getDoubleExtra("latitude", 0.0)
-                val longitude = intent.getDoubleExtra("longitude", 0.0)
-                val date = intent.getStringExtra("date")
+                val info = intent.getStringExtra(COLUMN_INFO)
+                val imagePath = intent.getStringExtra(COLUMN_IMAGE_PATH)
+                val latitude = intent.getDoubleExtra(COLUMN_LATITUDE, 0.0)
+                val longitude = intent.getDoubleExtra(COLUMN_LONGITUDE, 0.0)
+                val date = intent.getStringExtra(COLUMN_DATE)
                 val fOptions = MarkerOptions()
                 val latLng = LatLng(latitude, longitude)
                 fOptions.position(latLng)
@@ -340,7 +343,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                         val marker = map.addMarker(fOptions)
                         map.setOnInfoWindowClickListener {
                             val imageViewIntent = Intent(this@MapsActivity, PopupImageActivity::class.java)
-                            imageViewIntent.putExtra("imagePath", imagePath)
+                            imageViewIntent.putExtra(COLUMN_IMAGE_PATH, imagePath)
                             startActivity(imageViewIntent)
                         }
                         marker.showInfoWindow()
@@ -356,7 +359,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                         if (it) {
                             val location = getLocationWithGPSProvider()
                             location?.let {
-                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), Constant.GOOGLE_MAP_DEFAULT_ZOOM_VALUE))
+                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), GOOGLE_MAP_DEFAULT_ZOOM_VALUE))
                             }
                         } else {
                             animateDefaultCamera()
@@ -378,13 +381,13 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
     
     private fun animateDefaultCamera() {
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                LatLng(Constant.GOOGLE_MAP_DEFAULT_LATITUDE, Constant.GOOGLE_MAP_DEFAULT_LONGITUDE), Constant.GOOGLE_MAP_DEFAULT_ZOOM_VALUE))
+                LatLng(GOOGLE_MAP_DEFAULT_LATITUDE, GOOGLE_MAP_DEFAULT_LONGITUDE), GOOGLE_MAP_DEFAULT_ZOOM_VALUE))
     }
 
     private fun migrateLegacyData() {
-        val legacyFile = File(Constant.LEGACY_PHOTO_DATA_PATH)
+        val legacyFile = File(LEGACY_PHOTO_DATA_PATH)
         if (legacyFile.exists()) {
-            val listPhotoMapData = CommonUtils.readDataFile(Constant.LEGACY_PHOTO_DATA_PATH)
+            val listPhotoMapData = CommonUtils.readDataFile(LEGACY_PHOTO_DATA_PATH)
             listPhotoMapData?.map { data ->
                 val temps = StringUtils.split(data, "|")
                 val item = PhotoMapItem().apply {
@@ -396,7 +399,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                 }
                 PhotoMapDbHelper.insertPhotoMapItem(item)
             }
-            legacyFile.renameTo(File(Constant.LEGACY_PHOTO_DATA_PATH + "_BAK"))
+            legacyFile.renameTo(File(LEGACY_PHOTO_DATA_PATH + "_BAK"))
             parseMetadata()
         }
     }
@@ -424,8 +427,8 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
             setProgressStyle(ProgressDialog.STYLE_HORIZONTAL)
             setMessage("find $keyword...")
             max = when (applyFilter) {
-                true -> PhotoMapDbHelper.containsPhotoMapItemBy("date", keyword).size
-                false -> PhotoMapDbHelper.containsPhotoMapItemBy("info", keyword).size
+                true -> PhotoMapDbHelper.containsPhotoMapItemBy(COLUMN_DATE, keyword).size
+                false -> PhotoMapDbHelper.containsPhotoMapItemBy(COLUMN_INFO, keyword).size
             }
             setCanceledOnTouchOutside(false)
         }
@@ -458,11 +461,11 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
             super.run()
             val listTemp = when (applyFilter) {
                 true -> {
-                    PhotoMapDbHelper.containsPhotoMapItemBy("date", keyword)
+                    PhotoMapDbHelper.containsPhotoMapItemBy(COLUMN_DATE, keyword)
 //                    PhotoMapDbHelper.containsPhotoMapItemBy("dateWithoutTime", keyword)
                 }
                 false -> {
-                    PhotoMapDbHelper.containsPhotoMapItemBy("info", keyword)
+                    PhotoMapDbHelper.containsPhotoMapItemBy(COLUMN_INFO, keyword)
                 }
             }
             mListLatLng.clear()
@@ -483,7 +486,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                 val latLng = LatLng(item.latitude, item.longitude)
                 options.position(latLng)
                 val fileName = FilenameUtils.getName(item.imagePath)
-                val tempBitmap: Bitmap = BitmapUtils.decodeFile(this@MapsActivity, Constant.WORKING_DIRECTORY + fileName + ".thumb")
+                val tempBitmap: Bitmap = BitmapUtils.decodeFile(this@MapsActivity, WORKING_DIRECTORY + fileName + ".thumb")
                 val bm = BitmapUtils.cropCenterBitmap(tempBitmap)
                 val image = when (config.photoMarkerIcon) {
                     FILM -> {
@@ -516,10 +519,10 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                 setUpCluster()
                 val listForCluster = when(applyFilter) {
                     true -> {
-                        PhotoMapDbHelper.containsPhotoMapItemBy("date", keyword)
+                        PhotoMapDbHelper.containsPhotoMapItemBy(COLUMN_DATE, keyword)
                     }
                     false -> {
-                        PhotoMapDbHelper.containsPhotoMapItemBy("info", keyword)
+                        PhotoMapDbHelper.containsPhotoMapItemBy(COLUMN_INFO, keyword)
                     }
                 }
                 for (i in mListMarkerOptions.indices) {
@@ -552,7 +555,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                             val fImagePath = item.photoEntity.imagePath
                             map.setOnInfoWindowClickListener {
                                 val imageViewIntent = Intent(this@MapsActivity, PopupImageActivity::class.java)
-                                imageViewIntent.putExtra("imagePath", fImagePath)
+                                imageViewIntent.putExtra(COLUMN_IMAGE_PATH, fImagePath)
                                 startActivity(imageViewIntent)
                             }
                             false
@@ -590,7 +593,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
         }
 
         override fun shouldRenderAsCluster(cluster: Cluster<MyItem>): Boolean {
-            return if (mapZoom > Constant.GOOGLE_MAP_MAX_ZOOM_IN_VALUE - 1) {
+            return if (mapZoom > GOOGLE_MAP_MAX_ZOOM_IN_VALUE - 1) {
                 false
             } else {
                 cluster.size > getPhotoMarkerMinimumCluster()
@@ -599,8 +602,8 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
         }
 
         override fun onCameraChange(cameraPosition: CameraPosition) {
-            if (cameraPosition.zoom > Constant.GOOGLE_MAP_MAX_ZOOM_IN_VALUE) {
-                mMap.animateCamera(CameraUpdateFactory.zoomTo(Constant.GOOGLE_MAP_MAX_ZOOM_IN_VALUE))
+            if (cameraPosition.zoom > GOOGLE_MAP_MAX_ZOOM_IN_VALUE) {
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(GOOGLE_MAP_MAX_ZOOM_IN_VALUE))
             }
             mapZoom = cameraPosition.zoom
         }

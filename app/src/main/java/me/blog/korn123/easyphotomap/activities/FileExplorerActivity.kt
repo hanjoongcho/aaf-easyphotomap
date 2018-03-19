@@ -17,11 +17,12 @@ import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_file_explorer.*
 import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.adapters.ExplorerItemAdapter
-import me.blog.korn123.easyphotomap.constants.Constant
 import me.blog.korn123.easyphotomap.dialogs.ChangeSortingDialog
 import me.blog.korn123.easyphotomap.extensions.config
 import me.blog.korn123.easyphotomap.extensions.showAlertDialog
+import me.blog.korn123.easyphotomap.helper.CAMERA_DIRECTORY
 import me.blog.korn123.easyphotomap.helper.RegistrationThread
+import me.blog.korn123.easyphotomap.helper.WORKING_DIRECTORY
 import me.blog.korn123.easyphotomap.models.FileItem
 import me.blog.korn123.easyphotomap.utils.CommonUtils
 import org.apache.commons.io.FilenameUtils
@@ -48,7 +49,7 @@ class FileExplorerActivity : SimpleActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
-        mCurrent = Constant.CAMERA_DIRECTORY
+        mCurrent = CAMERA_DIRECTORY
         mAdapter = ExplorerItemAdapter(this, this, R.layout.item_file_explorer, this.mListFile)
         fileList.adapter = mAdapter
         fileList.setOnItemClickListener { parent, _, position, _ ->
@@ -66,8 +67,8 @@ class FileExplorerActivity : SimpleActivity() {
                 mCurrent = path
                 refreshFiles()
             } else {
-                if (!File(Constant.WORKING_DIRECTORY).exists()) {
-                    File(Constant.WORKING_DIRECTORY).mkdirs()
+                if (!File(WORKING_DIRECTORY).exists()) {
+                    File(WORKING_DIRECTORY).mkdirs()
                 }
                 val positiveListener = PositiveListener(this@FileExplorerActivity, this@FileExplorerActivity, FilenameUtils.getName(path) + ".origin", path)
                 showAlertDialog(getString(R.string.file_explorer_message7), path, positiveListener)

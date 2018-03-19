@@ -8,11 +8,11 @@ import android.widget.AdapterView
 import kotlinx.android.synthetic.main.activity_timeline.*
 import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.adapters.TimelineItemAdapter
-import me.blog.korn123.easyphotomap.helper.PhotoMapDbHelper
 import me.blog.korn123.easyphotomap.models.PhotoMapItem
 import java.util.*
 import android.support.v7.widget.LinearLayoutManager
 import com.simplemobiletools.commons.extensions.onGlobalLayout
+import me.blog.korn123.easyphotomap.helper.*
 
 
 /**
@@ -28,11 +28,11 @@ class TimelineActivity : AppCompatActivity() {
                 AdapterView.OnItemClickListener { _, _, position, _ ->
                     mTimeLineItemAdapter?.getItem(position)?.let { item ->
                         val intent = Intent(this@TimelineActivity, MapsActivity::class.java).apply {
-                            putExtra("info", item.info)
-                            putExtra("imagePath", item.imagePath)
-                            putExtra("latitude", item.latitude)
-                            putExtra("longitude", item.longitude)
-                            putExtra("date", item.date)
+                            putExtra(COLUMN_INFO, item.info)
+                            putExtra(COLUMN_IMAGE_PATH, item.imagePath)
+                            putExtra(COLUMN_LATITUDE, item.latitude)
+                            putExtra(COLUMN_LONGITUDE, item.longitude)
+                            putExtra(COLUMN_DATE, item.date)
                         }
                         startActivity(intent)
                     }

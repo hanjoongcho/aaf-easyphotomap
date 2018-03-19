@@ -13,7 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import me.blog.korn123.easyphotomap.R
-import me.blog.korn123.easyphotomap.constants.Constant
+import me.blog.korn123.easyphotomap.helper.WORKING_DIRECTORY
 import me.blog.korn123.easyphotomap.models.PhotoMapItem
 import me.blog.korn123.easyphotomap.utils.BitmapUtils
 import me.blog.korn123.easyphotomap.utils.CommonUtils
@@ -53,7 +53,7 @@ class TimelineItemAdapter(private val activity: Activity,
         holder?.run {
             text1?.text = photoMapItem.info
             val fileName = FilenameUtils.getName(photoMapItem.imagePath)
-            ThumbnailTask(activity, position, holder).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, Constant.WORKING_DIRECTORY + fileName + ".thumb")
+            ThumbnailTask(activity, position, holder).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, WORKING_DIRECTORY + fileName + ".thumb")
         }
 
         holder?.let {

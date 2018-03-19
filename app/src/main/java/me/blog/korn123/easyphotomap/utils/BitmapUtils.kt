@@ -3,6 +3,7 @@ package me.blog.korn123.easyphotomap.utils
 import android.app.Activity
 import android.content.Context
 import android.graphics.*
+import android.media.ExifInterface
 import android.support.v4.content.ContextCompat
 import android.util.Log
 import android.util.LruCache
@@ -64,9 +65,9 @@ object BitmapUtils {
             val bitmap = BitmapFactory.decodeFile(srcPath, options)
             val matrix = Matrix()
             when (orientation) {
-                6 -> matrix.postRotate(90f)
-                3 -> matrix.postRotate(180f)
-                8 -> matrix.postRotate(270f)
+                ExifInterface.ORIENTATION_ROTATE_90 -> matrix.postRotate(90f)
+                ExifInterface.ORIENTATION_ROTATE_180 -> matrix.postRotate(180f)
+                ExifInterface.ORIENTATION_ROTATE_270 -> matrix.postRotate(270f)
             }
             val rotateBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
             

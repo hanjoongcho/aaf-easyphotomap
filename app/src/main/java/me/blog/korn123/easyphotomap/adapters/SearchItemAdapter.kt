@@ -13,7 +13,7 @@ import android.widget.AdapterView
 import android.widget.ImageView
 import android.widget.TextView
 import me.blog.korn123.easyphotomap.R
-import me.blog.korn123.easyphotomap.constants.Constant
+import me.blog.korn123.easyphotomap.helper.WORKING_DIRECTORY
 import me.blog.korn123.easyphotomap.models.PhotoMapItem
 import me.blog.korn123.easyphotomap.utils.BitmapUtils
 import org.apache.commons.io.FilenameUtils
@@ -41,7 +41,7 @@ class SearchItemAdapter(private val activity: Activity,
             text2?.text = photoMapItem.date
             text3?.text = photoMapItem.imagePath
             val fileName = FilenameUtils.getName(photoMapItem.imagePath)
-            SearchItemAdapter.ThumbnailTask(activity, position, holder).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, Constant.WORKING_DIRECTORY + fileName + ".thumb")
+            SearchItemAdapter.ThumbnailTask(activity, position, holder).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, WORKING_DIRECTORY + fileName + ".thumb")
         }
 
         holder?.let {

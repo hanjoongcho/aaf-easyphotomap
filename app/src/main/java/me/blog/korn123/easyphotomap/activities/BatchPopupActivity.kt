@@ -6,23 +6,19 @@ import android.content.DialogInterface
 import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
-import com.drew.imaging.jpeg.JpegMetadataReader
-import com.drew.metadata.exif.ExifIFD0Directory
-import com.drew.metadata.exif.ExifSubIFDDirectory
-import com.drew.metadata.exif.GpsDirectory
 import kotlinx.android.synthetic.main.activity_batch_popup.*
 import me.blog.korn123.easyphotomap.R
-import me.blog.korn123.easyphotomap.constants.Constant
 import me.blog.korn123.easyphotomap.extensions.config
 import me.blog.korn123.easyphotomap.extensions.showAlertDialog
+import me.blog.korn123.easyphotomap.helper.COLUMN_IMAGE_PATH
+import me.blog.korn123.easyphotomap.helper.PHOTO_MAP_THUMBNAIL_FIXED_WIDTH_HEIGHT
 import me.blog.korn123.easyphotomap.helper.PhotoMapDbHelper
+import me.blog.korn123.easyphotomap.helper.WORKING_DIRECTORY
 import me.blog.korn123.easyphotomap.models.PhotoMapItem
 import me.blog.korn123.easyphotomap.utils.BitmapUtils
 import me.blog.korn123.easyphotomap.utils.CommonUtils
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
-import org.apache.commons.lang.time.StopWatch
 import java.io.File
 import java.util.*
 
@@ -30,7 +26,6 @@ import java.util.*
  * Created by CHO HANJOONG on 2016-09-11.
  */
 class BatchPopupActivity : SimpleActivity() {
-
     private var mEnableUpdate = true
     private var mTotalPhoto = 0
     private var mSuccessCount = 0
@@ -61,8 +56,8 @@ class BatchPopupActivity : SimpleActivity() {
         mTotalPhoto = listImagePath.size
         when (mTotalPhoto > 0) {
             true -> {
-                if (!File(Constant.WORKING_DIRECTORY).exists()) {
-                    File(Constant.WORKING_DIRECTORY).mkdirs()
+                if (!File(WORKING_DIRECTORY).exists()) {
+                    File(WORKING_DIRECTORY).mkdirs()
                 }
                 val thread = RegisterThread(this@BatchPopupActivity, listImagePath)
                 progressBar.max = mTotalPhoto
@@ -112,7 +107,6 @@ class BatchPopupActivity : SimpleActivity() {
     internal inner class RegisterThread(var context: Context, private var listImagePath: ArrayList<String>) : Thread() {
 
         override fun run() {
-            val stopWatch: StopWatch = StopWatch() 
             for (imagePath in listImagePath) {
                 
                 if (!mEnableUpdate) return
@@ -121,7 +115,7 @@ class BatchPopupActivity : SimpleActivity() {
                     var fileName = FilenameUtils.getName(imagePath) + ".origin"
                     var targetFile: File?
                     if (config.enableCreateCopy) {
-                        targetFile = File(Constant.WORKING_DIRECTORY + fileName)
+                        targetFile = File(WORKING_DIRECTORY + fileName)
                         if (!targetFile.exists()) {
                             FileUtils.copyFile(File(imagePath), targetFile)
                         }
@@ -131,45 +125,33 @@ class BatchPopupActivity : SimpleActivity() {
                         fileName = FilenameUtils.getBaseName(fileName)
                     }
 
-
-                    if (PhotoMapDbHelper.selectPhotoMapItemBy("imagePath", targetFile.absolutePath).size > 0) {
+                    if (PhotoMapDbHelper.selectPhotoMapItemBy(COLUMN_IMAGE_PATH, targetFile.absolutePath).size > 0) {
                         mReduplicationCount++
                     } else {
-                        stopWatch.start()
-                        val metadata = JpegMetadataReader.readMetadata(targetFile)
-                        Log.i("stopwatch", "readMetadata ${stopWatch.time} $targetFile")
-                        stopWatch.reset()
+                        val exifInfo = CommonUtils.parseExifDescription(targetFile.absolutePath)
                         val item = PhotoMapItem()
                         item.imagePath = targetFile.absolutePath
-                        val exifSubIFDDirectory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory::class.java)
-                        val exifIFD0Directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory::class.java)
-                        val orientation = exifIFD0Directory.getInt(ExifIFD0Directory.TAG_ORIENTATION)
-                        val date = exifSubIFDDirectory.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL, TimeZone.getDefault())
-                        if (date != null) {
-                            item.date = CommonUtils.dateTimePattern.format(date)
+                        if (exifInfo.date != null) {
+                            item.date = CommonUtils.dateTimePattern.format(exifInfo.date)
                         } else {
                             item.date = getString(R.string.file_explorer_message2)
                         }
-                        val gpsDirectory = metadata.getFirstDirectoryOfType(GpsDirectory::class.java)
-                        if (gpsDirectory != null && gpsDirectory.geoLocation != null) {
-                            item.longitude = gpsDirectory.geoLocation.longitude
-                            item.latitude = gpsDirectory.geoLocation.latitude
-                            stopWatch.start()
+
+                        exifInfo.geoLocation?.let {
+                            item.longitude = it.longitude
+                            item.latitude = it.latitude
                             val listAddress = CommonUtils.getFromLocation(this@BatchPopupActivity, item.latitude, item.longitude, 1, 0)
-                            Log.i("stopwatch", "getFromLocation ${stopWatch.time} $targetFile")
-                            stopWatch.reset()
                             listAddress?.let {
                                 if (it.isNotEmpty()) item.info = CommonUtils.fullAddress(it[0])
                             }
                             PhotoMapDbHelper.insertPhotoMapItem(item)
                             val srcPath = targetFile.absolutePath
                             Thread(Runnable {
-                                BitmapUtils.createScaledBitmap(srcPath, Constant.WORKING_DIRECTORY + fileName + ".thumb", 200, orientation)
+                                BitmapUtils.createScaledBitmap(srcPath, WORKING_DIRECTORY + fileName + ".thumb", PHOTO_MAP_THUMBNAIL_FIXED_WIDTH_HEIGHT, exifInfo.tagOrientation)
                             }).start()
                             mSuccessCount++
-                        } else {
-                            mNoGPSInfoCount++
-                        }
+                        } ?: mNoGPSInfoCount++
+                        
                     }
                 } catch (e: Exception) {
                     mFailCount++
@@ -182,5 +164,4 @@ class BatchPopupActivity : SimpleActivity() {
     override fun onBackPressed() {
         showAlertDialog(getString(R.string.batch_popup_message6))
     }
-
 }

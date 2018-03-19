@@ -9,21 +9,23 @@ import android.location.Geocoder
 import android.media.ExifInterface
 import android.preference.PreferenceManager
 import android.provider.MediaStore
-import android.util.Log
 import android.util.TypedValue
 import android.view.ViewGroup
 import android.widget.TextView
 import com.drew.imaging.jpeg.JpegMetadataReader
 import com.drew.imaging.jpeg.JpegProcessingException
+import com.drew.metadata.exif.ExifIFD0Directory
 import com.drew.metadata.exif.ExifSubIFDDirectory
 import com.drew.metadata.exif.GpsDirectory
-import me.blog.korn123.easyphotomap.constants.Constant
+import me.blog.korn123.easyphotomap.helper.WORKING_DIRECTORY
+import me.blog.korn123.easyphotomap.models.ExifModel
 import me.blog.korn123.easyphotomap.models.ThumbnailItem
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -41,8 +43,8 @@ class CommonUtils {
         private fun getGeoCoderInstance(context: Context): Geocoder = mGeoCoder?.let { it } ?: Geocoder(context, Locale.getDefault())
 
         fun initWorkingDirectory() {
-            if (!File(Constant.WORKING_DIRECTORY).exists()) {
-                File(Constant.WORKING_DIRECTORY).mkdirs()
+            if (!File(WORKING_DIRECTORY).exists()) {
+                File(WORKING_DIRECTORY).mkdirs()
             }
         }
 
@@ -276,10 +278,51 @@ class CommonUtils {
             }
         }
         
-        fun getDateFromEXIT(imageFilePath: String) {
+        fun parseExifDescription(imageFilePath: String): ExifModel {
+            val metadata = JpegMetadataReader.readMetadata(File(imageFilePath))
+            val exifSubIFDDirectory = metadata.getFirstDirectoryOfType(ExifSubIFDDirectory::class.java)
+            val exifIFD0Directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory::class.java)
+            val gpsDirectory = metadata.getFirstDirectoryOfType(GpsDirectory::class.java)
+            
+            val exifModel = ExifModel(imageFilePath)
+            exifModel.tagOrientation = exifIFD0Directory.getInt(ExifIFD0Directory.TAG_ORIENTATION)
+            exifModel.date = exifSubIFDDirectory.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL, TimeZone.getDefault())
+            gpsDirectory?.geoLocation?.let {
+                exifModel.geoLocation = it 
+            }
+            return exifModel
+        }
+        
+        fun getDateFromEXIF(imageFilePath: String): Date? {
             val exifInterface = ExifInterface(imageFilePath)
-            val dateTime = exifInterface.getAttribute(ExifInterface.TAG_DATETIME_ORIGINAL)
-            Log.i("dateTime", dateTime)
+//            val dateTime = exifInterface.getAttribute(ExifInterface.TAG_DATETIME_ORIGINAL)
+            val dateString = exifInterface.getAttribute(ExifInterface.TAG_DATETIME)
+            return getDate(dateString, TimeZone.getDefault())
+        }
+
+        fun getDate(dateString: String, timeZone: TimeZone?): java.util.Date? {
+            val datePatterns = arrayOf(
+                    "yyyy:MM:dd HH:mm:ss",
+                    "yyyy:MM:dd HH:mm",
+                    "yyyy-MM-dd HH:mm:ss",
+                    "yyyy-MM-dd HH:mm",
+                    "yyyy.MM.dd HH:mm:ss",
+                    "yyyy.MM.dd HH:mm"
+            )
+            for (datePattern in datePatterns) {
+                try {
+                    val parser = SimpleDateFormat(datePattern)
+                    if (timeZone != null)
+                        parser.timeZone = timeZone
+                    else
+                        parser.timeZone = TimeZone.getTimeZone("GMT") // don't interpret zone time
+
+                    return parser.parse(dateString)
+                } catch (ex: ParseException) {
+                    // simply try the next pattern
+                }
+            }
+            return null
         }
         
         fun getOrientationFromEXIF(imageFilePath: String): Int {
