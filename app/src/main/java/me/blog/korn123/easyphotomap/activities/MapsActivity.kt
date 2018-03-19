@@ -359,7 +359,8 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                         if (it) {
                             val location = getLocationWithGPSProvider()
                             location?.let {
-                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), GOOGLE_MAP_DEFAULT_ZOOM_VALUE))
+//                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), GOOGLE_MAP_DEFAULT_ZOOM_VALUE))
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), GOOGLE_MAP_DEFAULT_ZOOM_VALUE))
                             }
                         } else {
                             animateDefaultCamera()
@@ -380,8 +381,8 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
     }
     
     private fun animateDefaultCamera() {
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                LatLng(GOOGLE_MAP_DEFAULT_LATITUDE, GOOGLE_MAP_DEFAULT_LONGITUDE), GOOGLE_MAP_DEFAULT_ZOOM_VALUE))
+//        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(GOOGLE_MAP_DEFAULT_LATITUDE, GOOGLE_MAP_DEFAULT_LONGITUDE), GOOGLE_MAP_DEFAULT_ZOOM_VALUE))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(GOOGLE_MAP_DEFAULT_LATITUDE, GOOGLE_MAP_DEFAULT_LONGITUDE), GOOGLE_MAP_DEFAULT_ZOOM_VALUE))
     }
 
     private fun migrateLegacyData() {
