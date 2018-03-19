@@ -13,11 +13,11 @@ import kotlinx.android.synthetic.main.activity_address_search.*
 import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.adapters.AddressItemAdapter
 import me.blog.korn123.easyphotomap.constants.Constant
+import me.blog.korn123.easyphotomap.extensions.makeSnackBar
 import me.blog.korn123.easyphotomap.helper.PhotoMapDbHelper
 import me.blog.korn123.easyphotomap.models.PhotoMapItem
 import me.blog.korn123.easyphotomap.utils.BitmapUtils
 import me.blog.korn123.easyphotomap.utils.CommonUtils
-import me.blog.korn123.easyphotomap.utils.DialogUtils
 import org.apache.commons.io.FilenameUtils
 
 /**
@@ -108,7 +108,7 @@ class AddressSearchActivity : AppCompatActivity() {
                                         getString(R.string.file_explorer_message4)
                                     }
                                 }
-                                DialogUtils.makeSnackBar(view, resultMessage)
+                                makeSnackBar(view, resultMessage)
                             }
                             Thread(Runnable {
                                 try {

@@ -14,12 +14,12 @@ import com.drew.metadata.exif.GpsDirectory
 import kotlinx.android.synthetic.main.activity_batch_popup.*
 import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.constants.Constant
+import me.blog.korn123.easyphotomap.extensions.config
+import me.blog.korn123.easyphotomap.extensions.showAlertDialog
 import me.blog.korn123.easyphotomap.helper.PhotoMapDbHelper
 import me.blog.korn123.easyphotomap.models.PhotoMapItem
 import me.blog.korn123.easyphotomap.utils.BitmapUtils
 import me.blog.korn123.easyphotomap.utils.CommonUtils
-import me.blog.korn123.easyphotomap.utils.DialogUtils
-import me.blog.korn123.easyphotomap.extensions.config
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 import org.apache.commons.lang.time.StopWatch
@@ -180,7 +180,7 @@ class BatchPopupActivity : SimpleActivity() {
     }
 
     override fun onBackPressed() {
-        DialogUtils.showAlertDialog(this@BatchPopupActivity, getString(R.string.batch_popup_message6))
+        showAlertDialog(getString(R.string.batch_popup_message6))
     }
 
 }

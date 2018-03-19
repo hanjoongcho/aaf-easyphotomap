@@ -18,10 +18,10 @@ import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_thumbnail_explorer.*
 import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.adapters.ThumbnailItemAdapter
+import me.blog.korn123.easyphotomap.extensions.showAlertDialog
 import me.blog.korn123.easyphotomap.helper.RegistrationThread
 import me.blog.korn123.easyphotomap.models.ThumbnailItem
 import me.blog.korn123.easyphotomap.utils.CommonUtils
-import me.blog.korn123.easyphotomap.utils.DialogUtils
 import org.apache.commons.io.FilenameUtils
 import java.util.*
 
@@ -90,9 +90,9 @@ class ThumbnailExplorerActivity : AppCompatActivity() {
             val imagePath = CommonUtils.getOriginImagePath(this@ThumbnailExplorerActivity, photoEntity.imageId)
             val positiveListener = PositiveListener(this@ThumbnailExplorerActivity, this@ThumbnailExplorerActivity, FilenameUtils.getName(imagePath) + ".origin", imagePath)
             if (imagePath == null) {
-                DialogUtils.showAlertDialog(this@ThumbnailExplorerActivity, getString(R.string.thumbnail_explorer_message4))
+                showAlertDialog(getString(R.string.thumbnail_explorer_message4))
             } else {
-                DialogUtils.showAlertDialog(this@ThumbnailExplorerActivity, getString(R.string.file_explorer_message7), this@ThumbnailExplorerActivity, imagePath, positiveListener)
+                showAlertDialog(getString(R.string.file_explorer_message7), imagePath, positiveListener)
             }
         }
     }
@@ -101,7 +101,7 @@ class ThumbnailExplorerActivity : AppCompatActivity() {
         fun register() {
             if (fileName != null && path != null) {
                 mProgressDialog = ProgressDialog.show(this@ThumbnailExplorerActivity, getString(R.string.file_explorer_message5), getString(R.string.file_explorer_message6))
-                val registerThread = RegistrationThread(context, activity, mProgressDialog!!, fileName, path!!)
+                val registerThread = RegistrationThread(activity, mProgressDialog!!, fileName, path!!)
                 registerThread.start()
             }
         }

@@ -8,8 +8,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.support.v4.content.ContextCompat
 import android.util.TypedValue
 import android.view.*
@@ -22,10 +20,10 @@ import me.blog.korn123.easyphotomap.adapters.ExplorerItemAdapter
 import me.blog.korn123.easyphotomap.constants.Constant
 import me.blog.korn123.easyphotomap.dialogs.ChangeSortingDialog
 import me.blog.korn123.easyphotomap.extensions.config
+import me.blog.korn123.easyphotomap.extensions.showAlertDialog
 import me.blog.korn123.easyphotomap.helper.RegistrationThread
 import me.blog.korn123.easyphotomap.models.FileItem
 import me.blog.korn123.easyphotomap.utils.CommonUtils
-import me.blog.korn123.easyphotomap.utils.DialogUtils
 import org.apache.commons.io.FilenameUtils
 import org.apache.commons.lang.StringUtils
 import java.io.File
@@ -72,13 +70,7 @@ class FileExplorerActivity : SimpleActivity() {
                     File(Constant.WORKING_DIRECTORY).mkdirs()
                 }
                 val positiveListener = PositiveListener(this@FileExplorerActivity, this@FileExplorerActivity, FilenameUtils.getName(path) + ".origin", path)
-                DialogUtils.showAlertDialog(
-                        this@FileExplorerActivity,
-                        getString(R.string.file_explorer_message7),
-                        this@FileExplorerActivity,
-                        path,
-                        positiveListener
-                )
+                showAlertDialog(getString(R.string.file_explorer_message7), path, positiveListener)
             }
         }
 
@@ -133,8 +125,7 @@ class FileExplorerActivity : SimpleActivity() {
     }
 
     override fun onBackPressed() {
-        DialogUtils.showAlertDialog(
-                this@FileExplorerActivity,
+        showAlertDialog(
                 getString(R.string.file_explorer_message12),
                 DialogInterface.OnClickListener { _, _ -> finish() },
                 DialogInterface.OnClickListener { _, _ -> }
@@ -188,7 +179,7 @@ class FileExplorerActivity : SimpleActivity() {
         fun register() {
             mProgressDialog = ProgressDialog.show(this@FileExplorerActivity, getString(R.string.file_explorer_message5), getString(R.string.file_explorer_message6))
             mProgressDialog?.let { it ->
-                val registerThread = RegistrationThread(context, activity, it, fileName, path)
+                val registerThread = RegistrationThread(activity, it, fileName, path)
                 registerThread.start()
             }
         }

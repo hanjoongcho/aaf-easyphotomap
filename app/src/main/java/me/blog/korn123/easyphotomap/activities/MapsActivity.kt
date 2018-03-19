@@ -41,6 +41,7 @@ import me.blog.korn123.easyphotomap.adapters.RecommendationItemAdapter
 import me.blog.korn123.easyphotomap.constants.Constant
 import me.blog.korn123.easyphotomap.extensions.config
 import me.blog.korn123.easyphotomap.extensions.getLocationWithGPSProvider
+import me.blog.korn123.easyphotomap.extensions.showAlertDialog
 import me.blog.korn123.easyphotomap.helper.*
 import me.blog.korn123.easyphotomap.models.PhotoMapItem
 import me.blog.korn123.easyphotomap.utils.*
@@ -158,12 +159,12 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                 parseMetadata()
                 mListPhotoMapItem?.let { listPhotoMapItem ->
                     if (listPhotoMapItem.size == 0) {
-                        DialogUtils.showAlertDialog(this, getString(R.string.maps_activity_message2))
+                        showAlertDialog(getString(R.string.maps_activity_message2))
                     } else {
                         val inflater = this.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
                         val customView = inflater.inflate(R.layout.popup_window_recommendation, null)
                         recyclerView = customView.findViewById<RecyclerView>(R.id.recommendation_items)
-                        FontUtils.setChildViewTypeface(customView as ViewGroup)
+                        CommonUtils.setChildViewTypeface(customView as ViewGroup)
                         val listOfSortEntry: List<Map.Entry<String, Int>>?
                         if (mEnableDateFilter) {
                             listPhotoMapItem.map { item ->
@@ -255,7 +256,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
             R.id.find -> {
                 mListPhotoMapItem?.let { listPhotoMapItem ->
                     if (listPhotoMapItem.size == 0) {
-                        DialogUtils.showAlertDialog(this, getString(R.string.maps_activity_message2))
+                        showAlertDialog(getString(R.string.maps_activity_message2))
                     } else {
                         val photoSearchIntent = Intent(this, PhotoSearchActivity::class.java)
                         startActivity(photoSearchIntent)
@@ -270,7 +271,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
             R.id.timeline -> {
                 mListPhotoMapItem?.let {
                     if (it.size == 0) {
-                        DialogUtils.showAlertDialog(this, getString(R.string.maps_activity_message2))
+                        showAlertDialog(getString(R.string.maps_activity_message2))
                     } else {
                         val timelineIntent = Intent(this@MapsActivity, TimelineActivity::class.java)
                         startActivity(timelineIntent)

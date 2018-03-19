@@ -3,14 +3,16 @@ package me.blog.korn123.easyphotomap.utils
 import android.app.Activity
 import android.content.Context
 import android.graphics.Point
+import android.graphics.Typeface
 import android.location.Address
 import android.location.Geocoder
+import android.media.ExifInterface
 import android.preference.PreferenceManager
 import android.provider.MediaStore
 import android.util.Log
 import android.util.TypedValue
-import android.view.MotionEvent
-import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
 import com.drew.imaging.jpeg.JpegMetadataReader
 import com.drew.imaging.jpeg.JpegProcessingException
 import com.drew.metadata.exif.ExifSubIFDDirectory
@@ -30,9 +32,9 @@ import java.util.*
  */
 class CommonUtils {
     companion object {
-        @JvmStatic @Volatile private var mGeoCoder: Geocoder? = null
+        @Volatile private var mGeoCoder: Geocoder? = null
 
-        @JvmStatic val dateTimePattern = SimpleDateFormat("yyyy-MM-dd(EEE) HH:mm", Locale.getDefault())
+        val dateTimePattern = SimpleDateFormat("yyyy-MM-dd(EEE) HH:mm", Locale.getDefault())
 
         private val MAX_RETRY = 5
 
@@ -44,7 +46,6 @@ class CommonUtils {
             }
         }
 
-        @JvmStatic
         @Throws(Exception::class)
         fun getFromLocation(context: Context, latitude: Double, longitude: Double, maxResults: Int, retryCount: Int): List<Address>? {
             val lat = java.lang.Double.parseDouble(String.format("%.6f", latitude))
@@ -62,7 +63,6 @@ class CommonUtils {
             return listAddress
         }
 
-        @JvmStatic
         @Throws(Exception::class)
         fun getFromLocationName(context: Context, locationName: String, maxResults: Int, retryCount: Int): List<Address>? {
             var count = retryCount
@@ -92,19 +92,6 @@ class CommonUtils {
             return sortedEntries
         }
 
-        fun bindButtonEffect(targetView: View) {
-            val onTouchListener = View.OnTouchListener { view, motionEvent ->
-                if (motionEvent.action == MotionEvent.ACTION_DOWN) {
-                    view.setBackgroundColor(0x5fef1014)
-                } else if (motionEvent.action == MotionEvent.ACTION_UP) {
-                    view.setBackgroundColor(0x00ffffff)
-                }
-                false
-            }
-            targetView.setOnTouchListener(onTouchListener)
-        }
-
-        @JvmStatic
         fun saveStringPreference(context: Context, key: String, value: String) {
             val preferences = PreferenceManager.getDefaultSharedPreferences(context)
             val edit = preferences.edit()
@@ -112,7 +99,6 @@ class CommonUtils {
             edit.apply()
         }
 
-        @JvmStatic
         fun fetchAllThumbnail(context: Context): List<ThumbnailItem> {
             val projection = arrayOf(MediaStore.Images.Thumbnails.DATA, MediaStore.Images.Thumbnails.IMAGE_ID)
             val imageCursor = context.contentResolver.query(
@@ -147,7 +133,6 @@ class CommonUtils {
             }
         }
 
-        @JvmStatic
         fun fetchAllImages(context: Context): List<ThumbnailItem> {
             // DATA는 이미지 파일의 스트림 데이터 경로를 나타냅니다.
             val projection = arrayOf(MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID)
@@ -180,7 +165,6 @@ class CommonUtils {
             return result
         }
 
-        @JvmStatic
         fun getOriginImagePath(context: Context, imageId: String): String? {
             // DATA는 이미지 파일의 스트림 데이터 경로를 나타냅니다.
             val projection = arrayOf(MediaStore.Images.Media.DATA)
@@ -218,7 +202,6 @@ class CommonUtils {
             return gpsDirectory
         }
 
-        @JvmStatic
         fun fullAddress(address: Address): String {
             val sb = StringBuilder()
             if (address.countryName != null) sb.append(address.countryName).append(" ")
@@ -252,16 +235,13 @@ class CommonUtils {
             }
         }
 
-        @JvmStatic
         fun dpToPixel(context: Context, dp: Float): Int = dpToPixel(context, dp, 0)
 
-        @JvmStatic
         fun getDisplayOrientation(activity: Activity): Int {
             val display = activity.windowManager.defaultDisplay
             return display.orientation
         }
 
-        @JvmStatic
         fun getDefaultDisplay(activity: Activity): Point {
             val display = activity.windowManager.defaultDisplay
             val size = Point()
@@ -281,6 +261,37 @@ class CommonUtils {
                 true -> CommonUtils.dateTimePattern.format(date)
                 false -> ""
             } 
+        }
+
+        fun setChildViewTypeface(viewGroup: ViewGroup) {
+            repeat(viewGroup.childCount) { i ->
+                if (viewGroup.getChildAt(i) is ViewGroup) {
+                    setChildViewTypeface(viewGroup.getChildAt(i) as ViewGroup)
+                } else {
+                    if (viewGroup.getChildAt(i) is TextView) {
+                        val tv = viewGroup.getChildAt(i) as TextView
+                        tv.typeface = Typeface.DEFAULT
+                    }
+                }
+            }
+        }
+        
+        fun getDateFromEXIT(imageFilePath: String) {
+            val exifInterface = ExifInterface(imageFilePath)
+            val dateTime = exifInterface.getAttribute(ExifInterface.TAG_DATETIME_ORIGINAL)
+            Log.i("dateTime", dateTime)
+        }
+        
+        fun getOrientationFromEXIF(imageFilePath: String): Int {
+            val exifInterface = ExifInterface(imageFilePath)
+            return exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
+        }
+        
+        fun orientationToDegree(orientation: Int): Int = when (orientation) {
+            ExifInterface.ORIENTATION_ROTATE_90 -> 90
+            ExifInterface.ORIENTATION_ROTATE_180 -> 180
+            ExifInterface.ORIENTATION_ROTATE_270 -> 270
+            else -> 0
         }
     }
 }
