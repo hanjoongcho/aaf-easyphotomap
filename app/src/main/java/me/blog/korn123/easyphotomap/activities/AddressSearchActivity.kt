@@ -12,12 +12,11 @@ import android.widget.AdapterView
 import kotlinx.android.synthetic.main.activity_address_search.*
 import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.adapters.AddressItemAdapter
-import me.blog.korn123.easyphotomap.constants.Constant
-import me.blog.korn123.easyphotomap.helper.PhotoMapDbHelper
+import me.blog.korn123.easyphotomap.extensions.makeSnackBar
+import me.blog.korn123.easyphotomap.helper.*
 import me.blog.korn123.easyphotomap.models.PhotoMapItem
 import me.blog.korn123.easyphotomap.utils.BitmapUtils
 import me.blog.korn123.easyphotomap.utils.CommonUtils
-import me.blog.korn123.easyphotomap.utils.DialogUtils
 import org.apache.commons.io.FilenameUtils
 
 /**
@@ -90,25 +89,25 @@ class AddressSearchActivity : AppCompatActivity() {
                         listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, _ ->
                             val address = parent.adapter.getItem(position) as Address
                             val intent = intent
-                            if (intent.hasExtra("imagePath")) {
-                                val fileName = FilenameUtils.getName(intent.getStringExtra("imagePath"))
+                            if (intent.hasExtra(COLUMN_IMAGE_PATH)) {
+                                val fileName = FilenameUtils.getName(intent.getStringExtra(COLUMN_IMAGE_PATH))
                                 val item = PhotoMapItem()
-                                item.imagePath = intent.getStringExtra("imagePath")
+                                item.imagePath = intent.getStringExtra(COLUMN_IMAGE_PATH)
                                 item.info = CommonUtils.fullAddress(address)
                                 item.latitude = address.latitude
                                 item.longitude = address.longitude
-                                item.date = intent.getStringExtra("date")
-
-                                val tempList = PhotoMapDbHelper.selectPhotoMapItemBy("imagePath", item.imagePath)
+                                item.date = intent.getStringExtra(COLUMN_DATE)
+                                
+                                val tempList = PhotoMapDbHelper.selectPhotoMapItemBy(COLUMN_IMAGE_PATH, item.imagePath)
                                 val resultMessage = when(tempList.size > 0) {
                                     true -> getString(R.string.file_explorer_message3)
                                     false -> {
                                         PhotoMapDbHelper.insertPhotoMapItem(item)
-                                        BitmapUtils.createScaledBitmap(item.imagePath, Constant.WORKING_DIRECTORY + fileName + ".thumb", 200)
+                                        BitmapUtils.createScaledBitmap(item.imagePath, WORKING_DIRECTORY + fileName + ".thumb", 200, intent.getIntExtra(COLUMN_TAG_ORIENTATION, 1))
                                         getString(R.string.file_explorer_message4)
                                     }
                                 }
-                                DialogUtils.makeSnackBar(view, resultMessage)
+                                makeSnackBar(view, resultMessage)
                             }
                             Thread(Runnable {
                                 try {

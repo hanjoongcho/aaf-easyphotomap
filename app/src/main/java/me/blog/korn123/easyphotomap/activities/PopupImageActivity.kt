@@ -7,6 +7,7 @@ import android.os.Bundle
 import com.github.chrisbanes.photoview.PhotoView
 import kotlinx.android.synthetic.main.activity_popup_image.*
 import me.blog.korn123.easyphotomap.R
+import me.blog.korn123.easyphotomap.helper.COLUMN_IMAGE_PATH
 import me.blog.korn123.easyphotomap.utils.BitmapUtils
 import java.io.File
 
@@ -23,7 +24,7 @@ class PopupImageActivity : Activity() {
         val options = BitmapFactory.Options()
         options.inJustDecodeBounds = false
         options.inSampleSize = 2
-        val imagePath = intent.getStringExtra("imagePath")
+        val imagePath = intent.getStringExtra(COLUMN_IMAGE_PATH)
         val bitmap: Bitmap = if (File(imagePath).exists()) BitmapUtils.decodeFile(this@PopupImageActivity, imagePath, options) else BitmapFactory.decodeResource(resources, android.R.drawable.ic_menu_gallery) 
         imageView.setImageBitmap(bitmap)
         finish.setOnClickListener { finish() }

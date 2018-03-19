@@ -16,7 +16,7 @@ import com.simplemobiletools.commons.extensions.onGlobalLayout
 import kotlinx.android.synthetic.main.activity_photo_search.*
 import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.adapters.SearchItemAdapter
-import me.blog.korn123.easyphotomap.helper.PhotoMapDbHelper
+import me.blog.korn123.easyphotomap.helper.*
 import me.blog.korn123.easyphotomap.models.PhotoMapItem
 
 /**
@@ -35,11 +35,11 @@ class PhotoSearchActivity : AppCompatActivity() {
                 AdapterView.OnItemClickListener { _, _, position, _ ->
                     mSearchItemAdapter?.getItem(position)?.let { item ->
                         val intent = Intent(this@PhotoSearchActivity, MapsActivity::class.java).apply {
-                            putExtra("info", item.info)
-                            putExtra("imagePath", item.imagePath)
-                            putExtra("latitude", item.latitude)
-                            putExtra("longitude", item.longitude)
-                            putExtra("date", item.date)
+                            putExtra(COLUMN_INFO, item.info)
+                            putExtra(COLUMN_IMAGE_PATH, item.imagePath)
+                            putExtra(COLUMN_LATITUDE, item.latitude)
+                            putExtra(COLUMN_LONGITUDE, item.longitude)
+                            putExtra(COLUMN_DATE, item.date)
                         }
                         startActivity(intent)
                     }
@@ -150,7 +150,7 @@ class PhotoSearchActivity : AppCompatActivity() {
     private fun parseMetadata(query: String?) {
         query?.let {
             mListPhotoMapItem.clear()
-            val listTemp = PhotoMapDbHelper.containsPhotoMapItemBy("info", it)
+            val listTemp = PhotoMapDbHelper.containsPhotoMapItemBy(COLUMN_INFO, it)
             mListPhotoMapItem.addAll(listTemp)
         }
     }
