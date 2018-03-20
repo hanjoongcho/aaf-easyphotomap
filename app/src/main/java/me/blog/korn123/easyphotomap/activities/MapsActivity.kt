@@ -364,7 +364,9 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                             if (it) {
                                 val location = getLocationWithGPSProvider()
                                 // mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), GOOGLE_MAP_DEFAULT_ZOOM_VALUE))
-                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), GOOGLE_MAP_DEFAULT_ZOOM_VALUE))
+                                location?.let {
+                                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), GOOGLE_MAP_DEFAULT_ZOOM_VALUE))
+                                } ?: animateDefaultCamera() 
                             } else {
                                 animateDefaultCamera()
                             }
