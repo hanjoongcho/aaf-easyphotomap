@@ -121,6 +121,10 @@ class FileExplorerActivity : SimpleActivity() {
                     setNegativeButton(getString(R.string.cancel), null)
                 }.create().show()
             }
+            R.id.homeDirectory -> {
+                mCurrent = CAMERA_DIRECTORY
+                refreshFiles()
+            }
         }
         return true
     }
@@ -145,31 +149,34 @@ class FileExplorerActivity : SimpleActivity() {
         pathView.removeViews(0, pathView.childCount)
         var currentPath = ""
         var index = 0
+        
         arrayPath.map { path ->
             currentPath += "/" + path
             val targetPath = currentPath
             val textView = TextView(this)
-            if (index < arrayPath.size - 1) {
-                textView.text = "$path  >  "
-            } else {
-                textView.text = path
-            }
-
-            if (StringUtils.equals(arrayPath[arrayPath.size - 1], path)) {
-                textView.setTypeface(Typeface.DEFAULT, Typeface.BOLD)
-                textView.setTextColor(ContextCompat.getColor(this@FileExplorerActivity, R.color.colorPrimary))
-            } else {
-                textView.typeface = Typeface.DEFAULT
-                textView.setTextColor(ContextCompat.getColor(this@FileExplorerActivity, R.color.default_text_color))
-            }
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16f)
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16F)
             textView.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT)
+            textView.setPadding(CommonUtils.dpToPixel(this, 5F), 0, CommonUtils.dpToPixel(this, 5F), 0)
             textView.gravity = Gravity.CENTER_VERTICAL
+            textView.text = path
             textView.setOnClickListener {
                 mCurrent = targetPath
                 refreshFiles()
             }
             pathView.addView(textView)
+            when (index < arrayPath.size - 1) {
+                true -> {
+                    textView.typeface = Typeface.DEFAULT
+                    textView.setTextColor(ContextCompat.getColor(this@FileExplorerActivity, R.color.default_text_color))
+                    val separator = TextView(this)
+                    separator.text = " > "
+                    pathView.addView(separator)
+                }
+                false -> {
+                    textView.setTypeface(Typeface.DEFAULT, Typeface.BOLD)
+                    textView.setTextColor(ContextCompat.getColor(this@FileExplorerActivity, R.color.colorPrimary))
+                }
+            }
             index++
         }
         progressDialog.visibility = View.VISIBLE

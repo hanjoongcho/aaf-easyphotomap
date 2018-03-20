@@ -1,0 +1,51 @@
+<fragment xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/map"
+    android:name="com.google.android.gms.maps.SupportMapFragment"
+    tools:context=".activities.MapsActivity">
+    <LinearLayout
+        android:padding="5dp"
+        android:gravity="right"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/camera"
+            android:src="@drawable/ic_camera"
+            style="@style/FloatingButton"
+            fab:fab_label="@string/maps_activity_camera" />
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/thumbnailViewer"
+            android:src="@drawable/ic_image"
+            style="@style/FloatingButton"
+            fab:fab_label="@string/maps_activity_explorer" />
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fileManager"
+            android:src="@drawable/ic_folder_01"
+            style="@style/FloatingButton"
+            fab:fab_label="@string/maps_activity_folder" />
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/overlay"
+            android:src="@drawable/ic_marker"
+            style="@style/FloatingButton"
+            fab:fab_label="@string/maps_activity_overlay" />
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/find"
+            android:src="@drawable/ic_search"
+            style="@style/FloatingButton"
+            fab:fab_label="@string/maps_activity_find" />
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/timeline"
+            android:src="@drawable/ic_timeline"
+            style="@style/FloatingButton"
+            fab:fab_label="@string/maps_activity_timeline" />
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/settings"
+            android:src="@drawable/ic_settings"
+            style="@style/FloatingButton"
+            fab:fab_label="@string/settings" />
+    </LinearLayout>
+</fragment>
