@@ -67,6 +67,10 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
     private var mClusterManager: ClusterManager<MyItem>? = null
     private var mListPhotoMapItem: ArrayList<PhotoMapItem>? = null
     private var mEnableDateFilter: Boolean = false
+    private var mHaveCameraPosition = false
+    private var mSavedCameraLatitude: Double = 0.0
+    private var mSavedCameraLongitude: Double = 0.0
+    private var mSavedCameraZoom: Float = 0F
 
     private val mRecommendationAdapter: RecommendationItemAdapter by lazy {
         RecommendationItemAdapter(
@@ -287,10 +291,21 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
     }
     
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(null)
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
         CommonUtils.initWorkingDirectory()
 
+        savedInstanceState?.let { 
+            when (it.getBoolean(HAVE_CAMERA_POSITION, false)) {
+                true -> {
+                    mHaveCameraPosition = true
+                    mSavedCameraZoom = it.getFloat(SAVED_CAMERA_ZOOM, 0F)
+                    mSavedCameraLatitude = it.getDouble(SAVED_CAMERA_LATITUDE, 0.0)
+                    mSavedCameraLongitude = it.getDouble(SAVED_CAMERA_LONGITUDE, 0.0)
+                }
+            }
+        }
+        
         // Obtain the SupportMapFragment and get notified when the mRecommendMap is ready to be used.
         val mapFragment = supportFragmentManager
                 .findFragmentById(R.id.map) as SupportMapFragment
@@ -338,7 +353,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                 fOptions.position(latLng)
                 fOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_map_marker))
                 map.setInfoWindowAdapter(InfoWindow(info, imagePath, latitude, longitude, date))
-                map.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(latitude, longitude), 15.0f), object : GoogleMap.CancelableCallback {
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(latitude, longitude), 15.0F), object : GoogleMap.CancelableCallback {
                     override fun onFinish() {
                         val marker = map.addMarker(fOptions)
                         map.setOnInfoWindowClickListener {
@@ -352,13 +367,15 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                     override fun onCancel() {}
                 })
             }
+        } else if (mHaveCameraPosition) {
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(mSavedCameraLatitude, mSavedCameraLongitude), mSavedCameraZoom))
         } else {
             handlePermission(PERMISSION_ACCESS_COARSE_LOCATION) {
                 if (it) {
                     handlePermission(PERMISSION_ACCESS_FINE_LOCATION) {
                         if (it) {
                             val location = getLocationWithGPSProvider()
-                            location?.let {
+                            location.let {
 //                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), GOOGLE_MAP_DEFAULT_ZOOM_VALUE))
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude), GOOGLE_MAP_DEFAULT_ZOOM_VALUE))
                             }
@@ -378,6 +395,16 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
     override fun onResume() {
         super.onResume()
         parseMetadata()
+    }
+            
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        outState?.let { 
+            it.putBoolean(HAVE_CAMERA_POSITION, true)
+            it.putDouble(SAVED_CAMERA_LATITUDE, mMap.cameraPosition.target.latitude)
+            it.putDouble(SAVED_CAMERA_LONGITUDE, mMap.cameraPosition.target.longitude)
+            it.putFloat(SAVED_CAMERA_ZOOM, mMap.cameraPosition.zoom)
+        }
     }
     
     private fun animateDefaultCamera() {
@@ -630,9 +657,9 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                     val exif = ExifInterface(imagePath)
                     orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1)
                     when (orientation) {
-                        6 -> matrix.postRotate(90f)
-                        3 -> matrix.postRotate(180f)
-                        8 -> matrix.postRotate(270f)
+                        6 -> matrix.postRotate(90F)
+                        3 -> matrix.postRotate(180F)
+                        8 -> matrix.postRotate(270F)
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()

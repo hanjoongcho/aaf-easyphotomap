@@ -24,6 +24,12 @@ const val PHOTO_MARKER_ICON = "photo_marker_icon"
 const val PHOTO_MARKER_MINIMUN_CLUSTER = "photo_marker_minimum_cluster"
 const val PHOTO_MARKER_SCALE = "photo_marker_scale"
 
+// bundle key
+const val HAVE_CAMERA_POSITION = "have_camera_position"
+const val SAVED_CAMERA_LATITUDE = "saved_camera_latitude"
+const val SAVED_CAMERA_LONGITUDE = "saved_camera_longitude"
+const val SAVED_CAMERA_ZOOM = "saved_camera_zoom"
+
 // photo marker cluster
 const val CLUSTER_L1 = 1
 const val CLUSTER_L2 = 2
