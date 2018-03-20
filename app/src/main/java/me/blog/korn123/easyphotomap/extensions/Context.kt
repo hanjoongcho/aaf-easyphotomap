@@ -58,6 +58,6 @@ private fun Context.getGPSProvider(): LocationManager = getSystemService(Context
 private fun Context.getNetworkProvider(): LocationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
 @SuppressLint("MissingPermission")
-fun Context.getLocationWithGPSProvider(): Location {
+fun Context.getLocationWithGPSProvider(): Location? {
     return getGPSProvider().getLastKnownLocation(LocationManager.GPS_PROVIDER) ?: getNetworkProvider().getLastKnownLocation(LocationManager.NETWORK_PROVIDER) 
 }
