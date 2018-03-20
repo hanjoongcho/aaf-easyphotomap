@@ -285,8 +285,12 @@ class CommonUtils {
             val gpsDirectory = metadata.getFirstDirectoryOfType(GpsDirectory::class.java)
             
             val exifModel = ExifModel(imageFilePath)
-            exifModel.tagOrientation = exifIFD0Directory.getInt(ExifIFD0Directory.TAG_ORIENTATION)
-            exifModel.date = exifSubIFDDirectory.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL, TimeZone.getDefault())
+            exifIFD0Directory?.let {
+                exifModel.tagOrientation = it.getInt(ExifIFD0Directory.TAG_ORIENTATION)    
+            }
+            exifSubIFDDirectory?.let {
+                exifModel.date = it.getDate(ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL, TimeZone.getDefault())
+            }
             gpsDirectory?.geoLocation?.let {
                 exifModel.geoLocation = it 
             }
