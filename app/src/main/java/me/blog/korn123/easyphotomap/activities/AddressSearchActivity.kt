@@ -103,7 +103,7 @@ class AddressSearchActivity : AppCompatActivity() {
                                     true -> getString(R.string.file_explorer_message3)
                                     false -> {
                                         PhotoMapDbHelper.insertPhotoMapItem(item)
-                                        BitmapUtils.createScaledBitmap(item.imagePath, WORKING_DIRECTORY + fileName + ".thumb", 200, intent.getIntExtra(COLUMN_TAG_ORIENTATION, 1))
+                                        BitmapUtils.saveBitmap(item.imagePath, WORKING_DIRECTORY + fileName + ".thumb", 200, intent.getIntExtra(COLUMN_TAG_ORIENTATION, 1))
                                         getString(R.string.file_explorer_message4)
                                     }
                                 }

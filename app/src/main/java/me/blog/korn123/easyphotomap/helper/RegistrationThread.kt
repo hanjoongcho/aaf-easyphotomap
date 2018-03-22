@@ -68,7 +68,7 @@ class RegistrationThread(
                     true -> mActivity.getString(R.string.file_explorer_message3)
                     false -> {
                         PhotoMapDbHelper.insertPhotoMapItem(item)
-                        BitmapUtils.createScaledBitmap(targetFile.absolutePath, WORKING_DIRECTORY + mFileName + ".thumb", PHOTO_MAP_THUMBNAIL_FIXED_WIDTH_HEIGHT, exifInfo.tagOrientation)
+                        BitmapUtils.saveBitmap(targetFile.absolutePath, WORKING_DIRECTORY + mFileName + ".thumb", PHOTO_MAP_THUMBNAIL_FIXED_WIDTH_HEIGHT, exifInfo.tagOrientation)
                         mActivity.getString(R.string.file_explorer_message4)
                     }
                 }

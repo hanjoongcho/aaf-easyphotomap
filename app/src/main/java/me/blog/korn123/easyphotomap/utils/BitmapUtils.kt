@@ -82,7 +82,7 @@ object BitmapUtils {
         return inSampleSize
     }
     
-    fun createScaledBitmap(srcPath: String, destPath: String, fixedWidthHeight: Int, orientation: Int = 1): Boolean {
+    fun saveBitmap(srcPath: String, destPath: String, fixedWidthHeight: Int, orientation: Int = 1): Boolean {
         var result = true
         var outputStream: OutputStream? = null
         try {
@@ -122,7 +122,7 @@ object BitmapUtils {
         return result
     }
     
-//    fun createScaledBitmap(bitmap: Bitmap, point: Point, scaleFactorX: Double = 0.8, scaleFactorY: Double = 0.5): Bitmap {
+//    fun saveBitmap(bitmap: Bitmap, point: Point, scaleFactorX: Double = 0.8, scaleFactorY: Double = 0.5): Bitmap {
 //        val fixedWidth = point.x * scaleFactorX
 //        val fixedHeight = point.y * scaleFactorY
 //        val height = bitmap.height
@@ -131,11 +131,11 @@ object BitmapUtils {
 //        val downSampleHeight = height / width.toFloat() * fixedWidth
 //        return when {
 //            // 가로이미지 & 세로보기 화면에서는 width값에 맞춰 고정함
-//            width > height && point.x < point.y -> Bitmap.createScaledBitmap(bitmap, fixedWidth.toInt(), downSampleHeight.toInt(), false)
+//            width > height && point.x < point.y -> Bitmap.saveBitmap(bitmap, fixedWidth.toInt(), downSampleHeight.toInt(), false)
 //            // 가로이미지 & 가로보기 화면에서는 height값에 맞춰 고정함
-//            width > height && point.x > point.y -> Bitmap.createScaledBitmap(bitmap, downSampleWidth.toInt(), fixedHeight.toInt(), false)
-//            width < height -> Bitmap.createScaledBitmap(bitmap, downSampleWidth.toInt(), fixedHeight.toInt(), false)
-//            width == height -> Bitmap.createScaledBitmap(bitmap, downSampleWidth.toInt(), fixedHeight.toInt(), false)
+//            width > height && point.x > point.y -> Bitmap.saveBitmap(bitmap, downSampleWidth.toInt(), fixedHeight.toInt(), false)
+//            width < height -> Bitmap.saveBitmap(bitmap, downSampleWidth.toInt(), fixedHeight.toInt(), false)
+//            width == height -> Bitmap.saveBitmap(bitmap, downSampleWidth.toInt(), fixedHeight.toInt(), false)
 //            else -> bitmap
 //        }
 //    }
@@ -270,7 +270,7 @@ object BitmapUtils {
 //        val bmpWithFrame = Bitmap.createBitmap(bmp.width + borderSize, bmp.height + borderSize * 2, bmp.config)
 //        val canvas = Canvas(bmpWithFrame)
 //        val temp = BitmapFactory.decodeResource(activity.resources, id)
-//        val frame = Bitmap.createScaledBitmap(temp, bmp.width + borderSize, bmp.height + borderSize * 2, false)
+//        val frame = Bitmap.saveBitmap(temp, bmp.width + borderSize, bmp.height + borderSize * 2, false)
 //        canvas.drawBitmap(frame, 0f, 0f, null)
 //        canvas.drawBitmap(bmp, (borderSize / 2).toFloat(), borderSize.toFloat(), null)
 //        return bmpWithFrame
