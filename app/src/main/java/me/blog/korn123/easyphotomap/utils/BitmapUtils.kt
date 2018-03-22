@@ -5,20 +5,19 @@ import android.content.Context
 import android.graphics.*
 import android.media.ExifInterface
 import android.support.v4.content.ContextCompat
-import android.util.Log
 import android.util.LruCache
 import me.blog.korn123.easyphotomap.R
+import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
-import org.apache.commons.lang.time.StopWatch
 import java.io.File
 import java.io.FileOutputStream
+import java.io.InputStream
 import java.io.OutputStream
 
 /**
  * Created by CHO HANJOONG on 2016-08-06.
  */
 object BitmapUtils {
-
     private var mMemoryCache: LruCache<String, Bitmap>? = null
 
     init {
@@ -35,33 +34,66 @@ object BitmapUtils {
         }
     }
 
-    fun getSampleSize(option: BitmapFactory.Options, filePath: String?, samplingFactor: Int = 200000): Int {
-        var inSampleSize = 0
-        filePath?.let {
-            BitmapFactory.decodeFile(filePath, option)
-            inSampleSize = (option.outWidth * option.outHeight) / samplingFactor
-            Log.i("option", String.format("%d x %d %d", option.outWidth, option.outHeight, inSampleSize))
-        }
-        return if (inSampleSize > 0) inSampleSize else 1
-    }
+//    fun getSampleSize(option: BitmapFactory.Options, filePath: String?, samplingFactor: Int = 200000): Int {
+//        var inSampleSize = 0
+//        filePath?.let {
+//            BitmapFactory.decodeFile(filePath, option)
+//            inSampleSize = (option.outWidth * option.outHeight) / samplingFactor
+//            Log.i("option", String.format("%d x %d %d", option.outWidth, option.outHeight, inSampleSize))
+//        }
+//        return if (inSampleSize > 0) inSampleSize else 1
+//    }
 
     fun addBitmapToMemoryCache(key: String, bitmap: Bitmap) {
         if (getBitmapFromMemCache(key) == null) {
-            mMemoryCache!!.put(key, bitmap)
+            mMemoryCache?.put(key, bitmap)
         }
     }
 
     fun getBitmapFromMemCache(key: String): Bitmap? = mMemoryCache?.get(key)
 
+    private fun calculateInSampleSize(filePath: String?, reqWidth: Int, reqHeight: Int): Int {
+        val options = BitmapFactory.Options().apply {
+            inJustDecodeBounds = true
+        }
+        BitmapFactory.decodeFile(filePath, options)
+        val h = options.outHeight
+        val w = options.outWidth
+        var inSampleSize = 0
+        if (h > reqHeight || w > reqWidth) {
+            val ratioW = w.toFloat() / reqWidth
+            val ratioH = h.toFloat() / reqHeight
+            inSampleSize = Math.min(ratioH, ratioW).toInt()
+        }
+        inSampleSize = Math.max(1, inSampleSize)
+        return inSampleSize
+    }
+
+    private fun calculateInSampleSize(options: BitmapFactory.Options, reqWidth: Int, reqHeight: Int): Int {
+        val h = options.outHeight
+        val w = options.outWidth
+        var inSampleSize = 0
+        if (h > reqHeight || w > reqWidth) {
+            val ratioW = w.toFloat() / reqWidth
+            val ratioH = h.toFloat() / reqHeight
+            inSampleSize = Math.min(ratioH, ratioW).toInt()
+        }
+        inSampleSize = Math.max(1, inSampleSize)
+        return inSampleSize
+    }
+    
     fun createScaledBitmap(srcPath: String, destPath: String, fixedWidthHeight: Int, orientation: Int = 1): Boolean {
-        val stopWatch: StopWatch = StopWatch()
-        stopWatch.start()
         var result = true
         var outputStream: OutputStream? = null
         try {
-            val options = BitmapFactory.Options()
+            val options = BitmapFactory.Options().apply {
+                inJustDecodeBounds = true
+            }
+            
+            BitmapFactory.decodeFile(srcPath, options)
+            val inSampleSize = calculateInSampleSize(options, fixedWidthHeight, fixedWidthHeight)
             options.inJustDecodeBounds = false
-            options.inSampleSize = 20
+            options.inSampleSize = inSampleSize
             val bitmap = BitmapFactory.decodeFile(srcPath, options)
             val matrix = Matrix()
             when (orientation) {
@@ -87,53 +119,26 @@ object BitmapUtils {
         } finally {
             IOUtils.closeQuietly(outputStream)
         }
-
-        Log.i("stopwatch", "createScaledBitmap ${stopWatch.time} $srcPath")
         return result
     }
-
-    fun createScaledBitmap(srcPath: String, fixedWidth: Int): Bitmap? {
-        val outputStream: OutputStream? = null
-        var thumbNail: Bitmap? = null
-        try {
-            val options = BitmapFactory.Options()
-            options.inJustDecodeBounds = false
-            options.inSampleSize = 10
-            val bitmap = BitmapFactory.decodeFile(srcPath, options)
-            val height = bitmap.height
-            val width = bitmap.width
-            val downSampleHeight = height / width.toFloat() * fixedWidth
-            thumbNail = Bitmap.createScaledBitmap(bitmap, fixedWidth, downSampleHeight.toInt(), false)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        } finally {
-            IOUtils.closeQuietly(outputStream)
-        }
-        return thumbNail
-    }
-
-    fun createScaledBitmap(bitmap: Bitmap, fixedWidthHeight: Int, scaleFactor: Double): Bitmap {
-        val downSampleWidthHeight = fixedWidthHeight * scaleFactor
-        return Bitmap.createScaledBitmap(bitmap, downSampleWidthHeight.toInt(), downSampleWidthHeight.toInt(), false)
-    }
     
-    fun createScaledBitmap(bitmap: Bitmap, point: Point, scaleFactorX: Double = 0.8, scaleFactorY: Double = 0.5): Bitmap {
-        val fixedWidth = point.x * scaleFactorX
-        val fixedHeight = point.y * scaleFactorY
-        val height = bitmap.height
-        val width = bitmap.width
-        val downSampleWidth = width / height.toFloat() * fixedHeight
-        val downSampleHeight = height / width.toFloat() * fixedWidth
-        return when {
-            // 가로이미지 & 세로보기 화면에서는 width값에 맞춰 고정함
-            width > height && point.x < point.y -> Bitmap.createScaledBitmap(bitmap, fixedWidth.toInt(), downSampleHeight.toInt(), false)
-            // 가로이미지 & 가로보기 화면에서는 height값에 맞춰 고정함
-            width > height && point.x > point.y -> Bitmap.createScaledBitmap(bitmap, downSampleWidth.toInt(), fixedHeight.toInt(), false)
-            width < height -> Bitmap.createScaledBitmap(bitmap, downSampleWidth.toInt(), fixedHeight.toInt(), false)
-            width == height -> Bitmap.createScaledBitmap(bitmap, downSampleWidth.toInt(), fixedHeight.toInt(), false)
-            else -> bitmap
-        }
-    }
+//    fun createScaledBitmap(bitmap: Bitmap, point: Point, scaleFactorX: Double = 0.8, scaleFactorY: Double = 0.5): Bitmap {
+//        val fixedWidth = point.x * scaleFactorX
+//        val fixedHeight = point.y * scaleFactorY
+//        val height = bitmap.height
+//        val width = bitmap.width
+//        val downSampleWidth = width / height.toFloat() * fixedHeight
+//        val downSampleHeight = height / width.toFloat() * fixedWidth
+//        return when {
+//            // 가로이미지 & 세로보기 화면에서는 width값에 맞춰 고정함
+//            width > height && point.x < point.y -> Bitmap.createScaledBitmap(bitmap, fixedWidth.toInt(), downSampleHeight.toInt(), false)
+//            // 가로이미지 & 가로보기 화면에서는 height값에 맞춰 고정함
+//            width > height && point.x > point.y -> Bitmap.createScaledBitmap(bitmap, downSampleWidth.toInt(), fixedHeight.toInt(), false)
+//            width < height -> Bitmap.createScaledBitmap(bitmap, downSampleWidth.toInt(), fixedHeight.toInt(), false)
+//            width == height -> Bitmap.createScaledBitmap(bitmap, downSampleWidth.toInt(), fixedHeight.toInt(), false)
+//            else -> bitmap
+//        }
+//    }
 
     fun decodeFile(activity: Activity, imagePath: String?, options: BitmapFactory.Options? = null): Bitmap = when (imagePath != null && File(imagePath).exists()) {
         true -> {
@@ -186,29 +191,79 @@ object BitmapUtils {
         return bmpWithFrame
     }
 
-    fun cropCenterBitmap(srcBmp: Bitmap): Bitmap {
-        val dstBmp: Bitmap
-        if (srcBmp.width >= srcBmp.height){
-
-            dstBmp = Bitmap.createBitmap(
-                    srcBmp,
-                    srcBmp.width / 2 - srcBmp.height / 2,
-                    0,
-                    srcBmp.height,
-                    srcBmp.height
-            );
-
-        }else{
-
-            dstBmp = Bitmap.createBitmap(
-                    srcBmp,
-                    0,
-                    srcBmp.height / 2 - srcBmp.width / 2,
-                    srcBmp.width,
-                    srcBmp.width
-            )
+    fun decodeFileMaxWidthHeight(path: String, maxWidthHeight: Int): Bitmap {
+        var inputStream: InputStream? = FileUtils.openInputStream(File(path))
+        val options = BitmapFactory.Options().apply {
+            inJustDecodeBounds = true
         }
-        return dstBmp
+
+        BitmapFactory.decodeStream(inputStream, null, options)
+        IOUtils.closeQuietly(inputStream)
+        val inSampleSize = calculateInSampleSize(options, maxWidthHeight, maxWidthHeight)
+        inputStream = FileUtils.openInputStream(File(path))
+        options.inJustDecodeBounds = false
+        options.inSampleSize = inSampleSize
+        val tempBitmap = BitmapFactory.decodeStream(inputStream, null, options)
+        val sampling = when (tempBitmap.width < tempBitmap.height) {
+            true -> {
+                val ratio: Float = maxWidthHeight * 1.0F / tempBitmap.height
+                Bitmap.createScaledBitmap(tempBitmap, (tempBitmap.width * ratio).toInt(), (tempBitmap.height * ratio).toInt(), false)
+            }
+            false -> {
+                val ratio: Float = maxWidthHeight * 1.0F / tempBitmap.width
+                Bitmap.createScaledBitmap(tempBitmap, (tempBitmap.width * ratio).toInt(), (tempBitmap.height * ratio).toInt(), false)
+            }
+        }
+        return sampling
+    }
+    
+    fun decodeFileCropCenter(path: String, fixedWidthHeight: Int): Bitmap {
+        var inputStream: InputStream = FileUtils.openInputStream(File(path))
+        val options = BitmapFactory.Options().apply {
+            inJustDecodeBounds = true
+        }
+
+        BitmapFactory.decodeStream(inputStream, null, options)
+        IOUtils.closeQuietly(inputStream)
+        val inSampleSize = calculateInSampleSize(options, fixedWidthHeight, fixedWidthHeight)
+        inputStream = FileUtils.openInputStream(File(path))
+        options.inJustDecodeBounds = false
+        options.inSampleSize = inSampleSize
+        val tempBitmap = BitmapFactory.decodeStream(inputStream, null, options)
+        val sampling = when (tempBitmap.width > tempBitmap.height) {
+            true -> {
+                val ratio: Float = fixedWidthHeight * 1.0F / tempBitmap.height
+                Bitmap.createScaledBitmap(tempBitmap, (tempBitmap.width * ratio).toInt(), (tempBitmap.height * ratio).toInt(), false)
+            }
+            false -> {
+                val ratio: Float = fixedWidthHeight * 1.0F / tempBitmap.width
+                Bitmap.createScaledBitmap(tempBitmap, (tempBitmap.width * ratio).toInt(), (tempBitmap.height * ratio).toInt(), false)
+            }
+        }
+        return cropCenter(sampling)
+    }
+    
+    fun cropCenter(srcBmp: Bitmap): Bitmap {
+        return when (srcBmp.width >= srcBmp.height) {
+            true -> {
+                Bitmap.createBitmap(
+                        srcBmp,
+                        srcBmp.width / 2 - srcBmp.height / 2,
+                        0,
+                        srcBmp.height,
+                        srcBmp.height
+                )
+            }
+            false -> {
+                Bitmap.createBitmap(
+                        srcBmp,
+                        0,
+                        srcBmp.height / 2 - srcBmp.width / 2,
+                        srcBmp.width,
+                        srcBmp.width
+                )
+            }
+        }
     }
 
 //    fun addFilmFrame(activity: Activity, bmp: Bitmap, borderSize: Int, id: Int): Bitmap {

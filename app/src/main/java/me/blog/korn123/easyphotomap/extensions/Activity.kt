@@ -85,14 +85,9 @@ fun Activity.showAlertDialog(
     builder.setCancelable(true)
     builder.setPositiveButton(getString(R.string.confirm), positiveListener)
     builder.setNegativeButton(getString(R.string.cancel), negativeListener)
-    val options = BitmapFactory.Options()
-    options.inJustDecodeBounds = true
-    options.inSampleSize = BitmapUtils.getSampleSize(options, imagePath, 2000000)
-    options.inJustDecodeBounds = false
-    val originBitmap = BitmapUtils.decodeFile(this, imagePath, options)
-    val scaledBitmap = BitmapUtils.createScaledBitmap(originBitmap, CommonUtils.getDefaultDisplay(this))
+    val bitmap = BitmapUtils.decodeFileMaxWidthHeight(imagePath, CommonUtils.dpToPixel(this, 250F))
     val thumbView = ImageView(this)
-    thumbView.setImageBitmap(scaledBitmap)
+    thumbView.setImageBitmap(bitmap)
     val layout = LinearLayout(this)
     layout.orientation = LinearLayout.VERTICAL
     layout.addView(thumbView)
@@ -116,14 +111,9 @@ fun Activity.showAlertDialog(
     builder.setCancelable(true)
     builder.setPositiveButton(getString(R.string.confirm), positiveListener)
     builder.setNegativeButton(getString(R.string.cancel), negativeListener)
-    val options = BitmapFactory.Options()
-    options.inJustDecodeBounds = true
-    options.inSampleSize = BitmapUtils.getSampleSize(options, imagePath, 2000000)
-    options.inJustDecodeBounds = false
-    val originBitmap = BitmapUtils.decodeFile(this, imagePath, options)
-    val scaledBitmap = BitmapUtils.createScaledBitmap(originBitmap, CommonUtils.getDefaultDisplay(this))
+    val bitmap = BitmapUtils.decodeFileMaxWidthHeight(imagePath, CommonUtils.dpToPixel(this, 250F))
     val thumbView = ImageView(this)
-    thumbView.setImageBitmap(scaledBitmap)
+    thumbView.setImageBitmap(bitmap)
     val layout = LinearLayout(this)
     layout.orientation = LinearLayout.VERTICAL
     layout.addView(thumbView)
