@@ -94,8 +94,6 @@
 
     <string name="camera_activity_message1">It does not receive GPS information.</string>
 
-    <string name="confirm">confirm</string>
-    <string name="cancel">cancel</string>
     <string name="setting_title">easy photo map preference setting</string>
 
     <string name="camera_info_message1">Before the picture is taken, please activate the tag location in the camera settings. If the tag location setting is not enabled, you must enter the location information manually by using the address search function.</string>

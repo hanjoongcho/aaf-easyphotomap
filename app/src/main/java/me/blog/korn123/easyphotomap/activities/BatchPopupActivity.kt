@@ -72,7 +72,7 @@ class BatchPopupActivity : SimpleActivity() {
                     return@OnClickListener
                 }
                 builder.setMessage(getString(R.string.file_explorer_message9))
-                builder.setPositiveButton(getString(R.string.confirm), positiveListener)
+                builder.setPositiveButton(getString(R.string.ok), positiveListener)
                 val alertDialog = builder.create()
                 alertDialog.show()
             }

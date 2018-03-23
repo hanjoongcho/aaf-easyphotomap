@@ -103,7 +103,7 @@ class FileExplorerActivity : SimpleActivity() {
 
                 AlertDialog.Builder(this@FileExplorerActivity).apply {
                     setMessage(getString(R.string.file_explorer_message11))
-                    setPositiveButton(getString(R.string.confirm), positiveListener)
+                    setPositiveButton(getString(R.string.ok), positiveListener)
                     setNegativeButton(getString(R.string.cancel), null)
                 }.create().show()
             }
@@ -117,7 +117,7 @@ class FileExplorerActivity : SimpleActivity() {
 
                 AlertDialog.Builder(this@FileExplorerActivity).apply {
                     setMessage(getString(R.string.file_explorer_message13))
-                    setPositiveButton(getString(R.string.confirm), positiveListener)
+                    setPositiveButton(getString(R.string.ok), positiveListener)
                     setNegativeButton(getString(R.string.cancel), null)
                 }.create().show()
             }

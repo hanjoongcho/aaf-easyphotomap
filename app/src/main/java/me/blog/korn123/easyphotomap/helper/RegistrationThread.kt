@@ -80,7 +80,7 @@ class RegistrationThread(
                     mProgressDialog.dismiss()
                     val addressIntent = Intent(mActivity, AddressSearchActivity::class.java)
                     val builder = AlertDialog.Builder(mActivity)
-                    builder.setMessage(mActivity.getString(R.string.file_explorer_message1)).setCancelable(false).setPositiveButton(mActivity.getString(R.string.confirm),
+                    builder.setMessage(mActivity.getString(R.string.file_explorer_message1)).setCancelable(false).setPositiveButton(mActivity.getString(R.string.ok),
                             DialogInterface.OnClickListener { _, _ ->
                                 addressIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                                 addressIntent.putExtra(COLUMN_IMAGE_PATH, item.imagePath)

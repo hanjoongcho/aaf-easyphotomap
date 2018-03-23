@@ -24,7 +24,7 @@ fun Activity.showConfirmDialog(message: String) {
     val builder = AlertDialog.Builder(this)
     builder.setMessage(message)
     builder.setCancelable(false)
-    builder.setPositiveButton(getString(R.string.confirm), null)
+    builder.setPositiveButton(getString(R.string.ok), null)
     val alert = builder.create()
     alert.show()
 }
@@ -34,7 +34,7 @@ fun Activity.showConfirmDialogWithFinish(message: String) {
     val builder = AlertDialog.Builder(this)
     builder.setMessage(message)
     builder.setCancelable(false)
-    builder.setPositiveButton(getString(R.string.confirm), positiveListener)
+    builder.setPositiveButton(getString(R.string.ok), positiveListener)
     val alert = builder.create()
     alert.show()
 }
@@ -47,8 +47,8 @@ fun Activity.showAlertDialog(
     val builder = AlertDialog.Builder(this)
     builder.setMessage(message)
     builder.setCancelable(true)
-    builder.setNegativeButton("취소", negativeListener)
-    builder.setPositiveButton("확인", positiveListener)
+    builder.setNegativeButton(R.string.cancel, negativeListener)
+    builder.setPositiveButton(R.string.ok, positiveListener)
     val alert = builder.create()
     alert.show()
 }
@@ -66,7 +66,7 @@ fun Activity.showAlertDialog(message: String) {
     val positiveListener = DialogInterface.OnClickListener { _, _ -> return@OnClickListener }
     builder.setMessage(message)
     builder.setCancelable(false)
-    builder.setPositiveButton(getString(R.string.confirm), positiveListener)
+    builder.setPositiveButton(getString(R.string.ok), positiveListener)
     val alert = builder.create()
     alert.show()
 }
@@ -100,7 +100,7 @@ fun Activity.launchDialog(message: String, imagePath: String, positiveListener: 
     val negativeListener = DialogInterface.OnClickListener { _, _ -> return@OnClickListener }
     builder.setMessage(message)
     builder.setCancelable(true)
-    builder.setPositiveButton(getString(R.string.confirm), positiveListener)
+    builder.setPositiveButton(getString(R.string.ok), positiveListener)
     builder.setNegativeButton(getString(R.string.cancel), negativeListener)
 
     val displayMetrics = resources.displayMetrics
