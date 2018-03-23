@@ -6,6 +6,7 @@ import android.content.DialogInterface
 import android.graphics.BitmapFactory
 import android.support.design.widget.Snackbar
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -75,25 +76,11 @@ fun Activity.showAlertDialog(
         imagePath: String,
         listener: ThumbnailExplorerActivity.PositiveListener
 ) {
-    val builder = AlertDialog.Builder(this)
     val positiveListener = DialogInterface.OnClickListener { _, _ ->
         listener.register()
         return@OnClickListener
     }
-    val negativeListener = DialogInterface.OnClickListener { _, _ -> return@OnClickListener }
-    builder.setMessage(message)
-    builder.setCancelable(true)
-    builder.setPositiveButton(getString(R.string.confirm), positiveListener)
-    builder.setNegativeButton(getString(R.string.cancel), negativeListener)
-    val bitmap = BitmapUtils.decodeFileMaxWidthHeight(imagePath, CommonUtils.dpToPixel(this, 250F))
-    val thumbView = ImageView(this)
-    thumbView.setImageBitmap(bitmap)
-    val layout = LinearLayout(this)
-    layout.orientation = LinearLayout.VERTICAL
-    layout.addView(thumbView)
-    builder.setView(layout)
-    val alert = builder.create()
-    alert.show()
+    launchDialog(message, imagePath, positiveListener)
 }
 
 fun Activity.showAlertDialog(
@@ -101,23 +88,28 @@ fun Activity.showAlertDialog(
         imagePath: String,
         listener: FileExplorerActivity.PositiveListener
 ) {
-    val builder = AlertDialog.Builder(this)
     val positiveListener = DialogInterface.OnClickListener { _, _ ->
         listener.register()
         return@OnClickListener
     }
+    launchDialog(message, imagePath, positiveListener)
+}
+
+fun Activity.launchDialog(message: String, imagePath: String, positiveListener: DialogInterface.OnClickListener) {
+    val builder = AlertDialog.Builder(this)
     val negativeListener = DialogInterface.OnClickListener { _, _ -> return@OnClickListener }
     builder.setMessage(message)
     builder.setCancelable(true)
     builder.setPositiveButton(getString(R.string.confirm), positiveListener)
     builder.setNegativeButton(getString(R.string.cancel), negativeListener)
-    val bitmap = BitmapUtils.decodeFileMaxWidthHeight(imagePath, CommonUtils.dpToPixel(this, 250F))
-    val thumbView = ImageView(this)
-    thumbView.setImageBitmap(bitmap)
-    val layout = LinearLayout(this)
-    layout.orientation = LinearLayout.VERTICAL
-    layout.addView(thumbView)
-    builder.setView(layout)
+
+    val displayMetrics = resources.displayMetrics
+    val size = Math.min(displayMetrics.widthPixels, displayMetrics.heightPixels)
+    val bitmap = BitmapUtils.decodeFileMaxWidthHeight(imagePath, size / 2)
+    val thumbnail = ImageView(this)
+    thumbnail.setImageBitmap(bitmap)
+    thumbnail.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT)
+    builder.setView(thumbnail)
     val alert = builder.create()
     alert.show()
 }
