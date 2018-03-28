@@ -94,8 +94,6 @@
 
     <string name="camera_activity_message1">GPS情報を受信しませんでした。</string>
 
-    <string name="confirm">確認</string>
-    <string name="cancel">キャンセル</string>
     <string name="setting_title">easy photo map設定</string>
 
     <string name="camera_info_message1">写真撮影前のカメラの設定で位置タグ機能を活性化させてください。位置タグ設定が有効になっていない場合、アドレス検索機能を利用して位置情報を直接入力する必要があります。</string>

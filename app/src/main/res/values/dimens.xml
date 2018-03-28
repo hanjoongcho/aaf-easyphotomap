@@ -1,34 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="card_radius">2dp</dimen>
-    <dimen name="card_layout_padding">3dp</dimen>
-    <dimen name="card_layout_margin">3dp</dimen>
-    <dimen name="card_contents_padding">15dp</dimen>
+    <!--App dimens-->
     <dimen name="item_minimum_height">55dp</dimen>
     <dimen name="item_contents_padding">15dp</dimen>
-    
-    <!--activity_batch_popup.xml-->
     <dimen name="batch_popup_guide_message_line_space">5dp</dimen>
     <dimen name="batch_popup_info_height">35dp</dimen>
-
-    <!--activity_file_explorer.xml-->
     <dimen name="activity_file_explorer_spacing">3dp</dimen>
     <dimen name="activity_thumbnail_explorer_spacing">3dp</dimen>
-
-    <!--item_file_explorer.xml-->
-    <dimen name="item_file_explorer_height">60dp</dimen>
     <dimen name="item_file_explorer_text_medium">13sp</dimen>
     <dimen name="item_file_explorer_text_small">11sp</dimen>
-
-    <!--item_search.xml-->
     <dimen name="item_search_text">13sp</dimen>
     <dimen name="item_timeline_text">13sp</dimen>
-
     <dimen name="popup_window_camera_guide">17dp</dimen>
     <dimen name="activity_thumbnail_spacing">1dp</dimen>
     <dimen name="map_dot_marker_size">12dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 
-    <!--https://github.com/SimpleMobileTools/Simple-Commons-->
+    <!--Override third party dimens-->
     <dimen name="bigger_text_size">15sp</dimen>
 </resources>

@@ -72,7 +72,7 @@ class BatchPopupActivity : SimpleActivity() {
                     return@OnClickListener
                 }
                 builder.setMessage(getString(R.string.file_explorer_message9))
-                builder.setPositiveButton(getString(R.string.confirm), positiveListener)
+                builder.setPositiveButton(getString(R.string.ok), positiveListener)
                 val alertDialog = builder.create()
                 alertDialog.show()
             }
@@ -147,7 +147,7 @@ class BatchPopupActivity : SimpleActivity() {
                             PhotoMapDbHelper.insertPhotoMapItem(item)
                             val srcPath = targetFile.absolutePath
                             Thread(Runnable {
-                                BitmapUtils.createScaledBitmap(srcPath, WORKING_DIRECTORY + fileName + ".thumb", PHOTO_MAP_THUMBNAIL_FIXED_WIDTH_HEIGHT, exifInfo.tagOrientation)
+                                BitmapUtils.saveBitmap(srcPath, WORKING_DIRECTORY + fileName + ".thumb", PHOTO_MAP_THUMBNAIL_FIXED_WIDTH_HEIGHT, exifInfo.tagOrientation)
                             }).start()
                             mSuccessCount++
                         } ?: mNoGPSInfoCount++

@@ -133,7 +133,7 @@ class CameraActivity : SimpleActivity() {
                             }
 
                             PhotoMapDbHelper.insertPhotoMapItem(item)
-                            BitmapUtils.createScaledBitmap(targetFile.absolutePath, WORKING_DIRECTORY + fileName + ".thumb",PHOTO_MAP_THUMBNAIL_FIXED_WIDTH_HEIGHT, exifInfo.tagOrientation)
+                            BitmapUtils.saveBitmap(targetFile.absolutePath, WORKING_DIRECTORY + fileName + ".thumb",PHOTO_MAP_THUMBNAIL_FIXED_WIDTH_HEIGHT, exifInfo.tagOrientation)
                             val intent = Intent(this@CameraActivity, MapsActivity::class.java)
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
                             intent.putExtra(COLUMN_INFO, item.info)

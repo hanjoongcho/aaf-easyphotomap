@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
-
 import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.helper.START_MAIN_ACTIVITY
 

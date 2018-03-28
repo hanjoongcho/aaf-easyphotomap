@@ -11,6 +11,7 @@ import android.media.ExifInterface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.content.res.AppCompatResources
 import android.support.v7.widget.DividerItemDecoration
@@ -71,6 +72,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
     private var mSavedCameraLatitude: Double = 0.0
     private var mSavedCameraLongitude: Double = 0.0
     private var mSavedCameraZoom: Float = 0F
+    private var isMapReady = false
 
     private val mRecommendationAdapter: RecommendationItemAdapter by lazy {
         RecommendationItemAdapter(
@@ -321,6 +323,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
      */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+        isMapReady = true
         mMap.let { it ->
             it.setOnCameraChangeListener { cameraPosition ->
                 if (cameraPosition.zoom > GOOGLE_MAP_MAX_ZOOM_IN_VALUE) {
@@ -387,12 +390,18 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
             
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
-        outState?.let { 
-            it.putBoolean(HAVE_CAMERA_POSITION, true)
-            it.putDouble(SAVED_CAMERA_LATITUDE, mMap.cameraPosition.target.latitude)
-            it.putDouble(SAVED_CAMERA_LONGITUDE, mMap.cameraPosition.target.longitude)
-            it.putFloat(SAVED_CAMERA_ZOOM, mMap.cameraPosition.zoom)
+        if (isMapReady) {
+            outState?.let {
+                it.putBoolean(HAVE_CAMERA_POSITION, true)
+                it.putDouble(SAVED_CAMERA_LATITUDE, mMap.cameraPosition.target.latitude)
+                it.putDouble(SAVED_CAMERA_LONGITUDE, mMap.cameraPosition.target.longitude)
+                it.putFloat(SAVED_CAMERA_ZOOM, mMap.cameraPosition.zoom)
+            }    
         }
+    }
+
+    override fun onBackPressed() {
+        ActivityCompat.finishAffinity(this)
     }
     
     private fun animateDefaultCamera() {
@@ -503,7 +512,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                 options.position(latLng)
                 val fileName = FilenameUtils.getName(item.imagePath)
                 val tempBitmap: Bitmap = BitmapUtils.decodeFile(this@MapsActivity, WORKING_DIRECTORY + fileName + ".thumb")
-                val bm = BitmapUtils.cropCenterBitmap(tempBitmap)
+                val bm = BitmapUtils.cropCenter(tempBitmap)
                 val image = when (config.photoMarkerIcon) {
                     FILM -> {
                         BitmapDescriptorFactory.fromBitmap(BitmapUtils.addFilmFrame(this@MapsActivity, bm, getPhotoMarkerScale(), R.drawable.frame_03))
