@@ -10,6 +10,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.TransitionDrawable
 import android.os.AsyncTask
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -91,11 +92,6 @@ class ExplorerItemAdapter(
 
         override fun doInBackground(vararg params: String): Bitmap? {
             val filePath = params[0]
-            val widthHeight = CommonUtils.dpToPixel(mActivity, 45F)
-            val options = BitmapFactory.Options()
-            options.inJustDecodeBounds = true
-            options.inSampleSize = BitmapUtils.getSampleSize(options, filePath)
-            options.inJustDecodeBounds = false
             var resized: Bitmap? = null
             //            Log.i("doInBack", String.format("%s, %s", mHolder.position, mPosition));
             if (mHolder.position == mPosition) {
@@ -110,10 +106,10 @@ class ExplorerItemAdapter(
                 } else {
                     var bitmap = BitmapUtils.getBitmapFromMemCache(filePath)
                     if (bitmap == null) {
-                        bitmap = BitmapUtils.decodeFile(mActivity, filePath, options)
+                        bitmap = BitmapUtils.decodeFileCropCenter(filePath, CommonUtils.dpToPixel(mActivity, 45F))
                         BitmapUtils.addBitmapToMemoryCache(filePath, bitmap)
                     }
-                    resized = Bitmap.createScaledBitmap(bitmap, widthHeight, widthHeight, true)
+                    resized = bitmap
 
                     val gpsDirectory = CommonUtils.getGPSDirectory(filePath)
                     gpsDirectory?.geoLocation?.let {

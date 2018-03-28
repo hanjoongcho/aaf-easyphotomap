@@ -69,7 +69,7 @@ class PhotoSearchActivity : AppCompatActivity() {
             }
             AlertDialog.Builder(this@PhotoSearchActivity).apply {
                 setMessage(message)
-                setPositiveButton(getString(R.string.confirm), { _, _ ->
+                setPositiveButton(getString(R.string.ok), { _, _ ->
                     PhotoMapDbHelper.deletePhotoMapItemBy(mCurrentQuery)
                     refreshList(mCurrentQuery)
                 })

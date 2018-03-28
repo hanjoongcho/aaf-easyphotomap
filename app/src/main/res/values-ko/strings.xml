@@ -94,8 +94,6 @@
 
     <string name="camera_activity_message1">GPS 정보를 수신하지 못하였습니다.</string>
 
-    <string name="confirm">확인</string>
-    <string name="cancel">취소</string>
     <string name="setting_title">easy photo map 환경설정</string>
 
     <string name="camera_info_message1">사진 촬영 전 카메라 설정에서 위치태그 기능을 활성화 시켜 주세요. 위치태그 설정이 활성화 되어 있지 않으면 주소검색 기능을 이용하여 위치 정보를 직접 입력해야 합니다.</string>

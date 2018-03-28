@@ -68,7 +68,7 @@ class RegistrationThread(
                     true -> mActivity.getString(R.string.file_explorer_message3)
                     false -> {
                         PhotoMapDbHelper.insertPhotoMapItem(item)
-                        BitmapUtils.createScaledBitmap(targetFile.absolutePath, WORKING_DIRECTORY + mFileName + ".thumb", PHOTO_MAP_THUMBNAIL_FIXED_WIDTH_HEIGHT, exifInfo.tagOrientation)
+                        BitmapUtils.saveBitmap(targetFile.absolutePath, WORKING_DIRECTORY + mFileName + ".thumb", PHOTO_MAP_THUMBNAIL_FIXED_WIDTH_HEIGHT, exifInfo.tagOrientation)
                         mActivity.getString(R.string.file_explorer_message4)
                     }
                 }
@@ -80,7 +80,7 @@ class RegistrationThread(
                     mProgressDialog.dismiss()
                     val addressIntent = Intent(mActivity, AddressSearchActivity::class.java)
                     val builder = AlertDialog.Builder(mActivity)
-                    builder.setMessage(mActivity.getString(R.string.file_explorer_message1)).setCancelable(false).setPositiveButton(mActivity.getString(R.string.confirm),
+                    builder.setMessage(mActivity.getString(R.string.file_explorer_message1)).setCancelable(false).setPositiveButton(mActivity.getString(R.string.ok),
                             DialogInterface.OnClickListener { _, _ ->
                                 addressIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                                 addressIntent.putExtra(COLUMN_IMAGE_PATH, item.imagePath)

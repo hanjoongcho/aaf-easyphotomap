@@ -22,179 +22,183 @@
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
         </android.support.design.widget.AppBarLayout>
 
-        <ScrollView
+        <RelativeLayout
             android:id="@+id/main_holder"
+            android:padding="@dimen/card_layout_padding"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <LinearLayout
-                    style="@style/SettingsItemHolder"
-                    android:layout_marginTop="@dimen/spacing_normal"
-                    android:orientation="vertical"
-                    android:id="@+id/about_holder">
-                    <com.simplemobiletools.commons.views.MyTextView
-                        android:id="@+id/about_label"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/about"/>
-
-                    <com.simplemobiletools.commons.views.MyTextView
-                        android:id="@+id/about_summary"
-                        android:alpha="0.5"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/aaf_about_summary"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    style="@style/SettingsItemHolder"
-                    android:orientation="horizontal"
-                    android:id="@+id/date_filter_holder">
+            <android.support.v7.widget.CardView
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                style="@style/AppCard.Settings">
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
                     <LinearLayout
                         android:orientation="vertical"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content">
-                        <com.simplemobiletools.commons.views.MyTextView
-                            android:id="@+id/date_filter_label"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/pref_title_social_recommendations"/>
-                        <com.simplemobiletools.commons.views.MyTextView
-                            android:alpha="0.5"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/pref_description_social_recommendations"/>
+                        <LinearLayout
+                            style="@style/SettingsItemHolder"
+                            android:layout_marginTop="@dimen/spacing_normal"
+                            android:orientation="vertical"
+                            android:id="@+id/about_holder">
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:id="@+id/about_label"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/about"/>
+
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:id="@+id/about_summary"
+                                android:alpha="0.5"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/aaf_about_summary"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            style="@style/SettingsItemHolder"
+                            android:orientation="horizontal"
+                            android:id="@+id/date_filter_holder">
+                            <LinearLayout
+                                android:orientation="vertical"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content">
+                                <com.simplemobiletools.commons.views.MyTextView
+                                    android:id="@+id/date_filter_label"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/pref_title_social_recommendations"/>
+                                <com.simplemobiletools.commons.views.MyTextView
+                                    android:alpha="0.5"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/pref_description_social_recommendations"/>
+                            </LinearLayout>
+                            <android.support.v7.widget.SwitchCompat
+                                android:id="@+id/date_filter_switcher"
+                                android:clickable="false"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="20dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            style="@style/SettingsItemHolder"
+                            android:orientation="horizontal"
+                            android:id="@+id/disable_info_popup_holder">
+                            <LinearLayout
+                                android:orientation="vertical"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content">
+                                <com.simplemobiletools.commons.views.MyTextView
+                                    android:id="@+id/disable_info_popup_label"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/disable_info_popup"/>
+                                <com.simplemobiletools.commons.views.MyTextView
+                                    android:alpha="0.5"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/disable_info_popup_summary"/>
+                            </LinearLayout>
+                            <android.support.v7.widget.SwitchCompat
+                                android:id="@+id/disable_info_popup_switcher"
+                                android:clickable="false"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="20dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            style="@style/SettingsItemHolder"
+                            android:orientation="horizontal"
+                            android:id="@+id/enable_copy_holder">
+                            <LinearLayout
+                                android:orientation="vertical"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content">
+                                <com.simplemobiletools.commons.views.MyTextView
+                                    android:id="@+id/enable_copy_label"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/enable_create_copy"/>
+                                <com.simplemobiletools.commons.views.MyTextView
+                                    android:alpha="0.5"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/enable_create_copy_summary"/>
+                            </LinearLayout>
+                            <android.support.v7.widget.SwitchCompat
+                                android:id="@+id/enable_copy_switcher"
+                                android:clickable="false"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="20dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            style="@style/SettingsItemHolder"
+                            android:orientation="vertical"
+                            android:id="@+id/photo_marker_holder">
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:id="@+id/photo_marker_label"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/photo_marker_setting"/>
+
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:alpha="0.5"
+                                android:id="@+id/photo_marker"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/photo_marker_setting_summary"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            style="@style/SettingsItemHolder"
+                            android:orientation="vertical"
+                            android:id="@+id/photo_marker_scale_holder">
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:id="@+id/photo_marker_scale_label"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/photo_size_setting"/>
+
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:alpha="0.5"
+                                android:id="@+id/photo_marker_scale"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/photo_size_setting_summary"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            style="@style/SettingsItemHolder"
+                            android:layout_marginBottom="@dimen/spacing_normal"
+                            android:orientation="vertical"
+                            android:id="@+id/minimum_cluster_holder">
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:id="@+id/minimum_cluster_label"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/setting_activity_minimum_cluster_title"/>
+
+                            <com.simplemobiletools.commons.views.MyTextView
+                                android:alpha="0.5"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/setting_activity_minimum_cluster_summary"/>
+                        </LinearLayout>
                     </LinearLayout>
-                    <android.support.v7.widget.SwitchCompat
-                        android:id="@+id/date_filter_switcher"
-                        android:clickable="false"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="20dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-
-                <LinearLayout
-                    style="@style/SettingsItemHolder"
-                    android:orientation="horizontal"
-                    android:id="@+id/disable_info_popup_holder">
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content">
-                        <com.simplemobiletools.commons.views.MyTextView
-                            android:id="@+id/disable_info_popup_label"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/disable_info_popup"/>
-                        <com.simplemobiletools.commons.views.MyTextView
-                            android:alpha="0.5"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/disable_info_popup_summary"/>
-                    </LinearLayout>
-                    <android.support.v7.widget.SwitchCompat
-                        android:id="@+id/disable_info_popup_switcher"
-                        android:clickable="false"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="20dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-
-                <LinearLayout
-                    style="@style/SettingsItemHolder"
-                    android:orientation="horizontal"
-                    android:id="@+id/enable_copy_holder">
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content">
-                        <com.simplemobiletools.commons.views.MyTextView
-                            android:id="@+id/enable_copy_label"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/enable_create_copy"/>
-                        <com.simplemobiletools.commons.views.MyTextView
-                            android:alpha="0.5"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/enable_create_copy_summary"/>
-                    </LinearLayout>
-                    <android.support.v7.widget.SwitchCompat
-                        android:id="@+id/enable_copy_switcher"
-                        android:clickable="false"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="20dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-
-                <LinearLayout
-                    style="@style/SettingsItemHolder"
-                    android:orientation="vertical"
-                    android:id="@+id/photo_marker_holder">
-                    <com.simplemobiletools.commons.views.MyTextView
-                        android:id="@+id/photo_marker_label"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/photo_marker_setting"/>
-
-                    <com.simplemobiletools.commons.views.MyTextView
-                        android:alpha="0.5"
-                        android:id="@+id/photo_marker"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/photo_marker_setting_summary"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    style="@style/SettingsItemHolder"
-                    android:orientation="vertical"
-                    android:id="@+id/photo_marker_scale_holder">
-                    <com.simplemobiletools.commons.views.MyTextView
-                        android:id="@+id/photo_marker_scale_label"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/photo_size_setting"/>
-
-                    <com.simplemobiletools.commons.views.MyTextView
-                        android:alpha="0.5"
-                        android:id="@+id/photo_marker_scale"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/photo_size_setting_summary"/>
-                </LinearLayout>
-                
-                <LinearLayout
-                    style="@style/SettingsItemHolder"
-                    android:layout_marginBottom="@dimen/spacing_normal"
-                    android:orientation="vertical"
-                    android:id="@+id/minimum_cluster_holder">
-                    <com.simplemobiletools.commons.views.MyTextView
-                        android:id="@+id/minimum_cluster_label"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/setting_activity_minimum_cluster_title"/>
-
-                    <com.simplemobiletools.commons.views.MyTextView
-                        android:alpha="0.5"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/setting_activity_minimum_cluster_summary"/>
-                </LinearLayout>
-
-            </LinearLayout>
-            
-        </ScrollView>
-        
+                </ScrollView>
+            </android.support.v7.widget.CardView>
+        </RelativeLayout>
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>
