@@ -93,7 +93,7 @@ dependencies {
     implementation 'com.simplemobiletools:commons:3.7.8'
 //    implementation project(":simple-commons")
 
-    implementation 'compile io.github.aafactory:commons:0.0.2'
+    implementation 'io.github.aafactory:commons:0.0.2'
 //    implementation project(":aafactory-commons")
 }
 
