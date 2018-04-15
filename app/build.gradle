@@ -91,9 +91,9 @@ dependencies {
 
 //     https://github.com/SimpleMobileTools/Simple-Commons
     implementation 'com.simplemobiletools:commons:3.7.8'
-//    implementation project(":commons")
+//    implementation project(":simple-commons")
 
-    implementation 'io.github.hanjoongcho:commons-android:0.3.0'
-//    implementation project(":commons-android")
+    implementation 'compile io.github.aafactory:commons:0.0.2'
+//    implementation project(":aafactory-commons")
 }
 
