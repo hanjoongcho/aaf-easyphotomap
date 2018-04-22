@@ -15,13 +15,14 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.LinearLayout
 import android.widget.TextView
+import io.github.aafactory.commons.extensions.dpToPixel
 import kotlinx.android.synthetic.main.activity_thumbnail_explorer.*
 import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.adapters.ThumbnailItemAdapter
 import me.blog.korn123.easyphotomap.extensions.showAlertDialog
 import me.blog.korn123.easyphotomap.helper.RegistrationThread
 import me.blog.korn123.easyphotomap.models.ThumbnailItem
-import me.blog.korn123.easyphotomap.utils.CommonUtils
+import me.blog.korn123.easyphotomap.utils.EasyPhotoMapUtils
 import org.apache.commons.io.FilenameUtils
 import java.util.*
 
@@ -44,7 +45,7 @@ class ThumbnailExplorerActivity : AppCompatActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
         setAdapter()
-        thumbnailGrid.columnWidth = ((CommonUtils.getDefaultDisplay(this).x - CommonUtils.dpToPixel(this@ThumbnailExplorerActivity, 30f, 1)) / 3)
+        thumbnailGrid.columnWidth = ((EasyPhotoMapUtils.getDefaultDisplay(this).x - dpToPixel(30F, 1)) / 3)
         setOnItemClickListener()
 
         findViewById<View>(R.id.startSync).setOnClickListener {
@@ -79,7 +80,7 @@ class ThumbnailExplorerActivity : AppCompatActivity() {
     }
 
     fun setAdapter() {
-        val listPhotoEntity = CommonUtils.fetchAllThumbnail(this@ThumbnailExplorerActivity)
+        val listPhotoEntity = EasyPhotoMapUtils.fetchAllThumbnail(this@ThumbnailExplorerActivity)
         mThumbnailEntityAdapter = ThumbnailItemAdapter(this, this, R.layout.item_thumbnail, listPhotoEntity)
         thumbnailGrid.adapter = mThumbnailEntityAdapter
     }
@@ -87,7 +88,7 @@ class ThumbnailExplorerActivity : AppCompatActivity() {
     private fun setOnItemClickListener() {
         thumbnailGrid.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
             val photoEntity = parent.adapter.getItem(position) as ThumbnailItem
-            val imagePath = CommonUtils.getOriginImagePath(this@ThumbnailExplorerActivity, photoEntity.imageId)
+            val imagePath = EasyPhotoMapUtils.getOriginImagePath(this@ThumbnailExplorerActivity, photoEntity.imageId)
             val positiveListener = PositiveListener(this@ThumbnailExplorerActivity, this@ThumbnailExplorerActivity, FilenameUtils.getName(imagePath) + ".origin", imagePath)
             if (imagePath == null) {
                 showAlertDialog(getString(R.string.thumbnail_explorer_message4))
@@ -109,8 +110,8 @@ class ThumbnailExplorerActivity : AppCompatActivity() {
 
     inner class ThumbnailCreatorThread(var context: Context) : Thread() {
         override fun run() {
-            val listOriginImage = CommonUtils.fetchAllImages(context)
-            val listThumbnail = CommonUtils.fetchAllThumbnail(context)
+            val listOriginImage = EasyPhotoMapUtils.fetchAllImages(context)
+            val listThumbnail = EasyPhotoMapUtils.fetchAllThumbnail(context)
             val listImageId = ArrayList<String>()
             listThumbnail.map { thumbnailItem -> listImageId.add(thumbnailItem.imageId) }
             mCompleted = listThumbnail.size

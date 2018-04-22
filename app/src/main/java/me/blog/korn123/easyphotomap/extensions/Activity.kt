@@ -3,18 +3,15 @@ package me.blog.korn123.easyphotomap.extensions
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.DialogInterface
-import android.graphics.BitmapFactory
 import android.support.design.widget.Snackbar
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.Toast
+import io.github.aafactory.commons.utils.BitmapUtils
 import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.activities.FileExplorerActivity
 import me.blog.korn123.easyphotomap.activities.ThumbnailExplorerActivity
-import me.blog.korn123.easyphotomap.utils.BitmapUtils
-import me.blog.korn123.easyphotomap.utils.CommonUtils
 
 /**
  * Created by CHO HANJOONG on 2018-02-25.

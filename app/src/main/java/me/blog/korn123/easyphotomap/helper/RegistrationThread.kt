@@ -7,13 +7,13 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
+import io.github.aafactory.commons.utils.BitmapUtils
 import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.activities.AddressSearchActivity
 import me.blog.korn123.easyphotomap.extensions.config
 import me.blog.korn123.easyphotomap.extensions.makeSnackBar
 import me.blog.korn123.easyphotomap.models.PhotoMapItem
-import me.blog.korn123.easyphotomap.utils.BitmapUtils
-import me.blog.korn123.easyphotomap.utils.CommonUtils
+import me.blog.korn123.easyphotomap.utils.EasyPhotoMapUtils
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 import java.io.File
@@ -45,11 +45,11 @@ class RegistrationThread(
                 mFileName = FilenameUtils.getBaseName(mFileName)
             }
 
-            val exifInfo = CommonUtils.parseExifDescription(targetFile.absolutePath)
+            val exifInfo = EasyPhotoMapUtils.parseExifDescription(targetFile.absolutePath)
             val item = PhotoMapItem()
             item.imagePath = targetFile.absolutePath
             if (exifInfo.date != null) {
-                item.date = CommonUtils.dateTimePattern.format(exifInfo.date)
+                item.date = EasyPhotoMapUtils.dateTimePattern.format(exifInfo.date)
             } else {
                 item.date = mActivity.getString(R.string.file_explorer_message2)
             }
@@ -58,9 +58,9 @@ class RegistrationThread(
                 item.longitude = it.longitude
                 item.latitude = it.latitude
 
-                val listAddress = CommonUtils.getFromLocation(mActivity, item.latitude, item.longitude, 1, 0)
+                val listAddress = EasyPhotoMapUtils.getFromLocation(mActivity, item.latitude, item.longitude, 1, 0)
                 listAddress?.let {
-                    if (it.isNotEmpty()) item.info = CommonUtils.fullAddress(listAddress[0])
+                    if (it.isNotEmpty()) item.info = EasyPhotoMapUtils.fullAddress(listAddress[0])
                 }
 
                 val tempList = PhotoMapDbHelper.selectPhotoMapItemBy(COLUMN_IMAGE_PATH, item.imagePath)

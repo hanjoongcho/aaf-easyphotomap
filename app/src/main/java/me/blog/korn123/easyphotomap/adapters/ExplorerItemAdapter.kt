@@ -10,17 +10,18 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.TransitionDrawable
 import android.os.AsyncTask
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import com.drew.lang.GeoLocation
+import io.github.aafactory.commons.extensions.dpToPixel
+import io.github.aafactory.commons.utils.BitmapCache
+import io.github.aafactory.commons.utils.BitmapUtils
 import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.models.FileItem
-import me.blog.korn123.easyphotomap.utils.BitmapUtils
-import me.blog.korn123.easyphotomap.utils.CommonUtils
+import me.blog.korn123.easyphotomap.utils.EasyPhotoMapUtils
 
 /**
  * Created by CHO HANJOONG on 2016-07-30.
@@ -58,7 +59,7 @@ class ExplorerItemAdapter(
         val entity = mEntities[position]
 
         // init default option
-        val widthHeight = (CommonUtils.getDefaultDisplay(mActivity).x / 5)
+        val widthHeight = (EasyPhotoMapUtils.getDefaultDisplay(mActivity).x / 5)
         //        holder.imageView1.getLayoutParams().height = widthHeight;
         //        holder.imageView1.getLayoutParams().width = widthHeight;
 
@@ -86,7 +87,7 @@ class ExplorerItemAdapter(
         return row
     }
 
-    private class ThumbnailTask(private val mActivity: Activity, private val mPosition: Int, private val mHolder: ViewHolder) : AsyncTask<String, Void, Bitmap>() {
+    private inner class ThumbnailTask(private val mActivity: Activity, private val mPosition: Int, private val mHolder: ViewHolder) : AsyncTask<String, Void, Bitmap>() {
         private var isDirectory = false
         private var geoLocation: GeoLocation? = null
 
@@ -97,21 +98,21 @@ class ExplorerItemAdapter(
             if (mHolder.position == mPosition) {
                 if (filePath == null) {
                     isDirectory = true
-                    var bitmap = BitmapUtils.getBitmapFromMemCache("defaultBitmap")
+                    var bitmap = BitmapCache.getBitmapFromMemCache("defaultBitmap")
                     if (bitmap == null) {
                         bitmap = BitmapFactory.decodeResource(mActivity.resources, R.drawable.folder)
-                        BitmapUtils.addBitmapToMemoryCache("defaultBitmap", bitmap)
+                        BitmapCache.addBitmapToMemoryCache("defaultBitmap", bitmap)
                     }
                     resized = bitmap
                 } else {
-                    var bitmap = BitmapUtils.getBitmapFromMemCache(filePath)
+                    var bitmap = BitmapCache.getBitmapFromMemCache(filePath)
                     if (bitmap == null) {
-                        bitmap = BitmapUtils.decodeFileCropCenter(filePath, CommonUtils.dpToPixel(mActivity, 45F))
-                        BitmapUtils.addBitmapToMemoryCache(filePath, bitmap)
+                        bitmap = BitmapUtils.decodeFileCropCenter(filePath, mContext.dpToPixel(45F))
+                        BitmapCache.addBitmapToMemoryCache(filePath, bitmap)
                     }
                     resized = bitmap
 
-                    val gpsDirectory = CommonUtils.getGPSDirectory(filePath)
+                    val gpsDirectory = EasyPhotoMapUtils.getGPSDirectory(filePath)
                     gpsDirectory?.geoLocation?.let {
                         geoLocation = it
                     }

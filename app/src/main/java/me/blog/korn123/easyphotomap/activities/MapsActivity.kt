@@ -37,8 +37,9 @@ import com.simplemobiletools.commons.helpers.PERMISSION_CAMERA
 import com.simplemobiletools.commons.helpers.PERMISSION_READ_STORAGE
 import com.simplemobiletools.commons.helpers.PERMISSION_WRITE_STORAGE
 import com.simplemobiletools.commons.views.FastScroller
-import io.github.hanjoongcho.commons.helpers.PERMISSION_ACCESS_COARSE_LOCATION
-import io.github.hanjoongcho.commons.helpers.PERMISSION_ACCESS_FINE_LOCATION
+import io.github.aafactory.commons.helpers.PERMISSION_ACCESS_COARSE_LOCATION
+import io.github.aafactory.commons.helpers.PERMISSION_ACCESS_FINE_LOCATION
+import io.github.aafactory.commons.utils.BitmapUtils
 import kotlinx.android.synthetic.main.activity_maps.*
 import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.adapters.RecommendationItemAdapter
@@ -47,8 +48,7 @@ import me.blog.korn123.easyphotomap.extensions.getLocationWithGPSProvider
 import me.blog.korn123.easyphotomap.extensions.showAlertDialog
 import me.blog.korn123.easyphotomap.helper.*
 import me.blog.korn123.easyphotomap.models.PhotoMapItem
-import me.blog.korn123.easyphotomap.utils.BitmapUtils
-import me.blog.korn123.easyphotomap.utils.CommonUtils
+import me.blog.korn123.easyphotomap.utils.EasyPhotoMapUtils
 import org.apache.commons.io.FilenameUtils
 import org.apache.commons.lang.StringUtils
 import java.io.File
@@ -173,7 +173,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                         val inflater = this.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
                         val customView = inflater.inflate(R.layout.popup_window_recommendation, null)
                         recyclerView = customView.findViewById<RecyclerView>(R.id.recommendation_items)
-                        CommonUtils.setChildViewTypeface(customView as ViewGroup)
+                        EasyPhotoMapUtils.setChildViewTypeface(customView as ViewGroup)
                         val listOfSortEntry: List<Map.Entry<String, Int>>?
                         if (mEnableDateFilter) {
                             listPhotoMapItem.map { item ->
@@ -187,7 +187,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                                     mRecommendMap.put(it, count)
                                 }
                             }
-                            listOfSortEntry = CommonUtils.entriesSortedByKeys(mRecommendMap)
+                            listOfSortEntry = EasyPhotoMapUtils.entriesSortedByKeys(mRecommendMap)
                         } else {
                             listPhotoMapItem.map { it ->
                                 val pattern = "[0-9]{1,9}"
@@ -199,7 +199,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                                     }
                                 }
                             }
-                            listOfSortEntry = CommonUtils.entriesSortedByValues(mRecommendMap)
+                            listOfSortEntry = EasyPhotoMapUtils.entriesSortedByValues(mRecommendMap)
                         }
 
                         mListRecommendationOrigin.clear()
@@ -283,7 +283,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
-        CommonUtils.initWorkingDirectory()
+        EasyPhotoMapUtils.initWorkingDirectory()
 
         savedInstanceState?.let { 
             when (it.getBoolean(HAVE_CAMERA_POSITION, false)) {
@@ -412,7 +412,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
     private fun migrateLegacyData() {
         val legacyFile = File(LEGACY_PHOTO_DATA_PATH)
         if (legacyFile.exists()) {
-            val listPhotoMapData = CommonUtils.readDataFile(LEGACY_PHOTO_DATA_PATH)
+            val listPhotoMapData = EasyPhotoMapUtils.readDataFile(LEGACY_PHOTO_DATA_PATH)
             listPhotoMapData?.map { data ->
                 val temps = StringUtils.split(data, "|")
                 val item = PhotoMapItem().apply {

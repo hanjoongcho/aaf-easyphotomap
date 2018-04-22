@@ -8,13 +8,13 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.support.v4.content.FileProvider
 import android.util.Log
+import io.github.aafactory.commons.utils.BitmapUtils
 import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.extensions.config
 import me.blog.korn123.easyphotomap.extensions.showConfirmDialogWithFinish
 import me.blog.korn123.easyphotomap.helper.*
 import me.blog.korn123.easyphotomap.models.PhotoMapItem
-import me.blog.korn123.easyphotomap.utils.BitmapUtils
-import me.blog.korn123.easyphotomap.utils.CommonUtils
+import me.blog.korn123.easyphotomap.utils.EasyPhotoMapUtils
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 import java.io.File
@@ -115,11 +115,11 @@ class CameraActivity : SimpleActivity() {
                             targetFile = File(mCurrentFileName)
                             fileName = FilenameUtils.getName(mCurrentFileName)
                         }
-                        val exifInfo = CommonUtils.parseExifDescription(targetFile.absolutePath)
+                        val exifInfo = EasyPhotoMapUtils.parseExifDescription(targetFile.absolutePath)
                         val item = PhotoMapItem()
                         item.imagePath = targetFile.absolutePath
                         if (exifInfo.date != null) {
-                            item.date = CommonUtils.dateTimePattern.format(exifInfo.date)
+                            item.date = EasyPhotoMapUtils.dateTimePattern.format(exifInfo.date)
                         } else {
                             item.date = getString(R.string.file_explorer_message2)
                         }
@@ -127,9 +127,9 @@ class CameraActivity : SimpleActivity() {
                         exifInfo.geoLocation?.let {
                             item.longitude = it.longitude
                             item.latitude = it.latitude
-                            val listAddress = CommonUtils.getFromLocation(this@CameraActivity, item.latitude, item.longitude, 1, 0)
+                            val listAddress = EasyPhotoMapUtils.getFromLocation(this@CameraActivity, item.latitude, item.longitude, 1, 0)
                             listAddress?.let { it ->
-                                item.info = CommonUtils.fullAddress(it[0])
+                                item.info = EasyPhotoMapUtils.fullAddress(it[0])
                             }
 
                             PhotoMapDbHelper.insertPhotoMapItem(item)
