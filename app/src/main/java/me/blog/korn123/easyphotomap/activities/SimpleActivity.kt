@@ -1,6 +1,6 @@
 package me.blog.korn123.easyphotomap.activities
 
-import io.github.hanjoongcho.commons.activities.BaseSimpleActivity
+import io.github.aafactory.commons.activities.BaseSimpleActivity
 import me.blog.korn123.easyphotomap.extensions.initTextSize
 
 /**

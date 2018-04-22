@@ -1,6 +1,7 @@
 package me.blog.korn123.easyphotomap.adapters
 
 import android.app.Activity
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
@@ -12,11 +13,11 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import io.github.aafactory.commons.extensions.dpToPixel
+import io.github.aafactory.commons.utils.BitmapUtils
 import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.helper.WORKING_DIRECTORY
 import me.blog.korn123.easyphotomap.models.PhotoMapItem
-import me.blog.korn123.easyphotomap.utils.BitmapUtils
-import me.blog.korn123.easyphotomap.utils.CommonUtils
 import org.apache.commons.io.FilenameUtils
 import org.apache.commons.lang.StringUtils
 import java.util.*
@@ -37,7 +38,7 @@ class TimelineItemAdapter(private val activity: Activity,
     }
     private val layoutParamsB: FrameLayout.LayoutParams by lazy {
         FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT).apply {
-            setMargins(CommonUtils.dpToPixel(activity, 45F), 0, 0, 0)
+            setMargins((activity as Context).dpToPixel(45F), 0, 0, 0)
         }
     }
 
@@ -91,7 +92,7 @@ class TimelineItemAdapter(private val activity: Activity,
         
         override fun doInBackground(vararg params: String): Bitmap? {
             val filePath = params[0]
-//            val widthHeight = CommonUtils.dpToPixel(activity, 45f)
+//            val widthHeight = EasyPhotoMapUtils.dpToPixel(activity, 45f)
             var resized: Bitmap? = null
             if (holder.position == position) {
                 var bitmap = BitmapUtils.decodeFile(activity, filePath)

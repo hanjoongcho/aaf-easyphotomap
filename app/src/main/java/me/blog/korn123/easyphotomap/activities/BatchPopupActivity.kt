@@ -6,6 +6,7 @@ import android.content.DialogInterface
 import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
+import io.github.aafactory.commons.utils.BitmapUtils
 import kotlinx.android.synthetic.main.activity_batch_popup.*
 import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.extensions.config
@@ -15,8 +16,7 @@ import me.blog.korn123.easyphotomap.helper.PHOTO_MAP_THUMBNAIL_FIXED_WIDTH_HEIGH
 import me.blog.korn123.easyphotomap.helper.PhotoMapDbHelper
 import me.blog.korn123.easyphotomap.helper.WORKING_DIRECTORY
 import me.blog.korn123.easyphotomap.models.PhotoMapItem
-import me.blog.korn123.easyphotomap.utils.BitmapUtils
-import me.blog.korn123.easyphotomap.utils.CommonUtils
+import me.blog.korn123.easyphotomap.utils.EasyPhotoMapUtils
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.FilenameUtils
 import java.io.File
@@ -128,11 +128,11 @@ class BatchPopupActivity : SimpleActivity() {
                     if (PhotoMapDbHelper.selectPhotoMapItemBy(COLUMN_IMAGE_PATH, targetFile.absolutePath).size > 0) {
                         mReduplicationCount++
                     } else {
-                        val exifInfo = CommonUtils.parseExifDescription(targetFile.absolutePath)
+                        val exifInfo = EasyPhotoMapUtils.parseExifDescription(targetFile.absolutePath)
                         val item = PhotoMapItem()
                         item.imagePath = targetFile.absolutePath
                         if (exifInfo.date != null) {
-                            item.date = CommonUtils.dateTimePattern.format(exifInfo.date)
+                            item.date = EasyPhotoMapUtils.dateTimePattern.format(exifInfo.date)
                         } else {
                             item.date = getString(R.string.file_explorer_message2)
                         }
@@ -140,9 +140,9 @@ class BatchPopupActivity : SimpleActivity() {
                         exifInfo.geoLocation?.let {
                             item.longitude = it.longitude
                             item.latitude = it.latitude
-                            val listAddress = CommonUtils.getFromLocation(this@BatchPopupActivity, item.latitude, item.longitude, 1, 0)
+                            val listAddress = EasyPhotoMapUtils.getFromLocation(this@BatchPopupActivity, item.latitude, item.longitude, 1, 0)
                             listAddress?.let {
-                                if (it.isNotEmpty()) item.info = CommonUtils.fullAddress(it[0])
+                                if (it.isNotEmpty()) item.info = EasyPhotoMapUtils.fullAddress(it[0])
                             }
                             PhotoMapDbHelper.insertPhotoMapItem(item)
                             val srcPath = targetFile.absolutePath

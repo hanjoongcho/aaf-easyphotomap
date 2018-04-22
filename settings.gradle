@@ -1,4 +1,4 @@
 include ':app'
-//include ':app', ':commons', ':commons-android'
-//project(':commons').projectDir = new File(settingsDir, "../Simple-Commons/commons")
-//project(':commons-android').projectDir = new File(settingsDir, "../aaf-commons/commons-android")
+//include ':app', ':simple-commons', ':aafactory-commons'
+//project(':simple-commons').projectDir = new File(settingsDir, "../Simple-Commons/commons")
+//project(':aafactory-commons').projectDir = new File(settingsDir, "../aafactory-commons/commons")

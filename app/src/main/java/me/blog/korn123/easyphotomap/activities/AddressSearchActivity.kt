@@ -9,14 +9,14 @@ import android.support.v7.widget.SearchView
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.AdapterView
+import io.github.aafactory.commons.utils.BitmapUtils
 import kotlinx.android.synthetic.main.activity_address_search.*
 import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.adapters.AddressItemAdapter
 import me.blog.korn123.easyphotomap.extensions.makeSnackBar
 import me.blog.korn123.easyphotomap.helper.*
 import me.blog.korn123.easyphotomap.models.PhotoMapItem
-import me.blog.korn123.easyphotomap.utils.BitmapUtils
-import me.blog.korn123.easyphotomap.utils.CommonUtils
+import me.blog.korn123.easyphotomap.utils.EasyPhotoMapUtils
 import org.apache.commons.io.FilenameUtils
 
 /**
@@ -80,7 +80,7 @@ class AddressSearchActivity : AppCompatActivity() {
         query?.let {
             mListAddress.clear()
             try {
-                val listAddress = CommonUtils.getFromLocationName(this@AddressSearchActivity, it, maxResults, 0)
+                val listAddress = EasyPhotoMapUtils.getFromLocationName(this@AddressSearchActivity, it, maxResults, 0)
                 listAddress?.let {
                     mListAddress.addAll(it)
                     if (mAddressAdapter == null) {
@@ -93,7 +93,7 @@ class AddressSearchActivity : AppCompatActivity() {
                                 val fileName = FilenameUtils.getName(intent.getStringExtra(COLUMN_IMAGE_PATH))
                                 val item = PhotoMapItem()
                                 item.imagePath = intent.getStringExtra(COLUMN_IMAGE_PATH)
-                                item.info = CommonUtils.fullAddress(address)
+                                item.info = EasyPhotoMapUtils.fullAddress(address)
                                 item.latitude = address.latitude
                                 item.longitude = address.longitude
                                 item.date = intent.getStringExtra(COLUMN_DATE)

@@ -10,8 +10,8 @@ import com.simplemobiletools.commons.extensions.isBlackAndWhiteTheme
 import com.simplemobiletools.commons.helpers.APP_NAME
 import com.simplemobiletools.commons.helpers.APP_VERSION_NAME
 import com.simplemobiletools.commons.models.RadioItem
-import io.github.hanjoongcho.commons.extensions.updateTextColors
-import io.github.hanjoongcho.commons.helpers.TransitionHelper
+import io.github.aafactory.commons.extensions.updateTextColors
+import io.github.aafactory.commons.helpers.TransitionHelper
 import kotlinx.android.synthetic.main.activity_settings.*
 import me.blog.korn123.easyphotomap.BuildConfig
 import me.blog.korn123.easyphotomap.R

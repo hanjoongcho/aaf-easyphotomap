@@ -5,10 +5,10 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import com.github.chrisbanes.photoview.PhotoView
+import io.github.aafactory.commons.utils.BitmapUtils
 import kotlinx.android.synthetic.main.activity_popup_image.*
 import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.helper.COLUMN_IMAGE_PATH
-import me.blog.korn123.easyphotomap.utils.BitmapUtils
 import java.io.File
 
 /**

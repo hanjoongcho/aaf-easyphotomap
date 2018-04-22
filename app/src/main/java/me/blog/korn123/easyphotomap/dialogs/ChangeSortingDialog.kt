@@ -6,7 +6,7 @@ import android.view.View
 import com.simplemobiletools.commons.extensions.beVisibleIf
 import com.simplemobiletools.commons.extensions.setupDialogStuff
 import com.simplemobiletools.commons.helpers.*
-import io.github.hanjoongcho.commons.activities.BaseSimpleActivity
+import io.github.aafactory.commons.activities.BaseSimpleActivity
 import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.extensions.config
 import kotlinx.android.synthetic.main.dialog_change_sorting.view.*
