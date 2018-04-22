@@ -6,8 +6,6 @@ import android.graphics.Point
 import android.graphics.Typeface
 import android.location.Address
 import android.location.Geocoder
-import android.media.ExifInterface
-import android.preference.PreferenceManager
 import android.provider.MediaStore
 import android.view.ViewGroup
 import android.widget.TextView
@@ -24,7 +22,6 @@ import org.apache.commons.io.IOUtils
 import java.io.File
 import java.io.IOException
 import java.io.InputStream
-import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -90,13 +87,6 @@ class EasyPhotoMapUtils {
             val sortedEntries = ArrayList(map.entries)
             Collections.sort(sortedEntries) { e1, e2 -> e2.key.toString().compareTo(e1.key.toString()) }
             return sortedEntries
-        }
-
-        fun saveStringPreference(context: Context, key: String, value: String) {
-            val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-            val edit = preferences.edit()
-            edit.putString(key, value)
-            edit.apply()
         }
 
         fun fetchAllThumbnail(context: Context): List<ThumbnailItem> {
@@ -226,11 +216,6 @@ class EasyPhotoMapUtils {
             return listData
         }
 
-        fun getDisplayOrientation(activity: Activity): Int {
-            val display = activity.windowManager.defaultDisplay
-            return display.orientation
-        }
-
         fun getDefaultDisplay(activity: Activity): Point {
             val display = activity.windowManager.defaultDisplay
             val size = Point()
@@ -282,50 +267,6 @@ class EasyPhotoMapUtils {
                 exifModel.geoLocation = it 
             }
             return exifModel
-        }
-        
-        fun getDateFromEXIF(imageFilePath: String): Date? {
-            val exifInterface = ExifInterface(imageFilePath)
-//            val dateTime = exifInterface.getAttribute(ExifInterface.TAG_DATETIME_ORIGINAL)
-            val dateString = exifInterface.getAttribute(ExifInterface.TAG_DATETIME)
-            return getDate(dateString, TimeZone.getDefault())
-        }
-
-        fun getDate(dateString: String, timeZone: TimeZone?): java.util.Date? {
-            val datePatterns = arrayOf(
-                    "yyyy:MM:dd HH:mm:ss",
-                    "yyyy:MM:dd HH:mm",
-                    "yyyy-MM-dd HH:mm:ss",
-                    "yyyy-MM-dd HH:mm",
-                    "yyyy.MM.dd HH:mm:ss",
-                    "yyyy.MM.dd HH:mm"
-            )
-            for (datePattern in datePatterns) {
-                try {
-                    val parser = SimpleDateFormat(datePattern)
-                    if (timeZone != null)
-                        parser.timeZone = timeZone
-                    else
-                        parser.timeZone = TimeZone.getTimeZone("GMT") // don't interpret zone time
-
-                    return parser.parse(dateString)
-                } catch (ex: ParseException) {
-                    // simply try the next pattern
-                }
-            }
-            return null
-        }
-        
-        fun getOrientationFromEXIF(imageFilePath: String): Int {
-            val exifInterface = ExifInterface(imageFilePath)
-            return exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
-        }
-        
-        fun orientationToDegree(orientation: Int): Int = when (orientation) {
-            ExifInterface.ORIENTATION_ROTATE_90 -> 90
-            ExifInterface.ORIENTATION_ROTATE_180 -> 180
-            ExifInterface.ORIENTATION_ROTATE_270 -> 270
-            else -> 0
         }
     }
 }
