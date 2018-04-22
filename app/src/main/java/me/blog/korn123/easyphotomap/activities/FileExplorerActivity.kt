@@ -14,6 +14,7 @@ import android.view.*
 import android.widget.ArrayAdapter
 import android.widget.HorizontalScrollView
 import android.widget.TextView
+import io.github.aafactory.commons.extensions.dpToPixel
 import kotlinx.android.synthetic.main.activity_file_explorer.*
 import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.adapters.ExplorerItemAdapter
@@ -24,7 +25,7 @@ import me.blog.korn123.easyphotomap.helper.CAMERA_DIRECTORY
 import me.blog.korn123.easyphotomap.helper.RegistrationThread
 import me.blog.korn123.easyphotomap.helper.WORKING_DIRECTORY
 import me.blog.korn123.easyphotomap.models.FileItem
-import me.blog.korn123.easyphotomap.utils.CommonUtils
+import me.blog.korn123.easyphotomap.utils.EasyPhotoMapUtils
 import org.apache.commons.io.FilenameUtils
 import org.apache.commons.lang.StringUtils
 import java.io.File
@@ -156,7 +157,7 @@ class FileExplorerActivity : SimpleActivity() {
             val textView = TextView(this)
             textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 16F)
             textView.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT)
-            textView.setPadding(CommonUtils.dpToPixel(this, 5F), 0, CommonUtils.dpToPixel(this, 5F), 0)
+            textView.setPadding(dpToPixel(5F), 0, dpToPixel(5F), 0)
             textView.gravity = Gravity.CENTER_VERTICAL
             textView.text = path
             textView.setOnClickListener {
@@ -220,7 +221,7 @@ class FileExplorerActivity : SimpleActivity() {
                         fileItem.setImagePathAndFileName(path)
                         try {
                             fileItem.length = f.length()
-                            fileItem.takenDate = CommonUtils.getDateFromJpegMetaData(f)
+                            fileItem.takenDate = EasyPhotoMapUtils.getDateFromJpegMetaData(f)
                         } catch (e: Exception){
                             e.printStackTrace()
                         }

@@ -13,10 +13,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
+import io.github.aafactory.commons.extensions.dpToPixel
+import io.github.aafactory.commons.utils.BitmapUtils
 import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.models.ThumbnailItem
-import me.blog.korn123.easyphotomap.utils.BitmapUtils
-import me.blog.korn123.easyphotomap.utils.CommonUtils
+import me.blog.korn123.easyphotomap.utils.EasyPhotoMapUtils
 import java.io.File
 
 /**
@@ -41,7 +42,7 @@ class ThumbnailItemAdapter(private val mActivity: Activity,
         } else {
             holder = row.tag as ViewHolder
         }
-        val widthHeight = ((CommonUtils.getDefaultDisplay(mActivity).x - CommonUtils.dpToPixel(mActivity, 10F, 1)) / 3)
+        val widthHeight = ((EasyPhotoMapUtils.getDefaultDisplay(mActivity).x - mContext.dpToPixel(10F, 1)) / 3)
         val entity = mEntities[position]
         val thumbnailPath = entity.thumbnailPath
         holder.position = position

@@ -2,7 +2,7 @@
 
 buildscript {
     ext {
-        kotlin_version = '1.2.10'
+        kotlin_version = '1.2.31'
         supportLibVersion = "27.0.2"
         junitVersion = "4.12"
         espressoVersion = "2.2.2"

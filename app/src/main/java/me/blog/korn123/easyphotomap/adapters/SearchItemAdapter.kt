@@ -12,10 +12,10 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ImageView
 import android.widget.TextView
+import io.github.aafactory.commons.utils.BitmapUtils
 import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.helper.WORKING_DIRECTORY
 import me.blog.korn123.easyphotomap.models.PhotoMapItem
-import me.blog.korn123.easyphotomap.utils.BitmapUtils
 import org.apache.commons.io.FilenameUtils
 import java.util.*
 
@@ -63,7 +63,7 @@ class SearchItemAdapter(private val activity: Activity,
     private class ThumbnailTask(val activity: Activity, val position: Int, val holder: SearchItemAdapter.ViewHolder) : AsyncTask<String, Void, Bitmap>() {
         override fun doInBackground(vararg params: String): Bitmap? {
             val filePath = params[0]
-//            val widthHeight = CommonUtils.dpToPixel(activity, 45f)
+//            val widthHeight = EasyPhotoMapUtils.dpToPixel(activity, 45f)
             var resized: Bitmap? = null
             if (holder.position == position) {
                 var bitmap = BitmapUtils.decodeFile(activity, filePath)

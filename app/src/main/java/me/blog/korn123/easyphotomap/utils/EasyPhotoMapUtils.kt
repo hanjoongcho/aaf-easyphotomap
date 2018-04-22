@@ -9,7 +9,6 @@ import android.location.Geocoder
 import android.media.ExifInterface
 import android.preference.PreferenceManager
 import android.provider.MediaStore
-import android.util.TypedValue
 import android.view.ViewGroup
 import android.widget.TextView
 import com.drew.imaging.jpeg.JpegMetadataReader
@@ -32,7 +31,8 @@ import java.util.*
 /**
  * Created by CHO HANJOONG on 2016-07-21.
  */
-class CommonUtils {
+class EasyPhotoMapUtils {
+    
     companion object {
         @Volatile private var mGeoCoder: Geocoder? = null
 
@@ -48,7 +48,6 @@ class CommonUtils {
             }
         }
 
-        @Throws(Exception::class)
         fun getFromLocation(context: Context, latitude: Double, longitude: Double, maxResults: Int, retryCount: Int): List<Address>? {
             val lat = java.lang.Double.parseDouble(String.format("%.6f", latitude))
             val lon = java.lang.Double.parseDouble(String.format("%.7f", longitude))
@@ -65,7 +64,6 @@ class CommonUtils {
             return listAddress
         }
 
-        @Throws(Exception::class)
         fun getFromLocationName(context: Context, locationName: String, maxResults: Int, retryCount: Int): List<Address>? {
             var count = retryCount
             val geoCoder = Geocoder(context, Locale.getDefault())
@@ -228,17 +226,6 @@ class CommonUtils {
             return listData
         }
 
-        fun dpToPixel(context: Context, dp: Float, policy: Int = 0): Int {
-            val px: Float = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.resources.displayMetrics)
-            return when (policy) {
-                0 -> Math.floor(px.toDouble()).toInt()
-                1 -> Math.ceil(px.toDouble()).toInt()
-                else -> 0
-            }
-        }
-
-        fun dpToPixel(context: Context, dp: Float): Int = dpToPixel(context, dp, 0)
-
         fun getDisplayOrientation(activity: Activity): Int {
             val display = activity.windowManager.defaultDisplay
             return display.orientation
@@ -260,7 +247,7 @@ class CommonUtils {
             } catch (e: Exception) {}
             
             return when (date != null) {
-                true -> CommonUtils.dateTimePattern.format(date)
+                true -> EasyPhotoMapUtils.dateTimePattern.format(date)
                 false -> ""
             } 
         }
