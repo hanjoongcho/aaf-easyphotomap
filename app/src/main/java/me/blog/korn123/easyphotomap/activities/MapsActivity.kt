@@ -40,6 +40,7 @@ import com.simplemobiletools.commons.views.FastScroller
 import io.github.aafactory.commons.helpers.PERMISSION_ACCESS_COARSE_LOCATION
 import io.github.aafactory.commons.helpers.PERMISSION_ACCESS_FINE_LOCATION
 import io.github.aafactory.commons.utils.BitmapUtils
+import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_maps.*
 import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.adapters.RecommendationItemAdapter
@@ -57,6 +58,7 @@ import java.util.regex.Pattern
 
 class MapsActivity : SimpleActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
+    private lateinit var realmInstance: Realm
     private val mListLatLng = arrayListOf<LatLng>()
     private val mListPhotoEntity = arrayListOf<PhotoMapItem>()
     private val mListRecommendationOrigin = arrayListOf<Recommendation>()
@@ -284,7 +286,8 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
         EasyPhotoMapUtils.initWorkingDirectory()
-
+        realmInstance = PhotoMapDbHelper.getInstance()
+        
         savedInstanceState?.let { 
             when (it.getBoolean(HAVE_CAMERA_POSITION, false)) {
                 true -> {
@@ -403,6 +406,11 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
     override fun onBackPressed() {
         ActivityCompat.finishAffinity(this)
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        realmInstance.close()
+    }
     
     private fun animateDefaultCamera() {
 //        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(GOOGLE_MAP_DEFAULT_LATITUDE, GOOGLE_MAP_DEFAULT_LONGITUDE), GOOGLE_MAP_DEFAULT_ZOOM_VALUE))
@@ -431,7 +439,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
 
     private fun parseMetadata() {
         mRecommendMap.clear()
-        mListPhotoMapItem = PhotoMapDbHelper.selectPhotoMapItemAll()
+        mListPhotoMapItem = PhotoMapDbHelper.selectPhotoMapItemAll(realmInstance)
         mListPhotoMapItem?.let {
             Collections.sort(it)
         }
@@ -452,8 +460,8 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
             setProgressStyle(ProgressDialog.STYLE_HORIZONTAL)
             setMessage("find $keyword...")
             max = when (applyFilter) {
-                true -> PhotoMapDbHelper.containsPhotoMapItemBy(COLUMN_DATE, keyword).size
-                false -> PhotoMapDbHelper.containsPhotoMapItemBy(COLUMN_INFO, keyword).size
+                true -> PhotoMapDbHelper.containsPhotoMapItemBy(realmInstance, COLUMN_DATE, keyword).size
+                false -> PhotoMapDbHelper.containsPhotoMapItemBy(realmInstance, COLUMN_INFO, keyword).size
             }
             setCanceledOnTouchOutside(false)
         }
@@ -481,16 +489,16 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
     } 
 
     inner class OverlayThread(private val keyword: String, private val applyFilter: Boolean) : Thread() {
-
         override fun run() {
             super.run()
+            val realmInstanceSubThread = PhotoMapDbHelper.getInstance()
             val listTemp = when (applyFilter) {
                 true -> {
-                    PhotoMapDbHelper.containsPhotoMapItemBy(COLUMN_DATE, keyword)
+                    PhotoMapDbHelper.containsPhotoMapItemBy(realmInstanceSubThread, COLUMN_DATE, keyword)
 //                    PhotoMapDbHelper.containsPhotoMapItemBy("dateWithoutTime", keyword)
                 }
                 false -> {
-                    PhotoMapDbHelper.containsPhotoMapItemBy(COLUMN_INFO, keyword)
+                    PhotoMapDbHelper.containsPhotoMapItemBy(realmInstanceSubThread, COLUMN_INFO, keyword)
                 }
             }
             mListLatLng.clear()
@@ -544,10 +552,10 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                 setUpCluster()
                 val listForCluster = when(applyFilter) {
                     true -> {
-                        PhotoMapDbHelper.containsPhotoMapItemBy(COLUMN_DATE, keyword)
+                        PhotoMapDbHelper.containsPhotoMapItemBy(realmInstance, COLUMN_DATE, keyword)
                     }
                     false -> {
-                        PhotoMapDbHelper.containsPhotoMapItemBy(COLUMN_INFO, keyword)
+                        PhotoMapDbHelper.containsPhotoMapItemBy(realmInstance, COLUMN_INFO, keyword)
                     }
                 }
                 for (i in mListMarkerOptions.indices) {
@@ -595,6 +603,7 @@ class MapsActivity : SimpleActivity(), OnMapReadyCallback {
                     }
                 }
             }
+            realmInstanceSubThread.close()
         }
     }
 

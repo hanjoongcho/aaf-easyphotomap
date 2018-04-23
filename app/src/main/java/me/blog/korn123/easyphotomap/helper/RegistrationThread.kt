@@ -31,6 +31,7 @@ class RegistrationThread(
 
     private fun registerSingleFile() {
         var resultMessage: String? = null
+        val realmInstance = PhotoMapDbHelper.getInstance()
         try {
 
             val targetFile: File
@@ -63,7 +64,7 @@ class RegistrationThread(
                     if (it.isNotEmpty()) item.info = EasyPhotoMapUtils.fullAddress(listAddress[0])
                 }
 
-                val tempList = PhotoMapDbHelper.selectPhotoMapItemBy(COLUMN_IMAGE_PATH, item.imagePath)
+                val tempList = PhotoMapDbHelper.selectPhotoMapItemBy(realmInstance, COLUMN_IMAGE_PATH, item.imagePath)
                 resultMessage = when (tempList.isNotEmpty()) {
                     true -> mActivity.getString(R.string.file_explorer_message3)
                     false -> {
@@ -98,6 +99,7 @@ class RegistrationThread(
             resultMessage = e.message
         }
 
+        realmInstance.close()
         resultMessage?.let {
             Handler(Looper.getMainLooper()).post {
                 mProgressDialog.dismiss()

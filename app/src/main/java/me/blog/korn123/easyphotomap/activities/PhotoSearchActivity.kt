@@ -13,6 +13,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.AdapterView
 import com.simplemobiletools.commons.extensions.onGlobalLayout
+import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_photo_search.*
 import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.adapters.SearchItemAdapter
@@ -23,7 +24,7 @@ import me.blog.korn123.easyphotomap.models.PhotoMapItem
  * Created by CHO HANJOONG on 2016-07-22.
  */
 class PhotoSearchActivity : AppCompatActivity() {
-
+    private lateinit var realmInstance: Realm
     private val mListPhotoMapItem = arrayListOf<PhotoMapItem>()
     private var mSearchView: SearchView? = null
     private var mQueryTextListener: SearchView.OnQueryTextListener? = null
@@ -46,7 +47,7 @@ class PhotoSearchActivity : AppCompatActivity() {
                 },
                 AdapterView.OnItemLongClickListener { _, view, longClickPosition, _ ->
                     mSearchItemAdapter?.getItem(longClickPosition)?.let { item ->
-                        PhotoMapDbHelper.deletePhotoMapItemBy(item.sequence)
+                        PhotoMapDbHelper.deletePhotoMapItemBy(realmInstance, item.sequence)
                         refreshList(mCurrentQuery, longClickPosition, view.top)
                     }
                     true
@@ -62,6 +63,9 @@ class PhotoSearchActivity : AppCompatActivity() {
             setTitle(R.string.photo_search_message1)
             setDisplayHomeAsUpEnabled(true)
         }
+
+        realmInstance = PhotoMapDbHelper.getInstance()
+        
         delete.setOnClickListener({ _ ->
             val message = when (mCurrentQuery.isEmpty()) {
                 true -> getString(R.string.delete_all_confirm_message)
@@ -70,7 +74,7 @@ class PhotoSearchActivity : AppCompatActivity() {
             AlertDialog.Builder(this@PhotoSearchActivity).apply {
                 setMessage(message)
                 setPositiveButton(getString(R.string.ok), { _, _ ->
-                    PhotoMapDbHelper.deletePhotoMapItemBy(mCurrentQuery)
+                    PhotoMapDbHelper.deletePhotoMapItemBy(realmInstance, mCurrentQuery)
                     refreshList(mCurrentQuery)
                 })
             }.show()
@@ -134,6 +138,11 @@ class PhotoSearchActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        realmInstance.close()
+    }
+    
     fun refreshList(query: String? = "", position: Int = 0, top: Int = 0) {
         parseMetadata(query)
         mSearchItemAdapter?.notifyDataSetChanged()
@@ -150,7 +159,7 @@ class PhotoSearchActivity : AppCompatActivity() {
     private fun parseMetadata(query: String?) {
         query?.let {
             mListPhotoMapItem.clear()
-            val listTemp = PhotoMapDbHelper.containsPhotoMapItemBy(COLUMN_INFO, it)
+            val listTemp = PhotoMapDbHelper.containsPhotoMapItemBy(realmInstance, COLUMN_INFO, it)
             mListPhotoMapItem.addAll(listTemp)
         }
     }
