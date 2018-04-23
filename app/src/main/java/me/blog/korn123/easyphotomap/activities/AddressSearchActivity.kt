@@ -10,6 +10,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.AdapterView
 import io.github.aafactory.commons.utils.BitmapUtils
+import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_address_search.*
 import me.blog.korn123.easyphotomap.R
 import me.blog.korn123.easyphotomap.adapters.AddressItemAdapter
@@ -23,7 +24,7 @@ import org.apache.commons.io.FilenameUtils
  * Created by CHO HANJOONG on 2016-07-22.
  */
 class AddressSearchActivity : AppCompatActivity() {
-
+    private lateinit var realmInstance: Realm
     private val mListAddress = arrayListOf<Address>()
     private var mAddressAdapter: AddressItemAdapter? = null
     private var mSearchView: SearchView? = null
@@ -37,6 +38,8 @@ class AddressSearchActivity : AppCompatActivity() {
             title = ""
             setDisplayHomeAsUpEnabled(true)
         }
+
+        realmInstance = PhotoMapDbHelper.getInstance()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -75,6 +78,11 @@ class AddressSearchActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        realmInstance.close()
+    }
+    
     @JvmOverloads
     fun refreshList(query: String? = null, maxResults: Int = 50) {
         query?.let {
@@ -98,7 +106,7 @@ class AddressSearchActivity : AppCompatActivity() {
                                 item.longitude = address.longitude
                                 item.date = intent.getStringExtra(COLUMN_DATE)
                                 
-                                val tempList = PhotoMapDbHelper.selectPhotoMapItemBy(COLUMN_IMAGE_PATH, item.imagePath)
+                                val tempList = PhotoMapDbHelper.selectPhotoMapItemBy(realmInstance, COLUMN_IMAGE_PATH, item.imagePath)
                                 val resultMessage = when(tempList.size > 0) {
                                     true -> getString(R.string.file_explorer_message3)
                                     false -> {
@@ -128,5 +136,4 @@ class AddressSearchActivity : AppCompatActivity() {
             }
         }
     }
-
 }

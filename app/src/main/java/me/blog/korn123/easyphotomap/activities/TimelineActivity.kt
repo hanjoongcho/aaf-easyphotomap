@@ -12,6 +12,7 @@ import me.blog.korn123.easyphotomap.models.PhotoMapItem
 import java.util.*
 import android.support.v7.widget.LinearLayoutManager
 import com.simplemobiletools.commons.extensions.onGlobalLayout
+import io.realm.Realm
 import me.blog.korn123.easyphotomap.helper.*
 
 
@@ -20,6 +21,7 @@ import me.blog.korn123.easyphotomap.helper.*
  */
 
 class TimelineActivity : AppCompatActivity() {
+    private lateinit var realmInstance: Realm
     private var mListPhotoMapItem: ArrayList<PhotoMapItem> = arrayListOf<PhotoMapItem>()
     private val mTimeLineItemAdapter: TimelineItemAdapter? by lazy {
         TimelineItemAdapter(
@@ -49,6 +51,7 @@ class TimelineActivity : AppCompatActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
+        realmInstance = PhotoMapDbHelper.getInstance()
         parseMetadata()
 //        val layoutManager = LinearLayoutManager(this)
 //        layoutManager.reverseLayout = true
@@ -76,7 +79,12 @@ class TimelineActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        realmInstance.close()
+    }
+    
     private fun parseMetadata() {
-        mListPhotoMapItem = PhotoMapDbHelper.selectTimeLineItemAll(getString(R.string.file_explorer_message2))
+        mListPhotoMapItem = PhotoMapDbHelper.selectTimeLineItemAll(realmInstance, getString(R.string.file_explorer_message2))
     }
 }
