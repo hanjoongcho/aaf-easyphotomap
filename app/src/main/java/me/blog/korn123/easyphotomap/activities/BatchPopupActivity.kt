@@ -107,6 +107,7 @@ class BatchPopupActivity : SimpleActivity() {
     internal inner class RegisterThread(var context: Context, private var listImagePath: ArrayList<String>) : Thread() {
 
         override fun run() {
+            val realmInstance = PhotoMapDbHelper.getInstance()
             for (imagePath in listImagePath) {
                 
                 if (!mEnableUpdate) return
@@ -125,7 +126,7 @@ class BatchPopupActivity : SimpleActivity() {
                         fileName = FilenameUtils.getBaseName(fileName)
                     }
 
-                    if (PhotoMapDbHelper.selectPhotoMapItemBy(COLUMN_IMAGE_PATH, targetFile.absolutePath).size > 0) {
+                    if (PhotoMapDbHelper.selectPhotoMapItemBy(realmInstance, COLUMN_IMAGE_PATH, targetFile.absolutePath).size > 0) {
                         mReduplicationCount++
                     } else {
                         val exifInfo = EasyPhotoMapUtils.parseExifDescription(targetFile.absolutePath)
@@ -158,6 +159,8 @@ class BatchPopupActivity : SimpleActivity() {
                 }
                 progressHandler.sendMessage(message)
             }
+
+            realmInstance.close()
         }
     }
 
